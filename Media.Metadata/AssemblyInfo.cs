@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Ross King">
-// Copyright (c) Ross King. All rights reserved.
+// <copyright file="AssemblyInfo.cs" company="RossKing">
+// Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 

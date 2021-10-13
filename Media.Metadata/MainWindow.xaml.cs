@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MainWindow.xaml.cs" company="Ross King">
-// Copyright (c) Ross King. All rights reserved.
+// <copyright file="MainWindow.xaml.cs" company="RossKing">
+// Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 

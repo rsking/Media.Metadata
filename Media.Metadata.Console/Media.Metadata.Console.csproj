@@ -1,12 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>$(RootNamespace.Replace(".Console", ""))</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="$([MSBuild]::GetPathOfFileAbove(stylecop.json))" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.12.0" />
+    <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.21216.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Media.Metadata.TheTVDB\Media.Metadata.TheTVDB.csproj" />
+    <ProjectReference Include="..\Media.Metadata.TMDb\Media.Metadata.TMDb.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,16 +1,13 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="App.xaml.cs" company="RossKing">
+// <copyright file="Show.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
 namespace Media.Metadata;
 
-using System.Windows;
-
 /// <summary>
-/// Interaction logic for <c>App.xaml</c>.
+/// Represents a show.
 /// </summary>
-public partial class App : Application
-{
-}
+/// <param name="Name">Gets the name.</param>
+public record Show(string Name);
