@@ -1,11 +1,14 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Class1.cs" company="RossKing">
+// <copyright file="IUpdater.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Windows;
+namespace Media.Metadata;
 
-public class Class1
+public interface IUpdater
 {
+    void UpdateMovie(string fileName, Movie movie);
+
+    void UpdateEpisode(string fileName, Episode episode);
 }

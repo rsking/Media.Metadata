@@ -1,8 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Media.Metadata.Core\Media.Metadata.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="runtimes\**\libmp4v2.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>

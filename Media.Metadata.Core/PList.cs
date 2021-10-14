@@ -100,6 +100,19 @@ public class PList : IDictionary<string, object>, IXmlSerializable
         return (PList)serializer.Deserialize(stream);
     }
 
+    /// <summary>
+    /// Creates a new <see cref="PList"/> using the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns>The created <see cref="PList"/>.</returns>
+    public static PList Create(Stream stream)
+    {
+        using var streamReader = new StreamReader(stream, System.Text.Encoding.UTF8, detectEncodingFromByteOrderMarks: true, 1024, leaveOpen: true);
+        using var reader = XmlReader.Create(streamReader, new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreWhitespace = true });
+        var serializer = new XmlSerializer(typeof(PList));
+        return (PList)serializer.Deserialize(reader);
+    }
+
     /// <inheritdoc />
     public IEnumerator<KeyValuePair<string, object>> GetEnumerator() => this.DictionaryImplementation.GetEnumerator();
 

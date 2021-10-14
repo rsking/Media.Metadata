@@ -17,5 +17,5 @@ public interface IEpisodeSearch
     /// <param name="name">The name.</param>
     /// <param name="year">The year.</param>
     /// <returns>The movies if found; otherwise <see langword="false"/>.</returns>
-    IAsyncEnumerable<Movie> SearchAsync(string name, int year);
+    IAsyncEnumerable<Episode> SearchAsync(string name, int year);
 }

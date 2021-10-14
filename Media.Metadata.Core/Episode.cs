@@ -9,6 +9,4 @@ namespace Media.Metadata;
 /// <summary>
 /// Represents an episode.
 /// </summary>
-public class Episode
-{
-}
+public record Episode;

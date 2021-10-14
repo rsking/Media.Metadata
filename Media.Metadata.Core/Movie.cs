@@ -13,15 +13,15 @@ using System.Collections.Generic;
 /// Represents a movie.
 /// </summary>
 public record Movie(
-    string Name,
-    string Description,
-    IEnumerable<string> Producers,
-    IEnumerable<string> Directors,
-    IEnumerable<string> Studios,
-    IEnumerable<string> Genre,
-    IEnumerable<string> ScreenWriters,
-    IEnumerable<string> Cast,
-    IEnumerable<string> Composers)
+    string? Name,
+    string? Description,
+    IEnumerable<string>? Producers,
+    IEnumerable<string>? Directors,
+    IEnumerable<string>? Studios,
+    IEnumerable<string>? Genre,
+    IEnumerable<string>? ScreenWriters,
+    IEnumerable<string>? Cast,
+    IEnumerable<string>? Composers)
 {
     private const string Separator = ", ";
 
@@ -45,10 +45,10 @@ public record Movie(
     {
         var plist = new PList(new Dictionary<string, object>(StringComparer.Ordinal));
         plist.AddIfNotNullOrEmpty("studio", Separator, this.Studios);
-        plist.AddAsArray("producers", this.Producers);
-        plist.AddAsArray("directors", this.Directors);
-        plist.AddAsArray("cast", this.Cast);
-        plist.AddAsArray("screenwriters", this.ScreenWriters);
+        plist.AddIfNotNull("producers", this.Producers);
+        plist.AddIfNotNull("directors", this.Directors);
+        plist.AddIfNotNull("cast", this.Cast);
+        plist.AddIfNotNull("screenwriters", this.ScreenWriters);
         return plist.ToString();
     }
 }

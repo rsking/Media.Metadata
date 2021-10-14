@@ -4,6 +4,10 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>$(RootNamespace.Replace(".Console", ""))</RootNamespace>
+
+    <IsWindows>false</IsWindows>
+    <IsWindows Condition="$(TargetFramework.Contains('windows'))">true</IsWindows>
+    <DefineConstants Condition="$(IsWindows)">$(DefineConstants);WINDOWS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Media.Metadata.TheTVDB\Media.Metadata.TheTVDB.csproj" />
     <ProjectReference Include="..\Media.Metadata.TMDb\Media.Metadata.TMDb.csproj" />
+    <ProjectReference Include="..\Media.Metadata.Windows\Media.Metadata.Windows.csproj" />
   </ItemGroup>
 
 </Project>

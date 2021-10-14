@@ -20,9 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.Windows", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.Core", "Media.Metadata.Core\Media.Metadata.Core.csproj", "{F907DE4E-A2A0-4F37-AC4A-165A8A1B313A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media.Metadata.TMDb", "Media.Metadata.TMDb\Media.Metadata.TMDb.csproj", "{AF42E82E-B3A3-4C22-80E5-1A48200E2A22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.TMDb", "Media.Metadata.TMDb\Media.Metadata.TMDb.csproj", "{AF42E82E-B3A3-4C22-80E5-1A48200E2A22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media.Metadata.TheTVDB", "Media.Metadata.TheTVDB\Media.Metadata.TheTVDB.csproj", "{9779DD3F-90C9-46E1-BF99-EDFB2EFA5148}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.TheTVDB", "Media.Metadata.TheTVDB\Media.Metadata.TheTVDB.csproj", "{9779DD3F-90C9-46E1-BF99-EDFB2EFA5148}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

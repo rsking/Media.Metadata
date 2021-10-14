@@ -13,8 +13,6 @@ public class VideoFile
 {
     private static readonly TagLib.ReadOnlyByteVector DayAtom = new(169, 100, 97, 121);
 
-    private static readonly TagLib.ReadOnlyByteVector PodCastDescriptionAtom = "ldes";
-
     private readonly string fileName;
 
     /// <summary>
