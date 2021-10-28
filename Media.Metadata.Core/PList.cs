@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 /// </summary>
 [XmlRoot(PListElementName)]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is the correct name")]
-public class PList : IDictionary<string, object>, IXmlSerializable
+public class PList : IDictionary<string, object>, IDictionary, IXmlSerializable
 {
     private const string ArrayElementName = "array";
 
@@ -76,6 +76,27 @@ public class PList : IDictionary<string, object>, IXmlSerializable
     /// <inheritdoc />
     public ICollection<object> Values => this.DictionaryImplementation.Values;
 
+    /// <inheritdoc />
+    bool IDictionary.IsFixedSize => false;
+
+    /// <inheritdoc />
+    bool IDictionary.IsReadOnly => this.IsReadOnly;
+
+    /// <inheritdoc />
+    ICollection IDictionary.Keys => (ICollection)this.Keys;
+
+    /// <inheritdoc />
+    ICollection IDictionary.Values => (ICollection)this.Values;
+
+    /// <inheritdoc />
+    int ICollection.Count => this.Count;
+
+    /// <inheritdoc />
+    bool ICollection.IsSynchronized => false;
+
+    /// <inheritdoc />
+    object? ICollection.SyncRoot { get; }
+
     /// <summary>
     /// Gets the implementation.
     /// </summary>
@@ -86,6 +107,13 @@ public class PList : IDictionary<string, object>, IXmlSerializable
     {
         get => this.DictionaryImplementation[key];
         set => this.DictionaryImplementation[key] = value;
+    }
+
+    /// <inheritdoc />
+    object IDictionary.this[object key]
+    {
+        get => this[key.ToString()];
+        set => this[key.ToString()] = value;
     }
 
     /// <summary>
@@ -200,8 +228,27 @@ public class PList : IDictionary<string, object>, IXmlSerializable
             throw new ArgumentNullException(nameof(writer));
         }
 
+        writer.WriteAttributeString("version", "1.0");
         WriteDictionary(writer, 0, this);
     }
+
+    /// <inheritdoc/>
+    void IDictionary.Add(object key, object value) => this.Add(key.ToString(), value);
+
+    /// <inheritdoc/>
+    void IDictionary.Clear() => this.Clear();
+
+    /// <inheritdoc/>
+    bool IDictionary.Contains(object key) => this.ContainsKey(key.ToString());
+
+    /// <inheritdoc/>
+    IDictionaryEnumerator IDictionary.GetEnumerator() => ((IDictionary)this.DictionaryImplementation).GetEnumerator();
+
+    /// <inheritdoc/>
+    void IDictionary.Remove(object key) => this.Remove(key.ToString());
+
+    /// <inheritdoc/>
+    void ICollection.CopyTo(Array array, int index) => ((IDictionary)this.DictionaryImplementation).CopyTo(array, index);
 
     private static IDictionary<string, object> ReadDictionary(XmlReader reader)
     {
@@ -333,18 +380,18 @@ public class PList : IDictionary<string, object>, IXmlSerializable
         }
     }
 
-    private static void WriteDictionary(XmlWriter writer, int indentLevel, IDictionary<string, object> dictionary)
+    private static void WriteDictionary(XmlWriter writer, int indentLevel, IDictionary dictionary)
     {
         writer.WriteWhitespace(new string('\t', indentLevel));
         writer.WriteStartElement(DictionaryElementName);
         writer.WriteWhitespace(Environment.NewLine);
 
         var indent = new string('\t', indentLevel + 1);
-        foreach (var kvp in dictionary)
+        foreach (var key in dictionary.Keys)
         {
             writer.WriteWhitespace(indent);
-            writer.WriteElementString(KeyElementName, kvp.Key);
-            WriteValue(writer, indentLevel + 1, kvp.Value);
+            writer.WriteElementString(KeyElementName, key.ToString());
+            WriteValue(writer, indentLevel + 1, dictionary[key]);
             writer.WriteWhitespace(Environment.NewLine);
         }
 
@@ -381,15 +428,15 @@ public class PList : IDictionary<string, object>, IXmlSerializable
             var dateValue = (DateTime)value;
             writer.WriteElementString(DateElementName, dateValue.ToUniversalTime().ToString("s", CultureInfo.InvariantCulture) + "Z");
         }
-        else if (typeof(IDictionary<string, object>).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
+        else if (typeof(IDictionary).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
         {
             // put the dictionary on a new line.
             writer.WriteWhitespace(Environment.NewLine);
-            WriteDictionary(writer, indentLevel, (IDictionary<string, object>)value);
+            WriteDictionary(writer, indentLevel, (IDictionary)value);
         }
-        else if (type == typeof(object[]))
+        else if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
         {
-            var arrayValue = (object[])value;
+            var arrayValue = (IEnumerable)value;
             writer.WriteStartElement(ArrayElementName);
             foreach (var item in arrayValue)
             {
