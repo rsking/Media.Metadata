@@ -11,7 +11,7 @@ namespace Media.Metadata.TheTVDB;
 /// </summary>
 public sealed class TheTVDbShowSearch : IShowSearch
 {
-    private static readonly System.Text.Json.JsonSerializerOptions Options = new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = new LowerCaseJsonNamingPolicy() };
+    private static readonly System.Text.Json.JsonSerializerOptions Options = new() { PropertyNamingPolicy = new LowerCaseJsonNamingPolicy() };
 
     private readonly RestSharp.IRestClient client;
 
@@ -28,22 +28,25 @@ public sealed class TheTVDbShowSearch : IShowSearch
     }
 
     /// <inheritdoc/>
-    async IAsyncEnumerable<Show> IShowSearch.SearchAsync(string name)
+    async IAsyncEnumerable<Show> IShowSearch.SearchAsync(string name, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var series in this.SearchSeriesAsync(name).ConfigureAwait(false))
+        await foreach (var seriesName in this
+            .SearchSeriesAsync(name, cancellationToken)
+            .Select(series => series.SeriesName)
+            .ConfigureAwait(false))
         {
-            if (series.SeriesName is null)
+            if (seriesName is null)
             {
                 continue;
             }
 
-            yield return new Show(series.SeriesName);
+            yield return new Show(seriesName);
         }
     }
 
-    private async IAsyncEnumerable<Series> SearchSeriesAsync(string name)
+    private async IAsyncEnumerable<Series> SearchSeriesAsync(string name, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        this.tokenResponse ??= await GetTokenAsync(this.client).ConfigureAwait(false);
+        this.tokenResponse ??= await GetTokenAsync(this.client, cancellationToken).ConfigureAwait(false);
         if (this.tokenResponse is null)
         {
             throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
@@ -53,73 +56,73 @@ public sealed class TheTVDbShowSearch : IShowSearch
             .AddQueryParameter("name", name)
             .AddHeader("Authorization", $"Bearer {this.tokenResponse.Token}");
 
-        var response = await this.client.ExecuteGetTaskAsync<SeriesList>(request).ConfigureAwait(false);
+        var response = await this.client.ExecuteGetTaskAsync<SeriesList>(request, cancellationToken).ConfigureAwait(false);
         if (response.IsSuccessful && response.Data?.Series is not null)
         {
             foreach (var series in response.Data.Series)
             {
-                var fullSeries = await GetSeriesAsync(series.Id, this.tokenResponse).ConfigureAwait(false);
+                var fullSeries = await GetSeriesAsync(series.Id, this.tokenResponse, cancellationToken).ConfigureAwait(false);
                 if (fullSeries is not null)
                 {
                     yield return fullSeries;
                 }
 
-                async Task<Series?> GetSeriesAsync(int id, TokenResponse tokenResponse)
+                async Task<Series?> GetSeriesAsync(int id, TokenResponse tokenResponse, CancellationToken cancellationToken)
                 {
                     var request = new RestSharp.RestRequest("/series/{id}")
                         .AddUrlSegment("id", id.ToString(System.Globalization.CultureInfo.InvariantCulture))
                         .AddHeader("Authorization", $"Bearer {tokenResponse.Token}");
 
-                    var response = await this.client.ExecuteGetTaskAsync<ShowItem>(request).ConfigureAwait(false);
+                    var response = await this.client.ExecuteGetTaskAsync<ShowItem>(request, cancellationToken).ConfigureAwait(false);
 
                     return response.IsSuccessful ? response.Data.Series : default;
                 }
             }
         }
 
-        async static Task<TokenResponse?> GetTokenAsync(RestSharp.IRestClient client)
+        async static Task<TokenResponse?> GetTokenAsync(RestSharp.IRestClient client, CancellationToken cancellationToken = default)
         {
-            if (await GetTokenFromFile().ConfigureAwait(false) is TokenResponse tokenFromFile)
+            if (await GetTokenFromFile(cancellationToken: cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromFile)
             {
                 return tokenFromFile;
             }
 
-            if (await RequestToken(client).ConfigureAwait(false) is TokenResponse tokenFromWeb)
+            if (await RequestToken(client, cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromWeb)
             {
                 // write this to the local cache
-                await WriteTokenToFile(tokenFromWeb).ConfigureAwait(false);
+                await WriteTokenToFile(tokenFromWeb, cancellationToken: cancellationToken).ConfigureAwait(false);
                 return tokenFromWeb;
             }
 
             return default;
 
-            static async Task<TokenResponse?> RequestToken(RestSharp.IRestClient client)
+            static async Task<TokenResponse?> RequestToken(RestSharp.IRestClient client, CancellationToken cancellationToken)
             {
                 var tokenRequest = new RestSharp.RestRequest("login", RestSharp.Method.POST)
                     .AddJsonBody(new TokenRequest { ApiKey = TheTVDbHelpers.ApiKey });
 
-                var response = await client.ExecutePostTaskAsync<TokenResponse>(tokenRequest).ConfigureAwait(false);
+                var response = await client.ExecutePostTaskAsync<TokenResponse>(tokenRequest, cancellationToken).ConfigureAwait(false);
                 return response.IsSuccessful ? response.Data : default;
             }
 
-            static async Task<TokenResponse?> GetTokenFromFile(string? fileName = null)
+            static async Task<TokenResponse?> GetTokenFromFile(string? fileName = null, CancellationToken cancellationToken = default)
             {
                 fileName ??= GenerateFileName();
                 if (File.Exists(fileName))
                 {
                     using var stream = File.OpenRead(fileName);
-                    return await System.Text.Json.JsonSerializer.DeserializeAsync<TokenResponse>(stream, Options).ConfigureAwait(false);
+                    return await System.Text.Json.JsonSerializer.DeserializeAsync<TokenResponse>(stream, Options, cancellationToken).ConfigureAwait(false);
                 }
 
                 return default;
             }
 
-            static async Task WriteTokenToFile(TokenResponse tokenResponse, string? fileName = null)
+            static async Task WriteTokenToFile(TokenResponse tokenResponse, string? fileName = null, CancellationToken cancellationToken = default)
             {
                 fileName ??= GenerateFileName();
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
                 using var stream = File.OpenWrite(fileName);
-                await System.Text.Json.JsonSerializer.SerializeAsync(stream, tokenResponse, Options).ConfigureAwait(false);
+                await System.Text.Json.JsonSerializer.SerializeAsync(stream, tokenResponse, Options, cancellationToken: cancellationToken).ConfigureAwait(false);
             }
 
             static string GenerateFileName()
@@ -129,6 +132,8 @@ public sealed class TheTVDbShowSearch : IShowSearch
         }
     }
 
+#pragma warning disable S3459 // Unassigned members should be removed
+#pragma warning disable S1144 // Unused private types or members should be removed
     private sealed record TokenRequest
     {
         public string? ApiKey { get; init; }
@@ -199,6 +204,8 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         public string? Zap2ItId { get; init; }
     }
+#pragma warning restore S1144 // Unused private types or members should be removed
+#pragma warning restore S3459 // Unassigned members should be removed
 
     private sealed class LowerCaseJsonNamingPolicy : System.Text.Json.JsonNamingPolicy
     {

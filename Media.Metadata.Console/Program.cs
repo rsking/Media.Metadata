@@ -19,14 +19,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestSharp.Serializers.SystemTextJson;
 
-var searchMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create<IHost, string, int>(SearchMovie) })
+var searchMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create(SearchMovie) })
     .AddArgument(new Argument<string>("name"))
     .AddOption(new Option<int?>(new[] { "--year", "-y" }, "The movie year"));
 
-var readMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create<IHost, FileInfo>(ReadMovie) })
+var readMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create(ReadMovie) })
     .AddArgument(new Argument<FileInfo>("path"));
 
-var searchShowCommand = new CommandBuilder(new Command("show") { Handler = CommandHandler.Create<IHost, string>(SearchShow) })
+var searchShowCommand = new CommandBuilder(new Command("show") { Handler = CommandHandler.Create(SearchShow) })
     .AddArgument(new Argument<string>("name"));
 
 var searchCommand = new CommandBuilder(new Command("search"))
@@ -36,7 +36,7 @@ var searchCommand = new CommandBuilder(new Command("search"))
 var readCommand = new CommandBuilder(new Command("read"))
     .AddCommand(readMovieCommand.Command);
 
-var updateMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create<IHost, FileInfo, string, int>(UpdateMovie) })
+var updateMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create(UpdateMovie) })
     .AddArgument(new Argument<FileInfo>("path"))
     .AddArgument(new Argument<string>("name"))
     .AddOption(new Option<int?>(new[] { "--year", "-y" }, "The movie year"));
@@ -71,6 +71,7 @@ await rootCommand
             services
                 .Configure<InvocationLifetimeOptions>(options => options.SuppressStatusMessages = true);
         }))
+    .CancelOnProcessTermination()
     .Build()
     .InvokeAsync(args)
     .ConfigureAwait(true);
@@ -91,11 +92,11 @@ static IServiceCollection AddFileUpdater(IServiceCollection services)
     return services;
 }
 
-static async Task SearchMovie(IHost host, string name, int year = 0)
+static async Task SearchMovie(IHost host, string name, int year = 0, CancellationToken cancellationToken = default)
 {
     foreach (var search in host.Services.GetServices<IMovieSearch>())
     {
-        await foreach (var movie in search.SearchAsync(name, year).ConfigureAwait(false))
+        await foreach (var movie in search.SearchAsync(name, year, cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             Console.WriteLine("{0} - {1:yyyy-MM-dd}", movie.Name, movie.Release);
             Console.WriteLine(movie.ToString());
@@ -109,7 +110,7 @@ static async Task SearchMovie(IHost host, string name, int year = 0)
     }
 }
 
-static async Task UpdateMovie(IHost host, FileInfo path, string name, int year = 0)
+static async Task UpdateMovie(IHost host, FileInfo path, string name, int year = 0, CancellationToken cancellationToken = default)
 {
     if (!path.Exists)
     {
@@ -118,7 +119,7 @@ static async Task UpdateMovie(IHost host, FileInfo path, string name, int year =
 
     foreach (var search in host.Services.GetServices<IMovieSearch>())
     {
-        await foreach (var movie in search.SearchAsync(name, year).ConfigureAwait(false))
+        await foreach (var movie in search.SearchAsync(name, year, cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             if (string.Equals(movie.Name, name, StringComparison.Ordinal) && (year == 0 || (movie.Release.HasValue && movie.Release.Value.Year == year)))
             {
@@ -142,11 +143,11 @@ static void ReadMovie(IHost host, FileInfo path)
     Console.WriteLine(movie.Name);
 }
 
-static async Task SearchShow(IHost host, string name)
+static async Task SearchShow(IHost host, string name, CancellationToken cancellationToken = default)
 {
     foreach (var search in host.Services.GetServices<IShowSearch>())
     {
-        await foreach (var show in search.SearchAsync(name).ConfigureAwait(false))
+        await foreach (var show in search.SearchAsync(name, cancellationToken).ConfigureAwait(false))
         {
             Console.WriteLine("{0}", show.Name);
         }

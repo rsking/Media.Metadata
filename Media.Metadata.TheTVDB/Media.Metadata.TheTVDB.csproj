@@ -10,6 +10,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="RestSharp" Version="106.6.2" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
     <PackageReference Include="System.Text.Json" Version="4.6.0" />
   </ItemGroup>
 

@@ -17,6 +17,7 @@ public interface IMovieSearch
     /// <param name="name">The name.</param>
     /// <param name="year">The year.</param>
     /// <param name="country">The country.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The movies if found; otherwise <see langword="false"/>.</returns>
-    IAsyncEnumerable<Movie> SearchAsync(string name, int year = 0, string country = "AU");
+    IAsyncEnumerable<Movie> SearchAsync(string name, int year = 0, string country = "AU", CancellationToken cancellationToken = default);
 }

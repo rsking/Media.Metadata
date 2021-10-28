@@ -16,6 +16,7 @@ public interface IEpisodeSearch
     /// </summary>
     /// <param name="name">The name.</param>
     /// <param name="year">The year.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The movies if found; otherwise <see langword="false"/>.</returns>
-    IAsyncEnumerable<Episode> SearchAsync(string name, int year);
+    IAsyncEnumerable<Episode> SearchAsync(string name, int year, CancellationToken cancellationToken = default);
 }

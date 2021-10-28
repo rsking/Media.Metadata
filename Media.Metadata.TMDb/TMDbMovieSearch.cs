@@ -12,14 +12,14 @@ namespace Media.Metadata.TMDb;
 public class TMDbMovieSearch : IMovieSearch
 {
     /// <inheritdoc/>
-    public async IAsyncEnumerable<Movie> SearchAsync(string name, int year = 0, string country = "AU")
+    public async IAsyncEnumerable<Movie> SearchAsync(string name, int year = 0, string country = "AU", [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         using var client = new TMDbLib.Client.TMDbClient("b866acbf3519560a3879b55d2d9cb1cb");
-        var movies = await client.SearchMovieAsync(name, year: year).ConfigureAwait(false);
+        var movies = await client.SearchMovieAsync(name, year: year, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         foreach (var result in movies.Results)
         {
-            var movie = await client.GetMovieAsync(result.Id, TMDbLib.Objects.Movies.MovieMethods.Credits | TMDbLib.Objects.Movies.MovieMethods.Releases | TMDbLib.Objects.Movies.MovieMethods.Images).ConfigureAwait(false);
+            var movie = await client.GetMovieAsync(result.Id, TMDbLib.Objects.Movies.MovieMethods.Credits | TMDbLib.Objects.Movies.MovieMethods.Releases | TMDbLib.Objects.Movies.MovieMethods.Images, cancellationToken).ConfigureAwait(false);
             if (!client.HasConfig)
             {
                 _ = await client.GetConfigAsync().ConfigureAwait(false);
