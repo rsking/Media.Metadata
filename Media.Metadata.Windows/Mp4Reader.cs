@@ -21,7 +21,7 @@ public class Mp4Reader : IReader
             throw new ArgumentException(default, nameof(path));
         }
 
-        var movie = new Movie(
+        var movie = new LocalMovie(
             tags.Title,
             tags.Description,
             tags.MovieInfo?.Producers,
@@ -42,6 +42,11 @@ public class Mp4Reader : IReader
             && Rating.TryParse(tags.RatingInfo.ToString(), out var rating))
         {
             movie = movie with { Rating = rating };
+        }
+
+        if (tags.ArtworkCount > 0)
+        {
+            movie = movie with { Image = tags.Artwork };
         }
 
         return movie;

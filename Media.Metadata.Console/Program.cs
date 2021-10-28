@@ -85,8 +85,8 @@ static IServiceCollection AddFileUpdater(IServiceCollection services)
 
     static void AddFileUpdaterImpl(IServiceCollection services)
     {
-        //services.AddTransient<IUpdater, Media.Metadata.Windows.FileUpdater>();
         services.AddTransient<IReader, Media.Metadata.Windows.Mp4Reader>();
+        services.AddTransient<IUpdater, Media.Metadata.Windows.Mp4Writer>();
     }
 
     return services;

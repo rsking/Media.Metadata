@@ -6,7 +6,6 @@
 
 namespace Media.Metadata.Windows;
 
-using System;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
@@ -463,7 +462,7 @@ internal class MetadataTags : IDisposable
         SetStringValue(tagsPtr, this.Category, tags.category, NativeMethods.MP4TagsSetCategory);
         SetBoolValue(tagsPtr, this.IsHDVideo, tags.hdVideo.ReadBoolean(), NativeMethods.MP4TagsSetHDVideo);
         SetEnumValue(tagsPtr, this.MediaType, tags.mediaType, MediaKind.NotSet, NativeMethods.MP4TagsSetMediaType);
-        SetEnumValue(tagsPtr, this.ContentRating, tags.mediaType, ContentRating.NotSet, NativeMethods.MP4TagsSetContentRating);
+        SetEnumValue(tagsPtr, this.ContentRating, tags.contentRating, ContentRating.NotSet, NativeMethods.MP4TagsSetContentRating);
         SetBoolValue(tagsPtr, this.IsGapless, tags.gapless.ReadBoolean(), NativeMethods.MP4TagsSetGapless);
         SetStringValue(tagsPtr, this.MediaStoreAccount, tags.itunesAccount, NativeMethods.MP4TagsSetITunesAccount);
         SetEnumValue(tagsPtr, this.MediaStoreAccountType, tags.iTunesAccountType, MediaStoreAccountKind.NotSet, NativeMethods.MP4TagsSetITunesAccountType);
@@ -539,8 +538,8 @@ internal class MetadataTags : IDisposable
             if (!newValue.Equals(oldValue.ReadEnumValue<T>(defaultValue)))
             {
                 var value = newValue.Equals(defaultValue)
-                    ? default
-                    : (byte?)(object)newValue;
+                    ? default(byte?)
+                    : (byte)(object)newValue;
                 tagsPtr.WriteByte(value, setFunc);
             }
         }
@@ -681,7 +680,8 @@ internal class MetadataTags : IDisposable
         var newArtwork = default(NativeMethods.MP4TagArtwork);
 
         var stream = new MemoryStream();
-        this.artwork.Save(stream, this.ArtworkFormat);
+        var encoder = GetEncoder(this.ArtworkFormat!.Guid);
+        this.artwork.Save(stream, encoder, default);
         var artworkBytes = stream.ToArray();
 
         newArtwork.data = Marshal.AllocHGlobal(artworkBytes.Length);
@@ -710,6 +710,11 @@ internal class MetadataTags : IDisposable
 
         Marshal.FreeHGlobal(newArtwork.data);
         Marshal.FreeHGlobal(newArtworkPtr);
+
+        static ImageCodecInfo? GetEncoder(Guid guid)
+        {
+            return Array.Find(ImageCodecInfo.GetImageEncoders(), imageCodecInfo => imageCodecInfo.FormatID.Equals(guid));
+        }
     }
 
     private void ReadDiskInfo(IntPtr diskInfoPointer)

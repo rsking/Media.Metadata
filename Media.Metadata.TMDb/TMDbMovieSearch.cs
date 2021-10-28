@@ -48,7 +48,7 @@ public class TMDbMovieSearch : IMovieSearch
                 }
             }
 
-            yield return new Movie(
+            yield return new RemoteMovie(
                 movie.Title,
                 movie.Overview,
                 GetProducers(movie.Credits?.Crew),

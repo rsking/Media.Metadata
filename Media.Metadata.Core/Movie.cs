@@ -6,13 +6,10 @@
 
 namespace Media.Metadata;
 
-using System;
-using System.Collections.Generic;
-
 /// <summary>
 /// Represents a movie.
 /// </summary>
-public record Movie(
+public abstract record class Movie(
     string? Name,
     string? Description,
     IEnumerable<string>? Producers,
@@ -21,9 +18,15 @@ public record Movie(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers)
+    IEnumerable<string>? Composers) : IAsyncDisposable, IDisposable
 {
     private const string Separator = ", ";
+
+    private System.Drawing.Image? image;
+
+    private bool imageRetrived;
+
+    private bool disposedValue;
 
     /// <summary>
     /// Gets the release date.
@@ -31,14 +34,48 @@ public record Movie(
     public DateTime? Release { get; init; }
 
     /// <summary>
-    /// Gets the image URI.
-    /// </summary>
-    public Uri? ImageUri { get; init; }
-
-    /// <summary>
     /// Gets the rating.
     /// </summary>
     public Rating? Rating { get; init; }
+
+    /// <summary>
+    /// Gets the image.
+    /// </summary>
+    public System.Drawing.Image? Image
+    {
+        get
+        {
+            if (!this.imageRetrived)
+            {
+                this.image = GetImage(this.GetImageAsync());
+                this.imageRetrived = true;
+
+                static System.Drawing.Image? GetImage(ValueTask<System.Drawing.Image?> task)
+                {
+                    if (task.IsCompletedSuccessfully)
+                    {
+                        return task.Result;
+                    }
+
+                    if (task.IsFaulted)
+                    {
+                        // this should throw the exception.
+                        return task.GetAwaiter().GetResult();
+                    }
+
+                    return task.AsTask().Result;
+                }
+            }
+
+            return this.image;
+        }
+
+        init
+        {
+            this.image = value;
+            this.imageRetrived = true;
+        }
+    }
 
     /// <inheritdoc/>
     public override string ToString()
@@ -50,5 +87,76 @@ public record Movie(
         plist.AddIfNotNull("cast", this.Cast);
         plist.AddIfNotNull("screenwriters", this.ScreenWriters);
         return plist.ToString();
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        this.Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync()
+    {
+        // Perform async cleanup.
+        await this.DisposeAsyncCore().ConfigureAwait(false);
+
+        // Dispose of unmanaged resources.
+        this.Dispose(disposing: false);
+
+        // Suppress finalization.
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Gets the image.
+    /// </summary>
+    /// <returns>The image.</returns>
+    protected abstract ValueTask<System.Drawing.Image?> GetImageAsync();
+
+    /// <summary>
+    /// Disposes this instance.
+    /// </summary>
+    /// <param name="disposing">Set to <see langword="true"/> to dispose managed resources.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this.disposedValue)
+        {
+            if (disposing)
+            {
+                if (this.imageRetrived && this.image is not null)
+                {
+                    this.image.Dispose();
+                }
+
+                this.image = default;
+                this.imageRetrived = false;
+            }
+
+            this.disposedValue = true;
+        }
+    }
+
+    /// <summary>
+    /// Disposes this instance asynchronously.
+    /// </summary>
+    /// <returns>The value task.</returns>
+    protected virtual async ValueTask DisposeAsyncCore()
+    {
+        if (this.imageRetrived && this.image is not null)
+        {
+            if (this.image is IAsyncDisposable asyncDisposable)
+            {
+                await asyncDisposable.DisposeAsync().ConfigureAwait(false);
+            }
+            else
+            {
+                this.image.Dispose();
+            }
+        }
+
+        this.image = default;
+        this.imageRetrived = false;
     }
 }

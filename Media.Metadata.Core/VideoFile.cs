@@ -34,7 +34,7 @@ public class VideoFile
         {
             var plist = PList.Create(appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI"));
 
-            var movie = new Movie(
+            var movie = new LocalMovie(
                 appleTag.Title,
                 appleTag.Description,
                 GetPersonel(plist, "producers").ToArray(),
@@ -55,6 +55,13 @@ public class VideoFile
                 && Rating.TryParse(ratingString, out var rating))
             {
                 movie = movie with { Rating = rating };
+            }
+
+            if (appleTag.Pictures?.Length > 0)
+            {
+                var picture = appleTag.Pictures[0];
+                using var stream = new MemoryStream(picture.Data.Data);
+                movie = movie with { Image = System.Drawing.Image.FromStream(stream) };
             }
 
             return movie;
