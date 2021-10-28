@@ -57,7 +57,7 @@ public static class PListExtensions
             return;
         }
 
-        plist.Add(key, values);
+        Add(plist, key, values);
     }
 
     /// <summary>
