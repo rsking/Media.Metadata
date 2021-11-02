@@ -26,26 +26,32 @@ public class TMDbMovieSearch : IMovieSearch
             }
 
             var poster = movie.Images?.Posters?.FirstOrDefault();
-            Rating? rating = default;
+            Rating? countryRating = default;
             Rating? invariantRating = default;
             Rating? usRating = default;
 
             foreach (var cty in movie.Releases.Countries)
             {
-                if (!invariantRating.HasValue)
+                if (!invariantRating.HasValue && cty.Primary)
                 {
                     invariantRating = Rating.FindBest(cty.Certification, cty.Iso_3166_1);
                 }
 
                 if (country != null && string.Equals(cty.Iso_3166_1, country, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    rating = Rating.FindBest(cty.Certification, cty.Iso_3166_1);
+                    countryRating = Rating.FindBest(cty.Certification, cty.Iso_3166_1);
                 }
 
                 if (string.Equals(cty.Iso_3166_1, "us", StringComparison.InvariantCultureIgnoreCase))
                 {
                     usRating = Rating.FindBest(cty.Certification, cty.Iso_3166_1);
                 }
+            }
+
+            Rating? rating = countryRating ?? usRating ?? invariantRating;
+            if (rating is not null && rating.Value.ContentRating is null)
+            {
+                rating = default;
             }
 
             yield return new RemoteMovie(
@@ -60,7 +66,7 @@ public class TMDbMovieSearch : IMovieSearch
                 GetComposers(movie.Credits?.Crew))
             {
                 Release = movie.ReleaseDate,
-                Rating = rating ?? usRating ?? invariantRating,
+                Rating = rating,
                 ImageUri = poster is null ? null : client.GetImageUrl(GetBestPosterSize(client.Config) ?? "original", poster.FilePath),
             };
 
