@@ -4,10 +4,12 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>$(RootNamespace.Replace(".Console", ""))</RootNamespace>
+    <AssemblyName>mmc</AssemblyName>
 
     <IsWindows>false</IsWindows>
     <IsWindows Condition="$(TargetFramework.Contains('windows'))">true</IsWindows>
     <DefineConstants Condition="$(IsWindows)">$(DefineConstants);WINDOWS</DefineConstants>
+    <UserSecretsId>f4141296-1840-4f5a-9776-40b8aa343667</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
     <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.12.0" />
     <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.21216.1" />
   </ItemGroup>

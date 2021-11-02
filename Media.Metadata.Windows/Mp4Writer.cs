@@ -12,7 +12,15 @@ namespace Media.Metadata.Windows;
 public class Mp4Writer : IUpdater
 {
     /// <inheritdoc/>
-    public void UpdateEpisode(string fileName, Episode episode) => throw new NotImplementedException();
+    public void UpdateEpisode(string fileName, Episode episode)
+    {
+        var file = Mp4File.Open(fileName);
+        if (file.Tags is not null)
+        {
+            file.Tags.MediaType = MediaKind.TVShow;
+        }
+    }
+
 
     /// <inheritdoc/>
     public void UpdateMovie(string fileName, Movie movie)
@@ -85,12 +93,11 @@ public class Mp4Writer : IUpdater
 
             static string? ToString(IEnumerable<string>? value)
             {
-                if (value is null)
+                return value switch
                 {
-                    return default;
-                }
-
-                return string.Join(", ", value);
+                    null => default,
+                    _ => string.Join(", ", value),
+                };
             }
         }
 

@@ -17,5 +17,5 @@ public interface IShowSearch
     /// <param name="name">The name.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The shows if found; otherwise <see langword="false"/>.</returns>
-    IAsyncEnumerable<Show> SearchAsync(string name, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<Series> SearchAsync(string name, CancellationToken cancellationToken = default);
 }

@@ -15,6 +15,7 @@ using System.CommandLine.IO;
 using System.CommandLine.Parsing;
 using System.CommandLine.Suggestions;
 using Media.Metadata;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestSharp.Serializers.SystemTextJson;
@@ -52,8 +53,11 @@ var rootCommand = new CommandLineBuilder()
 await rootCommand
     .UseHost(
         Host.CreateDefaultBuilder,
-        configure => configure.ConfigureServices(services =>
+        configure => configure.ConfigureServices((builder, services) =>
         {
+            services
+                .Configure<Media.Metadata.TheTVDB.TheTVDbOptions>(builder.Configuration.GetSection("TheTVDB"));
+
             services
                 .AddTransient<IMovieSearch, Media.Metadata.TMDb.TMDbMovieSearch>()
                 .AddTransient<IShowSearch, Media.Metadata.TheTVDB.TheTVDbShowSearch>();
@@ -121,7 +125,7 @@ static async Task UpdateMovie(IHost host, FileInfo path, string name, int year =
     {
         await foreach (var movie in search.SearchAsync(name, year, cancellationToken: cancellationToken).ConfigureAwait(false))
         {
-            if (string.Equals(movie.Name, name, StringComparison.Ordinal) && (year == 0 || (movie.Release.HasValue && movie.Release.Value.Year == year)))
+            if (string.Equals(movie.Name, name, StringComparison.OrdinalIgnoreCase) && (year == 0 || (movie.Release.HasValue && movie.Release.Value.Year == year)))
             {
                 var updater = host.Services.GetRequiredService<IUpdater>();
                 updater.UpdateMovie(path.FullName, movie);
@@ -150,6 +154,15 @@ static async Task SearchShow(IHost host, string name, CancellationToken cancella
         await foreach (var show in search.SearchAsync(name, cancellationToken).ConfigureAwait(false))
         {
             Console.WriteLine("{0}", show.Name);
+            foreach (var season in show.Seasons.OrderBy(season => season.Number))
+            {
+                Console.WriteLine("\tSeason {0}", season.Number);
+
+                foreach (var episode in season.Episodes)
+                {
+                    Console.WriteLine("\t\t{0}", episode.Name);
+                }
+            }
         }
     }
 }

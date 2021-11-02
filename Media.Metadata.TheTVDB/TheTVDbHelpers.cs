@@ -14,5 +14,5 @@ internal static class TheTVDbHelpers
     /// <summary>
     /// The API key.
     /// </summary>
-    public const string ApiKey = "B2FC22B4ACB1113C";
+    public const string ApiKey = "2e105628-249c-491f-af50-b49119065f6b";
 }

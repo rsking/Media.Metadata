@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Show.cs" company="RossKing">
+// <copyright file="Season.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,7 +7,8 @@
 namespace Media.Metadata;
 
 /// <summary>
-/// Represents a show.
+/// Represents a series.
 /// </summary>
-/// <param name="Name">Gets the name.</param>
-public record Show(string Name);
+/// <param name="Number">Get the series number.</param>
+/// <param name="Episodes">Gets the episodes.</param>
+public record class Season(int Number, IEnumerable<Episode> Episodes);
