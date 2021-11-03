@@ -252,34 +252,33 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
 #pragma warning disable S3459 // Unassigned members should be removed
 #pragma warning disable S1144 // Unused private types or members should be removed
-#pragma warning disable SA1600 // Elements should be documented
-    private sealed record Response<T>
+    private sealed record class Response<T>
     {
         public T? Data { get; init; }
 
         public string? Status { get; init; }
     }
 
-    private sealed record TokenRequest
+    private sealed record class TokenRequest
     {
         public string? ApiKey { get; init; }
 
         public string? Pin { get; init; }
     }
 
-    private sealed record TokenResponse
+    private sealed record class TokenResponse
     {
         public string? Token { get; init; }
     }
 
-    public sealed record TranslationSimple
+    private sealed record class TranslationSimple
     {
         public string? Language { get; init; }
 
         public string? Description { get; init; }
     }
 
-    public sealed record RemoteId
+    private sealed record class RemoteId
     {
         public string? Id { get; init; }
 
@@ -288,7 +287,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public string? SourceName { get; init; }
     }
 
-    private sealed record SearchResult
+    private sealed record class SearchResult
     {
         public string? ObjectId { get; init; }
 
@@ -339,7 +338,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public string? Thumbnail { get; init; }
     }
 
-    private sealed record SeriesExtendedRecord
+    private sealed record class SeriesExtendedRecord
     {
         public int Id { get; init; }
 
@@ -380,14 +379,14 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public ICollection<SeasonBaseRecord>? Seasons { get; init; }
     }
 
-    private sealed record Alias
+    private sealed record class Alias
     {
         public string? Language { get; init; }
 
         public string? Name { get; init; }
     }
 
-    public sealed record Status
+    private sealed record class Status
     {
         public int Id { get; init; }
 
@@ -398,7 +397,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public bool KeepUpdated { get; init; }
     }
 
-    public record SeasonBaseRecord
+    private record class SeasonBaseRecord
     {
         public int Id { get; init; }
 
@@ -421,7 +420,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public IDictionary<string, System.Collections.IEnumerable>? Companies { get; init; }
     }
 
-    public sealed record SeasonType
+    private sealed record class SeasonType
     {
         public int Id { get; init; }
 
@@ -430,12 +429,12 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public string? Type { get; init; }
     }
 
-    public sealed record SeasonExtendedRecord : SeasonBaseRecord
+    private sealed record class SeasonExtendedRecord : SeasonBaseRecord
     {
         public ICollection<EpisodeBaseRecord>? Episodes { get; init; }
     }
 
-    public record EpisodeBaseRecord
+    private record EpisodeBaseRecord
     {
         public int Id { get; init; }
 
@@ -466,7 +465,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public string? LastUpdated { get; init; }
     }
 
-    public sealed record EpisodeExtendedRecord : EpisodeBaseRecord
+    private sealed record EpisodeExtendedRecord : EpisodeBaseRecord
     {
         public int? AirsAfterSeason { get; init; }
 
@@ -493,7 +492,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         ////public ICollection<Trailer> Trailers { get; init; }
     }
 
-    public sealed record Character
+    private sealed record Character
     {
         public ICollection<string>? Aliases { get; init; }
 
@@ -530,7 +529,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public string? PersonName { get; init; }
     }
 
-    public sealed record Company
+    private sealed record Company
     {
         public int Id { get; init; }
 
@@ -557,14 +556,14 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public CompanyType? CompanyType { get; init; }
     }
 
-    public sealed record CompanyType
+    private sealed record CompanyType
     {
         public int CompanyTypeId { get; init; }
 
         public string? CompanyTypeName { get; init; }
     }
 
-    public sealed record ContentRating
+    private sealed record ContentRating
     {
         public int Id { get; init; }
 
@@ -579,7 +578,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public string? FullName { get; init; }
     }
 
-    public sealed record Translation
+    private sealed record Translation
     {
         public ICollection<string>? Aliases { get; init; }
 
@@ -595,7 +594,6 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         public string? Tagline { get; init; }
     }
-#pragma warning restore SA1600 // Elements should be documented
 #pragma warning restore S1144 // Unused private types or members should be removed
 #pragma warning restore S3459 // Unassigned members should be removed
 
