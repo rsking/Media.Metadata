@@ -36,13 +36,17 @@ public sealed class TheTVDbShowSearch : IShowSearch
     /// <inheritdoc/>
     async IAsyncEnumerable<Series> IShowSearch.SearchAsync(string name, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        this.tokenResponse ??= await GetTokenAsync(this.client, this.pin, cancellationToken).ConfigureAwait(false);
-        if (this.tokenResponse is null)
+        if (!this.client.DefaultParameters
+            .Any(parameter => parameter.Type == ParameterType.HttpHeader && string.Equals(parameter.Name, "Authorization", StringComparison.Ordinal)))
         {
-            throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
-        }
+            this.tokenResponse ??= await GetTokenAsync(this.client, this.pin, cancellationToken).ConfigureAwait(false);
+            if (this.tokenResponse is null)
+            {
+                throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
+            }
 
-        this.client.AddDefaultHeader("Authorization", $"Bearer {this.tokenResponse.Token}");
+            this.client.AddDefaultHeader("Authorization", $"Bearer {this.tokenResponse.Token}");
+        }
 
         await foreach (var series in this
             .SearchSeriesAsync(name, cancellationToken)
