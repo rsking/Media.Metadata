@@ -29,7 +29,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
     public TheTVDbShowSearch(IRestClient restClient, Microsoft.Extensions.Options.IOptions<TheTVDbOptions> options)
     {
         this.client = restClient;
-        this.client.BaseUrl = new Uri("https://api4.thetvdb.com/v4");
+        this.client.BaseUrl = new Uri(options.Value.Url);
         this.pin = options.Value.Pin ?? throw new ArgumentNullException(nameof(options), "Pin cannot be null");
     }
 
@@ -470,7 +470,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         public int? AirsBeforeSeason { get; init; }
 
-        //public ICollection<AwardBaseRecord> Awards { get; init; }
+        ////public ICollection<AwardBaseRecord> Awards { get; init; }
 
         public ICollection<Character>? Characters { get; init; }
 
@@ -484,9 +484,9 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         public ICollection<SeasonBaseRecord>? Seasons { get; init; }
 
-        //public ICollection<TagOption> TagOptions { get; init; }
+        ////public ICollection<TagOption> TagOptions { get; init; }
 
-        //public ICollection<Trailer> Trailers { get; init; }
+        ////public ICollection<Trailer> Trailers { get; init; }
     }
 
     public sealed record Character
@@ -588,7 +588,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public string? Name { get; init; }
 
         public string? Overview { get; init; }
-        
+
         public string? Tagline { get; init; }
     }
 #pragma warning restore SA1600 // Elements should be documented

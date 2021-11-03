@@ -6,13 +6,9 @@
 
 namespace Media.Metadata.ViewModels;
 
-using System.Windows.Input;
-using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
-using Microsoft.Toolkit.Mvvm.Messaging;
 using MvvmDialogs;
 
 /// <summary>
@@ -23,6 +19,10 @@ internal partial class MainViewModel
 {
     private readonly IDialogService dialogService;
 
+    /// <summary>
+    /// Initialises a new instance of the <see cref="MainViewModel"/> class.
+    /// </summary>
+    /// <param name="dialogService">The dialog service.</param>
     public MainViewModel(IDialogService dialogService)
     {
         this.dialogService = dialogService;
@@ -46,13 +46,10 @@ internal partial class MainViewModel
             CheckFileExists = true,
             CheckPathExists = true,
             Multiselect = true,
-            Title = "Select Video files."
+            Title = "Select Video files.",
         };
 
-#pragma warning disable S1944 // Inappropriate casts should not be made
-        if (this.dialogService.ShowOpenFileDialog((INotifyPropertyChanged)this, settings) == true)
-
-#pragma warning restore S1944 // Inappropriate casts should not be made
+        if (this.dialogService.ShowOpenFileDialog(this, settings) == true)
         {
             foreach (var fileName in settings.FileNames)
             {
