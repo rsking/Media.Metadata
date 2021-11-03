@@ -26,7 +26,7 @@ internal class JsonDateConverter : System.Text.Json.Serialization.JsonConverter<
         static bool GetFromSpan(System.Text.Json.Utf8JsonReader reader, out DateTime value)
         {
             var span = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
-            return System.Buffers.Text.Utf8Parser.TryParse(span, out value, out int bytesConsumed) && span.Length == bytesConsumed;
+            return System.Buffers.Text.Utf8Parser.TryParse(span, out value, out var bytesConsumed) && span.Length == bytesConsumed;
         }
     }
 

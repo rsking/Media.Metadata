@@ -159,14 +159,13 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
                         static IEnumerable<string>? GetCharacters(IEnumerable<Character>? characters, string peopleType)
                         {
-                            if (characters is null)
+                            return characters switch
                             {
-                                return default;
-                            }
-
-                            return characters
-                                .Where(character => string.Equals(character.PeopleType, peopleType, StringComparison.Ordinal) && character.PersonName is not null)
-                                .Select(character => character.PersonName!);
+                                null => default,
+                                _ => characters
+                                    .Where(character => string.Equals(character.PeopleType, peopleType, StringComparison.Ordinal) && character.PersonName is not null)
+                                    .Select(character => character.PersonName!),
+                            };
                         }
                     })
                     .Select(episode => seasonResponse.Data.Data.Image switch

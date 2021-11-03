@@ -5,17 +5,11 @@
 // -----------------------------------------------------------------------
 
 using System.CommandLine;
-using System.CommandLine.Binding;
 using System.CommandLine.Builder;
-using System.CommandLine.Collections;
-using System.CommandLine.Help;
 using System.CommandLine.Hosting;
 using System.CommandLine.Invocation;
-using System.CommandLine.IO;
 using System.CommandLine.Parsing;
-using System.CommandLine.Suggestions;
 using Media.Metadata;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestSharp.Serializers.SystemTextJson;

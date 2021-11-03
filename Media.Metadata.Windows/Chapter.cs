@@ -82,8 +82,5 @@ internal class Chapter
     /// Raises the <see cref="Changed"/> event.
     /// </summary>
     /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-    protected void OnChanged(EventArgs e)
-    {
-        this.Changed?.Invoke(this, e);
-    }
+    protected void OnChanged(EventArgs e) => this.Changed?.Invoke(this, e);
 }

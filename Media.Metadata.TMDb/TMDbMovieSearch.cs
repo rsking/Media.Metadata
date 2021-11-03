@@ -48,7 +48,7 @@ public class TMDbMovieSearch : IMovieSearch
                 }
             }
 
-            Rating? rating = countryRating ?? usRating ?? invariantRating;
+            var rating = countryRating ?? usRating ?? invariantRating;
             if (rating is not null && rating.Value.ContentRating is null)
             {
                 rating = default;
@@ -99,13 +99,12 @@ public class TMDbMovieSearch : IMovieSearch
         }
     }
 
-    private static string GetBestPosterSize(TMDbLib.Objects.General.TMDbConfig confguration)
-    {
-        return confguration.Images.PosterSizes.OrderByDescending(value => value, new SizeComparer()).FirstOrDefault();
-    }
+    private static string GetBestPosterSize(TMDbLib.Objects.General.TMDbConfig confguration) => confguration.Images.PosterSizes.OrderByDescending(value => value, SizeComparer.Instance).FirstOrDefault();
 
     private sealed class SizeComparer : IComparer<string>
     {
+        public static IComparer<string> Instance { get; } = new SizeComparer();
+
         public int Compare(string x, string y)
         {
             if (int.TryParse(x.TrimStart('w'), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out var valueX))

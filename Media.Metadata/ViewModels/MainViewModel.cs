@@ -6,7 +6,6 @@
 
 namespace Media.Metadata.ViewModels;
 
-using System.ComponentModel;
 using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
 using MvvmDialogs;
@@ -23,10 +22,7 @@ internal partial class MainViewModel
     /// Initialises a new instance of the <see cref="MainViewModel"/> class.
     /// </summary>
     /// <param name="dialogService">The dialog service.</param>
-    public MainViewModel(IDialogService dialogService)
-    {
-        this.dialogService = dialogService;
-    }
+    public MainViewModel(IDialogService dialogService) => this.dialogService = dialogService;
 
     /// <summary>
     /// Gets the videos.

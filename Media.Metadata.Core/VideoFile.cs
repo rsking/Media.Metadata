@@ -152,10 +152,7 @@ public class VideoFile
         }
     }
 
-    private static IEnumerable<string> SplitArray(IEnumerable<string> values)
-    {
-        return values
-            .SelectMany(value => value.Split(','))
-            .Select(value => value.Trim());
-    }
+    private static IEnumerable<string> SplitArray(IEnumerable<string> values) => values
+        .SelectMany(value => value.Split(','))
+        .Select(value => value.Trim());
 }
