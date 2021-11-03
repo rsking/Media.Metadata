@@ -26,15 +26,34 @@ public class VideoFile
     /// </summary>
     /// <param name="fileName">The file name.</param>
     /// <returns>The movie.</returns>
-    public static Movie? ReadMovieMetadata(string fileName)
+    public static Video? ReadMetadata(string fileName)
     {
+        var fileInfo = new FileInfo(fileName);
         using var tagLibFile = TagLib.File.Create(fileName);
 
-        if (tagLibFile.GetTag(TagLib.TagTypes.Apple) is TagLib.Mpeg4.AppleTag appleTag && appleTag.IsMovie())
+        if (tagLibFile.GetTag(TagLib.TagTypes.Apple) is TagLib.Mpeg4.AppleTag appleTag)
         {
-            var plist = PList.Create(appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI"));
+            if (appleTag.IsMovie())
+            {
+                var plist = PList.Create(appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI"));
+                return Update(ReadMovieMetadata(fileInfo, appleTag, plist), appleTag);
+            }
 
-            var movie = new LocalMovie(
+            if (appleTag.IsTvShow())
+            {
+                var plist = PList.Create(appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI"));
+                return Update(ReadEpisodeMetadata(fileInfo, appleTag, plist), appleTag);
+            }
+
+            return new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileName));
+        }
+
+        return default;
+
+        static Movie ReadMovieMetadata(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag, PList plist)
+        {
+            return new LocalMovie(
+                fileInfo,
                 appleTag.Title,
                 appleTag.Description,
                 GetPersonel(plist, "producers").ToArray(),
@@ -43,38 +62,78 @@ public class VideoFile
                 appleTag.Genres,
                 GetPersonel(plist, "screenwriters").ToArray(),
                 GetPersonel(plist, "cast").ToArray(),
-                Array.Empty<string>());
+                SplitArray(appleTag.Composers).ToArray());
+        }
 
-            if (appleTag.GetText(DayAtom).FirstOrDefault() is string day
-                && DateTime.TryParse(day, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var release))
+        static Episode ReadEpisodeMetadata(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag, PList plist)
+        {
+            return new LocalEpisode(
+                fileInfo,
+                appleTag.Title,
+                appleTag.Description,
+                GetPersonel(plist, "producers").ToArray(),
+                GetPersonel(plist, "directors").ToArray(),
+                plist.ContainsKey("studio") ? plist["studio"].ToString().Split(',').Select(studio => studio.Trim()).ToArray() : Enumerable.Empty<string>(),
+                appleTag.Genres,
+                GetPersonel(plist, "screenwriters").ToArray(),
+                GetPersonel(plist, "cast").ToArray(),
+                SplitArray(appleTag.Composers).ToArray())
             {
-                movie = movie with { Release = release };
+                Show = appleTag.GetText("tvsh").SingleOrDefault(),
+                Network = appleTag.GetText("tvnn").SingleOrDefault(),
+                Season = GetInt32(appleTag, "tvsn").SingleOrDefault(),
+                Number = GetInt32(appleTag, "tves").SingleOrDefault(),
+                Id = appleTag.GetText("tven").SingleOrDefault(),
+            };
+
+            static int[] GetInt32(TagLib.Mpeg4.AppleTag appleTag, TagLib.ByteVector byteVector)
+            {
+                return appleTag
+                    .DataBoxes(byteVector)
+                    .Select(box =>
+                    {
+                        var bytes = box.Data.Data;
+                        if (BitConverter.IsLittleEndian)
+                        {
+                            bytes = new[] { bytes[3], bytes[2], bytes[1], bytes[0] };
+                        }
+
+                        return BitConverter.ToInt32(bytes, 0);
+                    }).ToArray();
+            }
+        }
+
+        static Video Update(Video video, TagLib.Mpeg4.AppleTag appleTag)
+        {
+            if (appleTag.GetText(DayAtom).FirstOrDefault() is string day
+                && (DateTime.TryParse(day, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.None, out var release)
+                || DateTime.TryParse(day, System.Globalization.DateTimeFormatInfo.CurrentInfo, System.Globalization.DateTimeStyles.None, out release)))
+            {
+                video = video with { Release = release.Date };
             }
 
             if (appleTag.GetDashBox("com.apple.iTunes", "iTunEXTC") is string ratingString
                 && Rating.TryParse(ratingString, out var rating))
             {
-                movie = movie with { Rating = rating };
+                video = video with { Rating = rating };
             }
 
             if (appleTag.Pictures?.Length > 0)
             {
                 var picture = appleTag.Pictures[0];
                 using var stream = new MemoryStream(picture.Data.Data);
-                movie = movie with { Image = System.Drawing.Image.FromStream(stream) };
+                video = video with { Image = System.Drawing.Image.FromStream(stream) };
             }
 
-            return movie;
+            return video;
         }
-
-        return default;
     }
 
     /// <summary>
-    /// Reads the movie.
+    /// Reads the video.
     /// </summary>
-    /// <returns>The movie.</returns>
-    public Movie ReadMovieMetadata() => ReadMovieMetadata(this.fileName) ?? throw new InvalidOperationException();
+    /// <returns>The video.</returns>
+    public Video ReadMetadata() => ReadMetadata(this.fileName) ?? throw new InvalidOperationException();
 
     private static IEnumerable<string> GetPersonel(PList plist, string key)
     {
@@ -91,5 +150,12 @@ public class VideoFile
                 yield return (string)item["name"];
             }
         }
+    }
+
+    private static IEnumerable<string> SplitArray(IEnumerable<string> values)
+    {
+        return values
+            .SelectMany(value => value.Split(','))
+            .Select(value => value.Trim());
     }
 }

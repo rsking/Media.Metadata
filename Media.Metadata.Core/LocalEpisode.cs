@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Movie.cs" company="RossKing">
+// <copyright file="LocalEpisode.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,9 +7,11 @@
 namespace Media.Metadata;
 
 /// <summary>
-/// Represents a movie.
+/// Represents a local episode.
 /// </summary>
-public abstract record class Movie(
+/// <inheritdoc />
+public record class LocalEpisode(
+    FileInfo FileInfo,
     string? Name,
     string? Description,
     IEnumerable<string>? Producers,
@@ -18,6 +20,4 @@ public abstract record class Movie(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : Video(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers)
-{
-}
+    IEnumerable<string>? Composers) : Episode(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), ILocalVideo;

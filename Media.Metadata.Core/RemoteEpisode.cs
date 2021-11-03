@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RemoteMovie.cs" company="RossKing">
+// <copyright file="RemoteEpisode.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,19 +7,13 @@
 namespace Media.Metadata;
 
 /// <summary>
-/// Represents a remote movie.
+/// A remote <see cref="Episode"/>.
 /// </summary>
-/// <inheritdoc />
-public record class RemoteMovie(
+/// <param name="Name">The name.</param>
+/// <param name="Description">The description.</param>
+public record class RemoteEpisode(
     string? Name,
-    string? Description,
-    IEnumerable<string>? Producers,
-    IEnumerable<string>? Directors,
-    IEnumerable<string>? Studios,
-    IEnumerable<string>? Genre,
-    IEnumerable<string>? ScreenWriters,
-    IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : Movie(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IRemoteVideo
+    string? Description) : Episode(Name, Description, default, default, default, default, default, default, default), IRemoteVideo
 {
     /// <summary>
     /// Gets the image URI.

@@ -22,6 +22,7 @@ public class Mp4Reader : IReader
         }
 
         var movie = new LocalMovie(
+            new FileInfo(path),
             tags.Title,
             tags.Description,
             tags.MovieInfo?.Producers,

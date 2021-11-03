@@ -11,6 +11,7 @@ namespace Media.Metadata;
 /// </summary>
 /// <inheritdoc />
 public record class LocalMovie(
+    FileInfo FileInfo,
     string? Name,
     string? Description,
     IEnumerable<string>? Producers,
@@ -19,8 +20,4 @@ public record class LocalMovie(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : Movie(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers)
-{
-    /// <inheritdoc />
-    protected override ValueTask<System.Drawing.Image?> GetImageAsync() => default;
-}
+    IEnumerable<string>? Composers) : Movie(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), ILocalVideo;

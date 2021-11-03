@@ -1,18 +1,18 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="TheTVDbOptions.cs" company="RossKing">
+// <copyright file="IRemoteVideo.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.TheTVDB;
+namespace Media.Metadata;
 
 /// <summary>
-/// The TVDb options.
+/// Represents a remove video.
 /// </summary>
-public class TheTVDbOptions
+internal interface IRemoteVideo
 {
     /// <summary>
-    /// Gets or sets the pin.
+    /// Gets the image URI.
     /// </summary>
-    public string? Pin { get; set; }
+    Uri? ImageUri { get; }
 }

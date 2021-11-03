@@ -21,7 +21,6 @@ public class Mp4Writer : IUpdater
         }
     }
 
-
     /// <inheritdoc/>
     public void UpdateMovie(string fileName, Movie movie)
     {
@@ -42,14 +41,12 @@ public class Mp4Writer : IUpdater
             if (movie.Rating is not null)
             {
                 var rating = movie.Rating.Value;
-                var ratingInfo = new RatingInfo
+                file.Tags.RatingInfo = new RatingInfo
                 {
                     RatingSource = rating.Standard,
                     Rating = rating.ContentRating,
                     SortValue = rating.Score,
                 };
-
-                file.Tags.RatingInfo = ratingInfo;
             }
 
             file.Tags.MovieInfo ??= new MovieInfo();

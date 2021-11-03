@@ -30,7 +30,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
     {
         this.client = restClient;
         this.client.BaseUrl = new Uri("https://api4.thetvdb.com/v4");
-        this.pin = options.Value.Pin;
+        this.pin = options.Value.Pin ?? throw new ArgumentNullException(nameof(options), "Pin cannot be null");
     }
 
     /// <inheritdoc/>
@@ -61,38 +61,119 @@ public sealed class TheTVDbShowSearch : IShowSearch
             var request = new RestRequest("/series/{id}/extended");
             request.AddUrlSegment("id", id);
 
-            var series = await client.ExecuteGetTaskAsync<Response<SeriesExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
+            var seriesResponse = await client.ExecuteGetTaskAsync<Response<SeriesExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
-            if (!series.IsSuccessful || series.Data.Data is null || series.Data.Data.Seasons is null)
+            if (!seriesResponse.IsSuccessful || seriesResponse.Data.Data is null || seriesResponse.Data.Data.Seasons is null)
             {
                 yield break;
             }
 
-            foreach (var season in series.Data.Data.Seasons)
+            var series = seriesResponse.Data.Data;
+
+            foreach (var season in series.Seasons)
             {
                 if (season.Type?.Id != 1)
                 {
                     continue;
                 }
 
-                yield return new Season(season.Number, GetEpisodes(client, season.Id, cancellationToken).ToEnumerable());
+                yield return new Season(season.Number, GetEpisodes(client, series, season.Id, cancellationToken).ToEnumerable());
             }
 
-            static async IAsyncEnumerable<Episode> GetEpisodes(IRestClient client, int seasonId, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+            static async IAsyncEnumerable<Episode> GetEpisodes(IRestClient client, SeriesExtendedRecord series, int seasonId, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
             {
                 var request = new RestRequest("/seasons/{id}/extended");
                 request.AddUrlSegment("id", seasonId);
 
-                var season = await client.ExecuteGetTaskAsync<Response<SeasonExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
+                var seasonResponse = await client.ExecuteGetTaskAsync<Response<SeasonExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
-                if (!season.IsSuccessful || season.Data.Data is null || season.Data.Data.Episodes is null)
+                if (!seasonResponse.IsSuccessful || seasonResponse.Data.Data is null || seasonResponse.Data.Data.Episodes is null)
                 {
                     yield break;
                 }
 
-                foreach (var episode in season.Data.Data.Episodes)
+                var season = seasonResponse.Data.Data;
+
+                var extendedEpisodes = season.Episodes.ToAsyncEnumerable().SelectAwait(async episode =>
                 {
-                    yield return new Episode(episode.Name, episode.Overview);
+                    var request = new RestRequest("/episodes/{id}/extended");
+                    request.AddUrlSegment("id", episode.Id);
+
+                    var episodeResponse = await client.ExecuteGetTaskAsync<Response<EpisodeExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
+
+                    var extendedEpisode = episodeResponse.Data.Data;
+
+                    if (extendedEpisode is not null && extendedEpisode.Overview is null)
+                    {
+                        request = new RestRequest("/episodes/{id}/translations/{language}");
+                        request.AddUrlSegment("id", episode.Id)
+                            .AddUrlSegment("language", "eng");
+
+                        var translationResponse = await client.ExecuteGetTaskAsync<Response<Translation>>(request, cancellationToken).ConfigureAwait(false);
+                        if (translationResponse.IsSuccessful && translationResponse.Data.Data is not null)
+                        {
+                            return extendedEpisode with
+                            {
+                                Name = translationResponse.Data.Data.Name,
+                                Overview = translationResponse.Data.Data.Overview,
+                            };
+                        }
+                    }
+
+                    return extendedEpisode;
+                });
+
+                await foreach (var episode in extendedEpisodes
+                    .Where(episode => episode is not null)
+                    .Select(episode =>
+                    {
+                        return new RemoteEpisode(episode!.Name, episode.Overview)
+                        {
+                            Season = episode.SeasonNumber,
+                            Number = episode.Number,
+                            Id = episode.ProductionCode,
+                            Show = series.Name,
+                            ScreenWriters = GetWriters(episode.Characters),
+                            Cast = GetCast(episode.Characters),
+                            Directors = GetDirectors(episode.Characters),
+                        };
+
+                        static IEnumerable<string>? GetWriters(IEnumerable<Character>? characters)
+                        {
+                            return GetCharacters(characters, "Writer");
+                        }
+
+                        static IEnumerable<string>? GetDirectors(IEnumerable<Character>? characters)
+                        {
+                            return GetCharacters(characters, "Director");
+                        }
+
+                        static IEnumerable<string>? GetCast(IEnumerable<Character>? characters)
+                        {
+                            return GetCharacters(characters, "Guest Star");
+                        }
+
+                        static IEnumerable<string>? GetCharacters(IEnumerable<Character>? characters, string peopleType)
+                        {
+                            if (characters is null)
+                            {
+                                return default;
+                            }
+
+                            return characters
+                                .Where(character => string.Equals(character.PeopleType, peopleType, StringComparison.Ordinal) && character.PersonName is not null)
+                                .Select(character => character.PersonName!);
+                        }
+                    })
+                    .Select(episode => seasonResponse.Data.Data.Image switch
+                    {
+                        not null => episode with { ImageUri = new Uri(seasonResponse.Data.Data.Image) },
+                        _ => episode,
+                    })
+                    .WithCancellation(cancellationToken)
+                    .ConfigureAwait(false))
+                {
+                    yield return episode;
                 }
             }
         }
@@ -350,17 +431,17 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public ICollection<EpisodeBaseRecord>? Episodes { get; init; }
     }
 
-    public sealed record EpisodeBaseRecord
+    public record EpisodeBaseRecord
     {
         public int Id { get; init; }
 
         public int SeriesId { get; init; }
 
-        public string? Name { get; init; }
-
         public string? Aired { get; init; }
 
         public int Runtime { get; init; }
+
+        public string? Name { get; init; }
 
         public ICollection<string>? NameTranslations { get; init; }
 
@@ -379,6 +460,136 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public int SeasonNumber { get; init; }
 
         public string? LastUpdated { get; init; }
+    }
+
+    public sealed record EpisodeExtendedRecord : EpisodeBaseRecord
+    {
+        public int? AirsAfterSeason { get; init; }
+
+        public int? AirsBeforeEpisode { get; init; }
+
+        public int? AirsBeforeSeason { get; init; }
+
+        //public ICollection<AwardBaseRecord> Awards { get; init; }
+
+        public ICollection<Character>? Characters { get; init; }
+
+        public ICollection<ContentRating>? ContentRatings { get; init; }
+
+        public ICollection<Company>? Networks { get; init; }
+
+        public string? ProductionCode { get; init; }
+
+        public ICollection<RemoteId>? RemoteIds { get; init; }
+
+        public ICollection<SeasonBaseRecord>? Seasons { get; init; }
+
+        //public ICollection<TagOption> TagOptions { get; init; }
+
+        //public ICollection<Trailer> Trailers { get; init; }
+    }
+
+    public sealed record Character
+    {
+        public ICollection<string>? Aliases { get; init; }
+
+        public int EpisodeId { get; init; }
+
+        public int Id { get; init; }
+
+        public string? Image { get; init; }
+
+        public bool IsFeatured { get; init; }
+
+        public int? PeopleId { get; init; }
+
+        public int? SeriesId { get; init; }
+
+        public int? MovieId { get; init; }
+
+        public string? Name { get; init; }
+
+        public ICollection<string>? NameTranslations { get; init; }
+
+        public string? Overview { get; init; }
+
+        public ICollection<string>? OverviewTranslations { get; init; }
+
+        public int Sort { get; init; }
+
+        public int Type { get; init; }
+
+        public string? Url { get; init; }
+
+        public string? PeopleType { get; init; }
+
+        public string? PersonName { get; init; }
+    }
+
+    public sealed record Company
+    {
+        public int Id { get; init; }
+
+        public string? Slug { get; init; }
+
+        public string? Name { get; init; }
+
+        public ICollection<string>? NameTranslations { get; init; }
+
+        public string? Overview { get; init; }
+
+        public ICollection<string>? OverviewTranslations { get; init; }
+
+        public ICollection<string>? Aliases { get; init; }
+
+        public string? Country { get; init; }
+
+        public int PrimaryCompanyType { get; init; }
+
+        public string? ActiveDate { get; init; }
+
+        public string? InactiveDate { get; init; }
+
+        public CompanyType? CompanyType { get; init; }
+    }
+
+    public sealed record CompanyType
+    {
+        public int CompanyTypeId { get; init; }
+
+        public string? CompanyTypeName { get; init; }
+    }
+
+    public sealed record ContentRating
+    {
+        public int Id { get; init; }
+
+        public string? Name { get; init; }
+
+        public string? Country { get; init; }
+
+        public string? ContentType { get; init; }
+
+        public int Order { get; init; }
+
+        public string? FullName { get; init; }
+    }
+
+    public sealed record Translation
+    {
+        public ICollection<string>? Aliases { get; init; }
+
+        public bool IsAlias { get; init; }
+
+        public bool IsPrimary { get; init; }
+
+        public string? Language { get; init; }
+
+        public string? Name { get; init; }
+
+        public string? Overview { get; init; }
+        
+        public string? Tagline { get; init; }
     }
 #pragma warning restore SA1600 // Elements should be documented
 #pragma warning restore S1144 // Unused private types or members should be removed

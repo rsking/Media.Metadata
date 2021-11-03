@@ -157,10 +157,14 @@ static async Task SearchShow(IHost host, string name, CancellationToken cancella
             foreach (var season in show.Seasons.OrderBy(season => season.Number))
             {
                 Console.WriteLine("\tSeason {0}", season.Number);
+                if (season.Episodes is null)
+                {
+                    continue;
+                }
 
                 foreach (var episode in season.Episodes)
                 {
-                    Console.WriteLine("\t\t{0}", episode.Name);
+                    Console.WriteLine("\t\t{0}: {1}", episode.Name, episode.Description);
                 }
             }
         }
