@@ -12,12 +12,13 @@ namespace Media.Metadata;
 /// <param name="Standard">The standard.</param>
 /// <param name="ContentRating">The content rating.</param>
 /// <param name="Score">The score.</param>
-public readonly record struct Rating(string Standard, string ContentRating, int Score = 0)
+/// <param name="Annotation">The annotation.</param>
+public readonly record struct Rating(string Standard, string ContentRating, int Score = default, string? Annotation = default)
 {
     private static readonly IDictionary<string, ILookup<string, Rating>> Ratings = LoadRatings();
 
     /// <inheritdoc/>
-    public override string ToString() => FormattableString.Invariant($"{this.Standard}|{this.ContentRating}|{this.Score}|");
+    public override string ToString() => FormattableString.Invariant($"{this.Standard}|{this.ContentRating}|{this.Score}|{this.Annotation ?? string.Empty}");
 
     /// <summary>
     /// Parses a <see cref="Rating"/> from a tag.
@@ -43,7 +44,10 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
         var score = int.TryParse(split[2], System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out var result)
             ? result
             : 0;
-        rating = new Rating(split[0], split[1], score);
+        var annotation = split.Length > 3
+            ? split[3]
+            : default;
+        rating = new Rating(split[0], split[1], score, string.IsNullOrEmpty(annotation) ? default : annotation);
         return true;
     }
 
@@ -85,7 +89,7 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
 
         static IEnumerable<Tuple<string, string, string, int, string>> GetRatings()
         {
-            yield return Tuple.Create("AU", "movie", "au-movie", 0, "NotRated");
+            yield return Tuple.Create("AU", "movie", "au-movie", 0, "Not Rated");
             yield return Tuple.Create("AU", "Movie", "au-movie", 100, "G");
             yield return Tuple.Create("AU", "Movie", "au-movie", 200, "PG");
             yield return Tuple.Create("AU", "Movie", "au-movie", 350, "M");
