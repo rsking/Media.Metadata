@@ -9,11 +9,9 @@ namespace Media.Metadata;
 /// <summary>
 /// Represents the rating.
 /// </summary>
-/// <param name="Standard">The standard.</param>
-/// <param name="ContentRating">The content rating.</param>
-/// <param name="Score">The score.</param>
-/// <param name="Annotation">The annotation.</param>
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
 public readonly record struct Rating(string Standard, string ContentRating, int Score = default, string? Annotation = default)
+#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 {
     private static readonly IDictionary<string, ILookup<string, Rating>> Ratings = LoadRatings();
 

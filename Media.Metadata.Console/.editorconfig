@@ -1,4 +1,8 @@
-[*.cs]
+# C#/VB files
+[*.{cs,vb}]
+
+# SA0001: XML comments disabled
+dotnet_diagnostic.SA0001.severity = none
 
 # MA0047: Declare types in namespaces
 dotnet_diagnostic.MA0047.severity = none

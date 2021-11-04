@@ -18,6 +18,9 @@ internal partial class MainViewModel
 {
     private readonly IDialogService dialogService;
 
+    [Microsoft.Toolkit.Mvvm.ComponentModel.ObservableProperty]
+    private Video? selectedVideo;
+
     /// <summary>
     /// Initialises a new instance of the <see cref="MainViewModel"/> class.
     /// </summary>

@@ -9,14 +9,19 @@
              xmlns:converters="clr-namespace:Media.Metadata.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             md:DialogServiceViews.IsRegistered="True">
+             md:DialogServiceViews.IsRegistered="True"
+             d:DataContext="{d:DesignInstance d:Type={x:Type vm:MainViewModel}, d:IsDesignTimeCreatable=False}">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Command="{Binding AddVideosCommand}" Width="75" Height="25" Content="Add" HorizontalAlignment="Left" Margin="5" />
-        <ListView Grid.Row="1" ItemsSource="{Binding Videos}">
+        <Button Command="{Binding AddVideosCommand, Mode=OneWay}" Width="75" Height="25" Content="Add" HorizontalAlignment="Left" Margin="5,5,0,5" />
+        <ListView Grid.Row="1" ItemsSource="{Binding Videos, Mode=OneWay}" SelectedItem="{Binding SelectedVideo, Mode=TwoWay}">
             <ListView.Resources>
                 <converters:ImageToImageSourceConverter x:Key="ImageToImageSourceConverter" />
             </ListView.Resources>
@@ -37,5 +42,9 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Grid DataContext="{Binding SelectedVideo}"  Grid.Column="1" Grid.Row="1" >
+            <TextBlock Text="{Binding Name}"/>
+        </Grid>
+        
     </Grid>
 </UserControl>
