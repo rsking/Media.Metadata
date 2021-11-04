@@ -11,7 +11,7 @@ namespace Media.Metadata.Windows;
 /// in the "iTunEXTC" atom. This information includes information about the parental
 /// advisory ratings of the content.
 /// </summary>
-internal class RatingInfo : Atom
+internal class RatingInfo : Atom, IEquatable<RatingInfo>
 {
     /// <summary>
     /// Gets or sets the string that represents the rating (e.g., 'PG').
@@ -33,42 +33,25 @@ internal class RatingInfo : Atom
     /// </summary>
     public string? RatingAnnotation { get; set; }
 
-    /// <summary>
-    /// Gets the meaning of the atom.
-    /// </summary>
+    /// <inheritdoc/>
     public override string Meaning => "com.apple.iTunes";
 
-    /// <summary>
-    /// Gets the name of the atom.
-    /// </summary>
+    /// <inheritdoc/>
     public override string Name => "iTunEXTC";
 
-    /// <summary>
-    /// Returns the string representation of the rating.
-    /// </summary>
-    /// <returns>The string representation of the rating.</returns>
+    /// <inheritdoc/>
     public override string ToString() => FormattableString.Invariant($"{this.RatingSource}|{this.Rating}|{this.SortValue}|{this.RatingAnnotation ?? string.Empty}");
 
-    /// <summary>
-    /// Returns the hash code for this <see cref="RatingInfo"/>.
-    /// </summary>
-    /// <returns>A 32-bit signed integer hash code.</returns>
+    /// <inheritdoc/>
     public override int GetHashCode() => StringComparer.Ordinal.GetHashCode(this.ToString());
 
-    /// <summary>
-    /// Determines whether two <see cref="RatingInfo"/> objects have the same value.
-    /// </summary>
-    /// <param name="obj">Determines whether this instance and a specified object, which
-    /// must also be a <see cref="RatingInfo"/> object, have the same value.</param>
-    /// <returns><see langword="true"/> if obj is a <see cref="RatingInfo"/> and its value
-    /// is the same as this instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object obj) => obj is RatingInfo other && string.Equals(this.ToString(), other.ToString(), StringComparison.Ordinal);
+    /// <inheritdoc/>
+    public override bool Equals(object obj) => obj is RatingInfo other && this.Equals(other);
 
-    /// <summary>
-    /// Populates this <see cref="RatingInfo"/> with the specific data stored in it in the referenced file.
-    /// </summary>
-    /// <param name="dataBuffer">A byte array containing the iTunes Metadata Format data
-    /// used to populate this <see cref="RatingInfo"/>.</param>
+    /// <inheritdoc/>
+    public bool Equals(RatingInfo other) => string.Equals(this.ToString(), other.ToString(), StringComparison.Ordinal);
+
+    /// <inheritdoc/>
     public override void Populate(byte[] dataBuffer)
     {
         var ratingString = System.Text.Encoding.UTF8.GetString(dataBuffer);
@@ -82,9 +65,6 @@ internal class RatingInfo : Atom
         }
     }
 
-    /// <summary>
-    /// Returns the data to be stored in this <see cref="RatingInfo"/> as a byte array.
-    /// </summary>
-    /// <returns>The byte array containing the data to be stored in the atom.</returns>
+    /// <inheritdoc/>
     public override byte[] ToByteArray() => System.Text.Encoding.UTF8.GetBytes(this.ToString());
 }

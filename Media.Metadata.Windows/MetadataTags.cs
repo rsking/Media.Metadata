@@ -501,18 +501,27 @@ internal class MetadataTags : IDisposable
         NativeMethods.MP4TagsFree(tagsPtr);
 
         var info = ReadRawAtom<RatingInfo>(fileHandle);
-        if (this.RatingInfo != info)
+        if (!Equals(this.RatingInfo, info))
         {
             WriteRawAtom(fileHandle, this.RatingInfo);
         }
 
-        // TODO: Implement an equality comparison for MovieInfo, so as to only write the atom to the file if it's been modified.
-        //// MovieInfo movieInfo = ReadRawAtom<MovieInfo>(fileHandle);
-        //// if (this.MovieInfo != movieInfo)
-        //// {
-        ////    WriteRawAtom<MovieInfo>(fileHandle, this.MovieInfo);
-        //// }
-        WriteRawAtom(fileHandle, this.MovieInfo);
+        var movieInfo = ReadRawAtom<MovieInfo>(fileHandle);
+        if (!Equals(this.MovieInfo, movieInfo))
+        {
+            WriteRawAtom(fileHandle, this.MovieInfo);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1008:Opening parenthesis should be spaced correctly", Justification = "This is correct.")]
+        static bool Equals<T>(T? x, T? y)
+        {
+            return (x, y) switch
+            {
+                (null, null) => true,
+                (null, not null) or (not null, null) => false,
+                _ => x.Equals(y),
+            };
+        }
 
         static void SetStringValue(IntPtr tags, string? newValue, string? oldValue, Func<IntPtr, string?, bool> setFunc)
         {

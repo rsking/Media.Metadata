@@ -13,7 +13,7 @@ using System.Text;
 /// in the "iTunMOVI" atom. This information includes such items as the cast, directors,
 /// producers, and writers.
 /// </summary>
-internal class MovieInfo : Atom
+internal class MovieInfo : Atom, IEquatable<MovieInfo>
 {
     private IList<string>? cast;
     private IList<string>? directors;
@@ -98,14 +98,10 @@ internal class MovieInfo : Atom
     /// </summary>
     public bool HasScreenwriters => this.screenwriters is not null;
 
-    /// <summary>
-    /// Gets the meaning of the atom.
-    /// </summary>
+    /// <inheritdoc/>
     public override string Meaning => "com.apple.iTunes";
 
-    /// <summary>
-    /// Gets the name of the atom.
-    /// </summary>
+    /// <inheritdoc/>
     public override string Name => "iTunMOVI";
 
     /// <summary>
@@ -128,11 +124,7 @@ internal class MovieInfo : Atom
     /// </summary>
     public void RemoveScreenwriters() => this.screenwriters = null;
 
-    /// <summary>
-    /// Populates this <see cref="MovieInfo"/> with the specific data stored in it.
-    /// </summary>
-    /// <param name="dataBuffer">A byte array containing the iTunes Metadata Format data
-    /// used to populate this <see cref="MovieInfo"/>.</param>
+    /// <inheritdoc/>
     public override void Populate(byte[] dataBuffer)
     {
         PList map;
@@ -168,11 +160,8 @@ internal class MovieInfo : Atom
         }
     }
 
-    /// <summary>
-    /// Returns the data to be stored in this <see cref="MovieInfo"/> as a byte array.
-    /// </summary>
-    /// <returns>The byte array containing the data to be stored in the atom.</returns>
-    public override byte[] ToByteArray()
+    /// <inheritdoc/>
+    public override string ToString()
     {
         var map = new PList();
         map.AddIfNotNull(nameof(this.cast), this.cast);
@@ -181,6 +170,26 @@ internal class MovieInfo : Atom
         map.AddIfNotNull(nameof(this.screenwriters), this.screenwriters);
         map.AddIfNotNullOrEmpty(nameof(this.studio), this.studio);
 
-        return Encoding.UTF8.GetBytes(map.ToString());
+        return map.ToString();
     }
+
+    /// <inheritdoc/>
+    public override byte[] ToByteArray() => Encoding.UTF8.GetBytes(this.ToString());
+
+    /// <inheritdoc/>
+    public override bool Equals(object obj) => obj is MovieInfo movieInfo && this.Equals(movieInfo);
+
+    /// <inheritdoc/>
+    public bool Equals(MovieInfo other) => this.HasCast == other.HasCast
+        && (!this.HasCast || this.cast.SequenceEqual(other.cast, StringComparer.Ordinal))
+        && this.HasDirectors == other.HasDirectors
+        && (!this.HasDirectors || this.directors.SequenceEqual(other.directors, StringComparer.Ordinal))
+        && this.HasProducers == other.HasProducers
+        && (!this.HasProducers || this.producers.SequenceEqual(other.producers, StringComparer.Ordinal))
+        && this.HasScreenwriters == other.HasScreenwriters
+        && (!this.HasScreenwriters || this.screenwriters.SequenceEqual(other.screenwriters, StringComparer.Ordinal))
+        && StringComparer.Ordinal.Equals(this.studio, other.studio);
+
+    /// <inheritdoc/>
+    public override int GetHashCode() => StringComparer.Ordinal.GetHashCode(this.Name) ^ StringComparer.Ordinal.GetHashCode(this.Meaning);
 }
