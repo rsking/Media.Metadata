@@ -2,29 +2,34 @@
   
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>Media.Metadata</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;arm64</Platforms>
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+    <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
+    <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 
     <AssemblyName>mm</AssemblyName>
     <UserSecretsId>f4141296-1840-4f5a-9776-40b8aa343667</UserSecretsId>
   </PropertyGroup>
 
-  <PropertyGroup Label="Versions">
-    <ProjectReunionVersion>0.8.5</ProjectReunionVersion>
-  </PropertyGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest" SubType="Designer" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="Assets\*.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.1" />
-    <PackageReference Include="Microsoft.ProjectReunion" Version="$(ProjectReunionVersion)" />
-    <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="$(ProjectReunionVersion)" />
-    <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="$(ProjectReunionVersion)" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0-preview3" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.20348.19" />
     <PackageReference Include="PInvoke.User32" Version="0.7.104" />
     <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.13.0" />
     <PackageReference Include="TMDbLib" Version="1.8.1" />
@@ -32,9 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Media.Metadata.Mp4v2\Media.Metadata.Mp4v2.csproj" />
-    <ProjectReference Include="..\..\Media.Metadata.TheTVDB\Media.Metadata.TheTVDB.csproj" />
-    <ProjectReference Include="..\..\Media.Metadata.TMDb\Media.Metadata.TMDb.csproj" />
+    <ProjectReference Include="..\Media.Metadata.Mp4v2\Media.Metadata.Mp4v2.csproj" />
+    <ProjectReference Include="..\Media.Metadata.TheTVDB\Media.Metadata.TheTVDB.csproj" />
+    <ProjectReference Include="..\Media.Metadata.TMDb\Media.Metadata.TMDb.csproj" />
   </ItemGroup>
 
   <ItemGroup>

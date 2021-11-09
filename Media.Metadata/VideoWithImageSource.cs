@@ -1,17 +1,16 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="VideoWithImage.cs" company="RossKing">
+// <copyright file="VideoWithImageSource.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
 namespace Media.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-internal record class VideoWithImage(
+/// <summary>
+/// A video with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
+/// </summary>
+/// <inheritdoc />
+internal record class VideoWithImageSource(
     string? Name,
     string? Description,
     IEnumerable<string>? Producers,
@@ -28,11 +27,11 @@ internal record class VideoWithImage(
     public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; init; }
 
     /// <summary>
-    /// Creates a <see cref="VideoWithImage"/> from a <see cref="Video"/>.
+    /// Creates a <see cref="VideoWithImageSource"/> from a <see cref="Video"/>.
     /// </summary>
     /// <param name="video">The video.</param>
     /// <returns>The video with image source.</returns>
-    public static async Task<VideoWithImage> CreateAsync(Video video)
+    public static async Task<VideoWithImageSource> CreateAsync(Video video)
     {
         Microsoft.UI.Xaml.Media.ImageSource? imageSource = default;
         if (video.Image is System.Drawing.Image image)
@@ -59,7 +58,7 @@ internal record class VideoWithImage(
             imageSource = softwareBitmapSource;
         }
 
-        return new VideoWithImage(video.Name, video.Description, video.Producers, video.Directors, video.Studios, video.Genre, video.ScreenWriters, video.Cast, video.Composers)
+        return new VideoWithImageSource(video.Name, video.Description, video.Producers, video.Directors, video.Studios, video.Genre, video.ScreenWriters, video.Cast, video.Composers)
         {
             ImageSource = imageSource,
         };

@@ -50,7 +50,7 @@ internal partial class MainViewModel
             {
                 if (VideoFile.ReadMetadata(file.Path) is Video video)
                 {
-                    this.Videos.Add(await VideoWithImage.CreateAsync(video).ConfigureAwait(true));
+                    this.Videos.Add(await VideoWithImageSource.CreateAsync(video).ConfigureAwait(true));
                 }
             }
         }
