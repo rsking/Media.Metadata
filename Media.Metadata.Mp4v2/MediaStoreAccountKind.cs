@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Windows;
+namespace Media.Metadata;
 
 /// <summary>
 /// Indicates the type of iTunes Music Store account with which this file was purchased.

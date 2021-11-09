@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Windows;
+namespace Media.Metadata;
 
 /// <summary>
 /// Indicates the kind of media contained in this file.

@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Windows;
+namespace Media.Metadata;
 
 /// <summary>
 /// Represents a chapter in an MP4 file.

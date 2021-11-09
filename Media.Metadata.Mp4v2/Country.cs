@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Windows;
+namespace Media.Metadata;
 
 /// <summary>
 /// Specifies the country from which the file was purchased in the iTunes Store.

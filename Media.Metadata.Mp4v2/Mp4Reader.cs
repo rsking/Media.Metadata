@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Windows;
+namespace Media.Metadata;
 
 /// <summary>
 /// The MP4v2 reader.

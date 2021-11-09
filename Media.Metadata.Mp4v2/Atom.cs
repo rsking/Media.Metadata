@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Windows;
+namespace Media.Metadata;
 
 /// <summary>
 /// The <see cref="Atom"/> class is the base class for so-called "reverse-DNS" MP4 tag atoms.
