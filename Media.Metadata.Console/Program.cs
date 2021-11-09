@@ -19,7 +19,7 @@ var searchMovieCommand = new CommandBuilder(new Command("movie") { Handler = Com
     .AddOption(new Option<int?>(new[] { "--year", "-y" }, "The movie year"));
 
 var readMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create(ReadMovie) })
-    .AddArgument(new Argument<FileInfo>("path"));
+    .AddArgument(new Argument<FileInfo>("path").ExistingOnly());
 
 var searchShowCommand = new CommandBuilder(new Command("show") { Handler = CommandHandler.Create(SearchShow) })
     .AddArgument(new Argument<string>("name"));
@@ -32,12 +32,19 @@ var readCommand = new CommandBuilder(new Command("read"))
     .AddCommand(readMovieCommand.Command);
 
 var updateMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create(UpdateMovie) })
-    .AddArgument(new Argument<FileInfo>("path"))
+    .AddArgument(new Argument<FileInfo>("path").ExistingOnly())
     .AddArgument(new Argument<string>("name"))
     .AddOption(new Option<int?>(new[] { "--year", "-y" }, "The movie year"));
 
+var updateEpisodeCommand = new CommandBuilder(new Command("episode") { Handler = CommandHandler.Create(UpdateEpisode) })
+    .AddArgument(new Argument<FileInfo>("path").ExistingOnly())
+    .AddOption(new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true })
+    .AddOption(new Option<int>(new[] { "--season", "-s" }, "The season number"))
+    .AddOption(new Option<int>(new[] { "--episode", "-e" }, "The episode number"));
+
 var updateCommand = new CommandBuilder(new Command("update"))
-    .AddCommand(updateMovieCommand.Command);
+    .AddCommand(updateMovieCommand.Command)
+    .AddCommand(updateEpisodeCommand.Command);
 
 var rootCommand = new CommandLineBuilder()
     .AddCommand(searchCommand.Command)
@@ -83,8 +90,8 @@ static IServiceCollection AddFileUpdater(IServiceCollection services)
 
     static void AddFileUpdaterImpl(IServiceCollection services)
     {
-        services.AddTransient<IReader, Media.Metadata.Windows.Mp4Reader>();
-        services.AddTransient<IUpdater, Media.Metadata.Windows.Mp4Writer>();
+        services.AddTransient<IReader, Mp4Reader>();
+        services.AddTransient<IUpdater, Mp4Writer>();
     }
 
     return services;
@@ -129,6 +136,31 @@ static async Task UpdateMovie(IHost host, FileInfo path, string name, int year =
     }
 }
 
+static async Task UpdateEpisode(IHost host, FileInfo path, string name, int season, int episode, CancellationToken cancellationToken = default)
+{
+    if (!path.Exists)
+    {
+        return;
+    }
+
+    foreach (var search in host.Services.GetServices<IShowSearch>())
+    {
+        await foreach (var series in search.SearchAsync(name, cancellationToken: cancellationToken).ConfigureAwait(false))
+        {
+            foreach (var s in series.Seasons.Where(s => s.Number == season))
+            {
+                var e = s.Episodes.FirstOrDefault(e => e.Number == episode);
+                if (e is not null)
+                {
+                    var updater = host.Services.GetRequiredService<IUpdater>();
+                    updater.UpdateEpisode(path.FullName, e);
+                    return;
+                }
+            }
+        }
+    }
+}
+
 static void ReadMovie(IHost host, FileInfo path)
 {
     if (!path.Exists)
@@ -145,7 +177,7 @@ static async Task SearchShow(IHost host, string name, CancellationToken cancella
 {
     foreach (var search in host.Services.GetServices<IShowSearch>())
     {
-        await foreach (var show in search.SearchAsync(name, cancellationToken).ConfigureAwait(false))
+        await foreach (var show in search.SearchAsync(name, cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             Console.WriteLine("{0}", show.Name);
             foreach (var season in show.Seasons.OrderBy(season => season.Number))

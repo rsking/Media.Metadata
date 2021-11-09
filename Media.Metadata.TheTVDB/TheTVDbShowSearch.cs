@@ -34,7 +34,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
     }
 
     /// <inheritdoc/>
-    async IAsyncEnumerable<Series> IShowSearch.SearchAsync(string name, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+    async IAsyncEnumerable<Series> IShowSearch.SearchAsync(string name, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
     {
         if (!this.client.DefaultParameters
             .Any(parameter => parameter.Type == ParameterType.HttpHeader && string.Equals(parameter.Name, "Authorization", StringComparison.Ordinal)))
@@ -57,10 +57,10 @@ public sealed class TheTVDbShowSearch : IShowSearch
                 continue;
             }
 
-            yield return new Series(series.Name, GetSeasons(this.client, series.TvDbId, cancellationToken).ToEnumerable());
+            yield return new Series(series.Name, GetSeasons(this.client, series.TvDbId, country, cancellationToken).ToEnumerable());
         }
 
-        static async IAsyncEnumerable<Season> GetSeasons(IRestClient client, string? id, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+        static async IAsyncEnumerable<Season> GetSeasons(IRestClient client, string? id, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var request = new RestRequest("/series/{id}/extended");
             request.AddUrlSegment("id", id);
@@ -81,10 +81,10 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     continue;
                 }
 
-                yield return new Season(season.Number, GetEpisodes(client, series, season.Id, cancellationToken).ToEnumerable());
+                yield return new Season(season.Number, GetEpisodes(client, series, season.Id, country, cancellationToken).ToEnumerable());
             }
 
-            static async IAsyncEnumerable<Episode> GetEpisodes(IRestClient client, SeriesExtendedRecord series, int seasonId, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+            static async IAsyncEnumerable<Episode> GetEpisodes(IRestClient client, SeriesExtendedRecord series, int seasonId, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
             {
                 var request = new RestRequest("/seasons/{id}/extended");
                 request.AddUrlSegment("id", seasonId);
@@ -105,26 +105,29 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
                     var episodeResponse = await client.ExecuteGetTaskAsync<Response<EpisodeExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
-                    var extendedEpisode = episodeResponse.Data.Data;
-
-                    if (extendedEpisode is not null && extendedEpisode.Overview is null)
+                    if (episodeResponse.Data.Data is EpisodeExtendedRecord extendedEpisode)
                     {
-                        request = new RestRequest("/episodes/{id}/translations/{language}");
-                        request.AddUrlSegment("id", episode.Id)
-                            .AddUrlSegment("language", "eng");
-
-                        var translationResponse = await client.ExecuteGetTaskAsync<Response<Translation>>(request, cancellationToken).ConfigureAwait(false);
-                        if (translationResponse.IsSuccessful && translationResponse.Data.Data is not null)
+                        if (extendedEpisode.Overview is null)
                         {
-                            return extendedEpisode with
+                            request = new RestRequest("/episodes/{id}/translations/{language}");
+                            request.AddUrlSegment("id", episode.Id)
+                                .AddUrlSegment("language", "eng");
+
+                            var translationResponse = await client.ExecuteGetTaskAsync<Response<Translation>>(request, cancellationToken).ConfigureAwait(false);
+                            if (translationResponse.IsSuccessful && translationResponse.Data.Data is not null)
                             {
-                                Name = translationResponse.Data.Data.Name,
-                                Overview = translationResponse.Data.Data.Overview,
-                            };
+                                return extendedEpisode with
+                                {
+                                    Name = translationResponse.Data.Data.Name,
+                                    Overview = translationResponse.Data.Data.Overview,
+                                };
+                            }
                         }
+
+                        return extendedEpisode;
                     }
 
-                    return extendedEpisode;
+                    return default;
                 });
 
                 await foreach (var episode in extendedEpisodes
@@ -140,6 +143,10 @@ public sealed class TheTVDbShowSearch : IShowSearch
                             ScreenWriters = GetWriters(episode.Characters),
                             Cast = GetCast(episode.Characters),
                             Directors = GetDirectors(episode.Characters),
+                            Release = GetReleaseDate(episode.Aired),
+                            Network = GetNetwork(episode.Networks),
+                            Rating = GetRating(episode.ContentRatings, country),
+                            ImageUri = GetImageUri(episode.Image),
                         };
 
                         static IEnumerable<string>? GetWriters(IEnumerable<Character>? characters)
@@ -167,10 +174,69 @@ public sealed class TheTVDbShowSearch : IShowSearch
                                     .Select(character => character.PersonName!),
                             };
                         }
+
+                        static string? GetNetwork(ICollection<Company>? companies)
+                        {
+                            if (companies == null)
+                            {
+                                return default;
+                            }
+
+                            var company = companies.FirstOrDefault(company => string.Equals(company.CompanyType.CompanyTypeName, "Network", StringComparison.Ordinal));
+                            return company?.Name;
+                        }
+
+                        static Rating? GetRating(ICollection<ContentRating>? contentRatings, string? country)
+                        {
+                            if (contentRatings == null)
+                            {
+                                return default;
+                            }
+
+                            country = GetCountry(country);
+
+                            var contentRating = contentRatings.FirstOrDefault(contentRating => string.Equals(contentRating.Country, country, StringComparison.OrdinalIgnoreCase));
+                            return contentRating is null || contentRating.Name is null || contentRating.Country is null
+                                ? default
+                                : Rating.FindBest(contentRating.Name, GetCountry(contentRating.Country));
+
+                            static string GetCountry(string? country)
+                            {
+                                return country switch
+                                {
+                                    "aus" => "AU",
+                                    "AU" => "aus",
+                                    "us" => "US",
+                                    "US" => "us",
+                                    null => "AU",
+                                    _ => country,
+                                };
+                            }
+                        }
+
+                        static Uri? GetImageUri(string? imageUri)
+                        {
+                            return imageUri is null ? default : new Uri(imageUri);
+                        }
+
+                        static DateTime? GetReleaseDate(string? aired)
+                        {
+                            return aired switch
+                            {
+                                not null when DateTime.TryParse(aired, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var releaseDate) => releaseDate,
+                                not null when DateTime.TryParse(aired, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out var releaseDate) => releaseDate,
+                                _ => default,
+                            };
+                        }
                     })
-                    .Select(episode => seasonResponse.Data.Data.Image switch
+                    .Select(episode => (episode.ImageUri, season.Image) switch
                     {
-                        not null => episode with { ImageUri = new Uri(seasonResponse.Data.Data.Image) },
+                        (null, not null) => episode with { ImageUri = new Uri(season.Image) },
+                        _ => episode,
+                    })
+                    .Select(episode => (episode.ImageUri, series.Image) switch
+                    {
+                        (null, not null) => episode with { ImageUri = new Uri(series.Image) },
                         _ => episode,
                     })
                     .WithCancellation(cancellationToken)
@@ -441,7 +507,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         public string? Aired { get; init; }
 
-        public int Runtime { get; init; }
+        public int? Runtime { get; init; }
 
         public string? Name { get; init; }
 
