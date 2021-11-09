@@ -6,12 +6,12 @@
 
 namespace Media.Metadata.Views;
 
-using System.Windows.Controls;
+using Microsoft.UI.Xaml.Controls;
 
 /// <summary>
 /// Interaction logic for <c>MainView.xaml</c>.
 /// </summary>
-public partial class MainView : UserControl
+public sealed partial class MainView : UserControl
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="MainView"/> class.

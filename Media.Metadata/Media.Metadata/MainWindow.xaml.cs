@@ -6,12 +6,12 @@
 
 namespace Media.Metadata;
 
-using System.Windows;
+using Microsoft.UI.Xaml;
 
 /// <summary>
-/// Interaction logic for <c>MainWindow.xaml</c>.
+/// An empty window that can be used on its own or navigated to within a Frame.
 /// </summary>
-public partial class MainWindow : Window
+public sealed partial class MainWindow : Window
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="MainWindow"/> class.
