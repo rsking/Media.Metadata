@@ -6,10 +6,8 @@
 
 namespace Media.Metadata.ViewModels;
 
-using System.Runtime.InteropServices;
+using System;
 using Microsoft.Toolkit.Mvvm.Input;
-using Microsoft.UI.Xaml;
-using WinRT;
 
 /// <summary>
 /// The main view model.

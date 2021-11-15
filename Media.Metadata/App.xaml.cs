@@ -44,7 +44,7 @@ public partial class App : Application
     /// <summary>
     /// Gets them main window handle.
     /// </summary>
-    public IntPtr MainWindowWindowHandle { get; private set; }
+    public System.IntPtr MainWindowWindowHandle { get; private set; }
 
     /// <summary>
     /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -63,7 +63,7 @@ public partial class App : Application
         {
             using (this.host)
             {
-                await this.host.StopAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(true);
+                await this.host.StopAsync(System.TimeSpan.FromSeconds(5)).ConfigureAwait(true);
             }
         };
     }

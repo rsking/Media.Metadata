@@ -6,6 +6,7 @@
 
 namespace Media.Metadata.Converters;
 
+using System;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Graphics.Imaging;
 

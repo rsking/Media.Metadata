@@ -11,14 +11,13 @@
     <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 
     <AssemblyName>mm</AssemblyName>
     <UserSecretsId>f4141296-1840-4f5a-9776-40b8aa343667</UserSecretsId>
+    <NoWarn>$(NoWarn);SA0001</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AppxManifest Include="Package.appxmanifest" SubType="Designer" />
-  </ItemGroup>
   
   <ItemGroup>
     <Content Include="Assets\*.png" />
@@ -29,7 +28,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0-preview3" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.20348.19" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.196" />
     <PackageReference Include="PInvoke.User32" Version="0.7.104" />
     <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.13.0" />
     <PackageReference Include="TMDbLib" Version="1.8.1" />
@@ -50,6 +49,10 @@
     <Page Update="Views\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Remove="System" />
   </ItemGroup>
   
 </Project>

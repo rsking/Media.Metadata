@@ -6,6 +6,8 @@
 
 namespace Media.Metadata;
 
+using System;
+
 /// <summary>
 /// A video with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
 /// </summary>
