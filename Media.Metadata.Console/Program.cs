@@ -8,6 +8,7 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Invocation;
+using System.CommandLine.IO;
 using System.CommandLine.Parsing;
 using Media.Metadata;
 using Microsoft.Extensions.DependencyInjection;
@@ -136,7 +137,7 @@ static async Task UpdateMovie(IHost host, FileInfo path, string name, int year =
     }
 }
 
-static async Task UpdateEpisode(IHost host, FileInfo path, string name, int season, int episode, CancellationToken cancellationToken = default)
+static async Task UpdateEpisode(IConsole console, IHost host, FileInfo path, string name, int season, int episode, CancellationToken cancellationToken = default)
 {
     if (!path.Exists)
     {
@@ -147,11 +148,14 @@ static async Task UpdateEpisode(IHost host, FileInfo path, string name, int seas
     {
         await foreach (var series in search.SearchAsync(name, cancellationToken: cancellationToken).ConfigureAwait(false))
         {
+            console.Out.WriteLine($"Found Series {series.Name}");
             foreach (var s in series.Seasons.Where(s => s.Number == season))
             {
+                console.Out.WriteLine($"Found Season {series.Name}:{s.Number}");
                 var e = s.Episodes.FirstOrDefault(e => e.Number == episode);
                 if (e is not null)
                 {
+                    console.Out.WriteLine($"Found Episode {series.Name}:{s.Number}:{e.Name}");
                     var updater = host.Services.GetRequiredService<IUpdater>();
                     updater.UpdateEpisode(path.FullName, e);
                     return;

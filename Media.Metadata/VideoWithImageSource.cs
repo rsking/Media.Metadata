@@ -62,6 +62,8 @@ internal record class VideoWithImageSource(
 
         return new VideoWithImageSource(video.Name, video.Description, video.Producers, video.Directors, video.Studios, video.Genre, video.ScreenWriters, video.Cast, video.Composers)
         {
+            Release = video.Release,
+            Rating = video.Rating,
             ImageSource = imageSource,
         };
     }
