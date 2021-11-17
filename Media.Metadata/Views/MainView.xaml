@@ -43,8 +43,15 @@
         </ListBox>
         <StackPanel DataContext="{Binding SelectedVideo}"  Grid.Column="1" Grid.Row="1" >
             <StackPanel.Resources>
-                <converters:ArrayToStringConverter x:Key="ArrayToStringConverter" />
-                <converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter" />
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+                        <ResourceDictionary>
+                            <converters:ArrayToStringConverter x:Key="ArrayToStringConverter" />
+                            <converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter" />
+                        </ResourceDictionary>
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
             </StackPanel.Resources>
             <Grid>
                 <Grid.ColumnDefinitions>

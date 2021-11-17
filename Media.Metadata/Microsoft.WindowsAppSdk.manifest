@@ -660,7 +660,9 @@
         <activatableClass name="Microsoft.UI.Xaml.Controls.NavigationViewItem" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Controls.NavigationViewItemSeparator" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Controls.NavigationViewItemHeader" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Controls.Primitives.NavigationViewItemPresenter" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.Primitives.NavigationViewItemPresenterTemplateSettings" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Automation.Peers.NavigationViewItemAutomationPeer" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Automation.Peers.NavigationViewAutomationPeer" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Controls.ColorPicker" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
@@ -698,6 +700,9 @@
         <activatableClass name="Microsoft.UI.Xaml.Automation.Peers.TreeViewListAutomationPeer" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Automation.Peers.TreeViewItemAutomationPeer" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Automation.Peers.TreeViewItemDataAutomationPeer" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.TreeViewCollapsedEventArgs" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.TreeViewDragItemsCompletedEventArgs" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.TreeViewExpandingEventArgs" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Controls.ParallaxView" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Controls.ScrollOptions" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Controls.ZoomOptions" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
@@ -783,6 +788,29 @@
         <activatableClass name="Microsoft.UI.Xaml.Automation.Peers.ProgressRingAutomationPeer" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Controls.ProgressBar" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
         <activatableClass name="Microsoft.UI.Xaml.Automation.Peers.ProgressBarAutomationPeer" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedIcon" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedIconSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedVisuals.AnimatedAcceptVisualSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedVisuals.AnimatedBackVisualSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedVisuals.AnimatedChevronDownSmallVisualSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedVisuals.AnimatedChevronRightDownSmallVisualSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedVisuals.AnimatedChevronUpDownSmallVisualSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedVisuals.AnimatedFindVisualSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedVisuals.AnimatedGlobalNavigationButtonVisualSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.AnimatedVisuals.AnimatedSettingsVisualSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.BreadcrumbBar" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.BreadcrumbBarItem" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.BreadcrumbBarItemClickedEventArgs" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.Expander" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.ExpanderCollapsedEventArgs" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.ExpanderExpandingEventArgs" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.ImageIcon" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.ImageIconSource" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.PipsPager" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.PipsPagerSelectedIndexChangedEventArgs" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.PipsPagerTemplateSettings" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
+        <activatableClass name="Microsoft.UI.Xaml.Controls.Primitives.MonochromaticOverlayPresenter" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>
     </file>
     <file name="Microsoft.UI.Xaml.Phone.dll">
         <activatableClass name="Microsoft.UI.Xaml.Media.Animation.CommonNavigationTransitionInfo" threadingModel="both" xmlns="urn:schemas-microsoft-com:winrt.v1"></activatableClass>

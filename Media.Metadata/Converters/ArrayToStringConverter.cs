@@ -26,7 +26,7 @@ public sealed class ArrayToStringConverter : Microsoft.UI.Xaml.Data.IValueConver
     {
         return value switch
         {
-            string stringValue => stringValue.Split(';').Select(x => x.Trim()).ToArray(),
+            string stringValue => stringValue.Split(';').Select(x => x.Trim()).ToList(),
             _ => default,
         };
     }
