@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ILocalVideo.cs" company="RossKing">
+// <copyright file="IHasImageSource.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,12 +7,12 @@
 namespace Media.Metadata;
 
 /// <summary>
-/// A local file.
+/// Interface for having an image source.
 /// </summary>
-public interface ILocalVideo
+internal interface IHasImageSource
 {
     /// <summary>
-    /// Gets the file info.
+    /// Gets the image source.
     /// </summary>
-    FileInfo FileInfo { get; }
+    public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; }
 }

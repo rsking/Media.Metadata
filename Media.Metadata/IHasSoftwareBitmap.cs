@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ILocalVideo.cs" company="RossKing">
+// <copyright file="IHasSoftwareBitmap.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,12 +7,12 @@
 namespace Media.Metadata;
 
 /// <summary>
-/// A local file.
+/// Interface for have a software bitmap.
 /// </summary>
-public interface ILocalVideo
+internal interface IHasSoftwareBitmap
 {
     /// <summary>
-    /// Gets the file info.
+    /// Gets the softare bitmap.
     /// </summary>
-    FileInfo FileInfo { get; }
+    Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; }
 }

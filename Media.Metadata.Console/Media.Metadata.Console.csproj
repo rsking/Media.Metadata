@@ -25,9 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Media.Metadata.Mp4v2\Media.Metadata.Mp4v2.csproj" />
-    <ProjectReference Include="..\Media.Metadata.TheTVDB\Media.Metadata.TheTVDB.csproj" />
-    <ProjectReference Include="..\Media.Metadata.TMDb\Media.Metadata.TMDb.csproj" />
+    <ProjectReference Include="..\Media.Metadata.DependencyInjection\Media.Metadata.DependencyInjection.csproj" />
   </ItemGroup>
 
   <ItemGroup>

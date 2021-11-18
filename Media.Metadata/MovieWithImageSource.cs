@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="VideoWithImageSource.cs" company="RossKing">
+// <copyright file="MovieWithImageSource.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,10 +7,10 @@
 namespace Media.Metadata;
 
 /// <summary>
-/// A video with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
+/// A movie with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
 /// </summary>
 /// <inheritdoc />
-internal record class VideoWithImageSource(
+internal record class MovieWithImageSource(
     FileInfo FileInfo,
     string? Name,
     string? Description,
@@ -20,7 +20,7 @@ internal record class VideoWithImageSource(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : LocalVideo(FileInfo, Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
+    IEnumerable<string>? Composers) : LocalMovie(FileInfo, Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
 {
     /// <inheritdoc/>
     public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; init; }
@@ -29,17 +29,17 @@ internal record class VideoWithImageSource(
     public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; init; }
 
     /// <summary>
-    /// Creates a <see cref="VideoWithImageSource"/> from a <see cref="LocalVideo"/>.
+    /// Creates a <see cref="MovieWithImageSource"/> from a <see cref="Movie"/>.
     /// </summary>
-    /// <param name="video">The video.</param>
+    /// <param name="movie">The movie.</param>
     /// <returns>The video with image source.</returns>
-    public static async Task<VideoWithImageSource> CreateAsync(LocalVideo video)
+    public static async Task<MovieWithImageSource> CreateAsync(LocalMovie movie)
     {
-        var softwareBitmap = await video.CreateSoftwareBitmapAsync().ConfigureAwait(true);
-        return new VideoWithImageSource(video.FileInfo, video.Name, video.Description, video.Producers, video.Directors, video.Studios, video.Genre, video.ScreenWriters, video.Cast, video.Composers)
+        var softwareBitmap = await movie.CreateSoftwareBitmapAsync().ConfigureAwait(true);
+        return new MovieWithImageSource(movie.FileInfo, movie.Name, movie.Description, movie.Producers, movie.Directors, movie.Studios, movie.Genre, movie.ScreenWriters, movie.Cast, movie.Composers)
         {
-            Release = video.Release,
-            Rating = video.Rating,
+            Release = movie.Release,
+            Rating = movie.Rating,
             SoftwareBitmap = softwareBitmap,
             ImageSource = await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
         };

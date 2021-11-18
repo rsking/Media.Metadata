@@ -29,16 +29,11 @@
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.196" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.8" />
     <PackageReference Include="PInvoke.User32" Version="0.7.104" />
     <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.13.0" />
     <PackageReference Include="TMDbLib" Version="1.8.1" />
     <Manifest Include="$(ApplicationManifest)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Media.Metadata.Mp4v2\Media.Metadata.Mp4v2.csproj" />
-    <ProjectReference Include="..\Media.Metadata.TheTVDB\Media.Metadata.TheTVDB.csproj" />
-    <ProjectReference Include="..\Media.Metadata.TMDb\Media.Metadata.TMDb.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +48,10 @@
 
   <ItemGroup>
     <Using Remove="System" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Media.Metadata.DependencyInjection\Media.Metadata.DependencyInjection.csproj" />
   </ItemGroup>
   
 </Project>

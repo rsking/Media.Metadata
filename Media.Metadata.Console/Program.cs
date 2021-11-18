@@ -58,13 +58,9 @@ await rootCommand
         configure => configure.ConfigureServices((builder, services) =>
         {
             services
-                .Configure<Media.Metadata.TheTVDB.TheTVDbOptions>(builder.Configuration.GetSection("TheTVDB"));
-
-            services
-                .AddTransient<IMovieSearch, Media.Metadata.TMDb.TMDbMovieSearch>()
-                .AddTransient<IShowSearch, Media.Metadata.TheTVDB.TheTVDbShowSearch>();
-
-            AddFileUpdater(services);
+                .AddTMDb()
+                .AddTheTVDB(builder.Configuration)
+                .AddMp4v2();
 
             services
                 .AddTransient<RestSharp.IRestClient>(_ =>
@@ -81,22 +77,6 @@ await rootCommand
     .Build()
     .InvokeAsync(args)
     .ConfigureAwait(true);
-
-static IServiceCollection AddFileUpdater(IServiceCollection services)
-{
-    if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
-    {
-        AddFileUpdaterImpl(services);
-    }
-
-    static void AddFileUpdaterImpl(IServiceCollection services)
-    {
-        services.AddTransient<IReader, Mp4Reader>();
-        services.AddTransient<IUpdater, Mp4Writer>();
-    }
-
-    return services;
-}
 
 static async Task SearchMovie(IHost host, string name, int year = 0, CancellationToken cancellationToken = default)
 {

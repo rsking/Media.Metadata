@@ -6,4 +6,18 @@
 
 namespace Media.Metadata;
 
-internal record class LocalVideo(FileInfo FileInfo, string? Name) : Video(Name, default, default, default, default, default, default, default, default);
+/// <summary>
+/// Represents a local video.
+/// </summary>
+/// <inheritdoc />
+public record class LocalVideo(
+    FileInfo FileInfo,
+    string? Name,
+    string? Description = default,
+    IEnumerable<string>? Producers = default,
+    IEnumerable<string>? Directors = default,
+    IEnumerable<string>? Studios = default,
+    IEnumerable<string>? Genre = default,
+    IEnumerable<string>? ScreenWriters = default,
+    IEnumerable<string>? Cast = default,
+    IEnumerable<string>? Composers = default) : Video(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers);
