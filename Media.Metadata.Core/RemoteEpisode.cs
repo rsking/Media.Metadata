@@ -13,7 +13,7 @@ namespace Media.Metadata;
 /// <param name="Description">The description.</param>
 public record class RemoteEpisode(
     string? Name,
-    string? Description) : Episode(Name, Description, default, default, default, default, default, default, default), IRemoteVideo
+    string? Description) : Episode(Name, Description, default, default, default, default, default, default, default), IRemoteImage
 {
     /// <summary>
     /// Gets the image URI.

@@ -137,7 +137,7 @@ static async Task UpdateEpisode(IConsole console, IHost host, FileInfo path, str
                 {
                     console.Out.WriteLine($"Found Episode {series.Name}:{s.Number}:{e.Name}");
                     var updater = host.Services.GetRequiredService<IUpdater>();
-                    updater.UpdateEpisode(path.FullName, e);
+                    updater.UpdateEpisode(path.FullName, e with { Image = s.Image ?? series.Image ?? e.Image });
                     return;
                 }
             }

@@ -57,10 +57,20 @@ public sealed class TheTVDbShowSearch : IShowSearch
                 continue;
             }
 
-            yield return new Series(series.Name, GetSeasons(this.client, series.TvDbId, country, cancellationToken).ToEnumerable());
+            yield return new RemoteSeries(series.Name, GetSeasons(this.client, series.TvDbId, country, cancellationToken).ToEnumerable())
+            {
+                ImageUri = GetUri(series.ImageUrl),
+            };
         }
 
-        static async IAsyncEnumerable<Season> GetSeasons(IRestClient client, string? id, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+        static Uri? GetUri(string? imageUrl)
+        {
+            return imageUrl is not null && Uri.TryCreate(imageUrl, UriKind.Absolute, out var uri)
+                ? uri
+                : default;
+        }
+
+        static async IAsyncEnumerable<RemoteSeason> GetSeasons(IRestClient client, string? id, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var request = new RestRequest("/series/{id}/extended");
             request.AddUrlSegment("id", id);
@@ -81,10 +91,13 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     continue;
                 }
 
-                yield return new Season(season.Number, GetEpisodes(client, series, season.Id, country, cancellationToken).ToEnumerable());
+                yield return new RemoteSeason(season.Number, GetEpisodes(client, series, season.Id, country, cancellationToken).ToEnumerable())
+                {
+                    ImageUri = GetUri(season.Image),
+                };
             }
 
-            static async IAsyncEnumerable<Episode> GetEpisodes(IRestClient client, SeriesExtendedRecord series, int seasonId, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+            static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(IRestClient client, SeriesExtendedRecord series, int seasonId, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
             {
                 var request = new RestRequest("/seasons/{id}/extended");
                 request.AddUrlSegment("id", seasonId);
@@ -228,16 +241,6 @@ public sealed class TheTVDbShowSearch : IShowSearch
                                 _ => default,
                             };
                         }
-                    })
-                    .Select(episode => (episode.ImageUri, season.Image) switch
-                    {
-                        (null, not null) => episode with { ImageUri = new Uri(season.Image) },
-                        _ => episode,
-                    })
-                    .Select(episode => (episode.ImageUri, series.Image) switch
-                    {
-                        (null, not null) => episode with { ImageUri = new Uri(series.Image) },
-                        _ => episode,
                     })
                     .WithCancellation(cancellationToken)
                     .ConfigureAwait(false))

@@ -16,7 +16,7 @@ internal static class ExtensionMethods
     /// </summary>
     /// <param name="remoteVideo">The remote video.</param>
     /// <returns>The image.</returns>
-    public static async ValueTask<System.Drawing.Image?> DownloadImageAsync(this IRemoteVideo remoteVideo)
+    public static async ValueTask<System.Drawing.Image?> DownloadImageAsync(this IRemoteImage remoteVideo)
     {
         if (remoteVideo.ImageUri is null)
         {

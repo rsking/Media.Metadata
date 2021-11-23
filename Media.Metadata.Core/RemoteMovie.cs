@@ -19,7 +19,7 @@ public record class RemoteMovie(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : Movie(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IRemoteVideo
+    IEnumerable<string>? Composers) : Movie(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IRemoteImage
 {
     /// <summary>
     /// Gets the image URI.

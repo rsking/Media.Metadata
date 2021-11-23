@@ -11,4 +11,4 @@ namespace Media.Metadata;
 /// </summary>
 /// <param name="Name">Gets the name.</param>
 /// <param name="Seasons">Gets the seasons.</param>
-public record Series(string Name, IEnumerable<Season> Seasons);
+public record Series(string Name, IEnumerable<Season> Seasons) : HasImage;
