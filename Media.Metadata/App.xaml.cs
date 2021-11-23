@@ -35,77 +35,13 @@ public partial class App : Application
                 services.AddTransient<ViewModels.MainViewModel>();
                 services.AddTransient<MainWindow>();
 
-                services.AddMp4v2();
+                services.AddMp4v2(Path.PathSeparator);
 
                 services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
             })
             .Build();
 
         Ioc.Default.ConfigureServices(this.host.Services);
-
-        var potentialPaths = GetPotentialPaths()
-            .Select(path => path.Replace('/', Path.DirectorySeparatorChar));
-
-        var probingDirectories = ((string?)System.AppDomain.CurrentDomain.GetData("PROBING_DIRECTORIES"))?.Split(Path.PathSeparator) ?? new[] { System.AppDomain.CurrentDomain.BaseDirectory };
-        var directories = probingDirectories
-            .Select(RootedPath)
-            .SelectMany(directory => potentialPaths.Select(path => Path.Combine(directory, path)))
-            .Where(Directory.Exists);
-
-        var path = System.Environment.GetEnvironmentVariable("PATH", System.EnvironmentVariableTarget.Process);
-        path = path is null
-            ? string.Join(Path.PathSeparator, directories)
-            : string.Concat(string.Join(Path.PathSeparator, directories), Path.PathSeparator, path);
-
-        System.Environment.SetEnvironmentVariable("PATH", path, System.EnvironmentVariableTarget.Process);
-
-        static string RootedPath(string path)
-        {
-            return Path.IsPathRooted(path) ? path : Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, path);
-        }
-
-        // get the path to the runtimes
-        static IEnumerable<string> GetPotentialPaths()
-        {
-            const string Arm = "arm";
-            const string Arm64 = "arm64";
-            const string X64 = "x64";
-            const string X86 = "x86";
-
-            var architecture = RuntimeInformation.OSArchitecture switch
-            {
-                Architecture.Arm => Arm,
-                Architecture.Arm64 when System.IntPtr.Size == 4 => Arm,
-                Architecture.Arm64 => Arm64,
-                Architecture.X86 => X86,
-                Architecture.X64 when System.IntPtr.Size == 4 => X86,
-                Architecture.X64 => X64,
-                _ => throw new System.InvalidOperationException(),
-            };
-
-            yield return $"runtimes/{GetRidFront()}-{architecture}/native";
-            yield return architecture;
-
-            static string GetRidFront()
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    return "win";
-                }
-
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    return "linux";
-                }
-
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    return "osx";
-                }
-
-                throw new System.InvalidOperationException();
-            }
-        }
     }
 
     /// <summary>

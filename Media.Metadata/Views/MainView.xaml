@@ -14,16 +14,24 @@
     <UserControl.Resources>
         <ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
     </UserControl.Resources>
-    
+
     <SplitView DisplayMode="Inline" IsPaneOpen="True" PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
         <SplitView.Pane>
-            <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <AppBarButton Command="{Binding AddVideosCommand, Mode=OneWay}" Icon="Add" Label="Add" Margin="5" />
-                    <AppBarButton Command="{Binding RemoveVideoCommand, Mode=OneWay}" Icon="Remove" Label="Remove" Margin="5" />
-                </StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                
+                <CommandBar DefaultLabelPosition="Right" Grid.Row="0">
+                    <AppBarButton Command="{Binding AddVideosCommand, Mode=OneWay}" Icon="Add" Label="Add" />
+                    <AppBarButton Command="{Binding RemoveVideoCommand, Mode=OneWay}" Icon="Remove" Label="Remove" />
+                </CommandBar>
 
-                <ListBox Grid.Row="1" ItemsSource="{Binding Videos, Mode=OneWay}" SelectedItem="{Binding SelectedVideo, Mode=TwoWay}" SelectionMode="Multiple">
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding Videos, Mode=OneWay}"
+                         SelectedItem="{Binding SelectedVideo, Mode=TwoWay}"
+                         SelectionMode="Extended">
                     <i:Interaction.Behaviors>
                         <behaviors:VideoListBoxSelectionBehavior SelectedItems="{Binding SelectedVideos, Mode=OneWay}" />
                     </i:Interaction.Behaviors>
@@ -44,78 +52,88 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </StackPanel>
+            </Grid>
         </SplitView.Pane>
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Auto" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
-            <StackPanel DataContext="{Binding SelectedEditableVideo}" Grid.Column="1" Grid.Row="1"
-                        d:DataContext="{d:DesignInstance Type=m:EditableVideo, IsDesignTimeCreatable=False}">
-                <StackPanel.Resources>
-                    <converters:ArrayToStringConverter x:Key="ArrayToStringConverter" />
-                    <converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter" />
-                </StackPanel.Resources>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" />
-                    <ComboBox Grid.Column="1" Header="Video Type" Margin="2">
-                        <x:String>No Set</x:String>
-                        <x:String>Movie</x:String>
-                        <x:String>TV Show</x:String>
-                        <x:String>Music Video</x:String>
-                    </ComboBox>
-                    <ToggleSwitch Grid.Column="2" OffContent="SD" OnContent="HD" Margin="2" />
-                </Grid>
-                <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox Header="Producers" Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                    <TextBox Grid.Column="1" Header="Directors" Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox Header="Studios" Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                    <ComboBox Header="Country" Grid.Column="1" Margin="2">
-                        <x:String>AU</x:String>
-                        <x:String>CA</x:String>
-                        <x:String>FR</x:String>
-                        <x:String>DE</x:String>
-                        <x:String>NZ</x:String>
-                        <x:String>GB</x:String>
-                        <x:String>US</x:String>
-                    </ComboBox>
-                    <ComboBox Header="Rating" Grid.Column="2" Margin="2">
-                        <x:String>Not Rated</x:String>
-                        <x:String>G</x:String>
-                        <x:String>PG</x:String>
-                        <x:String>M</x:String>
-                        <x:String>MA 15+</x:String>
-                        <x:String>R18+</x:String>
-                    </ComboBox>
-                </Grid>
-                <ComboBox Header="Genre" Margin="2" />
-                <TextBox Header="Screen Writers" Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                <TextBox Header="Cast" Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                <TextBox Header="Composers" Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                <DatePicker Header="Release Date" Date="{Binding Release, Mode=TwoWay}" Margin="2" />
+            <CommandBar DefaultLabelPosition="Right">
+                <AppBarButton Icon="Find" Label="Search" />
+                <AppBarButton Command="{Binding SaveCommand, Mode=OneWay}" Icon="Save" Label="Save" />
+            </CommandBar>
+
+            <ScrollViewer DataContext="{Binding SelectedEditableVideo}"
+                          Grid.Row="1"
+                          HorizontalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          VerticalScrollMode="Auto">
+                <StackPanel d:DataContext="{d:DesignInstance Type=m:EditableVideo, IsDesignTimeCreatable=False}"
+                            Grid.Column="1"
+                            Grid.Row="1">
+                    <StackPanel.Resources>
+                        <converters:ArrayToStringConverter x:Key="ArrayToStringConverter" />
+                        <converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter" />
+                    </StackPanel.Resources>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" />
+                        <ComboBox Grid.Column="1" Header="Video Type" Margin="2">
+                            <x:String>No Set</x:String>
+                            <x:String>Movie</x:String>
+                            <x:String>TV Show</x:String>
+                            <x:String>Music Video</x:String>
+                        </ComboBox>
+                        <ToggleSwitch Grid.Column="2" OffContent="SD" OnContent="HD" Margin="2" />
+                    </Grid>
+                    <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Header="Producers" Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                        <TextBox Grid.Column="1" Header="Directors" Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Header="Studios" Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                        <ComboBox Header="Country" Grid.Column="1" Margin="2">
+                            <x:String>AU</x:String>
+                            <x:String>CA</x:String>
+                            <x:String>FR</x:String>
+                            <x:String>DE</x:String>
+                            <x:String>NZ</x:String>
+                            <x:String>GB</x:String>
+                            <x:String>US</x:String>
+                        </ComboBox>
+                        <ComboBox Header="Rating" Grid.Column="2" Margin="2">
+                            <x:String>Not Rated</x:String>
+                            <x:String>G</x:String>
+                            <x:String>PG</x:String>
+                            <x:String>M</x:String>
+                            <x:String>MA 15+</x:String>
+                            <x:String>R18+</x:String>
+                        </ComboBox>
+                    </Grid>
+                    <ComboBox Header="Genre" Margin="2" />
+                    <TextBox Header="Screen Writers" Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                    <TextBox Header="Cast" Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                    <TextBox Header="Composers" Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                    <DatePicker Header="Release Date" Date="{Binding Release, Mode=TwoWay}" Margin="2" />
                 </StackPanel>
             </ScrollViewer>
-            <AppBarButton Grid.Row="1" Command="{Binding SaveCommand, Mode=OneWay}" Icon="Save" Label="Save" Margin="5" HorizontalAlignment="Right" />
         </Grid>
     </SplitView>
 </UserControl>
