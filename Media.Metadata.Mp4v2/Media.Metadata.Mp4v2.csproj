@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>$(RootNamespace.Replace(".Mp4v2", ""))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Description>Uses libmp4v2 from https://github.com/TechSmith/mp4v2</Description>
   </PropertyGroup>
 
   <ItemGroup>

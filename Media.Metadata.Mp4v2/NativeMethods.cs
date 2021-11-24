@@ -999,6 +999,39 @@ internal static class NativeMethods
     internal static extern string MP4GetTrackType(IntPtr hFile, int trackId);
 
     /// <summary>
+    /// Get the track media data name.
+    /// </summary>
+    /// <param name="hFile">handle of file for operation.</param>
+    /// <param name="trackId">id of track for operation.</param>
+    /// <returns>On success, a string indicating track type. On failure, <see langword="null"/>.</returns>
+    [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern string MP4GetTrackMediaDataName(IntPtr hFile, int trackId);
+
+    /// <summary>
+    /// Get ISO-639-2/T language code of a track.
+    /// </summary>
+    /// <param name="hFile">handle of file for operation.</param>
+    /// <param name="trackId">id of track for operation.</param>
+    /// <param name="code">buffer to hold 3-char+null.</param>
+    /// <remarks>The language code is a 3-char alpha code consisting of lower-case letters.</remarks>
+    /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
+    [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static extern bool MP4GetTrackLanguage(IntPtr hFile, int trackId, byte[] code);
+
+    /// <summary>
+    /// Set ISO-639-2/T language code of a track.
+    /// </summary>
+    /// <param name="hFile">handle of file for operation.</param>
+    /// <param name="trackId">id of track for operation.</param>
+    /// <param name="code">3-char language code.</param>
+    /// <remarks>The language code is a 3-char alpha code consisting of lower-case letters.</remarks>
+    /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
+    [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static extern bool MP4SetTrackLanguage(IntPtr hFile, int trackId, byte[] code);
+
+    /// <summary>
     /// Convert duration from track time scale to an arbitrary time scale.
     /// </summary>
     /// <param name="hFile">handle of file for operation.</param>

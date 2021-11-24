@@ -12,10 +12,10 @@ namespace Media.Metadata;
 public class Mp4Writer : IUpdater
 {
     /// <inheritdoc/>
-    public void UpdateEpisode(string fileName, Episode episode)
+    public void UpdateEpisode(string fileName, Episode episode, IDictionary<int, string>? languages = default)
     {
         var file = Mp4File.Open(fileName);
-        Update(file, episode, MediaKind.TVShow);
+        Update(file, episode, MediaKind.TVShow, languages);
         if (file.Tags is not null)
         {
             // episode
@@ -30,14 +30,14 @@ public class Mp4Writer : IUpdater
     }
 
     /// <inheritdoc/>
-    public void UpdateMovie(string fileName, Movie movie)
+    public void UpdateMovie(string fileName, Movie movie, IDictionary<int, string>? languages = default)
     {
         var file = Mp4File.Open(fileName);
-        Update(file, movie, MediaKind.Movie);
+        Update(file, movie, MediaKind.Movie, languages);
         file.Save();
     }
 
-    private static void Update(Mp4File file, Video video, MediaKind mediaKind)
+    private static void Update(Mp4File file, Video video, MediaKind mediaKind, IDictionary<int, string>? languages)
     {
         if (file.Tags is not null)
         {
@@ -101,6 +101,18 @@ public class Mp4Writer : IUpdater
             }
 
             file.Tags.MovieInfo.Studio = ToString(video.Studios);
+
+            if (languages is not null && file.Tracks is not null)
+            {
+                foreach (var language in languages)
+                {
+                    var tracks = language.Key == -1 ? file.Tracks : file.Tracks.Where(track => track.Id == language.Key);
+                    foreach (var track in tracks)
+                    {
+                        track.Language = language.Value;
+                    }
+                }
+            }
 
             static string? ToString(IEnumerable<string>? value)
             {

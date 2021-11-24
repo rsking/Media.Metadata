@@ -38,6 +38,11 @@ internal sealed class Mp4File
     public MetadataTags? Tags { get; private set; }
 
     /// <summary>
+    /// Gets the tracks for this file.
+    /// </summary>
+    public TrackList? Tracks { get; private set; }
+
+    /// <summary>
     /// Opens and reads the data for the specified file.
     /// </summary>
     /// <param name="fileName">The full path and file name of the MP4 file to open.</param>
@@ -64,6 +69,7 @@ internal sealed class Mp4File
             {
                 this.Tags = MetadataTags.ReadFromFile(fileHandle);
                 this.Chapters = ChapterList.ReadFromFile(fileHandle);
+                this.Tracks = TrackList.ReadFromFile(fileHandle);
             }
             finally
             {
@@ -84,6 +90,7 @@ internal sealed class Mp4File
             {
                 this.Tags?.WriteToFile(fileHandle);
                 this.Chapters?.WriteToFile(fileHandle);
+                this.Tracks?.WriteToFile(fileHandle);
             }
             finally
             {

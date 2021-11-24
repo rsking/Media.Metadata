@@ -15,9 +15,6 @@ internal sealed class ChapterList : IList<Chapter>
     private readonly IList<Chapter> chapters = new List<Chapter>();
     private readonly ICollection<Guid> hashedIndex = new HashSet<Guid>();
 
-    /// <summary>
-    /// Prevents a default instance of the <see cref="ChapterList"/> class from being created.
-    /// </summary>
     private ChapterList()
     {
     }
