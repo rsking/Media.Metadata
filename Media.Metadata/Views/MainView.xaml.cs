@@ -19,6 +19,6 @@ public sealed partial class MainView : UserControl
     public MainView()
     {
         this.InitializeComponent();
-        this.DataContext = Microsoft.Toolkit.Mvvm.DependencyInjection.Ioc.Default.GetRequiredService<ViewModels.MainViewModel>();
+        this.DataContext = CommunityToolkit.Mvvm.DependencyInjection.Ioc.Default.GetRequiredService<ViewModels.MainViewModel>();
     }
 }

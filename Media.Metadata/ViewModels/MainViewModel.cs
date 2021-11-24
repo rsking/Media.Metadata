@@ -7,20 +7,18 @@
 namespace Media.Metadata.ViewModels;
 
 using System;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 
 /// <summary>
 /// The main view model.
 /// </summary>
-internal partial class MainViewModel : Microsoft.Toolkit.Mvvm.ComponentModel.ObservableObject
+internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
     private readonly IUpdater updater;
 
-    [Microsoft.Toolkit.Mvvm.ComponentModel.ObservableProperty]
-    [Microsoft.Toolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(SelectedEditableVideo))]
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(SelectedEditableVideo))]
     private Video? selectedVideo;
-
-    private Models.EditableVideo? selectedEditableVideo;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="MainViewModel"/> class.
@@ -36,7 +34,7 @@ internal partial class MainViewModel : Microsoft.Toolkit.Mvvm.ComponentModel.Obs
     /// <summary>
     /// Gets the selected editable video.
     /// </summary>
-    public Models.EditableVideo? SelectedEditableVideo => this.selectedEditableVideo;
+    public Models.EditableVideo? SelectedEditableVideo { get; private set; }
 
     /// <summary>
     /// Gets the selected videos.
@@ -112,9 +110,9 @@ internal partial class MainViewModel : Microsoft.Toolkit.Mvvm.ComponentModel.Obs
     [ICommand]
     public async Task Save()
     {
-        if (this.selectedEditableVideo is not null)
+        if (this.SelectedEditableVideo is not null)
         {
-            var video = await this.selectedEditableVideo.ToVideoAsync().ConfigureAwait(true);
+            var video = await this.SelectedEditableVideo.ToVideoAsync().ConfigureAwait(true);
             if (video is LocalEpisode episode)
             {
                 this.updater.UpdateEpisode(episode.FileInfo.FullName, episode);
@@ -160,7 +158,7 @@ internal partial class MainViewModel : Microsoft.Toolkit.Mvvm.ComponentModel.Obs
     {
         if (string.Equals(e.PropertyName, nameof(this.selectedVideo), StringComparison.OrdinalIgnoreCase))
         {
-            this.selectedEditableVideo = this.selectedVideo switch
+            this.SelectedEditableVideo = this.selectedVideo switch
             {
                 EpisodeWithImageSource episode => new Models.EditableEpisode(episode),
                 MovieWithImageSource movie => new Models.EditableMovie(movie),

@@ -117,10 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AU" xml:space="preserve">
+    <value>Australia</value>
+  </data>
+  <data name="CA" xml:space="preserve">
+    <value>Canada</value>
+  </data>
+  <data name="DE" xml:space="preserve">
+    <value>Germany</value>
+  </data>
+  <data name="FR" xml:space="preserve">
+    <value>France</value>
+  </data>
+  <data name="GB" xml:space="preserve">
+    <value>Great Britan</value>
+  </data>
   <data name="InvalidPListValueType" xml:space="preserve">
     <value>Invalid PList value type</value>
   </data>
   <data name="InvalidXml" xml:space="preserve">
     <value>Invalid XML</value>
+  </data>
+  <data name="NZ" xml:space="preserve">
+    <value>New Zealand</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>United States</value>
   </data>
 </root>

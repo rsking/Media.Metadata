@@ -61,6 +61,51 @@ namespace Media.Metadata.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Australia.
+        /// </summary>
+        internal static string AU {
+            get {
+                return ResourceManager.GetString("AU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Canada.
+        /// </summary>
+        internal static string CA {
+            get {
+                return ResourceManager.GetString("CA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Germany.
+        /// </summary>
+        internal static string DE {
+            get {
+                return ResourceManager.GetString("DE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to France.
+        /// </summary>
+        internal static string FR {
+            get {
+                return ResourceManager.GetString("FR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Great Britan.
+        /// </summary>
+        internal static string GB {
+            get {
+                return ResourceManager.GetString("GB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid PList value type.
         /// </summary>
         internal static string InvalidPListValueType {
@@ -75,6 +120,24 @@ namespace Media.Metadata.Properties {
         internal static string InvalidXml {
             get {
                 return ResourceManager.GetString("InvalidXml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Zealand.
+        /// </summary>
+        internal static string NZ {
+            get {
+                return ResourceManager.GetString("NZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to United States.
+        /// </summary>
+        internal static string US {
+            get {
+                return ResourceManager.GetString("US", resourceCulture);
             }
         }
     }

@@ -53,7 +53,7 @@ internal class EditableEpisode : EditableVideo
     /// <inheritdoc/>
     public override async Task<Video> ToVideoAsync() => new LocalEpisode(this.FileInfo, this.Name, this.Description, this.Producers, this.Directors, this.Studios, this.Genre, this.ScreenWriters, this.Cast, this.Composers)
     {
-        Rating = this.Rating,
+        Rating = this.Rating.SelectedRating,
         Release = this.Release?.DateTime,
         Show = this.Show,
         Network = this.Network,

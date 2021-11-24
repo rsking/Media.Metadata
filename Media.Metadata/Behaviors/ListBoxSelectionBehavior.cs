@@ -18,6 +18,7 @@ internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavi
     /// <summary>
     /// Identifies the <see cref="SelectedItems"/> dependency property.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "RCS1158:Static member in generic type should use a type parameter.", Justification = "Checked")]
     public static readonly DependencyProperty SelectedItemsProperty =
         DependencyProperty.Register(
             nameof(SelectedItems),

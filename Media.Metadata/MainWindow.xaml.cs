@@ -14,5 +14,11 @@ public sealed partial class MainWindow : Microsoft.UI.Xaml.Window
     /// <summary>
     /// Initialises a new instance of the <see cref="MainWindow"/> class.
     /// </summary>
-    public MainWindow() => this.InitializeComponent();
+    public MainWindow()
+    {
+        this.InitializeComponent();
+
+        this.Title = "Media Metadata Updater";
+        this.ExtendsContentIntoTitleBar = true;
+    }
 }

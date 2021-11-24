@@ -40,7 +40,7 @@ internal class EditableVideo : ILocalVideo, IHasImageSource, IHasSoftwareBitmap
         this.Cast = Create(video.Cast);
         this.Composers = Create(video.Composers);
         this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
-        this.Rating = video.Rating;
+        this.Rating = new EditableRating(video.Rating);
         this.SoftwareBitmap = softwareBitmap;
         this.ImageSource = imageSource;
 
@@ -104,9 +104,9 @@ internal class EditableVideo : ILocalVideo, IHasImageSource, IHasSoftwareBitmap
     public System.DateTimeOffset? Release { get; set; }
 
     /// <summary>
-    /// Gets or sets the rating.
+    /// Gets the rating.
     /// </summary>
-    public Rating? Rating { get; set; }
+    public EditableRating Rating { get; init; }
 
     /// <inheritdoc/>
     public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; init; }
@@ -120,7 +120,7 @@ internal class EditableVideo : ILocalVideo, IHasImageSource, IHasSoftwareBitmap
     /// <returns>The video.</returns>
     public virtual async Task<Video> ToVideoAsync() => new LocalVideo(this.FileInfo, this.Name, this.Description, this.Producers, this.Directors, this.Studios, this.Genre, this.ScreenWriters, this.Cast, this.Composers)
     {
-        Rating = this.Rating,
+        Rating = this.Rating.SelectedRating,
         Release = this.Release?.DateTime,
         Image = await this.CreateImageAsync().ConfigureAwait(false),
     };

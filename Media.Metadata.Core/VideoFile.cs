@@ -35,20 +35,29 @@ public class VideoFile
         {
             if (appleTag.IsMovie())
             {
-                var plist = PList.Create(appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI"));
-                return Update(ReadMovieMetadata(fileInfo, appleTag, plist), appleTag);
+                return Update(ReadMovieMetadata(fileInfo, appleTag, CreatePList(appleTag)), appleTag);
             }
 
             if (appleTag.IsTvShow())
             {
-                var plist = PList.Create(appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI"));
-                return Update(ReadEpisodeMetadata(fileInfo, appleTag, plist), appleTag);
+                return Update(ReadEpisodeMetadata(fileInfo, appleTag, CreatePList(appleTag)), appleTag);
             }
 
             return new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileName));
         }
 
         return default;
+
+        static PList CreatePList(TagLib.Mpeg4.AppleTag appleTag)
+        {
+            var dashBox = appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI");
+            if (dashBox is null)
+            {
+                return new PList();
+            }
+
+            return PList.Create(dashBox);
+        }
 
         static Movie ReadMovieMetadata(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag, PList plist)
         {
