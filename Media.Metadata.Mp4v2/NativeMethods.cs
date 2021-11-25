@@ -371,7 +371,7 @@ internal static class NativeMethods
     /// <remarks>MP4Read is the first call that should be used when you want to just read an existing mp4 file.It is equivalent to opening a file for reading, but in addition the mp4 file is parsed and the controlinformation is loaded into memory.Note that actual track samples are notread into memory until MP4ReadSample() is called.</remarks>
     /// <returns>On success a handle of the file for use in subsequent calls to the library. On error, #MP4_INVALID_FILE_HANDLE.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern IntPtr MP4Read([MarshalAs(UnmanagedType.LPStr)] string fileName, IntPtr cb);
+    internal static extern IntPtr MP4Read(byte[] fileName, IntPtr cb);
 
     /// <summary>
     /// Modify an existing mp4 file.
@@ -384,7 +384,7 @@ internal static class NativeMethods
     /// </remarks>
     /// <returns>On success a handle of the target file for use in subsequent calls to the library. On error, #MP4_INVALID_FILE_HANDLE.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern IntPtr MP4Modify([MarshalAs(UnmanagedType.LPStr)] string fileName, int flags);
+    internal static extern IntPtr MP4Modify(byte[] fileName, int flags);
 
     //// Commenting this API declaration. It isn't called yet, but may be in the future.
     //// [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
@@ -395,7 +395,7 @@ internal static class NativeMethods
     /// Close an mp4 file.
     /// </summary>
     /// <param name="file">handle of file to close.</param>
-    /// <remarks>MP4Close closes a previously opened mp4 file. If the file was opened writable with <see cref="MP4Modify(string, int)"/>, then <see cref="MP4Close(IntPtr)"/> will write out all pending information to disk.</remarks>
+    /// <remarks>MP4Close closes a previously opened mp4 file. If the file was opened writable with <see cref="MP4Modify(byte[], int)"/>, then <see cref="MP4Close(IntPtr)"/> will write out all pending information to disk.</remarks>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     internal static extern void MP4Close(IntPtr file);
 

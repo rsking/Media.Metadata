@@ -264,7 +264,7 @@ internal class MetadataTags : IDisposable
     /// <summary>
     /// Gets or sets the country where this file was purchased from a media store, such as iTunes.
     /// </summary>
-    public Country MediaStoreCountry { get; set; }
+    public MediaStoreCountry MediaStoreCountry { get; set; }
 
     /// <summary>
     /// Gets or sets the media store ID of the of the content contained in this file.
@@ -400,7 +400,7 @@ internal class MetadataTags : IDisposable
             IsGapless = tags.gapless.ReadBoolean(),
 
             MediaStoreAccount = tags.itunesAccount,
-            MediaStoreCountry = tags.iTunesCountry.ReadEnumValue(Country.None),
+            MediaStoreCountry = tags.iTunesCountry.ReadEnumValue(MediaStoreCountry.None),
             MediaStoreAccountType = tags.iTunesAccountType.ReadEnumValue(MediaStoreAccountKind.NotSet),
             ContentId = tags.contentID.ReadInt32(),
             ArtistId = tags.artistID.ReadInt32(),
@@ -469,9 +469,9 @@ internal class MetadataTags : IDisposable
         SetBoolValue(tagsPtr, this.IsGapless, tags.gapless.ReadBoolean(), NativeMethods.MP4TagsSetGapless);
         SetStringValue(tagsPtr, this.MediaStoreAccount, tags.itunesAccount, NativeMethods.MP4TagsSetITunesAccount);
         SetEnumValue(tagsPtr, this.MediaStoreAccountType, tags.iTunesAccountType, MediaStoreAccountKind.NotSet, NativeMethods.MP4TagsSetITunesAccountType);
-        if (this.MediaStoreCountry != tags.iTunesCountry.ReadEnumValue(Country.None))
+        if (this.MediaStoreCountry != tags.iTunesCountry.ReadEnumValue(MediaStoreCountry.None))
         {
-            var countryValue = this.MediaStoreCountry == Country.None ? null : (int?)this.MediaStoreCountry;
+            var countryValue = this.MediaStoreCountry == MediaStoreCountry.None ? null : (int?)this.MediaStoreCountry;
             tagsPtr.WriteInt32(countryValue, NativeMethods.MP4TagsSetITunesCountry);
         }
 
@@ -659,6 +659,8 @@ internal class MetadataTags : IDisposable
         }
     }
 
+    private static bool ImagesEqual(System.Drawing.Image? first, System.Drawing.Image? second) => (first is null && second is null) || (first is not null && second is not null && ImageComparer.Compare(first, second));
+
     private void ReadArtwork(IntPtr artworkStructurePointer)
     {
         if (artworkStructurePointer == IntPtr.Zero)
@@ -803,20 +805,5 @@ internal class MetadataTags : IDisposable
                 Marshal.FreeHGlobal(trackPtr);
             }
         }
-    }
-
-    private static bool ImagesEqual(System.Drawing.Image? first, System.Drawing.Image? second)
-    {
-        if (first is null && second is null)
-        {
-            return true;
-        }
-
-        if (first is null || second is null)
-        {
-            return false;
-        }
-
-        return ImageComparer.Compare(first, second);
     }
 }

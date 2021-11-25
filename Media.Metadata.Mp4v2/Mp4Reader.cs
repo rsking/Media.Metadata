@@ -47,57 +47,48 @@ public class Mp4Reader : IReader
         return Update(ReadEpisode(path, tags), tags);
     }
 
-    private static Video ReadVideo(string path, MetadataTags tags)
-    {
-        return new LocalVideo(
-            new FileInfo(path),
-            tags.Title,
-            tags.Description,
-            tags.MovieInfo?.Producers,
-            tags.MovieInfo?.Directors,
-            Split(tags.MovieInfo?.Studio),
-            Split(tags.Genre),
-            tags.MovieInfo?.Screenwriters,
-            tags.MovieInfo?.Cast,
-            Split(tags.Composer));
-    }
+    private static Video ReadVideo(string path, MetadataTags tags) => new LocalVideo(
+        new FileInfo(path),
+        tags.Title,
+        tags.Description,
+        tags.MovieInfo?.Producers,
+        tags.MovieInfo?.Directors,
+        Split(tags.MovieInfo?.Studio),
+        Split(tags.Genre),
+        tags.MovieInfo?.Screenwriters,
+        tags.MovieInfo?.Cast,
+        Split(tags.Composer));
 
-    private static Movie ReadMovie(string path, MetadataTags tags)
-    {
-        return new LocalMovie(
-            new FileInfo(path),
-            tags.Title,
-            tags.Description,
-            tags.MovieInfo?.Producers,
-            tags.MovieInfo?.Directors,
-            Split(tags.MovieInfo?.Studio),
-            Split(tags.Genre),
-            tags.MovieInfo?.Screenwriters,
-            tags.MovieInfo?.Cast,
-            Split(tags.Composer));
-    }
+    private static Movie ReadMovie(string path, MetadataTags tags) => new LocalMovie(
+        new FileInfo(path),
+        tags.Title,
+        tags.Description,
+        tags.MovieInfo?.Producers,
+        tags.MovieInfo?.Directors,
+        Split(tags.MovieInfo?.Studio),
+        Split(tags.Genre),
+        tags.MovieInfo?.Screenwriters,
+        tags.MovieInfo?.Cast,
+        Split(tags.Composer));
 
-    private static Episode ReadEpisode(string path, MetadataTags tags)
+    private static Episode ReadEpisode(string path, MetadataTags tags) => new LocalEpisode(
+        new FileInfo(path),
+        tags.Title,
+        tags.Description,
+        tags.MovieInfo?.Producers,
+        tags.MovieInfo?.Directors,
+        Split(tags.MovieInfo?.Studio),
+        Split(tags.Genre),
+        tags.MovieInfo?.Screenwriters,
+        tags.MovieInfo?.Cast,
+        Split(tags.Composer))
     {
-        return new LocalEpisode(
-            new FileInfo(path),
-            tags.Title,
-            tags.Description,
-            tags.MovieInfo?.Producers,
-            tags.MovieInfo?.Directors,
-            Split(tags.MovieInfo?.Studio),
-            Split(tags.Genre),
-            tags.MovieInfo?.Screenwriters,
-            tags.MovieInfo?.Cast,
-            Split(tags.Composer))
-        {
-            Show = tags.TVShow,
-            Season = tags.SeasonNumber ?? -1,
-            Network = tags.TVNetwork,
-            Number = tags.EpisodeNumber ?? -1,
-            Id = tags.EpisodeId,
-        };
-    }
+        Show = tags.TVShow,
+        Season = tags.SeasonNumber ?? -1,
+        Network = tags.TVNetwork,
+        Number = tags.EpisodeNumber ?? -1,
+        Id = tags.EpisodeId,
+    };
 
     private static T Update<T>(T video, MetadataTags tags)
         where T : Video
@@ -128,8 +119,5 @@ public class Mp4Reader : IReader
         }
     }
 
-    private static IEnumerable<string>? Split(string? value)
-    {
-        return value?.Split(',').Select(v => v.Trim());
-    }
+    private static IEnumerable<string>? Split(string? value) => value?.Split(',').Select(v => v.Trim());
 }

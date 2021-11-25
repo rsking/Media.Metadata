@@ -62,7 +62,7 @@ internal sealed class Mp4File
     /// </summary>
     public void Load()
     {
-        var fileHandle = NativeMethods.MP4Read(this.fileName, IntPtr.Zero);
+        var fileHandle = NativeMethods.MP4Read(System.Text.Encoding.UTF8.GetBytes(this.fileName), IntPtr.Zero);
         if (fileHandle != IntPtr.Zero)
         {
             try
@@ -83,7 +83,7 @@ internal sealed class Mp4File
     /// </summary>
     public void Save()
     {
-        var fileHandle = NativeMethods.MP4Modify(this.fileName, 0);
+        var fileHandle = NativeMethods.MP4Modify(System.Text.Encoding.UTF8.GetBytes(this.fileName), 0);
         if (fileHandle != IntPtr.Zero)
         {
             try

@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Country.cs" company="RossKing">
+// <copyright file="MediaStoreCountry.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace Media.Metadata;
 /// <summary>
 /// Specifies the country from which the file was purchased in the iTunes Store.
 /// </summary>
-internal enum Country
+internal enum MediaStoreCountry
 {
     /// <summary>
     /// Indicates the country value was not set.

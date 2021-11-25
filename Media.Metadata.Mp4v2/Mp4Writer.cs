@@ -11,6 +11,7 @@ namespace Media.Metadata;
 /// </summary>
 public class Mp4Writer : IUpdater
 {
+    /// <inheritdoc/>
     public void UpdateVideo(string fileName, Video video, IDictionary<int, string>? languages = default)
     {
         if (video is Episode episode)
@@ -132,10 +133,16 @@ public class Mp4Writer : IUpdater
             {
                 foreach (var language in languages)
                 {
-                    var tracks = language.Key == -1 ? file.Tracks : file.Tracks.Where(track => track.Id == language.Key);
-                    foreach (var track in tracks)
+                    foreach (var track in GetTracks(file.Tracks, language.Key))
                     {
                         track.Language = language.Value;
+                    }
+
+                    IEnumerable<Track> GetTracks(IEnumerable<Track> tracks, int key)
+                    {
+                        return key == -1
+                            ? tracks
+                            : tracks.Where(track => track.Id == key);
                     }
                 }
             }
