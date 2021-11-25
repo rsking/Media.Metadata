@@ -1,0 +1,217 @@
+﻿// -----------------------------------------------------------------------
+// <copyright file="ImageComparer.cs" company="RossKing">
+// Copyright (c) RossKing. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace Media.Metadata;
+
+using System.Drawing;
+
+/// <summary>
+/// The image comparer.
+/// </summary>
+public static class ImageComparer
+{
+    /// <summary>
+    /// Compares two images.
+    /// </summary>
+    /// <param name="actualImage">The actual image.</param>
+    /// <param name="expectedImage">The expected image.</param>
+    /// <returns><see langword="true"/> if images are the same; otherwise <see langword="false"/>.</returns>
+    public static bool Compare(Image actualImage, Image expectedImage) => Compare(actualImage, expectedImage, new ColorDifference());
+
+    /// <summary>
+    /// Compares two images.
+    /// </summary>
+    /// <param name="actualImage">The actual image.</param>
+    /// <param name="expectedImage">The expected image.</param>
+    /// <param name="argbTolerance">The ARGB tolerance.</param>
+    /// <returns><see langword="true"/> if images are the same; otherwise <see langword="false"/>.</returns>
+    public static bool Compare(Image actualImage, Image expectedImage, ColorDifference argbTolerance) => CompareInternal(actualImage, expectedImage, argbTolerance, out _, createOutImage: false);
+
+    /// <summary>
+    /// Compares two images.
+    /// </summary>
+    /// <param name="actualImage">The actual image.</param>
+    /// <param name="expectedImage">The expected image.</param>
+    /// <param name="diffImage">The output difference image.</param>
+    /// <returns><see langword="true"/> if images are the same; otherwise <see langword="false"/>.</returns>
+    public static bool Compare(Image actualImage, Image expectedImage, out Image? diffImage) => Compare(actualImage, expectedImage, new ColorDifference(), out diffImage);
+
+    /// <summary>
+    /// Compares two images.
+    /// </summary>
+    /// <param name="actualImage">The actual image.</param>
+    /// <param name="expectedImage">The expected image.</param>
+    /// <param name="argbTolerance">The ARGB tolerance.</param>
+    /// <param name="diffImage">The output difference image.</param>
+    /// <returns><see langword="true"/> if images are the same; otherwise <see langword="false"/>.</returns>
+    public static bool Compare(Image actualImage, Image expectedImage, ColorDifference argbTolerance, out Image? diffImage) => CompareInternal(actualImage, expectedImage, argbTolerance, out diffImage, createOutImage: true);
+
+    /// <summary>
+    /// Compares two images.
+    /// </summary>
+    /// <param name="actualImage">The actual image.</param>
+    /// <param name="expectedImage">The expected image.</param>
+    /// <param name="rectangleList">The rectangle list.</param>
+    /// <returns><see langword="true"/> if images are the same; otherwise <see langword="false"/>.</returns>
+    public static bool Compare(Image actualImage, Image expectedImage, IList<ToleranceRectangle> rectangleList) => CompareInternal(actualImage, expectedImage, rectangleList, out _, createOutImage: false);
+
+    /// <summary>
+    /// Compares two images.
+    /// </summary>
+    /// <param name="actualImage">The actual image.</param>
+    /// <param name="expectedImage">The expected image.</param>
+    /// <param name="rectangleList">The rectangle list.</param>
+    /// <param name="diffImage">The output difference image.</param>
+    /// <returns><see langword="true"/> if images are the same; otherwise <see langword="false"/>.</returns>
+    public static bool Compare(Image actualImage, Image expectedImage, IList<ToleranceRectangle> rectangleList, out Image? diffImage) => CompareInternal(actualImage, expectedImage, rectangleList, out diffImage, createOutImage: true);
+
+    private static ColorDifference Compare(Color color1, Color color2) => new()
+    {
+        Alpha = (byte)Math.Abs(color1.A - color2.A),
+        Red = (byte)Math.Abs(color1.R - color2.R),
+        Green = (byte)Math.Abs(color1.G - color2.G),
+        Blue = (byte)Math.Abs(color1.B - color2.B),
+    };
+
+    private static bool CompareInternal(Image actualImage, Image expectedImage, IList<ToleranceRectangle> rectangleList, out Image? diffImage, bool createOutImage)
+    {
+        if (actualImage is null)
+        {
+            throw new ArgumentNullException(nameof(actualImage));
+        }
+
+        if (expectedImage is null)
+        {
+            throw new ArgumentNullException(nameof(expectedImage));
+        }
+
+        if (rectangleList is null)
+        {
+            throw new ArgumentNullException(nameof(rectangleList));
+        }
+
+        if (actualImage.Width != expectedImage.Width
+            || actualImage.Height != expectedImage.Height
+            || actualImage.PixelFormat != expectedImage.PixelFormat)
+        {
+            diffImage = default;
+            return false;
+        }
+
+        var snapshot = Snapshot.FromImage(actualImage);
+        var snapshot2 = Snapshot.FromImage(expectedImage);
+        if (snapshot.Width != snapshot2.Width || snapshot.Height != snapshot2.Height)
+        {
+            throw new InvalidOperationException(Properties.Resources.ImageSizesNotEqual);
+        }
+
+        var toleranceMap = CreateToleranceMap(rectangleList, snapshot.Height, snapshot.Width);
+        return CompareInternal(snapshot, snapshot2, toleranceMap, out diffImage, createOutImage);
+    }
+
+    private static bool CompareInternal(Image actualImage, Image expectedImage, ColorDifference argbTolerance, out Image? diffImage, bool createOutImage)
+    {
+        if (actualImage is null)
+        {
+            throw new ArgumentNullException(nameof(actualImage));
+        }
+
+        if (expectedImage is null)
+        {
+            throw new ArgumentNullException(nameof(expectedImage));
+        }
+
+        if (argbTolerance is null)
+        {
+            throw new ArgumentNullException(nameof(argbTolerance));
+        }
+
+        if (actualImage.Width != expectedImage.Width
+            || actualImage.Height != expectedImage.Height
+            || actualImage.PixelFormat != expectedImage.PixelFormat)
+        {
+            diffImage = default;
+            return false;
+        }
+
+        var snapshot = Snapshot.FromImage(actualImage);
+        var snapshot2 = Snapshot.FromImage(expectedImage);
+        if (snapshot.Width != snapshot2.Width || snapshot.Height != snapshot2.Height)
+        {
+            throw new InvalidOperationException(Properties.Resources.ImageSizesNotEqual);
+        }
+
+        var toleranceMap = new SingleValueToleranceMap(Color.FromArgb(argbTolerance.Alpha, argbTolerance.Red, argbTolerance.Green, argbTolerance.Blue));
+        return CompareInternal(snapshot, snapshot2, toleranceMap, out diffImage, createOutImage);
+    }
+
+    private static bool CompareInternal(Snapshot actualSnapshot, Snapshot expectedSnapshot, Snapshot toleranceMap, out Image? diffImage, bool createOutImage)
+    {
+        var result = true;
+        Snapshot? snapshot = null;
+        diffImage = null;
+        if (actualSnapshot.Width != expectedSnapshot.Width || actualSnapshot.Height != expectedSnapshot.Height)
+        {
+            throw new InvalidOperationException(Properties.Resources.ImageSizesNotEqual);
+        }
+
+        if (createOutImage)
+        {
+            snapshot = new Snapshot(actualSnapshot.Height, actualSnapshot.Width);
+            snapshot.SetAllPixels(Color.FromArgb(255, 0, 0, 0));
+        }
+
+        for (var i = 0; i < actualSnapshot.Height; i++)
+        {
+            for (var j = 0; j < actualSnapshot.Width; j++)
+            {
+                var colorDifference = Compare(actualSnapshot[i, j], expectedSnapshot[i, j]);
+                if (!colorDifference.MeetsTolerance(new ColorDifference(toleranceMap[i, j].A, toleranceMap[i, j].R, toleranceMap[i, j].G, toleranceMap[i, j].B)))
+                {
+                    result = false;
+                    if (snapshot is not null)
+                    {
+                        snapshot[i, j] = colorDifference.CalculateMargin(new ColorDifference(toleranceMap[i, j].A, toleranceMap[i, j].R, toleranceMap[i, j].G, toleranceMap[i, j].B));
+                    }
+                    else
+                    {
+                        return result;
+                    }
+                }
+            }
+        }
+
+        if (snapshot is not null)
+        {
+            diffImage = snapshot.ToImage();
+        }
+
+        return result;
+    }
+
+    private static Snapshot CreateToleranceMap(IList<ToleranceRectangle> rectangleList, int height, int width)
+    {
+        var snapshot = new Snapshot(height, width);
+        snapshot.SetAllPixels(Color.White);
+        for (var i = 0; i < rectangleList.Count; i++)
+        {
+            if (rectangleList[i].Rectangle.Left < 0 || rectangleList[i].Rectangle.Top < 0 || rectangleList[i].Rectangle.Right > width || rectangleList[i].Rectangle.Bottom > height)
+            {
+                throw new InvalidOperationException(string.Format(System.Globalization.CultureInfo.CurrentCulture, Properties.Resources.RectangleNotInRange, new object[1] { i }));
+            }
+
+            for (var j = rectangleList[i].Rectangle.Top; j < rectangleList[i].Rectangle.Bottom; j++)
+            {
+                for (var k = rectangleList[i].Rectangle.Left; k < rectangleList[i].Rectangle.Right; k++)
+                {
+                    snapshot[j, k] = Color.FromArgb(rectangleList[i].Difference.Alpha, rectangleList[i].Difference.Red, rectangleList[i].Difference.Green, rectangleList[i].Difference.Blue);
+                }
+            }
+        }
+
+        return snapshot;
+    }
+}

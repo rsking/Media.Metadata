@@ -123,6 +123,9 @@
   <data name="CA" xml:space="preserve">
     <value>Canada</value>
   </data>
+  <data name="ColorDifferenceToString" xml:space="preserve">
+    <value>{Alpha={0}, Red={1}, Green={2}, Blue={3}}</value>
+  </data>
   <data name="DE" xml:space="preserve">
     <value>Germany</value>
   </data>
@@ -132,6 +135,9 @@
   <data name="GB" xml:space="preserve">
     <value>Great Britan</value>
   </data>
+  <data name="ImageSizesNotEqual" xml:space="preserve">
+    <value>Images must be of equal size to be compared.</value>
+  </data>
   <data name="InvalidPListValueType" xml:space="preserve">
     <value>Invalid PList value type</value>
   </data>
@@ -140,6 +146,9 @@
   </data>
   <data name="NZ" xml:space="preserve">
     <value>New Zealand</value>
+  </data>
+  <data name="RectangleNotInRange" xml:space="preserve">
+    <value>Tolerance rectangle at index {0} does not lie within range of the image.</value>
   </data>
   <data name="US" xml:space="preserve">
     <value>United States</value>

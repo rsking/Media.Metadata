@@ -79,6 +79,15 @@ namespace Media.Metadata.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {Alpha={0}, Red={1}, Green={2}, Blue={3}}.
+        /// </summary>
+        internal static string ColorDifferenceToString {
+            get {
+                return ResourceManager.GetString("ColorDifferenceToString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Germany.
         /// </summary>
         internal static string DE {
@@ -106,6 +115,15 @@ namespace Media.Metadata.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Images must be of equal size to be compared..
+        /// </summary>
+        internal static string ImageSizesNotEqual {
+            get {
+                return ResourceManager.GetString("ImageSizesNotEqual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid PList value type.
         /// </summary>
         internal static string InvalidPListValueType {
@@ -129,6 +147,15 @@ namespace Media.Metadata.Properties {
         internal static string NZ {
             get {
                 return ResourceManager.GetString("NZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tolerance rectangle at index {0} does not lie within range of the image..
+        /// </summary>
+        internal static string RectangleNotInRange {
+            get {
+                return ResourceManager.GetString("RectangleNotInRange", resourceCulture);
             }
         }
         
