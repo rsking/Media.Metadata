@@ -10,8 +10,10 @@ using System.CommandLine.Hosting;
 using System.CommandLine.Invocation;
 using System.CommandLine.IO;
 using System.CommandLine.Parsing;
+using System.CommandLine.Rendering;
 using Media.Metadata;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Hosting;
 using RestSharp.Serializers.SystemTextJson;
 
@@ -44,7 +46,7 @@ var updateEpisodeCommand = new CommandBuilder(new Command("episode") { Handler =
     .AddOption(new Option<int>(new[] { "--episode", "-e" }, "The episode number"));
 
 var updateVideoCommand = new CommandBuilder(new Command("video") { Handler = CommandHandler.Create(UpdateVideo) })
-    .AddArgument(new Argument<FileInfo>("path").ExistingOnly());
+    .AddArgument(new Argument<FileInfo[]>("path", ParseFileInfo).ExistingOnly());
 
 var updateCommand = new CommandBuilder(new Command("update"))
     .AddCommand(updateMovieCommand.Command)
@@ -80,6 +82,7 @@ await rootCommand
                 .Configure<InvocationLifetimeOptions>(options => options.SuppressStatusMessages = true);
         }))
     .CancelOnProcessTermination()
+    .UseAnsiTerminalWhenAvailable()
     .Build()
     .InvokeAsync(args)
     .ConfigureAwait(true);
@@ -154,19 +157,17 @@ static async Task UpdateEpisode(IConsole console, IHost host, FileInfo path, str
     }
 }
 
-static async Task UpdateVideo(IConsole console, IHost host, FileInfo path, string[]? lang = default, CancellationToken cancellationToken = default)
+static void UpdateVideo(IConsole console, IHost host, FileInfo[] path, string[]? lang = default)
 {
-    if (!path.Exists)
-    {
-        return;
-    }
-
     var reader = host.Services.GetRequiredService<IReader>();
-    var video = reader.ReadVideo(path.FullName);
-
-    console.Out.WriteLine(FormattableString.CurrentCulture($"Updating {video.Name}"));
     var updater = host.Services.GetRequiredService<IUpdater>();
-    updater.UpdateVideo(path.FullName, video, GetLanguages(lang));
+    var languages = GetLanguages(lang);
+    foreach (var p in path.Where(p => p.Exists).Select(p => p.FullName))
+    {
+        var video = reader.ReadVideo(p);
+        console.Out.WriteLine(FormattableString.CurrentCulture($"Updating {video.Name}"));
+        updater.UpdateVideo(p, video, languages);
+    }
 }
 
 static IDictionary<int, string>? GetLanguages(string[]? lang)
@@ -222,6 +223,42 @@ static async Task SearchShow(IHost host, string name, CancellationToken cancella
                     Console.WriteLine("\t\t{0}: {1}", episode.Name, episode.Description);
                 }
             }
+        }
+    }
+}
+
+static FileInfo[] ParseFileInfo(ArgumentResult argumentResult)
+{
+    return Process(argumentResult.Tokens.Select(token => token.Value)).SelectMany(results => results.Select(file => new System.IO.FileInfo(file))).ToArray();
+
+    static IEnumerable<IEnumerable<string>> Process(IEnumerable<string> tokens)
+    {
+        var normalisedTokens = tokens.Select(token => token.Replace(Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar)).ToArray();
+        var rooted = normalisedTokens.Where(Path.IsPathRooted).ToArray();
+        foreach (var root in rooted)
+        {
+            yield return GetRooted(root);
+        }
+
+        var matcher = new Matcher(StringComparison.CurrentCulture);
+        matcher.AddIncludePatterns(normalisedTokens.Except(rooted, StringComparer.Ordinal));
+        yield return matcher.GetResultsInFullPath(Directory.GetCurrentDirectory());
+
+        static IEnumerable<string> GetRooted(string root)
+        {
+            var matcher = new Matcher(StringComparison.CurrentCulture);
+
+            // separate the root directory from the globbing
+            var glob = Path.GetFileName(root);
+            var directory = Path.GetDirectoryName(root);
+            while (directory?.Contains('*', StringComparison.OrdinalIgnoreCase) == true)
+            {
+                glob = Path.GetFileName(directory) + Path.AltDirectorySeparatorChar + glob;
+                directory = Path.GetDirectoryName(directory);
+            }
+
+            matcher.AddInclude(glob);
+            return matcher.GetResultsInFullPath(directory);
         }
     }
 }
