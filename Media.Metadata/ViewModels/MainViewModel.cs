@@ -14,6 +14,8 @@ using CommunityToolkit.Mvvm.Input;
 /// </summary>
 internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
+    private readonly IReader reader;
+
     private readonly IUpdater updater;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
@@ -23,8 +25,13 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// <summary>
     /// Initialises a new instance of the <see cref="MainViewModel"/> class.
     /// </summary>
+    /// <param name="reader">The reader.</param>
     /// <param name="updater">The updater.</param>
-    public MainViewModel(IUpdater updater) => this.updater = updater;
+    public MainViewModel(IReader reader, IUpdater updater)
+    {
+        this.reader = reader;
+        this.updater = updater;
+    }
 
     /// <summary>
     /// Gets the videos.
@@ -64,8 +71,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         {
             foreach (var file in files)
             {
-                var video = await ReadVideoAsync(file.Path).ConfigureAwait(true);
-                if (video is not null)
+                if (await this.ReadVideoAsync(file.Path).ConfigureAwait(true) is Video video)
                 {
                     this.Videos.Add(video);
                 }
@@ -113,15 +119,10 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         if (this.SelectedEditableVideo is not null)
         {
             var video = await this.SelectedEditableVideo.ToVideoAsync().ConfigureAwait(true);
-            if (video is LocalEpisode episode)
+            if (video is LocalVideo localVideo)
             {
-                this.updater.UpdateEpisode(episode.FileInfo.FullName, episode);
-                await Refresh(episode).ConfigureAwait(true);
-            }
-            else if (video is LocalMovie movie)
-            {
-                this.updater.UpdateMovie(movie.FileInfo.FullName, movie);
-                await Refresh(movie).ConfigureAwait(true);
+                this.updater.UpdateVideo(localVideo.FileInfo.FullName, video);
+                await Refresh(localVideo).ConfigureAwait(true);
             }
 
             // refresh the local video from the file
@@ -131,7 +132,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
                 {
                     if (this.Videos[i] == this.selectedVideo)
                     {
-                        var video = await ReadVideoAsync(localVideo.FileInfo.FullName).ConfigureAwait(true);
+                        var video = await this.ReadVideoAsync(localVideo.FileInfo.FullName).ConfigureAwait(true);
                         if (video is not null)
                         {
                             if (this.Videos[i] is IAsyncDisposable asyncDisposable)
@@ -170,7 +171,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         base.OnPropertyChanged(e);
     }
 
-    private static async Task<Video?> ReadVideoAsync(string path) => VideoFile.ReadMetadata(path) switch
+    private async Task<Video?> ReadVideoAsync(string path) => this.reader.ReadVideo(path) switch
     {
         LocalMovie movie => await MovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
         LocalEpisode episode => await EpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),

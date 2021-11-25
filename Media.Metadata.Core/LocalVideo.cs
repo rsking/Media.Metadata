@@ -20,4 +20,4 @@ public record class LocalVideo(
     IEnumerable<string>? Genre = default,
     IEnumerable<string>? ScreenWriters = default,
     IEnumerable<string>? Cast = default,
-    IEnumerable<string>? Composers = default) : Video(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers);
+    IEnumerable<string>? Composers = default) : Video(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), ILocalVideo;

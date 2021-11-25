@@ -6,28 +6,11 @@
 
 namespace Media.Metadata;
 
-public class ColorDifference : IEquatable<ColorDifference>
+/// <summary>
+/// Represents a color difference.
+/// </summary>
+public sealed class ColorDifference : IEquatable<ColorDifference>
 {
-    /// <summary>
-    /// Gets or sets the alpha.
-    /// </summary>
-    public byte Alpha { get; set; }
-
-    /// <summary>
-    /// Gets or sets the red.
-    /// </summary>
-    public byte Red { get; set; }
-
-    /// <summary>
-    /// Gets or sets the green.
-    /// </summary>
-    public byte Green { get; set; }
-
-    /// <summary>
-    /// Gets or sets the blue.
-    /// </summary>
-    public byte Blue { get; set; }
-
     /// <summary>
     /// Initialises a new instance of the <see cref="ColorDifference"/> class.
     /// </summary>
@@ -79,6 +62,26 @@ public class ColorDifference : IEquatable<ColorDifference>
         this.Green = green;
         this.Blue = blue;
     }
+
+    /// <summary>
+    /// Gets or sets the alpha.
+    /// </summary>
+    public byte Alpha { get; set; }
+
+    /// <summary>
+    /// Gets or sets the red.
+    /// </summary>
+    public byte Red { get; set; }
+
+    /// <summary>
+    /// Gets or sets the green.
+    /// </summary>
+    public byte Green { get; set; }
+
+    /// <summary>
+    /// Gets or sets the blue.
+    /// </summary>
+    public byte Blue { get; set; }
 
     /// <summary>
     /// Implements not-equals.

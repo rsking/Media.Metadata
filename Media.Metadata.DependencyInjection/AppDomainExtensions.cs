@@ -64,6 +64,7 @@ public static class AppDomainExtensions
             yield return $"runtimes/{GetRidFront()}-{architecture}/native";
             yield return architecture;
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convert to conditional expression", Justification = "This would make it harder to read")]
             static string GetRidFront()
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

@@ -34,7 +34,9 @@ public partial class App : Application
                 services.AddTransient<ViewModels.MainViewModel>();
                 services.AddTransient<MainWindow>();
 
-                services.AddMp4v2(Path.PathSeparator);
+                services
+                    .AddMp4v2(Path.PathSeparator)
+                    .AddTagLib();
 
                 services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
             })

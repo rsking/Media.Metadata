@@ -7,6 +7,7 @@
 namespace Microsoft.Extensions.DependencyInjection;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 /// <summary>
 /// Extension methods for <see cref="IServiceCollection"/>.
@@ -30,6 +31,17 @@ public static class ServiceCollectionExtensions
     /// <param name="services">The services.</param>
     /// <returns>The input services.</returns>
     public static IServiceCollection AddTMDb(this IServiceCollection services) => services.AddTransient<Media.Metadata.IMovieSearch, Media.Metadata.TMDb.TMDbMovieSearch>();
+
+    /// <summary>
+    /// Adds the <see cref="TagLib"/> services.
+    /// </summary>
+    /// <param name="services">The services.</param>
+    /// <returns>The input services.</returns>
+    public static IServiceCollection AddTagLib(this IServiceCollection services)
+    {
+        services.TryAddTransient<Media.Metadata.IReader, Media.Metadata.TagLibReader>();
+        return services;
+    }
 
     /// <summary>
     /// Adds the MP4 v2 services.

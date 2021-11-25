@@ -65,7 +65,8 @@ await rootCommand
             services
                 .AddTMDb()
                 .AddTheTVDB(builder.Configuration)
-                .AddMp4v2(Path.PathSeparator);
+                .AddMp4v2(Path.PathSeparator)
+                .AddTagLib();
 
             services
                 .AddTransient<RestSharp.IRestClient>(_ =>
