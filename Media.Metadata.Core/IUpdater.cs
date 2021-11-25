@@ -12,6 +12,14 @@ namespace Media.Metadata;
 public interface IUpdater
 {
     /// <summary>
+    /// Updates the video.
+    /// </summary>
+    /// <param name="fileName">The file name.</param>
+    /// <param name="video">The video.</param>
+    /// <param name="languages">The languages.</param>
+    void UpdateVideo(string fileName, Video video, IDictionary<int, string>? languages = default);
+
+    /// <summary>
     /// Updates the movie.
     /// </summary>
     /// <param name="fileName">The file name.</param>

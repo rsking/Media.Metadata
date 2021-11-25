@@ -11,6 +11,27 @@ namespace Media.Metadata;
 /// </summary>
 public class Mp4Writer : IUpdater
 {
+    public void UpdateVideo(string fileName, Video video, IDictionary<int, string>? languages = default)
+    {
+        if (video is Episode episode)
+        {
+            this.UpdateEpisode(fileName, episode, languages);
+        }
+        else if (video is Movie movie)
+        {
+            this.UpdateMovie(fileName, movie, languages);
+        }
+        else
+        {
+            var file = Mp4File.Open(fileName);
+            var mediaType = file.Tags is null
+                ? MediaKind.NotSet
+                : file.Tags.MediaType;
+            Update(file, video, mediaType, languages);
+            file.Save();
+        }
+    }
+
     /// <inheritdoc/>
     public void UpdateEpisode(string fileName, Episode episode, IDictionary<int, string>? languages = default)
     {
@@ -19,14 +40,19 @@ public class Mp4Writer : IUpdater
         if (file.Tags is not null)
         {
             // episode
-            file.Tags.EpisodeNumber = episode.Number;
-            file.Tags.SeasonNumber = episode.Season;
+            file.Tags.EpisodeNumber = ValueOrNull(episode.Number);
+            file.Tags.SeasonNumber = ValueOrNull(episode.Season);
             file.Tags.TVShow = episode.Show;
             file.Tags.EpisodeId = episode.Id;
             file.Tags.TVNetwork = episode.Network;
         }
 
         file.Save();
+
+        static int? ValueOrNull(int value)
+        {
+            return value < 0 ? null : value;
+        }
     }
 
     /// <inheritdoc/>

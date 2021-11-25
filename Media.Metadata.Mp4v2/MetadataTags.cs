@@ -322,14 +322,17 @@ internal class MetadataTags : IDisposable
 
         set
         {
-            this.artwork = value;
-            this.ArtworkFormat = value switch
+            if (!ImagesEqual(this.artwork, value))
             {
-                not null => value.RawFormat,
-                _ => null,
-            };
+                this.artwork = value;
+                this.ArtworkFormat = value switch
+                {
+                    not null => value.RawFormat,
+                    _ => null,
+                };
 
-            this.isArtworkEdited = true;
+                this.isArtworkEdited = true;
+            }
         }
     }
 
@@ -800,5 +803,20 @@ internal class MetadataTags : IDisposable
                 Marshal.FreeHGlobal(trackPtr);
             }
         }
+    }
+
+    private static bool ImagesEqual(System.Drawing.Image? first, System.Drawing.Image? second)
+    {
+        if (first is null && second is null)
+        {
+            return true;
+        }
+
+        if (first is null || second is null)
+        {
+            return false;
+        }
+
+        return ImageComparer.Compare(first, second);
     }
 }

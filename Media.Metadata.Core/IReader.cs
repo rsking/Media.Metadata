@@ -12,9 +12,23 @@ namespace Media.Metadata;
 public interface IReader
 {
     /// <summary>
+    /// Reads the video.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <returns>The video.</returns>
+    Video ReadVideo(string path);
+
+    /// <summary>
     /// Reads the movie.
     /// </summary>
     /// <param name="path">The path.</param>
-    /// <returns>The read movie.</returns>
+    /// <returns>The movie.</returns>
     Movie ReadMovie(string path);
+
+    /// <summary>
+    /// Reads the episode.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <returns>The episode.</returns>
+    Episode ReadEpisode(string path);
 }

@@ -35,19 +35,22 @@ var readCommand = new CommandBuilder(new Command("read"))
 var updateMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create(UpdateMovie) })
     .AddArgument(new Argument<FileInfo>("path").ExistingOnly())
     .AddArgument(new Argument<string>("name"))
-    .AddOption(new Option<int?>(new[] { "--year", "-y" }, "The movie year"))
-    .AddOption(new Option<IList<string>>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks"));
+    .AddOption(new Option<int?>(new[] { "--year", "-y" }, "The movie year"));
 
 var updateEpisodeCommand = new CommandBuilder(new Command("episode") { Handler = CommandHandler.Create(UpdateEpisode) })
     .AddArgument(new Argument<FileInfo>("path").ExistingOnly())
     .AddOption(new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true })
     .AddOption(new Option<int>(new[] { "--season", "-s" }, "The season number"))
-    .AddOption(new Option<int>(new[] { "--episode", "-e" }, "The episode number"))
-    .AddOption(new Option<IList<string>>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks"));
+    .AddOption(new Option<int>(new[] { "--episode", "-e" }, "The episode number"));
+
+var updateVideoCommand = new CommandBuilder(new Command("video") { Handler = CommandHandler.Create(UpdateVideo) })
+    .AddArgument(new Argument<FileInfo>("path").ExistingOnly());
 
 var updateCommand = new CommandBuilder(new Command("update"))
     .AddCommand(updateMovieCommand.Command)
-    .AddCommand(updateEpisodeCommand.Command);
+    .AddCommand(updateEpisodeCommand.Command)
+    .AddCommand(updateVideoCommand.Command)
+    .AddGlobalOption(new Option<IList<string>>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks"));
 
 var rootCommand = new CommandLineBuilder()
     .AddCommand(searchCommand.Command)
@@ -98,7 +101,7 @@ static async Task SearchMovie(IHost host, string name, int year = 0, Cancellatio
     }
 }
 
-static async Task UpdateMovie(IHost host, FileInfo path, string name, int year = 0, string[]? lang = default, CancellationToken cancellationToken = default)
+static async Task UpdateMovie(IConsole console, IHost host, FileInfo path, string name, int year = 0, string[]? lang = default, CancellationToken cancellationToken = default)
 {
     if (!path.Exists)
     {
@@ -111,8 +114,11 @@ static async Task UpdateMovie(IHost host, FileInfo path, string name, int year =
         {
             if (string.Equals(movie.Name, name, StringComparison.OrdinalIgnoreCase) && (year == 0 || (movie.Release.HasValue && movie.Release.Value.Year == year)))
             {
+                console.Out.WriteLine($"Found Movie {movie.Name} ({movie.Release?.Year})");
                 var updater = host.Services.GetRequiredService<IUpdater>();
+                console.Out.WriteLine($"Saving {path.Name}");
                 updater.UpdateMovie(path.FullName, movie, GetLanguages(lang));
+                console.Out.WriteLine($"Saved {path.Name}");
                 break;
             }
         }
@@ -145,6 +151,21 @@ static async Task UpdateEpisode(IConsole console, IHost host, FileInfo path, str
             }
         }
     }
+}
+
+static async Task UpdateVideo(IConsole console, IHost host, FileInfo path, string[]? lang = default, CancellationToken cancellationToken = default)
+{
+    if (!path.Exists)
+    {
+        return;
+    }
+
+    var reader = host.Services.GetRequiredService<IReader>();
+    var video = reader.ReadVideo(path.FullName);
+
+    console.Out.WriteLine(FormattableString.CurrentCulture($"Updating {video.Name}"));
+    var updater = host.Services.GetRequiredService<IUpdater>();
+    updater.UpdateVideo(path.FullName, video, GetLanguages(lang));
 }
 
 static IDictionary<int, string>? GetLanguages(string[]? lang)
