@@ -22,6 +22,9 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(SelectedEditableVideo))]
     private Video? selectedVideo;
 
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    private bool isSaving;
+
     /// <summary>
     /// Initialises a new instance of the <see cref="MainViewModel"/> class.
     /// </summary>
@@ -121,8 +124,10 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
             var video = await this.SelectedEditableVideo.ToVideoAsync().ConfigureAwait(true);
             if (video is ILocalVideo localVideo)
             {
-                this.updater.UpdateVideo(localVideo.FileInfo.FullName, video);
+                this.IsSaving = true;
+                await Task.Run(() => this.updater.UpdateVideo(localVideo.FileInfo.FullName, video)).ConfigureAwait(true);
                 await Refresh(localVideo).ConfigureAwait(true);
+                this.IsSaving = false;
             }
 
             // refresh the local video from the file

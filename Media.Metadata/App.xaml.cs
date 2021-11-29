@@ -60,6 +60,8 @@ public partial class App : Application
         await this.host.StartAsync().ConfigureAwait(true);
 
         this.window = this.host.Services.GetRequiredService<MainWindow>();
+        this.window.Title = "Media Metadata Updater";
+        this.window.ExtendsContentIntoTitleBar = true;
         this.window.Activate();
         this.MainWindowWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(this.window);
 
