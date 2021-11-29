@@ -35,6 +35,9 @@ public partial class App : Application
                 services.AddTransient<MainWindow>();
 
                 services
+                    .AddTMDb();
+
+                services
                     .AddMp4v2(Path.PathSeparator)
                     .AddTagLib();
 
@@ -43,12 +46,23 @@ public partial class App : Application
             .Build();
 
         Ioc.Default.ConfigureServices(this.host.Services);
+
+        Current = this;
     }
 
     /// <summary>
     /// Gets them main window handle.
     /// </summary>
     public System.IntPtr MainWindowWindowHandle { get; private set; }
+
+    /// <inheritdoc cref="Application.Current" />
+    internal static new App? Current { get; private set; }
+
+    /// <summary>
+    /// Gets the window.
+    /// </summary>
+    /// <returns>The main window.</returns>
+    internal Window? GetWindow() => this.window;
 
     /// <summary>
     /// Invoked when the application is launched normally by the end user.  Other entry points

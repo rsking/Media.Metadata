@@ -1,23 +1,23 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="EditableMovie.cs" company="RossKing">
+// <copyright file="MovieViewModel.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Models;
+namespace Media.Metadata.ViewModels;
 
 using Media.Metadata;
 
 /// <summary>
 /// An editable <see cref="Movie"/>.
 /// </summary>
-internal class EditableMovie : EditableVideo
+internal class MovieViewModel : VideoViewModel
 {
     /// <summary>
-    /// Initialises a new instance of the <see cref="EditableMovie"/> class.
+    /// Initialises a new instance of the <see cref="MovieViewModel"/> class.
     /// </summary>
     /// <param name="movie">The movie.</param>
-    public EditableMovie(MovieWithImageSource movie)
+    public MovieViewModel(LocalMovieWithImageSource movie)
         : base(movie, movie.FileInfo, movie.SoftwareBitmap, movie.ImageSource)
     {
     }

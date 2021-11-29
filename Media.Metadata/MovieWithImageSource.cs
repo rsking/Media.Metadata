@@ -11,7 +11,6 @@ namespace Media.Metadata;
 /// </summary>
 /// <inheritdoc />
 internal record class MovieWithImageSource(
-    FileInfo FileInfo,
     string? Name,
     string? Description,
     IEnumerable<string>? Producers,
@@ -20,7 +19,7 @@ internal record class MovieWithImageSource(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : LocalMovie(FileInfo, Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
+    IEnumerable<string>? Composers) : Movie(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
 {
     /// <inheritdoc/>
     public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; init; }
@@ -33,10 +32,10 @@ internal record class MovieWithImageSource(
     /// </summary>
     /// <param name="movie">The movie.</param>
     /// <returns>The video with image source.</returns>
-    public static async Task<MovieWithImageSource> CreateAsync(LocalMovie movie)
+    public static async Task<MovieWithImageSource> CreateAsync(Movie movie)
     {
         var softwareBitmap = await movie.CreateSoftwareBitmapAsync().ConfigureAwait(true);
-        return new MovieWithImageSource(movie.FileInfo, movie.Name, movie.Description, movie.Producers, movie.Directors, movie.Studios, movie.Genre, movie.ScreenWriters, movie.Cast, movie.Composers)
+        return new MovieWithImageSource(movie.Name, movie.Description, movie.Producers, movie.Directors, movie.Studios, movie.Genre, movie.ScreenWriters, movie.Cast, movie.Composers)
         {
             Release = movie.Release,
             Rating = movie.Rating,

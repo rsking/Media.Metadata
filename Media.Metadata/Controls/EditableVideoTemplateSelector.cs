@@ -7,7 +7,7 @@
 namespace Media.Metadata.Controls;
 
 /// <summary>
-/// The <see cref="Models.EditableVideo"/> <see cref="Microsoft.UI.Xaml.Controls.DataTemplateSelector"/>.
+/// The <see cref="Models.VideoViewModel"/> <see cref="Microsoft.UI.Xaml.Controls.DataTemplateSelector"/>.
 /// </summary>
 internal class EditableVideoTemplateSelector : Microsoft.UI.Xaml.Controls.DataTemplateSelector
 {
@@ -31,9 +31,9 @@ internal class EditableVideoTemplateSelector : Microsoft.UI.Xaml.Controls.DataTe
     {
         return item switch
         {
-            Models.EditableEpisode => this.EpisodeTemplate,
-            Models.EditableMovie => this.MovieTemplate,
-            Models.EditableVideo => this.VideoTemplate,
+            ViewModels.EpisodeViewModel => this.EpisodeTemplate,
+            ViewModels.MovieViewModel => this.MovieTemplate,
+            ViewModels.VideoViewModel => this.VideoTemplate,
             _ => base.SelectTemplateCore(item),
         };
     }

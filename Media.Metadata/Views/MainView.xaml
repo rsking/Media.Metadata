@@ -10,7 +10,6 @@
              xmlns:markup="using:Media.Metadata.Markup"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:models="using:Media.Metadata.Models"
-             xmlns:m="using:Media.Metadata.Models"
              xmlns:vm="using:Media.Metadata.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -72,7 +71,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <CommandBar DefaultLabelPosition="Right">
-                    <AppBarButton Icon="Find" Label="Search" />
+                    <AppBarButton Command="{Binding SearchCommand, Mode=OneWay}" Icon="Find" Label="Search" />
                     <AppBarButton Command="{Binding SaveCommand, Mode=OneWay}" Icon="Save" Label="Save" />
                 </CommandBar>
 
@@ -88,7 +87,7 @@
                         <converters:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter" />
                         <c:EditableVideoTemplateSelector x:Key="EditableVideoTemplateSelector">
                             <c:EditableVideoTemplateSelector.EpisodeTemplate>
-                                <DataTemplate x:DataType="m:EditableEpisode">
+                                <DataTemplate x:DataType="vm:EpisodeViewModel">
                                     <StackPanel Grid.Column="1"
                                                 Grid.Row="1">
                                         <Grid>
@@ -142,7 +141,7 @@
                                 </DataTemplate>
                             </c:EditableVideoTemplateSelector.EpisodeTemplate>
                             <c:EditableVideoTemplateSelector.MovieTemplate>
-                                <DataTemplate x:DataType="m:EditableMovie">
+                                <DataTemplate x:DataType="vm:MovieViewModel">
                                     <StackPanel Grid.Column="1"
                                                 Grid.Row="1">
                                         <StackPanel.Resources>
@@ -195,7 +194,7 @@
                                 </DataTemplate>
                             </c:EditableVideoTemplateSelector.MovieTemplate>
                             <c:EditableVideoTemplateSelector.VideoTemplate>
-                                <DataTemplate x:DataType="m:EditableVideo">
+                                <DataTemplate x:DataType="vm:VideoViewModel">
                                     <Grid>
                                         <ComboBox Grid.Column="1" Header="Video Type" Margin="2" ItemsSource="{markup:EnumValuesExtension EnumType=models:VideoType}" SelectedItem="{Binding VideoType, Mode=TwoWay}" Width="100">
                                             <ComboBox.ItemTemplate>

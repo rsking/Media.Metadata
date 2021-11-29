@@ -11,7 +11,6 @@ namespace Media.Metadata;
 /// </summary>
 /// <inheritdoc />
 internal record class EpisodeWithImageSource(
-    FileInfo FileInfo,
     string? Name,
     string? Description,
     IEnumerable<string>? Producers,
@@ -20,7 +19,7 @@ internal record class EpisodeWithImageSource(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : LocalEpisode(FileInfo, Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
+    IEnumerable<string>? Composers) : Episode(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
 {
     /// <inheritdoc/>
     public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; init; }
@@ -33,10 +32,10 @@ internal record class EpisodeWithImageSource(
     /// </summary>
     /// <param name="episode">The episode.</param>
     /// <returns>The video with image source.</returns>
-    public static async Task<EpisodeWithImageSource> CreateAsync(LocalEpisode episode)
+    public static async Task<EpisodeWithImageSource> CreateAsync(Episode episode)
     {
         var softwareBitmap = await episode.CreateSoftwareBitmapAsync().ConfigureAwait(true);
-        return new EpisodeWithImageSource(episode.FileInfo, episode.Name, episode.Description, episode.Producers, episode.Directors, episode.Studios, episode.Genre, episode.ScreenWriters, episode.Cast, episode.Composers)
+        return new EpisodeWithImageSource(episode.Name, episode.Description, episode.Producers, episode.Directors, episode.Studios, episode.Genre, episode.ScreenWriters, episode.Cast, episode.Composers)
         {
             Release = episode.Release,
             Rating = episode.Rating,

@@ -1,15 +1,15 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="EditableVideo.cs" company="RossKing">
+// <copyright file="VideoViewModel.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Models;
+namespace Media.Metadata.ViewModels;
 
 /// <summary>
 /// The editable video.
 /// </summary>
-internal partial class EditableVideo : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, IHasImageSource, IHasSoftwareBitmap
+internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, IHasImageSource, IHasSoftwareBitmap
 {
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? name;
@@ -46,22 +46,22 @@ internal partial class EditableVideo : CommunityToolkit.Mvvm.ComponentModel.Obse
     private Windows.Graphics.Imaging.SoftwareBitmap? softwareBitmap;
 
     /// <summary>
-    /// Initialises a new instance of the <see cref="EditableVideo"/> class.
+    /// Initialises a new instance of the <see cref="VideoViewModel"/> class.
     /// </summary>
     /// <param name="video">The video.</param>
-    public EditableVideo(VideoWithImageSource video)
+    public VideoViewModel(LocalVideoWithImageSource video)
         : this(video, video.FileInfo, video.SoftwareBitmap, video.ImageSource)
     {
     }
 
     /// <summary>
-    /// Initialises a new instance of the <see cref="EditableVideo"/> class.
+    /// Initialises a new instance of the <see cref="VideoViewModel"/> class.
     /// </summary>
     /// <param name="video">The video.</param>
     /// <param name="fileInfo">The file information.</param>
     /// <param name="softwareBitmap">The software bitmap.</param>
     /// <param name="imageSource">The image source.</param>
-    protected EditableVideo(Video video, FileInfo fileInfo, Windows.Graphics.Imaging.SoftwareBitmap? softwareBitmap, Microsoft.UI.Xaml.Media.ImageSource? imageSource)
+    protected VideoViewModel(Video video, FileInfo fileInfo, Windows.Graphics.Imaging.SoftwareBitmap? softwareBitmap, Microsoft.UI.Xaml.Media.ImageSource? imageSource)
     {
         this.FileInfo = fileInfo;
         this.Name = video.Name;
@@ -74,7 +74,7 @@ internal partial class EditableVideo : CommunityToolkit.Mvvm.ComponentModel.Obse
         this.Cast = Create(video.Cast);
         this.Composers = Create(video.Composers);
         this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
-        this.Rating = new EditableRating(video.Rating);
+        this.Rating = new RatingViewModel(video.Rating);
         this.SoftwareBitmap = softwareBitmap;
         this.ImageSource = imageSource;
 
@@ -87,7 +87,7 @@ internal partial class EditableVideo : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// <summary>
     /// Gets or sets the video type.
     /// </summary>
-    public VideoType VideoType { get; set; } = VideoType.NotSet;
+    public Models.VideoType VideoType { get; set; } = Models.VideoType.NotSet;
 
     /// <inheritdoc/>
     public FileInfo FileInfo { get; }
@@ -95,7 +95,7 @@ internal partial class EditableVideo : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// <summary>
     /// Gets the rating.
     /// </summary>
-    public EditableRating Rating { get; init; }
+    public RatingViewModel Rating { get; init; }
 
     /// <inheritdoc/>
     public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap
@@ -126,8 +126,8 @@ internal partial class EditableVideo : CommunityToolkit.Mvvm.ComponentModel.Obse
 
         return this.VideoType switch
         {
-            VideoType.Movie => new LocalMovie(localVideo),
-            VideoType.TVShow => new LocalEpisode(localVideo),
+            Models.VideoType.Movie => new LocalMovie(localVideo),
+            Models.VideoType.TVShow => new LocalEpisode(localVideo),
             _ => localVideo,
         };
     }

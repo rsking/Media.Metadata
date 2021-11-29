@@ -1,15 +1,15 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="EditableRating.cs" company="RossKing">
+// <copyright file="RatingViewModel.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Models;
+namespace Media.Metadata.ViewModels;
 
 /// <summary>
 /// An editable rating.
 /// </summary>
-internal partial class EditableRating : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+internal partial class RatingViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
     private readonly System.Collections.ObjectModel.ObservableCollection<Rating> ratings = new();
 
@@ -20,10 +20,10 @@ internal partial class EditableRating : CommunityToolkit.Mvvm.ComponentModel.Obs
     private Rating? selectedRating;
 
     /// <summary>
-    /// Initialises a new instance of the <see cref="EditableRating"/> class.
+    /// Initialises a new instance of the <see cref="RatingViewModel"/> class.
     /// </summary>
     /// <param name="rating">The rating.</param>
-    public EditableRating(Rating? rating)
+    public RatingViewModel(Rating? rating)
     {
         this.Countries = Country.All;
         this.SelectedCountry = Rating.GetCountry(rating);

@@ -37,7 +37,7 @@ internal static class DialogExtensions
         if (Microsoft.UI.Xaml.Window.Current is null)
         {
             var hwnd = window is null
-                ? PInvoke.User32.GetActiveWindow()
+                ? TerraFX.Interop.Windows.Windows.GetActiveWindow()
                 : WinRT.Interop.WindowNative.GetWindowHandle(window);
             WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
         }

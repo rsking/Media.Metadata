@@ -7,7 +7,9 @@
 namespace Media.Metadata.ViewModels;
 
 using System;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml.Controls;
 
 /// <summary>
 /// The main view model.
@@ -44,7 +46,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// <summary>
     /// Gets the selected editable video.
     /// </summary>
-    public Models.EditableVideo? SelectedEditableVideo { get; private set; }
+    public VideoViewModel? SelectedEditableVideo { get; private set; }
 
     /// <summary>
     /// Gets the selected videos.
@@ -159,6 +161,71 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         }
     }
 
+    /// <summary>
+    /// Searches for the current video.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [ICommand]
+    public async Task Search()
+    {
+        VideoSearchViewModel? viewModel = this.SelectedEditableVideo switch
+        {
+            MovieViewModel movie => new MovieSearchViewModel(Ioc.Default.GetRequiredService<IMovieSearch>()) { Name = movie.Name, Year = GetYear(movie.Release) },
+            EpisodeViewModel episode => new EpisodeSearchViewModel(Ioc.Default.GetRequiredService<IShowSearch>()) { Name = episode.Show },
+            _ => default,
+        };
+
+        object? view = viewModel switch
+        {
+            MovieSearchViewModel movieViewModel => new Views.MovieSearchView(movieViewModel),
+            EpisodeSearchViewModel episodeViewModel => new Views.EpisodeSearchView(episodeViewModel),
+            _ => default,
+        };
+
+        var dialog = new ContentDialog
+        {
+            Title = "Search",
+            PrimaryButtonText = "Save",
+            IsSecondaryButtonEnabled = false,
+            CloseButtonText = "Cancel",
+            DefaultButton = ContentDialogButton.Primary,
+            Content = view,
+            XamlRoot = GetXamlRoot(),
+        };
+
+        var result = await dialog.ShowAsync(ContentDialogPlacement.Popup);
+        if (result == ContentDialogResult.Primary
+            && this.SelectedEditableVideo is not null
+            && viewModel?.SelectedVideo is not null)
+        {
+            Video? videoWithImageSource = viewModel.SelectedVideo switch
+            {
+                Episode episode => await EpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
+                Movie movie => await MovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
+                Video video => await VideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
+                _ => default,
+            };
+
+            if (videoWithImageSource is not null)
+            {
+                // apply this to the editable video
+                this.SelectedEditableVideo.Update(videoWithImageSource);
+            }
+        }
+
+        static int? GetYear(DateTimeOffset? dateTimeOffset)
+        {
+            return dateTimeOffset?.Year;
+        }
+
+        static Microsoft.UI.Xaml.XamlRoot? GetXamlRoot()
+        {
+            return App.Current?.GetWindow() is Microsoft.UI.Xaml.Window window
+                ? window.Content.XamlRoot
+                : default;
+        }
+    }
+
     /// <inheritdoc/>
     protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -166,9 +233,9 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         {
             this.SelectedEditableVideo = this.selectedVideo switch
             {
-                EpisodeWithImageSource episode => new Models.EditableEpisode(episode),
-                MovieWithImageSource movie => new Models.EditableMovie(movie),
-                VideoWithImageSource video => new Models.EditableVideo(video),
+                LocalEpisodeWithImageSource episode => new EpisodeViewModel(episode),
+                LocalMovieWithImageSource movie => new MovieViewModel(movie),
+                LocalVideoWithImageSource video => new VideoViewModel(video),
                 _ => default,
             };
         }
@@ -178,9 +245,9 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
 
     private async Task<Video?> ReadVideoAsync(string path) => this.reader.ReadVideo(path) switch
     {
-        LocalMovie movie => await MovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
-        LocalEpisode episode => await EpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
-        LocalVideo video => await VideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
+        LocalMovie movie => await LocalMovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
+        LocalEpisode episode => await LocalEpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
+        LocalVideo video => await LocalVideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
         _ => default(Video?),
     };
 }

@@ -1,15 +1,15 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="EditableEpisode.cs" company="RossKing">
+// <copyright file="EpisodeViewModel.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.Models;
+namespace Media.Metadata.ViewModels;
 
 /// <summary>
 /// An editable <see cref="Episode"/>.
 /// </summary>
-internal partial class EditableEpisode : EditableVideo
+internal partial class EpisodeViewModel : VideoViewModel
 {
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? show;
@@ -27,10 +27,10 @@ internal partial class EditableEpisode : EditableVideo
     private string? id;
 
     /// <summary>
-    /// Initialises a new instance of the <see cref="EditableEpisode"/> class.
+    /// Initialises a new instance of the <see cref="EpisodeViewModel"/> class.
     /// </summary>
     /// <param name="episode">The episode.</param>
-    public EditableEpisode(EpisodeWithImageSource episode)
+    public EpisodeViewModel(LocalEpisodeWithImageSource episode)
         : base(episode, episode.FileInfo, episode.SoftwareBitmap, episode.ImageSource)
     {
         this.Show = episode.Show;
