@@ -12,7 +12,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Title, ElementName=ThisWindow}" Margin="5" HorizontalAlignment="Left" />
+        <TextBlock Name="TitleBar" Text="{Binding Title, ElementName=ThisWindow}" Margin="5" FontSize="20" HorizontalAlignment="Left" />
         <views:MainView Grid.Row="1" />
     </Grid>
 </Window>

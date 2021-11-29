@@ -119,7 +119,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         if (this.SelectedEditableVideo is not null)
         {
             var video = await this.SelectedEditableVideo.ToVideoAsync().ConfigureAwait(true);
-            if (video is LocalVideo localVideo)
+            if (video is ILocalVideo localVideo)
             {
                 this.updater.UpdateVideo(localVideo.FileInfo.FullName, video);
                 await Refresh(localVideo).ConfigureAwait(true);

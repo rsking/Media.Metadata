@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.TMDb", "Medi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.TheTVDB", "Media.Metadata.TheTVDB\Media.Metadata.TheTVDB.csproj", "{9779DD3F-90C9-46E1-BF99-EDFB2EFA5148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media.Metadata.DependencyInjection", "Media.Metadata.DependencyInjection\Media.Metadata.DependencyInjection.csproj", "{0EFB0CE0-76A6-4F3C-93FB-0B7224FAFDDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.DependencyInjection", "Media.Metadata.DependencyInjection\Media.Metadata.DependencyInjection.csproj", "{0EFB0CE0-76A6-4F3C-93FB-0B7224FAFDDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

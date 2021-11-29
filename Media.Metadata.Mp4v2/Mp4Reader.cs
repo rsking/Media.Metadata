@@ -49,7 +49,7 @@ public class Mp4Reader : IReader
 
     private static Video ReadVideo(string path, MetadataTags tags) => new LocalVideo(
         new FileInfo(path),
-        tags.Title,
+        tags.Title ?? Path.GetFileNameWithoutExtension(path),
         tags.Description,
         tags.MovieInfo?.Producers,
         tags.MovieInfo?.Directors,
@@ -61,7 +61,7 @@ public class Mp4Reader : IReader
 
     private static Movie ReadMovie(string path, MetadataTags tags) => new LocalMovie(
         new FileInfo(path),
-        tags.Title,
+        tags.Title ?? Path.GetFileNameWithoutExtension(path),
         tags.Description,
         tags.MovieInfo?.Producers,
         tags.MovieInfo?.Directors,
@@ -73,7 +73,7 @@ public class Mp4Reader : IReader
 
     private static Episode ReadEpisode(string path, MetadataTags tags) => new LocalEpisode(
         new FileInfo(path),
-        tags.Title,
+        tags.Title ?? Path.GetFileNameWithoutExtension(path),
         tags.Description,
         tags.MovieInfo?.Producers,
         tags.MovieInfo?.Directors,

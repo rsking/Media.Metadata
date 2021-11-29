@@ -149,11 +149,15 @@ public class Mp4Writer : IUpdater
 
             static string? ToString(IEnumerable<string>? value)
             {
-                return value switch
+                if (value is null)
                 {
-                    null => default,
-                    _ => string.Join(", ", value),
-                };
+                    return default;
+                }
+
+                var stringValue = string.Join(", ", value);
+                return string.IsNullOrEmpty(stringValue)
+                    ? default
+                    : stringValue;
             }
         }
     }

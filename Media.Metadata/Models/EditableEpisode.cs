@@ -9,8 +9,23 @@ namespace Media.Metadata.Models;
 /// <summary>
 /// An editable <see cref="Episode"/>.
 /// </summary>
-internal class EditableEpisode : EditableVideo
+internal partial class EditableEpisode : EditableVideo
 {
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    private string? show;
+
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    private string? network;
+
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    private int season;
+
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    private int number;
+
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    private string? id;
+
     /// <summary>
     /// Initialises a new instance of the <see cref="EditableEpisode"/> class.
     /// </summary>
@@ -25,31 +40,6 @@ internal class EditableEpisode : EditableVideo
         this.Id = episode.Id;
     }
 
-    /// <summary>
-    /// Gets or sets the show.
-    /// </summary>
-    public string? Show { get; set; }
-
-    /// <summary>
-    /// Gets or sets the network.
-    /// </summary>
-    public string? Network { get; set; }
-
-    /// <summary>
-    /// Gets or sets the season.
-    /// </summary>
-    public int Season { get; set; }
-
-    /// <summary>
-    /// Gets or sets the number.
-    /// </summary>
-    public int Number { get; set; }
-
-    /// <summary>
-    /// Gets or sets the ID.
-    /// </summary>
-    public string? Id { get; set; }
-
     /// <inheritdoc/>
     public override async Task<Video> ToVideoAsync() => new LocalEpisode(this.FileInfo, this.Name, this.Description, this.Producers, this.Directors, this.Studios, this.Genre, this.ScreenWriters, this.Cast, this.Composers)
     {
@@ -62,4 +52,19 @@ internal class EditableEpisode : EditableVideo
         Id = this.Id,
         Image = await this.CreateImageAsync().ConfigureAwait(false),
     };
+
+    /// <inheritdoc/>
+    public override void Update(Video video)
+    {
+        base.Update(video);
+
+        if (video is Episode episode)
+        {
+            this.Show = episode.Show;
+            this.Network = episode.Network;
+            this.Season = episode.Season;
+            this.Number = episode.Number;
+            this.Id = episode.Id;
+        }
+    }
 }
