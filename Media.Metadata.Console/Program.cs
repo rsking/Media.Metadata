@@ -60,6 +60,7 @@ var rootCommand = new CommandLineBuilder()
     .AddCommand(updateCommand.Command);
 
 await rootCommand
+    .UseDefaults()
     .UseHost(
         Host.CreateDefaultBuilder,
         configure => configure.ConfigureServices((builder, services) =>
