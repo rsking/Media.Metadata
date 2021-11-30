@@ -30,7 +30,7 @@ internal partial class EpisodeViewModel : VideoViewModel
     /// Initialises a new instance of the <see cref="EpisodeViewModel"/> class.
     /// </summary>
     /// <param name="episode">The episode.</param>
-    public EpisodeViewModel(LocalEpisodeWithImageSource episode)
+    public EpisodeViewModel(Models.LocalEpisodeWithImageSource episode)
         : base(episode, episode.FileInfo, episode.SoftwareBitmap, episode.ImageSource)
     {
         this.Show = episode.Show;

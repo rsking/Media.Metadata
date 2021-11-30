@@ -1,18 +1,18 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="IHasSoftwareBitmap.cs" company="RossKing">
+// <copyright file="IHasImageSource.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata;
+namespace Media.Metadata.Models;
 
 /// <summary>
-/// Interface for have a software bitmap.
+/// Interface for having an image source.
 /// </summary>
-internal interface IHasSoftwareBitmap
+internal interface IHasImageSource
 {
     /// <summary>
-    /// Gets the softare bitmap.
+    /// Gets the image source.
     /// </summary>
-    Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; }
+    public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; }
 }

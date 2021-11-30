@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata;
+namespace Media.Metadata.Models;
 
 /// <summary>
 /// A movie with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.

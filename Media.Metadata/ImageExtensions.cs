@@ -67,7 +67,7 @@ internal static class ImageExtensions
     /// </summary>
     /// <param name="source">The source.</param>
     /// <returns>The image.</returns>
-    public static async Task<System.Drawing.Image?> CreateImageAsync(this IHasSoftwareBitmap source)
+    public static async Task<System.Drawing.Image?> CreateImageAsync(this Models.IHasSoftwareBitmap source)
     {
         if (source.SoftwareBitmap is Windows.Graphics.Imaging.SoftwareBitmap softwareBitmap)
         {

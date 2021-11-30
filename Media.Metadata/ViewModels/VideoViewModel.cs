@@ -9,7 +9,7 @@ namespace Media.Metadata.ViewModels;
 /// <summary>
 /// The editable video.
 /// </summary>
-internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, IHasImageSource, IHasSoftwareBitmap
+internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, Models.IHasImageSource, Models.IHasSoftwareBitmap
 {
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? name;
@@ -49,7 +49,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     /// Initialises a new instance of the <see cref="VideoViewModel"/> class.
     /// </summary>
     /// <param name="video">The video.</param>
-    public VideoViewModel(LocalVideoWithImageSource video)
+    public VideoViewModel(Models.LocalVideoWithImageSource video)
         : this(video, video.FileInfo, video.SoftwareBitmap, video.ImageSource)
     {
     }
@@ -155,12 +155,12 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
         this.Rating.SelectedRating = video.Rating;
 
-        if (video is IHasSoftwareBitmap softwareBitmap)
+        if (video is Models.IHasSoftwareBitmap softwareBitmap)
         {
             this.SoftwareBitmap = softwareBitmap.SoftwareBitmap;
         }
 
-        if (video is IHasImageSource imageSource)
+        if (video is Models.IHasImageSource imageSource)
         {
             this.ImageSource = imageSource.ImageSource;
         }

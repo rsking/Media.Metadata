@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata;
+namespace Media.Metadata.Models;
 
 /// <summary>
 /// A local video with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
@@ -32,6 +32,8 @@ internal record class LocalVideoWithImageSource(
     {
         this.Release = video.Release;
         this.Rating = video.Rating;
+        this.ImageSource = video.ImageSource;
+        this.SoftwareBitmap = video.SoftwareBitmap;
     }
 
     /// <summary>

@@ -200,9 +200,9 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         {
             Video? videoWithImageSource = viewModel.SelectedVideo switch
             {
-                Episode episode => await EpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
-                Movie movie => await MovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
-                Video video => await VideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
+                Episode episode => await Models.EpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
+                Movie movie => await Models.MovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
+                Video video => await Models.VideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
                 _ => default,
             };
 
@@ -233,9 +233,9 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         {
             this.SelectedEditableVideo = this.selectedVideo switch
             {
-                LocalEpisodeWithImageSource episode => new EpisodeViewModel(episode),
-                LocalMovieWithImageSource movie => new MovieViewModel(movie),
-                LocalVideoWithImageSource video => new VideoViewModel(video),
+                Models.LocalEpisodeWithImageSource episode => new EpisodeViewModel(episode),
+                Models.LocalMovieWithImageSource movie => new MovieViewModel(movie),
+                Models.LocalVideoWithImageSource video => new VideoViewModel(video),
                 _ => default,
             };
         }
@@ -245,9 +245,9 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
 
     private async Task<Video?> ReadVideoAsync(string path) => this.reader.ReadVideo(path) switch
     {
-        LocalMovie movie => await LocalMovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
-        LocalEpisode episode => await LocalEpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
-        LocalVideo video => await LocalVideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
+        LocalMovie movie => await Models.LocalMovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
+        LocalEpisode episode => await Models.LocalEpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
+        LocalVideo video => await Models.LocalVideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
         _ => default(Video?),
     };
 }

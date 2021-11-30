@@ -17,7 +17,7 @@ internal class MovieViewModel : VideoViewModel
     /// Initialises a new instance of the <see cref="MovieViewModel"/> class.
     /// </summary>
     /// <param name="movie">The movie.</param>
-    public MovieViewModel(LocalMovieWithImageSource movie)
+    public MovieViewModel(Models.LocalMovieWithImageSource movie)
         : base(movie, movie.FileInfo, movie.SoftwareBitmap, movie.ImageSource)
     {
     }
