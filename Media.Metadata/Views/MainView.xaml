@@ -77,8 +77,8 @@
 
                 <ScrollViewer DataContext="{Binding SelectedEditableVideo}"
                               Grid.Row="1"
-                              HorizontalScrollBarVisibility="Auto"
-                              HorizontalScrollMode="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              HorizontalScrollMode="Disabled"
                               VerticalScrollBarVisibility="Auto"
                               VerticalScrollMode="Auto">
                     <ScrollViewer.Resources>
@@ -95,7 +95,7 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" />
+                                            <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" TextWrapping="Wrap" />
                                             <ToggleSwitch Grid.Column="1" OffContent="SD" OnContent="HD" Margin="2" />
                                         </Grid>
                                         <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" />
@@ -104,15 +104,15 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Header="Producers" Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                                            <TextBox Grid.Column="1" Header="Directors" Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                                            <TextBox Header="Producers" Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                            <TextBox Grid.Column="1" Header="Directors" Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
                                         </Grid>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Header="Studios" Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                                            <TextBox Header="Studios" Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
                                             <Grid Grid.Column="1" DataContext="{Binding Rating, Mode=OneWay}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
@@ -128,14 +128,14 @@
                                                 </ComboBox>
                                             </Grid>
                                         </Grid>
-                                        <TextBox Header="Screen Writers" Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                                        <TextBox Header="Cast" Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                                        <TextBox Header="Composers" Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                                        <TextBox Header="Show" Text="{Binding Show, Mode=TwoWay}" Margin="2" />
-                                        <TextBox Header="Network" Text="{Binding Network, Mode=TwoWay}" Margin="2" />
+                                        <TextBox Header="Screen Writers" Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                        <TextBox Header="Cast" Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                        <TextBox Header="Composers" Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                        <TextBox Header="Show" Text="{Binding Show, Mode=TwoWay}" Margin="2" TextWrapping="Wrap" />
+                                        <TextBox Header="Network" Text="{Binding Network, Mode=TwoWay}" Margin="2" TextWrapping="Wrap" />
                                         <NumberBox Header="Season" Value="{Binding Season, Mode=TwoWay}" Margin="2" />
                                         <NumberBox Header="Number" Value="{Binding Number, Mode=TwoWay}" Margin="2" />
-                                        <TextBox Header="Episode ID" Text="{Binding Id, Mode=TwoWay}" Margin="2" />
+                                        <TextBox Header="Episode ID" Text="{Binding Id, Mode=TwoWay}" Margin="2" TextWrapping="Wrap" />
                                         <DatePicker Header="Release Date" Date="{Binding Release, Mode=TwoWay}" Margin="2" />
                                     </StackPanel>
                                 </DataTemplate>
@@ -144,33 +144,29 @@
                                 <DataTemplate x:DataType="vm:MovieViewModel">
                                     <StackPanel Grid.Column="1"
                                                 Grid.Row="1">
-                                        <StackPanel.Resources>
-                                            <converters:ArrayToStringConverter x:Key="ArrayToStringConverter" />
-                                            <converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter" />
-                                        </StackPanel.Resources>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" />
+                                            <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" TextWrapping="Wrap" />
                                             <ToggleSwitch Grid.Column="1" OffContent="SD" OnContent="HD" Margin="2" />
                                         </Grid>
-                                        <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" />
+                                        <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" TextWrapping="Wrap" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Header="Producers" Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                                            <TextBox Grid.Column="1" Header="Directors" Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                                            <TextBox Header="Producers" Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                            <TextBox Grid.Column="1" Header="Directors" Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
                                         </Grid>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Header="Studios" Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                                            <TextBox Header="Studios" Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
                                             <Grid Grid.Column="1" DataContext="{Binding Rating, Mode=OneWay}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
@@ -186,9 +182,9 @@
                                                 </ComboBox>
                                             </Grid>
                                         </Grid>
-                                        <TextBox Header="Screen Writers" Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                                        <TextBox Header="Cast" Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
-                                        <TextBox Header="Composers" Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" />
+                                        <TextBox Header="Screen Writers" Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                        <TextBox Header="Cast" Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                        <TextBox Header="Composers" Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
                                         <DatePicker Header="Release Date" Date="{Binding Release, Mode=TwoWay}" Margin="2" />
                                     </StackPanel>
                                 </DataTemplate>
