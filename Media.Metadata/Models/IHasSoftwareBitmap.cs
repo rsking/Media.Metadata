@@ -9,7 +9,7 @@ namespace Media.Metadata.Models;
 /// <summary>
 /// Interface for have a software bitmap.
 /// </summary>
-internal interface IHasSoftwareBitmap
+internal interface IHasSoftwareBitmap : System.IAsyncDisposable, System.IDisposable
 {
     /// <summary>
     /// Gets the softare bitmap.

@@ -100,7 +100,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
             foreach (var video in selectedVideos)
             {
                 this.Videos.Remove(video);
-                if (this.selectedVideo is IAsyncDisposable asyncDisposable)
+                if (video is IAsyncDisposable asyncDisposable)
                 {
                     await asyncDisposable.DisposeAsync().ConfigureAwait(true);
                 }
@@ -231,6 +231,11 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     {
         if (string.Equals(e.PropertyName, nameof(this.selectedVideo), StringComparison.OrdinalIgnoreCase))
         {
+            if (this.SelectedEditableVideo is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+
             this.SelectedEditableVideo = this.selectedVideo switch
             {
                 Models.LocalEpisodeWithImageSource episode => new EpisodeViewModel(episode),

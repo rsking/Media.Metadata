@@ -21,6 +21,8 @@ internal record class VideoWithImageSource(
     IEnumerable<string>? Cast,
     IEnumerable<string>? Composers) : Video(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
 {
+    private bool disposedValue;
+
     /// <inheritdoc/>
     public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; init; }
 
@@ -42,5 +44,45 @@ internal record class VideoWithImageSource(
             SoftwareBitmap = softwareBitmap,
             ImageSource = await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
         };
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (disposing && !this.disposedValue)
+        {
+            if (this.ImageSource is System.IDisposable imageSourceDisposable)
+            {
+                imageSourceDisposable.Dispose();
+            }
+
+            if (this.SoftwareBitmap is System.IDisposable softwareBitmapDisposable)
+            {
+                softwareBitmapDisposable.Dispose();
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override async ValueTask DisposeAsyncCore()
+    {
+        await base.DisposeAsyncCore().ConfigureAwait(false);
+
+        await DisposeAsync(this.ImageSource).ConfigureAwait(false);
+        await DisposeAsync(this.SoftwareBitmap).ConfigureAwait(false);
+        this.disposedValue = true;
+
+        static async ValueTask DisposeAsync(object? value)
+        {
+            if (value is System.IAsyncDisposable asyncDisposable)
+            {
+                await asyncDisposable.DisposeAsync().ConfigureAwait(false);
+            }
+            else if (value is System.IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
     }
 }

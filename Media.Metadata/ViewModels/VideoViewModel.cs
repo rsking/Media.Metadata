@@ -45,6 +45,8 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
 
     private Windows.Graphics.Imaging.SoftwareBitmap? softwareBitmap;
 
+    private bool disposedValue;
+
     /// <summary>
     /// Initialises a new instance of the <see cref="VideoViewModel"/> class.
     /// </summary>
@@ -111,6 +113,26 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         set => this.SetProperty(ref this.imageSource, value);
     }
 
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        this.Dispose(disposing: true);
+        System.GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync()
+    {
+        // Perform async cleanup.
+        await this.DisposeAsyncCore().ConfigureAwait(false);
+
+        // Dispose of unmanaged resources.
+        this.Dispose(disposing: false);
+
+        // Suppress finalization.
+        System.GC.SuppressFinalize(this);
+    }
+
     /// <summary>
     /// Converts this to a video.
     /// </summary>
@@ -168,6 +190,58 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         static IList<T> Create<T>(IEnumerable<T>? source)
         {
             return source?.ToList() ?? new List<T>();
+        }
+    }
+
+    /// <summary>
+    /// Disposes this instance.
+    /// </summary>
+    /// <param name="disposing">Set to <see langword="true"/> to dispose managed resources.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this.disposedValue)
+        {
+            if (disposing)
+            {
+                if (this.imageSource is System.IDisposable imageSourceDisposable)
+                {
+                    imageSourceDisposable.Dispose();
+                }
+
+                if (this.softwareBitmap is System.IDisposable softwareBitmapDisposable)
+                {
+                    softwareBitmapDisposable.Dispose();
+                }
+
+                this.imageSource = default;
+                this.softwareBitmap = default;
+            }
+
+            this.disposedValue = true;
+        }
+    }
+
+    /// <summary>
+    /// Disposes this instance asynchronously.
+    /// </summary>
+    /// <returns>The value task.</returns>
+    protected virtual async ValueTask DisposeAsyncCore()
+    {
+        await DisposeAsync(this.imageSource).ConfigureAwait(false);
+        this.imageSource = default;
+        await DisposeAsync(this.softwareBitmap).ConfigureAwait(false);
+        this.softwareBitmap = default;
+
+        static async ValueTask DisposeAsync(object? value)
+        {
+            if (value is System.IAsyncDisposable asyncDisposable)
+            {
+                await asyncDisposable.DisposeAsync().ConfigureAwait(false);
+            }
+            else if (value is System.IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }
