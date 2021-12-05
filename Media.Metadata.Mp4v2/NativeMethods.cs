@@ -17,52 +17,52 @@ internal static class NativeMethods
     /// <summary>
     /// Invalid track ID.
     /// </summary>
-    internal const int MP4InvalidTrackId = 0;
+    public const int MP4InvalidTrackId = 0;
 
     /// <summary>
     /// Od track type.
     /// </summary>
-    internal const string MP4OdTrackType = "odsm";
+    public const string MP4OdTrackType = "odsm";
 
     /// <summary>
     /// Scene track type.
     /// </summary>
-    internal const string MP4SceneTrackType = "sdsm";
+    public const string MP4SceneTrackType = "sdsm";
 
     /// <summary>
     /// Audio track type.
     /// </summary>
-    internal const string MP4AudioTrackType = "soun";
+    public const string MP4AudioTrackType = "soun";
 
     /// <summary>
     /// Video track type.
     /// </summary>
-    internal const string MP4VideoTrackType = "vide";
+    public const string MP4VideoTrackType = "vide";
 
     /// <summary>
     /// Hint track type.
     /// </summary>
-    internal const string MP4HintTrackType = "hint";
+    public const string MP4HintTrackType = "hint";
 
     /// <summary>
     /// Control track type.
     /// </summary>
-    internal const string MP4ControlTrackType = "cntl";
+    public const string MP4ControlTrackType = "cntl";
 
     /// <summary>
     /// Text track type.
     /// </summary>
-    internal const string MP4TextTrackType = "text";
+    public const string MP4TextTrackType = "text";
 
     /// <summary>
     /// Subtitle track type.
     /// </summary>
-    internal const string MP4SubtitleTrackType = "sbtl";
+    public const string MP4SubtitleTrackType = "sbtl";
 
     /// <summary>
     /// Sub-picture track type.
     /// </summary>
-    internal const string MP4SubpictureTrackType = "subp";
+    public const string MP4SubpictureTrackType = "subp";
 
     /// <summary>
     /// The should parse atom call back.
@@ -106,7 +106,7 @@ internal static class NativeMethods
     /// </code>
     /// </para>
     /// </remarks>
-    internal enum MP4ItmfBasicType
+    public enum MP4ItmfBasicType
     {
         /// <summary>
         /// For use with tags for which no type needs to be indicated.
@@ -232,7 +232,7 @@ internal static class NativeMethods
     /// </code>
     /// </para>
     /// </remarks>
-    internal enum ArtworkType
+    public enum ArtworkType
     {
         /// <summary>
         /// Undefined image type.
@@ -276,7 +276,7 @@ internal static class NativeMethods
     /// </code>
     /// </para>
     /// </remarks>
-    internal enum MP4ChapterType
+    public enum MP4ChapterType
     {
         /// <summary>
         /// No chapters found return value.
@@ -302,7 +302,7 @@ internal static class NativeMethods
     /// <summary>
     /// Values representing the time scale for a track.
     /// </summary>
-    internal enum MP4TimeScale
+    public enum MP4TimeScale
     {
         /// <summary>
         /// Track duration is measured in seconds.
@@ -331,7 +331,7 @@ internal static class NativeMethods
     /// <remarks>This function allocates a new structure which represents a snapshot of all the tags therein, tracking if the tag is missing, or present and with value.It is the caller's responsibility to free the structure with <see cref="MP4TagsFree"/>.</remarks>
     /// <returns>Structure with all tags missing.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern IntPtr MP4TagsAlloc();
+    public static extern IntPtr MP4TagsAlloc();
 
     /// <summary>
     /// Fetch data from mp4 file and populate structure.
@@ -342,7 +342,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsFetch(IntPtr tags, IntPtr file);
+    public static extern bool MP4TagsFetch(IntPtr tags, IntPtr file);
 
     /// <summary>
     /// Store data to mp4 file from structure.
@@ -353,7 +353,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsStore(IntPtr tags, IntPtr file);
+    public static extern bool MP4TagsStore(IntPtr tags, IntPtr file);
 
     /// <summary>
     /// Free tags convenience structure.
@@ -361,7 +361,7 @@ internal static class NativeMethods
     /// <param name="tags">tags structure to destroy.</param>
     /// <remarks>This function frees memory associated with the structure.</remarks>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern void MP4TagsFree(IntPtr tags);
+    public static extern void MP4TagsFree(IntPtr tags);
 
     /// <summary>
     /// Read an existing mp4 file.
@@ -371,7 +371,7 @@ internal static class NativeMethods
     /// <remarks>MP4Read is the first call that should be used when you want to just read an existing mp4 file.It is equivalent to opening a file for reading, but in addition the mp4 file is parsed and the controlinformation is loaded into memory.Note that actual track samples are notread into memory until MP4ReadSample() is called.</remarks>
     /// <returns>On success a handle of the file for use in subsequent calls to the library. On error, #MP4_INVALID_FILE_HANDLE.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern IntPtr MP4Read(byte[] fileName, IntPtr cb);
+    public static extern IntPtr MP4Read(byte[] fileName, IntPtr cb);
 
     /// <summary>
     /// Modify an existing mp4 file.
@@ -384,12 +384,12 @@ internal static class NativeMethods
     /// </remarks>
     /// <returns>On success a handle of the target file for use in subsequent calls to the library. On error, #MP4_INVALID_FILE_HANDLE.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern IntPtr MP4Modify(byte[] fileName, int flags);
+    public static extern IntPtr MP4Modify(byte[] fileName, int flags);
 
     //// Commenting this API declaration. It isn't called yet, but may be in the future.
     //// [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     //// [return: MarshalAs(UnmanagedType.U1)]
-    //// internal static extern bool MP4Optimize([MarshalAs(UnmanagedType.LPStr)]string fileName, [MarshalAs(UnmanagedType.LPStr)]string newName);
+    //// public static extern bool MP4Optimize([MarshalAs(UnmanagedType.LPStr)]string fileName, [MarshalAs(UnmanagedType.LPStr)]string newName);
 
     /// <summary>
     /// Close an mp4 file.
@@ -397,14 +397,14 @@ internal static class NativeMethods
     /// <param name="file">handle of file to close.</param>
     /// <remarks>MP4Close closes a previously opened mp4 file. If the file was opened writable with <see cref="MP4Modify(byte[], int)"/>, then <see cref="MP4Close(IntPtr)"/> will write out all pending information to disk.</remarks>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern void MP4Close(IntPtr file);
+    public static extern void MP4Close(IntPtr file);
 
     /// <summary>
     /// Frees the pointer.
     /// </summary>
     /// <param name="pointer">The pointer.</param>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern void MP4Free(IntPtr pointer);
+    public static extern void MP4Free(IntPtr pointer);
 
     /// <summary>
     /// Sets the name tag.
@@ -414,7 +414,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetName(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? name);
+    public static extern bool MP4TagsSetName(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? name);
 
     /// <summary>
     /// Sets the artist tag.
@@ -424,7 +424,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetArtist(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? artist);
+    public static extern bool MP4TagsSetArtist(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? artist);
 
     /// <summary>
     /// Sets the album artist tag.
@@ -434,7 +434,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetAlbumArtist(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? albumArtist);
+    public static extern bool MP4TagsSetAlbumArtist(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? albumArtist);
 
     /// <summary>
     /// Sets the album tag.
@@ -444,7 +444,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetAlbum(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? album);
+    public static extern bool MP4TagsSetAlbum(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? album);
 
     /// <summary>
     /// Sets the grouping tag.
@@ -454,7 +454,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetGrouping(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? grouping);
+    public static extern bool MP4TagsSetGrouping(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? grouping);
 
     /// <summary>
     /// Sets the composer tag.
@@ -464,7 +464,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetComposer(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? composer);
+    public static extern bool MP4TagsSetComposer(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? composer);
 
     /// <summary>
     /// Sets the comments tag.
@@ -474,7 +474,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetComments(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? comments);
+    public static extern bool MP4TagsSetComments(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? comments);
 
     /// <summary>
     /// Sets the genre tag.
@@ -484,7 +484,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetGenre(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? genre);
+    public static extern bool MP4TagsSetGenre(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? genre);
 
     /// <summary>
     /// Sets the genre type tag.
@@ -494,7 +494,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetGenreType(IntPtr tags, IntPtr genreType);
+    public static extern bool MP4TagsSetGenreType(IntPtr tags, IntPtr genreType);
 
     /// <summary>
     /// Sets the release date tag.
@@ -504,7 +504,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetReleaseDate(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? releaseDate);
+    public static extern bool MP4TagsSetReleaseDate(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? releaseDate);
 
     /// <summary>
     /// Sets the track tag.
@@ -514,7 +514,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetTrack(IntPtr tags, IntPtr trackInfo);
+    public static extern bool MP4TagsSetTrack(IntPtr tags, IntPtr trackInfo);
 
     /// <summary>
     /// Sets the disk tag.
@@ -524,7 +524,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetDisk(IntPtr tags, IntPtr discInfo);
+    public static extern bool MP4TagsSetDisk(IntPtr tags, IntPtr discInfo);
 
     /// <summary>
     /// Sets the tempo tag.
@@ -534,7 +534,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetTempo(IntPtr tags, IntPtr tempo);
+    public static extern bool MP4TagsSetTempo(IntPtr tags, IntPtr tempo);
 
     /// <summary>
     /// Sets the compilation tag.
@@ -544,7 +544,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetCompilation(IntPtr tags, IntPtr isCompilation);
+    public static extern bool MP4TagsSetCompilation(IntPtr tags, IntPtr isCompilation);
 
     /// <summary>
     /// Sets the TV show tag.
@@ -554,7 +554,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetTVShow(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? tvShow);
+    public static extern bool MP4TagsSetTVShow(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? tvShow);
 
     /// <summary>
     /// Sets the TV network tag.
@@ -564,7 +564,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetTVNetwork(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? tvNetwork);
+    public static extern bool MP4TagsSetTVNetwork(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? tvNetwork);
 
     /// <summary>
     /// Sets the TV episode ID tag.
@@ -574,7 +574,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetTVEpisodeID(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? tvEpisodeId);
+    public static extern bool MP4TagsSetTVEpisodeID(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? tvEpisodeId);
 
     /// <summary>
     /// Sets the TV season tag.
@@ -584,7 +584,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetTVSeason(IntPtr tags, IntPtr seasonNumber);
+    public static extern bool MP4TagsSetTVSeason(IntPtr tags, IntPtr seasonNumber);
 
     /// <summary>
     /// Sets the TV episode tag.
@@ -594,7 +594,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetTVEpisode(IntPtr tags, IntPtr episodeNumber);
+    public static extern bool MP4TagsSetTVEpisode(IntPtr tags, IntPtr episodeNumber);
 
     /// <summary>
     /// Sets the description tag.
@@ -604,7 +604,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetDescription(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? description);
+    public static extern bool MP4TagsSetDescription(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? description);
 
     /// <summary>
     /// Sets the long description tag.
@@ -614,7 +614,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetLongDescription(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? longDescription);
+    public static extern bool MP4TagsSetLongDescription(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? longDescription);
 
     /// <summary>
     /// Sets the comments tag.
@@ -624,7 +624,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetLyrics(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? lyrics);
+    public static extern bool MP4TagsSetLyrics(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? lyrics);
 
     /// <summary>
     /// Sets the sort name tag.
@@ -634,7 +634,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetSortName(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortName);
+    public static extern bool MP4TagsSetSortName(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortName);
 
     /// <summary>
     /// Sets the sort artist tag.
@@ -644,7 +644,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetSortArtist(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortArtist);
+    public static extern bool MP4TagsSetSortArtist(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortArtist);
 
     /// <summary>
     /// Sets the sort album artist tag.
@@ -654,7 +654,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetSortAlbumArtist(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortAlbumArtist);
+    public static extern bool MP4TagsSetSortAlbumArtist(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortAlbumArtist);
 
     /// <summary>
     /// Sets the sort album tag.
@@ -664,7 +664,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetSortAlbum(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortAlbum);
+    public static extern bool MP4TagsSetSortAlbum(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortAlbum);
 
     /// <summary>
     /// Sets the sort composer tag.
@@ -674,7 +674,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetSortComposer(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortComposer);
+    public static extern bool MP4TagsSetSortComposer(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortComposer);
 
     /// <summary>
     /// Sets the sort TV show tag.
@@ -684,7 +684,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetSortTVShow(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortTVShow);
+    public static extern bool MP4TagsSetSortTVShow(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? sortTVShow);
 
     /// <summary>
     /// Adds artwork.
@@ -694,7 +694,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsAddArtwork(IntPtr tags, IntPtr artwork);
+    public static extern bool MP4TagsAddArtwork(IntPtr tags, IntPtr artwork);
 
     /// <summary>
     /// Sets the artwork tag.
@@ -705,7 +705,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetArtwork(IntPtr tags, int index, IntPtr artwork);
+    public static extern bool MP4TagsSetArtwork(IntPtr tags, int index, IntPtr artwork);
 
     /// <summary>
     /// Removes the artwork at the specified index.
@@ -715,7 +715,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsRemoveArtwork(IntPtr tags, int index);
+    public static extern bool MP4TagsRemoveArtwork(IntPtr tags, int index);
 
     /// <summary>
     /// Sets the copyright tag.
@@ -725,7 +725,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetCopyright(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? copyright);
+    public static extern bool MP4TagsSetCopyright(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? copyright);
 
     /// <summary>
     /// Sets the encoding tool tag.
@@ -735,7 +735,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetEncodingTool(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? encodingTool);
+    public static extern bool MP4TagsSetEncodingTool(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? encodingTool);
 
     /// <summary>
     /// Sets the encoded by tag.
@@ -745,7 +745,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetEncodedBy(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? encodedBy);
+    public static extern bool MP4TagsSetEncodedBy(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? encodedBy);
 
     /// <summary>
     /// Sets the purchased date tag.
@@ -755,7 +755,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetPurchaseDate(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? purchaseDate);
+    public static extern bool MP4TagsSetPurchaseDate(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? purchaseDate);
 
     /// <summary>
     /// Sets the podcast tag.
@@ -765,7 +765,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetPodcast(IntPtr tags, IntPtr isPodcast);
+    public static extern bool MP4TagsSetPodcast(IntPtr tags, IntPtr isPodcast);
 
     /// <summary>
     /// Sets the keywords tag.
@@ -775,7 +775,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetKeywords(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? podcastKeywords);
+    public static extern bool MP4TagsSetKeywords(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? podcastKeywords);
 
     /// <summary>
     /// Sets the category tag.
@@ -785,7 +785,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetCategory(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? podcastCategory);
+    public static extern bool MP4TagsSetCategory(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? podcastCategory);
 
     /// <summary>
     /// Sets the HD video tag.
@@ -795,7 +795,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetHDVideo(IntPtr tags, IntPtr isHDVideo);
+    public static extern bool MP4TagsSetHDVideo(IntPtr tags, IntPtr isHDVideo);
 
     /// <summary>
     /// Sets the mediat type tag.
@@ -805,7 +805,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetMediaType(IntPtr tags, IntPtr mediaType);
+    public static extern bool MP4TagsSetMediaType(IntPtr tags, IntPtr mediaType);
 
     /// <summary>
     /// Sets the content rating tag.
@@ -815,7 +815,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetContentRating(IntPtr tags, IntPtr contentRating);
+    public static extern bool MP4TagsSetContentRating(IntPtr tags, IntPtr contentRating);
 
     /// <summary>
     /// Sets the gapless tag.
@@ -825,7 +825,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetGapless(IntPtr tags, IntPtr isGapless);
+    public static extern bool MP4TagsSetGapless(IntPtr tags, IntPtr isGapless);
 
     /// <summary>
     /// Sets the iTunes account tag.
@@ -835,7 +835,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetITunesAccount(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? iTunesAccount);
+    public static extern bool MP4TagsSetITunesAccount(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? iTunesAccount);
 
     /// <summary>
     /// Sets the iTunes account type tag.
@@ -845,7 +845,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetITunesAccountType(IntPtr tags, IntPtr iTunesAccountType);
+    public static extern bool MP4TagsSetITunesAccountType(IntPtr tags, IntPtr iTunesAccountType);
 
     /// <summary>
     /// Sets the iTunes country tag.
@@ -855,7 +855,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetITunesCountry(IntPtr tags, IntPtr iTunesAccountCountry);
+    public static extern bool MP4TagsSetITunesCountry(IntPtr tags, IntPtr iTunesAccountCountry);
 
     /// <summary>
     /// Sets the content ID tag.
@@ -865,7 +865,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetContentID(IntPtr tags, IntPtr contentId);
+    public static extern bool MP4TagsSetContentID(IntPtr tags, IntPtr contentId);
 
     /// <summary>
     /// Sets the artist ID tag.
@@ -875,7 +875,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetArtistID(IntPtr tags, IntPtr artistId);
+    public static extern bool MP4TagsSetArtistID(IntPtr tags, IntPtr artistId);
 
     /// <summary>
     /// Sets the playlist ID tag.
@@ -885,7 +885,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetPlaylistID(IntPtr tags, IntPtr playlistId);
+    public static extern bool MP4TagsSetPlaylistID(IntPtr tags, IntPtr playlistId);
 
     /// <summary>
     /// Sets the genre ID tag.
@@ -895,7 +895,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetGenreID(IntPtr tags, IntPtr genreId);
+    public static extern bool MP4TagsSetGenreID(IntPtr tags, IntPtr genreId);
 
     /// <summary>
     /// Sets the composer ID tag.
@@ -905,7 +905,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetComposerID(IntPtr tags, IntPtr composerId);
+    public static extern bool MP4TagsSetComposerID(IntPtr tags, IntPtr composerId);
 
     /// <summary>
     /// Sets the XID tag.
@@ -915,7 +915,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4TagsSetXID(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? xid);
+    public static extern bool MP4TagsSetXID(IntPtr tags, [MarshalAs(UnmanagedType.LPStr)] string? xid);
 
     /// <summary>
     /// Get list of items by meaning from file.
@@ -925,14 +925,14 @@ internal static class NativeMethods
     /// <param name="name">may be NULL. UTF-8 name. NULL-terminated.</param>
     /// <returns>On succes, list of items, which must be free'd. On failure, <see cref="IntPtr.Zero"/>.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern IntPtr MP4ItmfGetItemsByMeaning(IntPtr file, [MarshalAs(UnmanagedType.LPStr)] string meaning, [MarshalAs(UnmanagedType.LPStr)] string? name);
+    public static extern IntPtr MP4ItmfGetItemsByMeaning(IntPtr file, [MarshalAs(UnmanagedType.LPStr)] string meaning, [MarshalAs(UnmanagedType.LPStr)] string? name);
 
     /// <summary>
     /// Free an item list (deep free).
     /// </summary>
     /// <param name="itemList">itemList to be free'd.</param>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern void MP4ItmfItemListFree(IntPtr itemList);
+    public static extern void MP4ItmfItemListFree(IntPtr itemList);
 
     /// <summary>
     /// Allocate an item on the heap.
@@ -941,7 +941,7 @@ internal static class NativeMethods
     /// <param name="numData">number of data elements to allocate. Must be >= 1.</param>
     /// <returns>newly allocated item.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern IntPtr MP4ItmfItemAlloc([MarshalAs(UnmanagedType.LPStr)] string code, int numData);
+    public static extern IntPtr MP4ItmfItemAlloc([MarshalAs(UnmanagedType.LPStr)] string code, int numData);
 
     /// <summary>
     /// Add an item to file.
@@ -951,12 +951,12 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4ItmfAddItem(IntPtr hFile, IntPtr item);
+    public static extern bool MP4ItmfAddItem(IntPtr hFile, IntPtr item);
 
     //// Commenting this API declaration. It isn't called yet, but may be in the future.
     //// [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     //// [return: MarshalAs(UnmanagedType.U1)]
-    //// internal static extern bool MP4ItmfSetItem(IntPtr hFile, IntPtr item);
+    //// public static extern bool MP4ItmfSetItem(IntPtr hFile, IntPtr item);
 
     /// <summary>
     /// Remove an existing item from file.
@@ -966,7 +966,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4ItmfRemoveItem(IntPtr hFile, IntPtr item);
+    public static extern bool MP4ItmfRemoveItem(IntPtr hFile, IntPtr item);
 
     /// <summary>
     /// Gets the number of tracks.
@@ -976,7 +976,7 @@ internal static class NativeMethods
     /// <param name="subType">sub type of track.</param>
     /// <returns>number of tracks.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern int MP4GetNumberOfTracks(IntPtr hFile, [MarshalAs(UnmanagedType.LPStr)] string? type, byte subType);
+    public static extern int MP4GetNumberOfTracks(IntPtr hFile, [MarshalAs(UnmanagedType.LPStr)] string? type, byte subType);
 
     /// <summary>
     /// Finds the track ID.
@@ -987,7 +987,7 @@ internal static class NativeMethods
     /// <param name="subType">sub type of track.</param>
     /// <returns>track ID.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern int MP4FindTrackId(IntPtr hFile, short index, [MarshalAs(UnmanagedType.LPStr)] string? type, byte subType);
+    public static extern int MP4FindTrackId(IntPtr hFile, short index, [MarshalAs(UnmanagedType.LPStr)] string? type, byte subType);
 
     /// <summary>
     /// Get the track type.
@@ -995,7 +995,7 @@ internal static class NativeMethods
     /// <param name="hFile">handle of file for operation.</param>
     /// <param name="trackId">id of track for operation.</param>
     /// <returns>On success, a string indicating track type. On failure, <see langword="null"/>.</returns>
-    internal static string? MP4GetTrackType(IntPtr hFile, int trackId)
+    public static string? MP4GetTrackType(IntPtr hFile, int trackId)
     {
         var ptr = MP4GetTrackTypeInterop(hFile, trackId);
         var trackType = Marshal.PtrToStringAnsi(ptr);
@@ -1009,7 +1009,7 @@ internal static class NativeMethods
     /// <param name="trackId">id of track for operation.</param>
     /// <returns>On success, a string indicating track type. On failure, <see langword="null"/>.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern string MP4GetTrackMediaDataName(IntPtr hFile, int trackId);
+    public static extern string MP4GetTrackMediaDataName(IntPtr hFile, int trackId);
 
     /// <summary>
     /// Get ISO-639-2/T language code of a track.
@@ -1021,7 +1021,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4GetTrackLanguage(IntPtr hFile, int trackId, byte[] code);
+    public static extern bool MP4GetTrackLanguage(IntPtr hFile, int trackId, byte[] code);
 
     /// <summary>
     /// Set ISO-639-2/T language code of a track.
@@ -1033,7 +1033,7 @@ internal static class NativeMethods
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static extern bool MP4SetTrackLanguage(IntPtr hFile, int trackId, byte[] code);
+    public static extern bool MP4SetTrackLanguage(IntPtr hFile, int trackId, byte[] code);
 
     /// <summary>
     /// Convert duration from track time scale to an arbitrary time scale.
@@ -1044,7 +1044,7 @@ internal static class NativeMethods
     /// <param name="timeScale">time scale in ticks per second.</param>
     /// <returns>On success, the duration in arbitrary time scale units. On error, <b>0</b>.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern long MP4ConvertFromTrackDuration(IntPtr hFile, int trackId, long duration, MP4TimeScale timeScale);
+    public static extern long MP4ConvertFromTrackDuration(IntPtr hFile, int trackId, long duration, MP4TimeScale timeScale);
 
     /// <summary>
     /// Gets the track duration.
@@ -1053,7 +1053,7 @@ internal static class NativeMethods
     /// <param name="trackId">id of track for operation.</param>
     /// <returns>On success, the duration. On error, <b>0</b>.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern long MP4GetTrackDuration(IntPtr hFile, int trackId);
+    public static extern long MP4GetTrackDuration(IntPtr hFile, int trackId);
 
     /// <summary>
     /// Get list of chapters.
@@ -1065,7 +1065,7 @@ internal static class NativeMethods
     /// <returns>the first type of chapters found.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static extern MP4ChapterType MP4GetChapters(IntPtr hFile, ref IntPtr chapterList, ref int chapterCount, MP4ChapterType chapterType);
+    public static extern MP4ChapterType MP4GetChapters(IntPtr hFile, ref IntPtr chapterList, ref int chapterCount, MP4ChapterType chapterType);
 
     /// <summary>
     /// Set list of chapters.
@@ -1077,7 +1077,7 @@ internal static class NativeMethods
     /// <returns>the type of chapters written.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static extern MP4ChapterType MP4SetChapters(IntPtr hFile, [In, Out] MP4Chapter[] chapterList, int chapterCount, MP4ChapterType chapterType);
+    public static extern MP4ChapterType MP4SetChapters(IntPtr hFile, [In, Out] MP4Chapter[] chapterList, int chapterCount, MP4ChapterType chapterType);
 
     /// <summary>
     /// Gets the duration.
@@ -1085,7 +1085,7 @@ internal static class NativeMethods
     /// <param name="hFile">handle of file for operation.</param>
     /// <returns>On success, the duration. On error, <b>0</b>.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern long MP4GetDuration(IntPtr hFile);
+    public static extern long MP4GetDuration(IntPtr hFile);
 
     /// <summary>
     /// Get the time scale of the movie (file).
@@ -1093,7 +1093,7 @@ internal static class NativeMethods
     /// <param name="hFile">handle of file for operation.</param>
     /// <returns>timescale (ticks per second) of the mp4 file.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern int MP4GetTimeScale(IntPtr hFile);
+    public static extern int MP4GetTimeScale(IntPtr hFile);
 
     [DllImport("libmp4v2.dll", EntryPoint = nameof(MP4GetTrackType), CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr MP4GetTrackTypeInterop(IntPtr hFile, int trackId);
@@ -1117,32 +1117,32 @@ internal static class NativeMethods
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MP4ItmfData
+    public struct MP4ItmfData
     {
         /// <summary>
         /// Always zero.
         /// </summary>
-        internal byte typeSetIdentifier;
+        public byte typeSetIdentifier;
 
         /// <summary>
         /// Basic type of data.
         /// </summary>
-        internal MP4ItmfBasicType typeCode;
+        public MP4ItmfBasicType typeCode;
 
         /// <summary>
         /// Always zero.
         /// </summary>
-        internal int locale;
+        public int locale;
 
         /// <summary>
         /// Value of the data, may be NULL (<see cref="IntPtr.Zero"/>).
         /// </summary>
-        internal IntPtr value;
+        public IntPtr value;
 
         /// <summary>
         /// Value size in bytes.
         /// </summary>
-        internal int valueSize;
+        public int valueSize;
     }
 
     /// <summary>
@@ -1162,18 +1162,18 @@ internal static class NativeMethods
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MP4ItmfDataList
+    public struct MP4ItmfDataList
     {
         /// <summary>
         /// flat array. NULL when size is zero.
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray)]
-        internal IntPtr[] elements;
+        public IntPtr[] elements;
 
         /// <summary>
         /// number of elements.
         /// </summary>
-        internal int size;
+        public int size;
     }
 
     /// <summary>
@@ -1196,32 +1196,32 @@ internal static class NativeMethods
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MP4ItmfItem
+    public struct MP4ItmfItem
     {
         /// <summary>
         /// internal use only.
         /// </summary>
-        internal IntPtr handle;
+        public IntPtr handle;
 
         /// <summary>
         /// four-char code identifying atom type. NULL-terminated.
         /// </summary>
-        internal string code;
+        public string code;
 
         /// <summary>
         /// may be NULL. UTF-8 meaning. NULL-terminated.
         /// </summary>
-        internal string mean;
+        public string mean;
 
         /// <summary>
         /// may be NULL. UTF-8 name. NULL-terminated.
         /// </summary>
-        internal string name;
+        public string name;
 
         /// <summary>
         /// list of data. can be zero length.
         /// </summary>
-        internal MP4ItmfDataList dataList;
+        public MP4ItmfDataList dataList;
     }
 
     /// <summary>
@@ -1240,18 +1240,18 @@ internal static class NativeMethods
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MP4ItmfItemList
+    public struct MP4ItmfItemList
     {
         /// <summary>
         /// flat array. NULL when size is zero.
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray)]
-        internal IntPtr[] elements;
+        public IntPtr[] elements;
 
         /// <summary>
         /// number of elements.
         /// </summary>
-        internal int size;
+        public int size;
     }
 
     /// <summary>
@@ -1270,22 +1270,22 @@ internal static class NativeMethods
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MP4TagArtwork
+    public struct MP4TagArtwork
     {
         /// <summary>
         /// raw picture data.
         /// </summary>
-        internal IntPtr data;
+        public IntPtr data;
 
         /// <summary>
         /// data size in bytes.
         /// </summary>
-        internal int size;
+        public int size;
 
         /// <summary>
         /// data type.
         /// </summary>
-        internal ArtworkType type;
+        public ArtworkType type;
     }
 
     /// <summary>
@@ -1304,17 +1304,17 @@ internal static class NativeMethods
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MP4TagTrack
+    public struct MP4TagTrack
     {
         /// <summary>
         /// Track number.
         /// </summary>
-        internal short index;
+        public short index;
 
         /// <summary>
         /// Total number of tracks.
         /// </summary>
-        internal short total;
+        public short total;
     }
 
     /// <summary>
@@ -1333,17 +1333,17 @@ internal static class NativeMethods
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MP4TagDisk
+    public struct MP4TagDisk
     {
         /// <summary>
         /// Disc number.
         /// </summary>
-        internal short index;
+        public short index;
 
         /// <summary>
         /// Total number of discs.
         /// </summary>
-        internal short total;
+        public short total;
     }
 
     /// <summary>
@@ -1363,18 +1363,18 @@ internal static class NativeMethods
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MP4Chapter
+    public struct MP4Chapter
     {
         /// <summary>
         /// Duration of chapter in milliseconds.
         /// </summary>
-        internal long duration;
+        public long duration;
 
         /// <summary>
         /// Title of chapter.
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1024)]
-        internal byte[] title;
+        public byte[] title;
     }
 
     /// <summary>
@@ -1451,261 +1451,261 @@ internal static class NativeMethods
     /// </para>
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MP4Tags
+    public struct MP4Tags
     {
         /// <summary>
         /// Internal handle.
         /// </summary>
-        internal IntPtr handle;
+        public IntPtr handle;
 
         /// <summary>
         /// Name of the file.
         /// </summary>
-        internal string name;
+        public string name;
 
         /// <summary>
         /// Artist for the file.
         /// </summary>
-        internal string artist;
+        public string artist;
 
         /// <summary>
         /// Album artist for the file.
         /// </summary>
-        internal string albumArtist;
+        public string albumArtist;
 
         /// <summary>
         /// Album for the file.
         /// </summary>
-        internal string album;
+        public string album;
 
         /// <summary>
         /// Grouping for the file.
         /// </summary>
-        internal string grouping;
+        public string grouping;
 
         /// <summary>
         /// Composer for the file.
         /// </summary>
-        internal string composer;
+        public string composer;
 
         /// <summary>
         /// Comment for the file.
         /// </summary>
-        internal string comment;
+        public string comment;
 
         /// <summary>
         /// Genre for the file.
         /// </summary>
-        internal string genre;
+        public string genre;
 
         /// <summary>
         /// Pointer to the genre type for the file.
         /// </summary>
-        internal IntPtr genreType;
+        public IntPtr genreType;
 
         /// <summary>
         /// Release data for the file.
         /// </summary>
-        internal string releaseDate;
+        public string releaseDate;
 
         /// <summary>
         /// Pointer to the track information about the file.
         /// </summary>
-        internal IntPtr track;
+        public IntPtr track;
 
         /// <summary>
         /// Pointer to the disc information about the file.
         /// </summary>
-        internal IntPtr disk;
+        public IntPtr disk;
 
         /// <summary>
         /// Pointer to the tempo.
         /// </summary>
-        internal IntPtr tempo;
+        public IntPtr tempo;
 
         /// <summary>
         /// Pointer to the "isCompilation" value.
         /// </summary>
-        internal IntPtr compilation;
+        public IntPtr compilation;
 
         /// <summary>
         /// Pointer to the TV show name.
         /// </summary>
-        internal string tvShow;
+        public string tvShow;
 
         /// <summary>
         /// Pointer to the TV network.
         /// </summary>
-        internal string tvNetwork;
+        public string tvNetwork;
 
         /// <summary>
         /// Pointer to the TV episode ID.
         /// </summary>
-        internal string tvEpisodeID;
+        public string tvEpisodeID;
 
         /// <summary>
         /// Pointer to the season number.
         /// </summary>
-        internal IntPtr tvSeason;
+        public IntPtr tvSeason;
 
         /// <summary>
         /// Pointer to the episode number.
         /// </summary>
-        internal IntPtr tvEpisode;
+        public IntPtr tvEpisode;
 
         /// <summary>
         /// Description of the file.
         /// </summary>
-        internal string description;
+        public string description;
 
         /// <summary>
         /// Long description of the file.
         /// </summary>
-        internal string longDescription;
+        public string longDescription;
 
         /// <summary>
         /// Lyrics of the file.
         /// </summary>
-        internal string lyrics;
+        public string lyrics;
 
         /// <summary>
         /// Sort name of the file.
         /// </summary>
-        internal string sortName;
+        public string sortName;
 
         /// <summary>
         /// Sort artist of the file.
         /// </summary>
-        internal string sortArtist;
+        public string sortArtist;
 
         /// <summary>
         /// Sort album artist of the file.
         /// </summary>
-        internal string sortAlbumArtist;
+        public string sortAlbumArtist;
 
         /// <summary>
         /// Sort album of the file.
         /// </summary>
-        internal string sortAlbum;
+        public string sortAlbum;
 
         /// <summary>
         /// Sort composer of the file.
         /// </summary>
-        internal string sortComposer;
+        public string sortComposer;
 
         /// <summary>
         /// Sort TV show of the file.
         /// </summary>
-        internal string sortTVShow;
+        public string sortTVShow;
 
         /// <summary>
         /// Pointer to the artwork in the file.
         /// </summary>
-        internal IntPtr artwork;
+        public IntPtr artwork;
 
         /// <summary>
         /// The artwork count in the file.
         /// </summary>
-        internal int artworkCount;
+        public int artworkCount;
 
         /// <summary>
         /// Copyright in the file.
         /// </summary>
-        internal string copyright;
+        public string copyright;
 
         /// <summary>
         /// Encoding tool used for the file.
         /// </summary>
-        internal string encodingTool;
+        public string encodingTool;
 
         /// <summary>
         /// Encoded by information for the file.
         /// </summary>
-        internal string encodedBy;
+        public string encodedBy;
 
         /// <summary>
         /// Purchase date for the file.
         /// </summary>
-        internal string purchasedDate;
+        public string purchasedDate;
 
         /// <summary>
         /// Pointer to the "isPodcast" value for the file.
         /// </summary>
-        internal IntPtr podcast;
+        public IntPtr podcast;
 
         /// <summary>
         /// Podcast keywords for the file.
         /// </summary>
-        internal string keywords;
+        public string keywords;
 
         /// <summary>
         /// Podcast category for the file.
         /// </summary>
-        internal string category;
+        public string category;
 
         /// <summary>
         /// Pointer to the "isHDVideo" value for the file.
         /// </summary>
-        internal IntPtr hdVideo;
+        public IntPtr hdVideo;
 
         /// <summary>
         /// Pointer to the media type for the file.
         /// </summary>
-        internal IntPtr mediaType;
+        public IntPtr mediaType;
 
         /// <summary>
         /// Pointer to the content rating for the file.
         /// </summary>
-        internal IntPtr contentRating;
+        public IntPtr contentRating;
 
         /// <summary>
         /// Pointer to the "isGapless" value for the file.
         /// </summary>
-        internal IntPtr gapless;
+        public IntPtr gapless;
 
         /// <summary>
         /// iTunes account used to purchase the file.
         /// </summary>
-        internal string itunesAccount;
+        public string itunesAccount;
 
         /// <summary>
         /// Pointer to the type of iTunes account used to purchase the file.
         /// </summary>
-        internal IntPtr iTunesAccountType;
+        public IntPtr iTunesAccountType;
 
         /// <summary>
         /// Pointer to the country for the iTunes account used to purchase the file.
         /// </summary>
-        internal IntPtr iTunesCountry;
+        public IntPtr iTunesCountry;
 
         /// <summary>
         /// Pointer to the content ID of the file.
         /// </summary>
-        internal IntPtr contentID;
+        public IntPtr contentID;
 
         /// <summary>
         /// Pointer to the artist ID of the file.
         /// </summary>
-        internal IntPtr artistID;
+        public IntPtr artistID;
 
         /// <summary>
         /// Pointer to the playlist ID of the file.
         /// </summary>
-        internal IntPtr playlistID;
+        public IntPtr playlistID;
 
         /// <summary>
         /// Pointer to the genre ID of the file.
         /// </summary>
-        internal IntPtr genreID;
+        public IntPtr genreID;
 
         /// <summary>
         /// Pointer to the composer ID of the file.
         /// </summary>
-        internal IntPtr composerID;
+        public IntPtr composerID;
 
         /// <summary>
         /// Auxiliary ID of the file.
         /// </summary>
-        internal string xid;
+        public string xid;
     }
 }
