@@ -58,7 +58,13 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
     /// <returns>The best rating.</returns>
     public static Rating? FindBest(string rating, Country? country = default, RatingType type = default)
     {
-        return GetRatings(country ?? Country.UnitedStates, type).FirstOrDefault(type => string.Equals(type.ContentRating, rating, StringComparison.OrdinalIgnoreCase));
+        rating = RemoveSpaces(rating);
+        return GetRatings(country ?? Country.UnitedStates, type).FirstOrDefault(type => string.Equals(RemoveSpaces(type.ContentRating), rating, StringComparison.OrdinalIgnoreCase));
+    
+        static string RemoveSpaces(string value)
+        {
+            return value.Replace(" ", string.Empty);
+        }
     }
 
     /// <summary>
