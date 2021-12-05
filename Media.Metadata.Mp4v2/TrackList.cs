@@ -43,8 +43,9 @@ internal sealed class TrackList : IReadOnlyList<Track>
         for (short i = 0; i < NativeMethods.MP4GetNumberOfTracks(fileHandle, type: null, 0); i++)
         {
             var currentTrackId = NativeMethods.MP4FindTrackId(fileHandle, i, type: null, 0);
+            var trackType = NativeMethods.MP4GetTrackType(fileHandle, currentTrackId);
             var language = GetLanguage(fileHandle, currentTrackId);
-            list.tracks.Add(new Track(currentTrackId, language));
+            list.tracks.Add(new Track(currentTrackId, trackType, language));
         }
 
         return list;

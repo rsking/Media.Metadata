@@ -171,19 +171,17 @@ static void UpdateVideo(IConsole console, IHost host, FileInfo[] path, string[]?
     }
 }
 
-static IDictionary<int, string>? GetLanguages(string[]? lang)
+static IDictionary<string, string>? GetLanguages(string[]? lang)
 {
     return lang is null
         ? default
-        : (IDictionary<int, string>)lang
+        : (IDictionary<string, string>)lang
             .Select(val => val.Split('='))
             .ToDictionary(GetId, GetLang);
 
-    static int GetId(string[] val)
+    static string GetId(string[] val)
     {
-        return val.Length > 1
-            ? int.Parse(val[0], System.Globalization.CultureInfo.InvariantCulture)
-            : -1;
+        return val.Length > 1 ? val[0] : string.Empty;
     }
 
     static string GetLang(string[] val)

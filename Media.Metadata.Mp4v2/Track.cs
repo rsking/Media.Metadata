@@ -15,10 +15,12 @@ internal class Track
     /// Initialises a new instance of the <see cref="Track"/> class.
     /// </summary>
     /// <param name="id">The track ID.</param>
+    /// <param name="type">The track type.</param>
     /// <param name="language">The track language.</param>
-    public Track(int id, string? language)
+    public Track(int id, string? type, string? language)
     {
         this.Id = id;
+        this.Type = type;
         this.Language = language;
     }
 
@@ -26,6 +28,11 @@ internal class Track
     /// Gets the ID.
     /// </summary>
     public int Id { get; }
+
+    /// <summary>
+    /// Gets the type.
+    /// </summary>
+    public string? Type { get; }
 
     /// <summary>
     /// Gets or sets the language.

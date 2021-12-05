@@ -995,8 +995,12 @@ internal static class NativeMethods
     /// <param name="hFile">handle of file for operation.</param>
     /// <param name="trackId">id of track for operation.</param>
     /// <returns>On success, a string indicating track type. On failure, <see langword="null"/>.</returns>
-    [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern string MP4GetTrackType(IntPtr hFile, int trackId);
+    internal static string? MP4GetTrackType(IntPtr hFile, int trackId)
+    {
+        var ptr = MP4GetTrackTypeInterop(hFile, trackId);
+        var trackType = Marshal.PtrToStringAnsi(ptr);
+        return trackType;
+    }
 
     /// <summary>
     /// Get the track media data name.
@@ -1090,6 +1094,9 @@ internal static class NativeMethods
     /// <returns>timescale (ticks per second) of the mp4 file.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     internal static extern int MP4GetTimeScale(IntPtr hFile);
+
+    [DllImport("libmp4v2.dll", EntryPoint = nameof(MP4GetTrackType), CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr MP4GetTrackTypeInterop(IntPtr hFile, int trackId);
 
     /// <summary>
     /// Models an iTunes Metadata Format data atom contained in an iTMF metadata item atom.
