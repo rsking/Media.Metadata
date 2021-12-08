@@ -57,7 +57,12 @@ public sealed class TheTVDbShowSearch : IShowSearch
                 continue;
             }
 
-            yield return new RemoteSeries(series.Name, GetSeasons(this.client, series.TvDbId, country, cancellationToken).ToEnumerable())
+            if (series.Translations?.TryGetValue("eng", out var englishName) != true)
+            {
+                englishName = series.Name;
+            }
+
+            yield return new RemoteSeries(englishName, GetSeasons(this.client, series.TvDbId, englishName, country, cancellationToken).ToEnumerable())
             {
                 ImageUri = GetUri(series.ImageUrl),
             };
@@ -70,10 +75,10 @@ public sealed class TheTVDbShowSearch : IShowSearch
                 : default;
         }
 
-        static async IAsyncEnumerable<RemoteSeason> GetSeasons(IRestClient client, string? id, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+        static async IAsyncEnumerable<RemoteSeason> GetSeasons(IRestClient client, string? id, string? name, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var request = new RestRequest("/series/{id}/extended");
-            request.AddUrlSegment("id", id);
+            IRestRequest request = new RestRequest("/series/{id}/extended")
+                .AddUrlSegment("id", id);
 
             var seriesResponse = await client.ExecuteGetTaskAsync<Response<SeriesExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
@@ -91,16 +96,16 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     continue;
                 }
 
-                yield return new RemoteSeason(season.Number, GetEpisodes(client, series, season.Id, country, cancellationToken).ToEnumerable())
+                yield return new RemoteSeason(season.Number, GetEpisodes(client, name, season.Id, country, cancellationToken).ToEnumerable())
                 {
                     ImageUri = GetUri(season.Image),
                 };
             }
 
-            static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(IRestClient client, SeriesExtendedRecord series, int seasonId, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+            static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(IRestClient client, string? name, int seasonId, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
             {
-                var request = new RestRequest("/seasons/{id}/extended");
-                request.AddUrlSegment("id", seasonId);
+                IRestRequest request = new RestRequest("/seasons/{id}/extended")
+                    .AddUrlSegment("id", seasonId);
 
                 var seasonResponse = await client.ExecuteGetTaskAsync<Response<SeasonExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
@@ -113,8 +118,8 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
                 var extendedEpisodes = season.Episodes.ToAsyncEnumerable().SelectAwait(async episode =>
                 {
-                    var request = new RestRequest("/episodes/{id}/extended");
-                    request.AddUrlSegment("id", episode.Id);
+                    IRestRequest request = new RestRequest("/episodes/{id}/extended")
+                        .AddUrlSegment("id", episode.Id);
 
                     var episodeResponse = await client.ExecuteGetTaskAsync<Response<EpisodeExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
@@ -122,8 +127,8 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     {
                         if (extendedEpisode.Overview is null)
                         {
-                            request = new RestRequest("/episodes/{id}/translations/{language}");
-                            request.AddUrlSegment("id", episode.Id)
+                            request = new RestRequest("/episodes/{id}/translations/{language}")
+                                .AddUrlSegment("id", episode.Id)
                                 .AddUrlSegment("language", "eng");
 
                             var translationResponse = await client.ExecuteGetTaskAsync<Response<Translation>>(request, cancellationToken).ConfigureAwait(false);
@@ -152,7 +157,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
                             Season = episode.SeasonNumber,
                             Number = episode.Number,
                             Id = episode.ProductionCode,
-                            Show = series.Name,
+                            Show = name,
                             ScreenWriters = GetWriters(episode.Characters),
                             Cast = GetCast(episode.Characters),
                             Directors = GetDirectors(episode.Characters),
@@ -373,10 +378,14 @@ public sealed class TheTVDbShowSearch : IShowSearch
         [System.Text.Json.Serialization.JsonPropertyName("name_translated")]
         public string? NameTranslated { get; init; }
 
+        public IDictionary<string, string>? Translations { get; init; }
+
         [System.Text.Json.Serialization.JsonPropertyName("first_air_time")]
         public string? FirstAirTime { get; init; }
 
         public string? Overview { get; init; }
+
+        public IDictionary<string, string>? Overviews { get; init; }
 
         [System.Text.Json.Serialization.JsonPropertyName("overview_translated")]
         public ICollection<string>? OverviewTranslated { get; init; }
@@ -393,10 +402,6 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public string? Year { get; init; }
 
         public string? Slug { get; init; }
-
-        public IDictionary<string, string>? Overviews { get; init; }
-
-        public IDictionary<string, string>? Translations { get; init; }
 
         public string? Network { get; init; }
 
