@@ -377,7 +377,7 @@ public sealed class DisplayAttribute : Attribute
                     else
                     {
                         var getter = property.GetMethod;
-                        if (getter is null || !getter.IsStatic)
+                        if (getter?.IsStatic != true)
                         {
                             badlyConfigured = true;
                         }

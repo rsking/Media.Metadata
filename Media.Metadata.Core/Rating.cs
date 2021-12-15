@@ -9,9 +9,7 @@ namespace Media.Metadata;
 /// <summary>
 /// Represents the rating.
 /// </summary>
-#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
 public readonly record struct Rating(string Standard, string ContentRating, int Score = default, string? Annotation = default)
-#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 {
     private static readonly IDictionary<Country, ILookup<RatingType, Rating>> Ratings = LoadRatings();
 
@@ -60,7 +58,7 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
     {
         rating = RemoveSpaces(rating);
         return GetRatings(country ?? Country.UnitedStates, type).FirstOrDefault(type => string.Equals(RemoveSpaces(type.ContentRating), rating, StringComparison.OrdinalIgnoreCase));
-    
+
         static string RemoveSpaces(string value)
         {
             return value.Replace(" ", string.Empty);
