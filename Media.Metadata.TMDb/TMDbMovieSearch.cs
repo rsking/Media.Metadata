@@ -14,7 +14,13 @@ public class TMDbMovieSearch : IMovieSearch
     /// <inheritdoc/>
     public async IAsyncEnumerable<Movie> SearchAsync(string name, int year = 0, string country = "AU", [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        using var client = new TMDbLib.Client.TMDbClient("b866acbf3519560a3879b55d2d9cb1cb");
+        using var client = new TMDbLib.Client.TMDbClient("b866acbf3519560a3879b55d2d9cb1cb")
+        {
+            DefaultCountry = country,
+            DefaultLanguage = "en",
+            DefaultImageLanguage = "en",
+        };
+
         var movies = await client.SearchMovieAsync(name, year: year, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         foreach (var result in movies.Results)
@@ -37,7 +43,7 @@ public class TMDbMovieSearch : IMovieSearch
                     invariantRating = Rating.FindBest(cty.Certification, cty.Iso_3166_1);
                 }
 
-                if (country != null && string.Equals(cty.Iso_3166_1, country, StringComparison.InvariantCultureIgnoreCase))
+                if (country is not null && string.Equals(cty.Iso_3166_1, country, StringComparison.InvariantCultureIgnoreCase))
                 {
                     countryRating = Rating.FindBest(cty.Certification, cty.Iso_3166_1);
                 }
