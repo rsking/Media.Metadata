@@ -9,6 +9,7 @@ using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Invocation;
 using System.CommandLine.IO;
+using System.CommandLine.NamingConventionBinder;
 using System.CommandLine.Parsing;
 using System.CommandLine.Rendering;
 using Media.Metadata;
@@ -17,49 +18,81 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Hosting;
 using RestSharp.Serializers.SystemTextJson;
 
-var searchMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create(SearchMovie) })
-    .AddArgument(new Argument<string>("name"))
-    .AddOption(new Option<int?>(new[] { "--year", "-y" }, "The movie year"));
+var searchMovieCommand = new Command("movie")
+{
+    new Argument<string>("name"),
+    new Option<int?>(new[] { "--year", "-y" }, "The movie year"),
+};
 
-var readMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create(ReadMovie) })
-    .AddArgument(new Argument<FileInfo>("path").ExistingOnly());
+searchMovieCommand.Handler = CommandHandler.Create(SearchMovie);
 
-var searchShowCommand = new CommandBuilder(new Command("show") { Handler = CommandHandler.Create(SearchShow) })
-    .AddArgument(new Argument<string>("name"));
+var readMovieCommand = new Command("movie")
+{
+    new Argument<FileInfo>("path").ExistingOnly(),
+};
 
-var searchCommand = new CommandBuilder(new Command("search"))
-    .AddCommand(searchMovieCommand.Command)
-    .AddCommand(searchShowCommand.Command);
+readMovieCommand.Handler = CommandHandler.Create(ReadMovie);
 
-var readCommand = new CommandBuilder(new Command("read"))
-    .AddCommand(readMovieCommand.Command);
+var searchShowCommand = new Command("show")
+{
+    new Argument<string>("name"),
+};
 
-var updateMovieCommand = new CommandBuilder(new Command("movie") { Handler = CommandHandler.Create(UpdateMovie) })
-    .AddArgument(new Argument<FileInfo>("path").ExistingOnly())
-    .AddArgument(new Argument<string>("name"))
-    .AddOption(new Option<int?>(new[] { "--year", "-y" }, "The movie year"));
+searchShowCommand.Handler = CommandHandler.Create(SearchShow);
 
-var updateEpisodeCommand = new CommandBuilder(new Command("episode") { Handler = CommandHandler.Create(UpdateEpisode) })
-    .AddArgument(new Argument<FileInfo>("path").ExistingOnly())
-    .AddOption(new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true })
-    .AddOption(new Option<int>(new[] { "--season", "-s" }, "The season number"))
-    .AddOption(new Option<int>(new[] { "--episode", "-e" }, "The episode number"));
+var searchCommand = new Command("search")
+{
+    searchMovieCommand,
+    searchShowCommand,
+};
 
-var updateVideoCommand = new CommandBuilder(new Command("video") { Handler = CommandHandler.Create(UpdateVideo) })
-    .AddArgument(new Argument<FileInfo[]>("path", ParseFileInfo).ExistingOnly());
+var readCommand = new Command("read")
+{
+    readMovieCommand,
+};
 
-var updateCommand = new CommandBuilder(new Command("update"))
-    .AddCommand(updateMovieCommand.Command)
-    .AddCommand(updateEpisodeCommand.Command)
-    .AddCommand(updateVideoCommand.Command)
-    .AddGlobalOption(new Option<IList<string>>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks"));
+var updateMovieCommand = new Command("movie")
+{
+    new Argument<FileInfo>("path").ExistingOnly(),
+    new Argument<string>("name"),
+    new Option<int?>(new[] { "--year", "-y" }, "The movie year"),
+};
 
-var rootCommand = new CommandLineBuilder()
-    .AddCommand(searchCommand.Command)
-    .AddCommand(readCommand.Command)
-    .AddCommand(updateCommand.Command);
+updateMovieCommand.Handler = CommandHandler.Create(UpdateMovie);
 
-await rootCommand
+var updateEpisodeCommand = new Command("episode") {
+    new Argument<FileInfo>("path").ExistingOnly(),
+    new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true },
+    new Option<int>(new[] { "--season", "-s" }, "The season number"),
+    new Option<int>(new[] { "--episode", "-e" }, "The episode number"),
+};
+
+updateEpisodeCommand.Handler = CommandHandler.Create(UpdateEpisode);
+
+var updateVideoCommand = new Command("video")
+{
+    new Argument<FileInfo[]>("path", ParseFileInfo).ExistingOnly(),
+};
+
+updateVideoCommand.Handler = CommandHandler.Create(UpdateVideo);
+
+var updateCommand = new Command("update")
+{
+    updateMovieCommand,
+    updateEpisodeCommand,
+    updateVideoCommand,
+};
+
+updateCommand.AddGlobalOption(new Option<IList<string>>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks"));
+
+var commandBuilder = new CommandLineBuilder(new RootCommand
+{
+    searchCommand,
+    readCommand,
+    updateCommand,
+});
+
+await commandBuilder
     .UseDefaults()
     .UseHost(
         Host.CreateDefaultBuilder,
