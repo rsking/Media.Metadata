@@ -60,7 +60,8 @@ var updateMovieCommand = new Command("movie")
 
 updateMovieCommand.Handler = CommandHandler.Create(UpdateMovie);
 
-var updateEpisodeCommand = new Command("episode") {
+var updateEpisodeCommand = new Command("episode")
+{
     new Argument<FileInfo>("path").ExistingOnly(),
     new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true },
     new Option<int>(new[] { "--season", "-s" }, "The season number"),
