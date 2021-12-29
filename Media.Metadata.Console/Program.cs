@@ -15,36 +15,24 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Hosting;
 using RestSharp.Serializers.SystemTextJson;
 
-var searchMovieCommand = CreateSearchMovie();
-
-var readMovieCommand = CreateReadMovie();
-
-var searchShowCommand = CreateSearchShow();
-
 var searchCommand = new Command("search")
 {
-    searchMovieCommand,
-    searchShowCommand,
+    CreateSearchMovie(),
+    CreateSearchShow(),
 };
 
 var readCommand = new Command("read")
 {
-    readMovieCommand,
+    CreateReadMovie(),
 };
 
 var langOption = new Option<IList<string>>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks");
 
-var updateMovieCommand = CreateUpdateMovie(langOption);
-
-var updateEpisodeCommand = CreateUpdateEpisode(langOption);
-
-var updateVideoCommand = CreateUpdateVideo(langOption);
-
 var updateCommand = new Command("update")
 {
-    updateMovieCommand,
-    updateEpisodeCommand,
-    updateVideoCommand,
+    CreateUpdateMovie(langOption),
+    CreateUpdateEpisode(langOption),
+    CreateUpdateVideo(langOption),
 };
 
 updateCommand.AddGlobalOption(langOption);
