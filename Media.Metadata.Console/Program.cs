@@ -9,7 +9,6 @@ using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.IO;
 using System.CommandLine.Parsing;
-using System.CommandLine.Rendering;
 using Media.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileSystemGlobbing;
@@ -81,7 +80,6 @@ await commandBuilder
                 .Configure<InvocationLifetimeOptions>(options => options.SuppressStatusMessages = true);
         }))
     .CancelOnProcessTermination()
-    .UseAnsiTerminalWhenAvailable()
     .Build()
     .InvokeAsync(args)
     .ConfigureAwait(true);
