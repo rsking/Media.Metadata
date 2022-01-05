@@ -85,6 +85,25 @@
                         <converters:ArrayToStringConverter x:Key="ArrayToStringConverter" />
                         <converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter" />
                         <converters:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter" />
+                        <converters:Iso639ToNameConverter x:Key="Iso639ToNameConverter" />
+                        <DataTemplate x:Key="TrackTemplate" x:DataType="vm:MediaTrackViewModel">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="200" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Id}" Margin="2" Grid.Column="0" />
+                                <TextBox Header="Type" IsReadOnly="True" Text="{x:Bind Type}" Margin="2" Grid.Column="1" />
+                                <ComboBox Header="Language" ItemsSource="{x:Bind Languages}" SelectedItem="{x:Bind SelectedLanguage}" Margin="2" Grid.Column="2">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource Iso639ToNameConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </Grid>
+                        </DataTemplate>
                         <c:EditableVideoTemplateSelector x:Key="EditableVideoTemplateSelector">
                             <c:EditableVideoTemplateSelector.EpisodeTemplate>
                                 <DataTemplate x:DataType="vm:EpisodeViewModel">
@@ -98,7 +117,7 @@
                                             <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" TextWrapping="Wrap" />
                                             <ToggleSwitch Grid.Column="1" OffContent="SD" OnContent="HD" Margin="2" />
                                         </Grid>
-                                        <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" />
+                                        <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -137,6 +156,8 @@
                                         <NumberBox Header="Number" Value="{Binding Number, Mode=TwoWay}" Margin="2" />
                                         <TextBox Header="Episode ID" Text="{Binding Id, Mode=TwoWay}" Margin="2" TextWrapping="Wrap" />
                                         <DatePicker Header="Release Date" Date="{Binding Release, Mode=TwoWay}" Margin="2" />
+                                        <TextBlock Text="Tracks" />
+                                        <ItemsControl ItemsSource="{Binding Tracks, Mode=OneWay}" ItemTemplate="{StaticResource TrackTemplate}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </c:EditableVideoTemplateSelector.EpisodeTemplate>
@@ -152,7 +173,7 @@
                                             <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" TextWrapping="Wrap" />
                                             <ToggleSwitch Grid.Column="1" OffContent="SD" OnContent="HD" Margin="2" />
                                         </Grid>
-                                        <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" TextWrapping="Wrap" />
+                                        <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -186,6 +207,7 @@
                                         <TextBox Header="Cast" Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
                                         <TextBox Header="Composers" Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
                                         <DatePicker Header="Release Date" Date="{Binding Release, Mode=TwoWay}" Margin="2" />
+                                        <ItemsControl ItemsSource="{Binding Tracks, Mode=OneWay}" ItemTemplate="{StaticResource TrackTemplate}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </c:EditableVideoTemplateSelector.MovieTemplate>

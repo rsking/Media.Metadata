@@ -12,7 +12,7 @@ namespace Media.Metadata;
 public class Mp4Writer : IUpdater
 {
     /// <inheritdoc/>
-    public void UpdateVideo(string fileName, Video video, IDictionary<string, string>? languages = default)
+    public void UpdateVideo(string fileName, Video video, IDictionary<MediaTrackType, string>? languages = default)
     {
         if (video is Episode episode)
         {
@@ -34,7 +34,7 @@ public class Mp4Writer : IUpdater
     }
 
     /// <inheritdoc/>
-    public void UpdateEpisode(string fileName, Episode episode, IDictionary<string, string>? languages = default)
+    public void UpdateEpisode(string fileName, Episode episode, IDictionary<MediaTrackType, string>? languages = default)
     {
         var file = Mp4File.Open(fileName);
         Update(file, episode, MediaKind.TVShow, languages);
@@ -57,14 +57,14 @@ public class Mp4Writer : IUpdater
     }
 
     /// <inheritdoc/>
-    public void UpdateMovie(string fileName, Movie movie, IDictionary<string, string>? languages = default)
+    public void UpdateMovie(string fileName, Movie movie, IDictionary<MediaTrackType, string>? languages = default)
     {
         var file = Mp4File.Open(fileName);
         Update(file, movie, MediaKind.Movie, languages);
         file.Save();
     }
 
-    private static void Update(Mp4File file, Video video, MediaKind mediaKind, IDictionary<string, string>? languages)
+    private static void Update(Mp4File file, Video video, MediaKind mediaKind, IDictionary<MediaTrackType, string>? languages)
     {
         if (file.Tags is not null)
         {
@@ -138,29 +138,25 @@ public class Mp4Writer : IUpdater
                         track.Language = language.Value;
                     }
 
-                    IEnumerable<Track> GetTracks(IEnumerable<Track> tracks, string? key)
+                    IEnumerable<Track> GetTracks(IEnumerable<Track> tracks, MediaTrackType key)
                     {
-                        if (string.IsNullOrEmpty(key))
+                        if (key == MediaTrackType.All)
                         {
                             return tracks;
                         }
 
-                        if (string.Equals(key, "a", StringComparison.Ordinal))
+                        if (key == MediaTrackType.Audio)
                         {
                             return tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4AudioTrackType, StringComparison.Ordinal));
                         }
 
-                        if (string.Equals(key, "v", StringComparison.Ordinal))
+                        if (key == MediaTrackType.Video)
                         {
                             return tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4VideoTrackType, StringComparison.Ordinal));
                         }
 
-                        if (int.TryParse(key, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.CurrentCulture, out var id))
-                        {
-                            return tracks.Where(track => track.Id == id);
-                        }
-
-                        return tracks;
+                        var id = (int)key;
+                        return tracks.Where(track => track.Id == id);
                     }
                 }
             }

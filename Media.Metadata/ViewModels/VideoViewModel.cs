@@ -77,6 +77,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         this.Composers = Create(video.Composers);
         this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
         this.Rating = new RatingViewModel(video.Rating);
+        this.Tracks = video.Tracks.Select(track => new MediaTrackViewModel(track));
         this.SoftwareBitmap = softwareBitmap;
         this.ImageSource = imageSource;
 
@@ -98,6 +99,11 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     /// Gets the rating.
     /// </summary>
     public RatingViewModel Rating { get; init; }
+
+    /// <summary>
+    /// Gets the tracks.
+    /// </summary>
+    public IEnumerable<MediaTrackViewModel> Tracks { get; init; }
 
     /// <inheritdoc/>
     public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap
@@ -143,6 +149,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         {
             Rating = this.Rating.SelectedRating,
             Release = this.Release?.DateTime,
+            Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
             Image = await this.CreateImageAsync().ConfigureAwait(false),
         };
 

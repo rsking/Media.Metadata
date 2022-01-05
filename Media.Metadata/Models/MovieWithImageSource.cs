@@ -39,6 +39,7 @@ internal record class MovieWithImageSource(
         {
             Release = movie.Release,
             Rating = movie.Rating,
+            Tracks = movie.Tracks,
             SoftwareBitmap = softwareBitmap,
             ImageSource = await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
         };

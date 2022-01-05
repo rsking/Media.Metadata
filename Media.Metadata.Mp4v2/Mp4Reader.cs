@@ -28,7 +28,7 @@ public class Mp4Reader : IReader
             _ => ReadVideo(path, tags),
         };
 
-        return Update(video, tags);
+        return Update(video, tags, file.Tracks);
     }
 
     /// <inheritdoc/>
@@ -36,7 +36,7 @@ public class Mp4Reader : IReader
     {
         var file = Mp4File.Open(path);
         var tags = file.Tags ?? throw new ArgumentException(default, nameof(path));
-        return Update(ReadMovie(path, tags), tags);
+        return Update(ReadMovie(path, tags), tags, file.Tracks);
     }
 
     /// <inheritdoc/>
@@ -44,7 +44,7 @@ public class Mp4Reader : IReader
     {
         var file = Mp4File.Open(path);
         var tags = file.Tags ?? throw new ArgumentException(default, nameof(path));
-        return Update(ReadEpisode(path, tags), tags);
+        return Update(ReadEpisode(path, tags), tags, file.Tracks);
     }
 
     private static Video ReadVideo(string path, MetadataTags tags) => new LocalVideo(
@@ -90,7 +90,7 @@ public class Mp4Reader : IReader
         Id = tags.EpisodeId,
     };
 
-    private static T Update<T>(T video, MetadataTags tags)
+    private static T Update<T>(T video, MetadataTags tags, TrackList? trackList)
         where T : Video
     {
         if (tags.ReleaseDate is not null
@@ -110,12 +110,27 @@ public class Mp4Reader : IReader
             video = video with { Image = tags.Artwork };
         }
 
+        if (trackList is not null && trackList.Count > 0)
+        {
+            video = video with { Tracks = trackList.Select(track => new MediaTrack(track.Id, GetMediaTrackType(track.Type), track.Language)).ToList() };
+        }
+
         return video;
 
         static bool TryParseDate(string? date, out DateTime result)
         {
             return DateTime.TryParse(date, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out result)
                 || DateTime.TryParse(date, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out result);
+        }
+
+        static MediaTrackType GetMediaTrackType(string? type)
+        {
+            return type switch
+            {
+                "vide" => MediaTrackType.Video,
+                "soun" => MediaTrackType.Audio,
+                _ => MediaTrackType.Unknown,
+            };
         }
     }
 

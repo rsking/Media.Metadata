@@ -32,6 +32,7 @@ internal record class LocalEpisodeWithImageSource(
     {
         this.Release = episode.Release;
         this.Rating = episode.Rating;
+        this.Tracks = episode.Tracks;
         this.Show = episode.Show;
         this.Network = episode.Network;
         this.Season = episode.Season;

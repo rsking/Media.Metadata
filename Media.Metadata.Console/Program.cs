@@ -291,17 +291,27 @@ static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor lan
     return command;
 }
 
-static IDictionary<string, string>? GetLanguages(string[]? lang)
+static IDictionary<MediaTrackType, string>? GetLanguages(string[]? lang)
 {
     return lang is null
-        ? default(IDictionary<string, string>)
-        : lang.Select(val => val.Split('=')).ToDictionary(GetId, GetLang, StringComparer.Ordinal);
+        ? default(IDictionary<MediaTrackType, string>)
+        : lang.Select(val => val.Split('=')).ToDictionary(GetId, GetLang);
 
-    static string GetId(string[] val)
+    static MediaTrackType GetId(string[] val)
     {
-        return val.Length > 1
-            ? val[0].ToLowerInvariant()
-            : string.Empty;
+        if (val.Length > 1)
+        {
+            var value = val[0].ToLowerInvariant();
+            return value switch
+            {
+                "a" => MediaTrackType.Audio,
+                "v" => MediaTrackType.Video,
+                _ when int.TryParse(value, out var intValue) => (MediaTrackType)intValue,
+                _ => MediaTrackType.Unknown,
+            };
+        }
+
+        return MediaTrackType.All;
     }
 
     static string GetLang(string[] val)

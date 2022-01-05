@@ -41,6 +41,7 @@ internal record class VideoWithImageSource(
         {
             Release = video.Release,
             Rating = video.Rating,
+            Tracks = video.Tracks,
             SoftwareBitmap = softwareBitmap,
             ImageSource = await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
         };
