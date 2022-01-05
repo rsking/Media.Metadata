@@ -51,9 +51,10 @@ internal abstract partial class VideoSearchViewModel : CommunityToolkit.Mvvm.Com
     protected async Task SetVideos(IAsyncEnumerable<Video> videos)
     {
         this.videos.Clear();
+        var dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
         await foreach (var video in videos.ConfigureAwait(true))
         {
-            this.videos.Add(video);
+            dispatcher.TryEnqueue(async () => this.videos.Add(await Models.VideoWithImageSource.CreateAsync(video).ConfigureAwait(true)));
         }
     }
 }

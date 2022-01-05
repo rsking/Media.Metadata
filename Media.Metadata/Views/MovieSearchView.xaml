@@ -28,6 +28,24 @@
         <NumberBox Grid.Column="1" Margin="2" Header="Year" Value="{Binding Year, Mode=TwoWay, Converter={StaticResource NullableIntToDoubleConverter}}" />
         <ComboBox Header="Country" Grid.Column="2" Margin="2" ItemsSource="{Binding Countries, Mode=OneWay}" SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
         <AppBarButton Command="{Binding SearchCommand, Mode=OneWay}" Icon="Find" Label="Search" Grid.Column="3" />
-        <ListBox Grid.Row="1" Grid.ColumnSpan="4" Margin="2" ItemsSource="{Binding Videos, Mode=OneWay}" SelectedItem="{Binding SelectedVideo, Mode=TwoWay}" />
+        <ListBox Grid.Row="1" Grid.ColumnSpan="4" Margin="2" ItemsSource="{Binding Videos, Mode=OneWay}" SelectedItem="{Binding SelectedVideo, Mode=TwoWay}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image Grid.RowSpan="2" Width="80" Height="120" Margin="5" Source="{Binding ImageSource, Mode=OneWay}" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Margin="5" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Description}" Margin="5" TextWrapping="WrapWholeWords" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>
