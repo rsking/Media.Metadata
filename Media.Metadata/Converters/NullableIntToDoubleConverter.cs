@@ -1,0 +1,33 @@
+﻿// -----------------------------------------------------------------------
+// <copyright file="NullableIntToDoubleConverter.cs" company="RossKing">
+// Copyright (c) RossKing. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace Media.Metadata.Converters;
+
+/// <summary>
+/// The converter from a <see cref="int?"/> to a <see cref="double"/>.
+/// </summary>
+internal class NullableIntToDoubleConverter : Microsoft.UI.Xaml.Data.IValueConverter
+{
+    /// <inheritdoc/>
+    public object? Convert(object value, System.Type targetType, object parameter, string language)
+    {
+        return value switch
+        {
+            int intValue => (double)intValue,
+            _ => double.NaN,
+        };
+    }
+
+    /// <inheritdoc/>
+    public object? ConvertBack(object value, System.Type targetType, object parameter, string language)
+    {
+        return value switch
+        {
+            double doubleValue when !double.IsNaN(doubleValue) => (int)doubleValue,
+            _ => default(int?),
+        };
+    }
+}
