@@ -36,14 +36,26 @@ internal record class VideoWithImageSource(
     /// <returns>The video with image source.</returns>
     public static async Task<VideoWithImageSource> CreateAsync(Video video)
     {
-        var softwareBitmap = await video.CreateSoftwareBitmapAsync().ConfigureAwait(true);
+        var softwareBitmap = video switch
+        {
+            IHasSoftwareBitmap hasSoftwareBitmap => hasSoftwareBitmap.SoftwareBitmap,
+            _ => await video.CreateSoftwareBitmapAsync().ConfigureAwait(true),
+        };
+
+        var imageSource = (video, softwareBitmap) switch
+        {
+            (IHasImageSource hasImageSource, _) => hasImageSource.ImageSource,
+            (_, not null) => await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
+            (_, _) => null,
+        };
+
         return new VideoWithImageSource(video.Name, video.Description, video.Producers, video.Directors, video.Studios, video.Genre, video.ScreenWriters, video.Cast, video.Composers)
         {
             Release = video.Release,
             Rating = video.Rating,
             Tracks = video.Tracks,
             SoftwareBitmap = softwareBitmap,
-            ImageSource = await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
+            ImageSource = imageSource,
         };
     }
 

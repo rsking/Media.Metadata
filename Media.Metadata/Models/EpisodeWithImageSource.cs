@@ -34,7 +34,19 @@ internal record class EpisodeWithImageSource(
     /// <returns>The video with image source.</returns>
     public static async Task<EpisodeWithImageSource> CreateAsync(Episode episode)
     {
-        var softwareBitmap = await episode.CreateSoftwareBitmapAsync().ConfigureAwait(true);
+        var softwareBitmap = episode switch
+        {
+            IHasSoftwareBitmap hasSoftwareBitmap => hasSoftwareBitmap.SoftwareBitmap,
+            _ => await episode.CreateSoftwareBitmapAsync().ConfigureAwait(true),
+        };
+
+        var imageSource = (episode, softwareBitmap) switch
+        {
+            (IHasImageSource hasImageSource, _) => hasImageSource.ImageSource,
+            (_, not null) => await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
+            (_, _) => null,
+        };
+
         return new EpisodeWithImageSource(episode.Name, episode.Description, episode.Producers, episode.Directors, episode.Studios, episode.Genre, episode.ScreenWriters, episode.Cast, episode.Composers)
         {
             Release = episode.Release,
@@ -46,7 +58,7 @@ internal record class EpisodeWithImageSource(
             Number = episode.Number,
             Id = episode.Id,
             SoftwareBitmap = softwareBitmap,
-            ImageSource = await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
+            ImageSource = imageSource,
         };
     }
 }
