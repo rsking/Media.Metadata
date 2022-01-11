@@ -26,7 +26,10 @@ var readCommand = new Command("read")
     CreateReadMovie(),
 };
 
-var langOption = new Option<IList<string>>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks");
+var langOption = new Option<string[]>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks")
+{
+    Arity = ArgumentArity.OneOrMore
+};
 
 var updateCommand = new Command("update")
 {
@@ -172,7 +175,7 @@ static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor lan
 {
     var pathArgument = new Argument<FileInfo>("path").ExistingOnly();
     var nameArgument = new Argument<string>("name");
-    var yearOption = new Option<int?>(new[] { "--year", "-y" }, "The movie year");
+    var yearOption = new Option<int>(new[] { "--year", "-y" }, "The movie year");
     var command = new Command("movie")
     {
         pathArgument,
