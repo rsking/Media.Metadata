@@ -15,6 +15,8 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Hosting;
 using RestSharp.Serializers.SystemTextJson;
 
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
 var searchCommand = new Command("search")
 {
     CreateSearchMovie(),

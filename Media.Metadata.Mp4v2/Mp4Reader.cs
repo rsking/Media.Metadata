@@ -110,7 +110,7 @@ public class Mp4Reader : IReader
             video = video with { Image = tags.Artwork };
         }
 
-        if (trackList is not null && trackList.Count > 0)
+        if (trackList?.Count > 0)
         {
             video = video with { Tracks = trackList.Select(track => new MediaTrack(track.Id, GetMediaTrackType(track.Type), track.Language)).ToList() };
         }

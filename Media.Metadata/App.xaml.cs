@@ -26,6 +26,8 @@ public partial class App : Application
     /// </summary>
     public App()
     {
+        System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
         this.InitializeComponent();
 
         this.host = Host.CreateDefaultBuilder()

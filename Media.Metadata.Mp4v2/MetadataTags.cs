@@ -356,50 +356,51 @@ internal class MetadataTags : IDisposable
         var tagPtr = NativeMethods.MP4TagsAlloc();
         NativeMethods.MP4TagsFetch(tagPtr, fileHandle);
         var tags = tagPtr.ToStructure<NativeMethods.MP4Tags>();
+
         var managedTags = new MetadataTags
         {
-            Title = tags.name,
-            Artist = tags.artist,
-            AlbumArtist = tags.albumArtist,
-            Album = tags.album,
-            Grouping = tags.grouping,
-            Composer = tags.composer,
-            Comment = tags.comment,
-            Genre = tags.genre,
+            Title = StringMarshaller.AnsiToUtf8(tags.name),
+            Artist = StringMarshaller.AnsiToUtf8(tags.artist),
+            AlbumArtist = StringMarshaller.AnsiToUtf8(tags.albumArtist),
+            Album = StringMarshaller.AnsiToUtf8(tags.album),
+            Grouping = StringMarshaller.AnsiToUtf8(tags.grouping),
+            Composer = StringMarshaller.AnsiToUtf8(tags.composer),
+            Comment = StringMarshaller.AnsiToUtf8(tags.comment),
+            Genre = StringMarshaller.AnsiToUtf8(tags.genre),
             Tempo = tags.tempo.ReadInt16(),
             IsCompilation = tags.compilation.ReadBoolean(),
-            Copyright = tags.copyright,
-            EncodingTool = tags.encodingTool,
-            EncodedBy = tags.encodedBy,
-            ReleaseDate = tags.releaseDate,
+            Copyright = StringMarshaller.AnsiToUtf8(tags.copyright),
+            EncodingTool = StringMarshaller.AnsiToUtf8(tags.encodingTool),
+            EncodedBy = StringMarshaller.AnsiToUtf8(tags.encodedBy),
+            ReleaseDate = StringMarshaller.AnsiToUtf8(tags.releaseDate),
 
             // Tags specific to TV Episodes.
             EpisodeNumber = tags.tvEpisode.ReadInt32(),
             SeasonNumber = tags.tvSeason.ReadInt32(),
-            EpisodeId = tags.tvEpisodeID,
-            TVNetwork = tags.tvNetwork,
-            TVShow = tags.tvShow,
-            Description = tags.description,
-            LongDescription = tags.longDescription,
-            Lyrics = tags.lyrics,
-            SortName = tags.sortName,
-            SortArtist = tags.sortArtist,
-            SortAlbumArtist = tags.sortAlbumArtist,
-            SortAlbum = tags.sortAlbum,
-            SortComposer = tags.sortComposer,
-            SortTVShow = tags.sortTVShow,
+            EpisodeId = StringMarshaller.AnsiToUtf8(tags.tvEpisodeID),
+            TVNetwork = StringMarshaller.AnsiToUtf8(tags.tvNetwork),
+            TVShow = StringMarshaller.AnsiToUtf8(tags.tvShow),
+            Description = StringMarshaller.AnsiToUtf8(tags.description),
+            LongDescription = StringMarshaller.AnsiToUtf8(tags.longDescription),
+            Lyrics = StringMarshaller.AnsiToUtf8(tags.lyrics),
+            SortName = StringMarshaller.AnsiToUtf8(tags.sortName),
+            SortArtist = StringMarshaller.AnsiToUtf8(tags.sortArtist),
+            SortAlbumArtist = StringMarshaller.AnsiToUtf8(tags.sortAlbumArtist),
+            SortAlbum = StringMarshaller.AnsiToUtf8(tags.sortAlbum),
+            SortComposer = StringMarshaller.AnsiToUtf8(tags.sortComposer),
+            SortTVShow = StringMarshaller.AnsiToUtf8(tags.sortTVShow),
             ArtworkCount = tags.artworkCount,
 
             IsPodcast = tags.podcast.ReadBoolean(),
-            Keywords = tags.keywords,
-            Category = tags.category,
+            Keywords = StringMarshaller.AnsiToUtf8(tags.keywords),
+            Category = StringMarshaller.AnsiToUtf8(tags.category),
 
             IsHDVideo = tags.hdVideo.ReadBoolean(),
             MediaType = tags.mediaType.ReadEnumValue(MediaKind.NotSet),
             ContentRating = tags.contentRating.ReadEnumValue(ContentRating.NotSet),
             IsGapless = tags.gapless.ReadBoolean(),
 
-            MediaStoreAccount = tags.itunesAccount,
+            MediaStoreAccount = StringMarshaller.AnsiToUtf8(tags.itunesAccount),
             MediaStoreCountry = tags.iTunesCountry.ReadEnumValue(MediaStoreCountry.None),
             MediaStoreAccountType = tags.iTunesAccountType.ReadEnumValue(MediaStoreAccountKind.NotSet),
             ContentId = tags.contentID.ReadInt32(),
@@ -407,7 +408,7 @@ internal class MetadataTags : IDisposable
             PlaylistId = tags.playlistID.ReadInt32(),
             GenreId = tags.genreID.ReadInt32(),
             ComposerId = tags.composerID.ReadInt32(),
-            Xid = tags.xid,
+            Xid = StringMarshaller.AnsiToUtf8(tags.xid),
         };
 
         managedTags.ReadTrackInfo(tags.track);
@@ -528,12 +529,13 @@ internal class MetadataTags : IDisposable
 
         static void SetStringValue(IntPtr tags, string? newValue, string? oldValue, Func<IntPtr, string?, bool> setFunc)
         {
-            if (string.Equals(oldValue, newValue, StringComparison.Ordinal))
+            var value = StringMarshaller.Utf8ToAnsi(newValue);
+            if (string.Equals(oldValue, value, StringComparison.Ordinal))
             {
                 return;
             }
 
-            setFunc(tags, newValue);
+            setFunc(tags, value);
         }
 
         static void SetBoolValue(IntPtr tagsPtr, bool? newValue, bool? oldValue, Func<IntPtr, IntPtr, bool> setFunc)
@@ -669,6 +671,11 @@ internal class MetadataTags : IDisposable
         }
 
         var artworkStructure = artworkStructurePointer.ToStructure<NativeMethods.MP4TagArtwork>();
+        if (artworkStructure.data == IntPtr.Zero)
+        {
+            return;
+        }
+
         var artworkBuffer = new byte[artworkStructure.size];
         Marshal.Copy(artworkStructure.data, artworkBuffer, 0, artworkStructure.size);
         this.artworkStream = new MemoryStream(artworkBuffer);

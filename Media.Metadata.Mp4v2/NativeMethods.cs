@@ -998,8 +998,7 @@ internal static class NativeMethods
     public static string? MP4GetTrackType(IntPtr hFile, int trackId)
     {
         var ptr = MP4GetTrackTypeInterop(hFile, trackId);
-        var trackType = Marshal.PtrToStringAnsi(ptr);
-        return trackType;
+        return Marshal.PtrToStringAnsi(ptr);
     }
 
     /// <summary>
@@ -1461,42 +1460,42 @@ internal static class NativeMethods
         /// <summary>
         /// Name of the file.
         /// </summary>
-        public string name;
+        public string? name;
 
         /// <summary>
         /// Artist for the file.
         /// </summary>
-        public string artist;
+        public string? artist;
 
         /// <summary>
         /// Album artist for the file.
         /// </summary>
-        public string albumArtist;
+        public string? albumArtist;
 
         /// <summary>
         /// Album for the file.
         /// </summary>
-        public string album;
+        public string? album;
 
         /// <summary>
         /// Grouping for the file.
         /// </summary>
-        public string grouping;
+        public string? grouping;
 
         /// <summary>
         /// Composer for the file.
         /// </summary>
-        public string composer;
+        public string? composer;
 
         /// <summary>
         /// Comment for the file.
         /// </summary>
-        public string comment;
+        public string? comment;
 
         /// <summary>
         /// Genre for the file.
         /// </summary>
-        public string genre;
+        public string? genre;
 
         /// <summary>
         /// Pointer to the genre type for the file.
@@ -1506,7 +1505,7 @@ internal static class NativeMethods
         /// <summary>
         /// Release data for the file.
         /// </summary>
-        public string releaseDate;
+        public string? releaseDate;
 
         /// <summary>
         /// Pointer to the track information about the file.
@@ -1531,17 +1530,17 @@ internal static class NativeMethods
         /// <summary>
         /// Pointer to the TV show name.
         /// </summary>
-        public string tvShow;
+        public string? tvShow;
 
         /// <summary>
         /// Pointer to the TV network.
         /// </summary>
-        public string tvNetwork;
+        public string? tvNetwork;
 
         /// <summary>
         /// Pointer to the TV episode ID.
         /// </summary>
-        public string tvEpisodeID;
+        public string? tvEpisodeID;
 
         /// <summary>
         /// Pointer to the season number.
@@ -1556,47 +1555,47 @@ internal static class NativeMethods
         /// <summary>
         /// Description of the file.
         /// </summary>
-        public string description;
+        public string? description;
 
         /// <summary>
         /// Long description of the file.
         /// </summary>
-        public string longDescription;
+        public string? longDescription;
 
         /// <summary>
         /// Lyrics of the file.
         /// </summary>
-        public string lyrics;
+        public string? lyrics;
 
         /// <summary>
         /// Sort name of the file.
         /// </summary>
-        public string sortName;
+        public string? sortName;
 
         /// <summary>
         /// Sort artist of the file.
         /// </summary>
-        public string sortArtist;
+        public string? sortArtist;
 
         /// <summary>
         /// Sort album artist of the file.
         /// </summary>
-        public string sortAlbumArtist;
+        public string? sortAlbumArtist;
 
         /// <summary>
         /// Sort album of the file.
         /// </summary>
-        public string sortAlbum;
+        public string? sortAlbum;
 
         /// <summary>
         /// Sort composer of the file.
         /// </summary>
-        public string sortComposer;
+        public string? sortComposer;
 
         /// <summary>
         /// Sort TV show of the file.
         /// </summary>
-        public string sortTVShow;
+        public string? sortTVShow;
 
         /// <summary>
         /// Pointer to the artwork in the file.
@@ -1611,22 +1610,22 @@ internal static class NativeMethods
         /// <summary>
         /// Copyright in the file.
         /// </summary>
-        public string copyright;
+        public string? copyright;
 
         /// <summary>
         /// Encoding tool used for the file.
         /// </summary>
-        public string encodingTool;
+        public string? encodingTool;
 
         /// <summary>
         /// Encoded by information for the file.
         /// </summary>
-        public string encodedBy;
+        public string? encodedBy;
 
         /// <summary>
         /// Purchase date for the file.
         /// </summary>
-        public string purchasedDate;
+        public string? purchasedDate;
 
         /// <summary>
         /// Pointer to the "isPodcast" value for the file.
@@ -1636,12 +1635,12 @@ internal static class NativeMethods
         /// <summary>
         /// Podcast keywords for the file.
         /// </summary>
-        public string keywords;
+        public string? keywords;
 
         /// <summary>
         /// Podcast category for the file.
         /// </summary>
-        public string category;
+        public string? category;
 
         /// <summary>
         /// Pointer to the "isHDVideo" value for the file.
@@ -1666,7 +1665,7 @@ internal static class NativeMethods
         /// <summary>
         /// iTunes account used to purchase the file.
         /// </summary>
-        public string itunesAccount;
+        public string? itunesAccount;
 
         /// <summary>
         /// Pointer to the type of iTunes account used to purchase the file.
@@ -1706,6 +1705,6 @@ internal static class NativeMethods
         /// <summary>
         /// Auxiliary ID of the file.
         /// </summary>
-        public string xid;
+        public string? xid;
     }
 }
