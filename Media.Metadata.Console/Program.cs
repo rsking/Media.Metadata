@@ -245,10 +245,10 @@ static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor lan
 
 static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor langOption)
 {
-    var pathArgument = new Argument<FileInfo>("path").ExistingOnly();
+    var pathArgument = new Argument<FileInfo[]>("path", ParseFileInfo);
     var nameOption = new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true };
-    var seasonOption = new Option<int>(new[] { "--season", "-s" }, "The season number");
-    var episodeOption = new Option<int>(new[] { "--episode", "-e" }, "The episode number");
+    var seasonOption = new Option<int>(new[] { "--season", "-s" }, () => -1, "The season number");
+    var episodeOption = new Option<int>(new[] { "--episode", "-e" }, () => -1, "The episode number");
 
     var command = new Command("episode")
     {
@@ -259,28 +259,93 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
     };
 
     command.SetHandler(
-        async (IConsole console, IHost host, FileInfo path, string name, int season, int episode, string[]? lang, CancellationToken cancellationToken) =>
+        async (IConsole console, IHost host, FileInfo[] paths, string name, int season, int episode, string[]? lang, CancellationToken cancellationToken) =>
         {
-            if (!path.Exists)
-            {
-                return;
-            }
+            var regex = new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})");
+            var pathList = paths.ToList();
 
             foreach (var search in host.Services.GetServices<IShowSearch>())
             {
                 await foreach (var series in search.SearchAsync(name, cancellationToken: cancellationToken).ConfigureAwait(false))
                 {
-                    console.Out.WriteLine($"Found Series {series.Name}");
-                    foreach (var s in series.Seasons.Where(s => s.Number == season))
+                    var seasons = pathList
+                        .Where(path => path.Exists)
+                        .GroupBy(
+                            path =>
+                            {
+                                if (season == -1 && regex.Match(path.Name) is System.Text.RegularExpressions.Match match)
+                                {
+                                    return int.Parse(match.Groups["season"].Value);
+                                }
+
+                                return season;
+                            },
+                            path => path)
+                        .OrderBy(group => group.Key)
+                        .ToList();
+
+                    if (seasons.Count == 0)
                     {
-                        console.Out.WriteLine(FormattableString.CurrentCulture($"Found Season {series.Name}:{s.Number}"));
-                        var e = s.Episodes.FirstOrDefault(e => e.Number == episode);
-                        if (e is not null)
+                        return;
+                    }
+
+                    console.Out.WriteLine($"Found Series  {series.Name}");
+                    var seasonEnumerator = series.Seasons.GetEnumerator();
+                    if (!seasonEnumerator.MoveNext())
+                    {
+                        continue;
+                    }
+
+                    foreach (var seasonGroup in seasons)
+                    {
+                        while (seasonEnumerator.Current is not null && seasonEnumerator.Current.Number < seasonGroup.Key && seasonEnumerator.MoveNext())
                         {
-                            console.Out.WriteLine(FormattableString.CurrentCulture($"Found Episode {series.Name}:{s.Number}:{e.Name}"));
-                            var updater = host.Services.GetRequiredService<IUpdater>();
-                            updater.UpdateEpisode(path.FullName, e with { Image = s.Image ?? series.Image ?? e.Image }, GetLanguages(lang));
-                            return;
+                        }
+
+                        if (seasonEnumerator.Current is not null && seasonEnumerator.Current.Number == seasonGroup.Key)
+                        {
+                            var s = seasonEnumerator.Current;
+                            console.Out.WriteLine(FormattableString.CurrentCulture($"Found Season  {series.Name}:{s.Number}"));
+
+                            var episoides = seasonGroup
+                                .Select(path =>
+                                {
+                                    if (episode == -1 && regex.Match(path.Name) is System.Text.RegularExpressions.Match match)
+                                    {
+                                        return (Episode: int.Parse(match.Groups["episode"].Value), Path: path);
+                                    }
+
+                                    return (Episode: episode, Path: path);
+                                })
+                                .OrderBy(ep => ep.Episode)
+                                .ToList();
+
+                            var episodeEnumerator = s.Episodes.GetEnumerator();
+
+                            if (!episodeEnumerator.MoveNext())
+                            {
+                                continue;
+                            }
+
+                            foreach (var ep in episoides.Where(ep => ep.Path.Exists))
+                            {
+                                console.Out.WriteLine(FormattableString.CurrentCulture($"Processing {ep.Path.Name}"));
+
+                                while (episodeEnumerator.Current is not null && episodeEnumerator.Current.Number < ep.Episode && episodeEnumerator.MoveNext())
+                                {
+                                }
+
+                                var e = episodeEnumerator.Current;
+                                if (e is not null && e.Number == ep.Episode)
+                                {
+                                    console.Out.WriteLine(FormattableString.CurrentCulture($"Found Episode {series.Name}:{s.Number}:{e.Name}"));
+                                    var updater = host.Services.GetRequiredService<IUpdater>();
+                                    updater.UpdateEpisode(ep.Path.FullName, e with { Image = s.Image ?? series.Image ?? e.Image }, GetLanguages(lang));
+
+                                    // remove this from the path list
+                                    pathList.Remove(ep.Path);
+                                }
+                            }
                         }
                     }
                 }
