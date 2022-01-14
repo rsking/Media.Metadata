@@ -231,11 +231,6 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     {
         if (string.Equals(e.PropertyName, nameof(this.selectedVideo), StringComparison.OrdinalIgnoreCase))
         {
-            if (this.SelectedEditableVideo is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-
             this.SelectedEditableVideo = this.selectedVideo switch
             {
                 Models.LocalEpisodeWithImageSource episode => new EpisodeViewModel(episode),
