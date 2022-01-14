@@ -26,6 +26,7 @@ var searchCommand = new Command("search")
 var readCommand = new Command("read")
 {
     CreateReadMovie(),
+    CreateReadEpisode(),
 };
 
 var langOption = new Option<string[]>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks")
@@ -130,6 +131,31 @@ static Command CreateReadMovie()
             var reader = host.Services.GetRequiredService<IReader>();
             var movie = reader.ReadMovie(path.FullName);
             Console.WriteLine(movie.Name);
+        },
+        pathArgument);
+
+    return command;
+}
+
+static Command CreateReadEpisode()
+{
+    var pathArgument = new Argument<FileInfo>("path").ExistingOnly();
+    var command = new Command("episode")
+    {
+        pathArgument,
+    };
+
+    command.SetHandler(
+        (IHost host, FileInfo path) =>
+        {
+            if (!path.Exists)
+            {
+                return;
+            }
+
+            var reader = host.Services.GetRequiredService<IReader>();
+            var episode = reader.ReadEpisode(path.FullName);
+            Console.WriteLine(episode.Name);
         },
         pathArgument);
 
