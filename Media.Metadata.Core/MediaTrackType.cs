@@ -5,14 +5,29 @@
 // -----------------------------------------------------------------------
 
 namespace Media.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
+/// <summary>
+/// The media track type.
+/// </summary>
 public enum MediaTrackType
 {
-    Unknown = -1,
-    Video = -2,
-    Audio = -3,
+    /// <summary>
+    /// All tracks.
+    /// </summary>
     All = int.MinValue,
+
+    /// <summary>
+    /// Audio.
+    /// </summary>
+    Audio = -3,
+
+    /// <summary>
+    /// Video.
+    /// </summary>
+    Video = -2,
+
+    /// <summary>
+    /// Unknown.
+    /// </summary>
+    Unknown = -1,
 }

@@ -5,12 +5,10 @@
 // -----------------------------------------------------------------------
 
 namespace Media.Metadata.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+/// <summary>
+/// The ISO639 to Name converter.
+/// </summary>
 internal class Iso639ToNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
     private static IDictionary<string, string>? codeToName;
@@ -25,13 +23,13 @@ internal class Iso639ToNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
             }
 
             var values = GetValues();
-            codeToName = values.ToDictionary(value => value.Bibliographic, value => value.Name, StringComparer.Ordinal);
+            codeToName = values.ToDictionary(value => value.Bibliographic, value => value.Name, System.StringComparer.Ordinal);
             return codeToName;
         }
     }
 
     /// <inheritdoc/>
-    public object? Convert(object? value, Type targetType, object parameter, string language)
+    public object? Convert(object? value, System.Type targetType, object parameter, string language)
     {
         return value switch
         {
@@ -42,12 +40,12 @@ internal class Iso639ToNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
     }
 
     /// <inheritdoc/>
-    public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotSupportedException();
+    public object ConvertBack(object value, System.Type targetType, object parameter, string language) => throw new System.NotSupportedException();
 
     private static IEnumerable<Iso639> GetValues()
     {
-        var stream = typeof(App).Assembly.GetManifestResourceStream(typeof(App), "ISO-639-2_utf-8.txt") ?? throw new InvalidOperationException();
-        using var reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: false);
+        var stream = typeof(App).Assembly.GetManifestResourceStream(typeof(App), "ISO-639-2_utf-8.txt") ?? throw new System.InvalidOperationException();
+        using var reader = new StreamReader(stream, System.Text.Encoding.UTF8, leaveOpen: false);
 
         while (reader.ReadLine() is string line)
         {

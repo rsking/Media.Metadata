@@ -12,22 +12,16 @@ namespace Media.Metadata.Converters;
 internal class NullableIntToDoubleConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
     /// <inheritdoc/>
-    public object? Convert(object value, System.Type targetType, object parameter, string language)
+    public object? Convert(object value, System.Type targetType, object parameter, string language) => value switch
     {
-        return value switch
-        {
-            int intValue => (double)intValue,
-            _ => double.NaN,
-        };
-    }
+        int intValue => intValue,
+        _ => double.NaN,
+    };
 
     /// <inheritdoc/>
-    public object? ConvertBack(object value, System.Type targetType, object parameter, string language)
+    public object? ConvertBack(object value, System.Type targetType, object parameter, string language) => value switch
     {
-        return value switch
-        {
-            double doubleValue when !double.IsNaN(doubleValue) => (int)doubleValue,
-            _ => default(int?),
-        };
-    }
+        double doubleValue when !double.IsNaN(doubleValue) => (int)doubleValue,
+        _ => default(int?),
+    };
 }
