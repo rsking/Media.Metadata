@@ -31,7 +31,7 @@ var readCommand = new Command("read")
 
 var langOption = new Option<string[]>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks")
 {
-    Arity = ArgumentArity.OneOrMore
+    Arity = ArgumentArity.OneOrMore,
 };
 
 var updateCommand = new Command("update")
@@ -261,7 +261,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
     command.SetHandler(
         async (IConsole console, IHost host, FileInfo[] paths, string name, int season, int episode, string[]? lang, CancellationToken cancellationToken) =>
         {
-            var regex = new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})");
+            var regex = new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1));
             var pathList = paths.ToList();
 
             foreach (var search in host.Services.GetServices<IShowSearch>())
@@ -271,15 +271,9 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                     var seasons = pathList
                         .Where(path => path.Exists)
                         .GroupBy(
-                            path =>
-                            {
-                                if (season == -1 && regex.Match(path.Name) is System.Text.RegularExpressions.Match match)
-                                {
-                                    return int.Parse(match.Groups["season"].Value);
-                                }
-
-                                return season;
-                            },
+                            path => season == -1 && regex.Match(path.Name) is System.Text.RegularExpressions.Match match
+                                ? int.Parse(match.Groups["season"].Value, System.Globalization.CultureInfo.CurrentCulture)
+                                : season,
                             path => path)
                         .OrderBy(group => group.Key)
                         .ToList();
@@ -300,6 +294,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                     {
                         while (seasonEnumerator.Current is not null && seasonEnumerator.Current.Number < seasonGroup.Key && seasonEnumerator.MoveNext())
                         {
+                            // loop until we have the correct season.
                         }
 
                         if (seasonEnumerator.Current is not null && seasonEnumerator.Current.Number == seasonGroup.Key)
@@ -312,7 +307,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                                 {
                                     if (episode == -1 && regex.Match(path.Name) is System.Text.RegularExpressions.Match match)
                                     {
-                                        return (Episode: int.Parse(match.Groups["episode"].Value), Path: path);
+                                        return (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture), Path: path);
                                     }
 
                                     return (Episode: episode, Path: path);
@@ -333,6 +328,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
 
                                 while (episodeEnumerator.Current is not null && episodeEnumerator.Current.Number < ep.Episode && episodeEnumerator.MoveNext())
                                 {
+                                    // loop until we have the correct episode.
                                 }
 
                                 var e = episodeEnumerator.Current;
@@ -402,7 +398,7 @@ static IDictionary<MediaTrackType, string>? GetLanguages(string[]? lang)
             {
                 "a" => MediaTrackType.Audio,
                 "v" => MediaTrackType.Video,
-                _ when int.TryParse(value, out var intValue) => (MediaTrackType)intValue,
+                _ when int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.CurrentCulture, out var intValue) => (MediaTrackType)intValue,
                 _ => MediaTrackType.Unknown,
             };
         }
