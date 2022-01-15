@@ -202,7 +202,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
                                     .Where(character => peopleTypes.Any(peopleType => string.Equals(character.PeopleType, peopleType, StringComparison.Ordinal)) && character.PersonName is not null)
                                     .Where(character => !character.EpisodeId.HasValue || character.EpisodeId.Value == episodeId)
                                     .Select(character => character.PersonName!)
-                                    .Distinct(),
+                                    .Distinct(System.StringComparer.OrdinalIgnoreCase),
                             };
                         }
 
