@@ -50,6 +50,7 @@ internal partial class EpisodeViewModel : VideoViewModel
         Season = this.Season,
         Number = this.Number,
         Id = this.Id,
+        Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
         Image = await this.CreateImageAsync().ConfigureAwait(false),
     };
 

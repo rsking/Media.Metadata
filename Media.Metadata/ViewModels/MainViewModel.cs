@@ -127,9 +127,20 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
             if (video is ILocalVideo localVideo)
             {
                 this.IsSaving = true;
-                await Task.Run(() => this.updater.UpdateVideo(localVideo.FileInfo.FullName, video)).ConfigureAwait(true);
+                await Task.Run(() => this.updater.UpdateVideo(localVideo.FileInfo.FullName, video, GetLanguages(video.Tracks))).ConfigureAwait(true);
                 await Refresh(localVideo).ConfigureAwait(true);
                 this.IsSaving = false;
+            }
+
+            static IDictionary<MediaTrackType, string> GetLanguages(IEnumerable<MediaTrack> tracks)
+            {
+                var dictionary = new Dictionary<MediaTrackType, string>();
+                foreach (var track in tracks)
+                {
+                    dictionary.Add((MediaTrackType)track.Id, track.Language ?? "und");
+                }
+
+                return dictionary;
             }
 
             // refresh the local video from the file

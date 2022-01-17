@@ -27,6 +27,7 @@ internal class MovieViewModel : VideoViewModel
     {
         Rating = this.Rating.SelectedRating,
         Release = this.Release?.DateTime,
+        Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
         Image = await this.CreateImageAsync().ConfigureAwait(false),
     };
 }
