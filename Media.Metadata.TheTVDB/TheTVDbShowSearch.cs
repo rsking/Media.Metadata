@@ -199,10 +199,12 @@ public sealed class TheTVDbShowSearch : IShowSearch
                             {
                                 null => default,
                                 _ => characters
-                                    .Where(character => peopleTypes.Any(peopleType => string.Equals(character.PeopleType, peopleType, StringComparison.Ordinal)) && character.PersonName is not null)
-                                    .Where(character => !character.EpisodeId.HasValue || character.EpisodeId.Value == episodeId)
+                                    .Where(character => peopleTypes.Any(peopleType =>
+                                        string.Equals(character.PeopleType, peopleType, StringComparison.Ordinal))
+                                        && character.PersonName is not null
+                                        && (!character.EpisodeId.HasValue || character.EpisodeId.Value == episodeId))
                                     .Select(character => character.PersonName!)
-                                    .Distinct(System.StringComparer.OrdinalIgnoreCase),
+                                    .Distinct(StringComparer.OrdinalIgnoreCase),
                             };
                         }
 

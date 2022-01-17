@@ -271,9 +271,11 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                     var seasons = pathList
                         .Where(path => path.Exists)
                         .GroupBy(
-                            path => season == -1 && regex.Match(path.Name) is System.Text.RegularExpressions.Match match
-                                ? int.Parse(match.Groups["season"].Value, System.Globalization.CultureInfo.CurrentCulture)
-                                : season,
+                            path => season switch
+                            {
+                                -1 when regex.Match(path.Name) is System.Text.RegularExpressions.Match match => int.Parse(match.Groups["season"].Value, System.Globalization.CultureInfo.CurrentCulture),
+                                _ => season,
+                            },
                             path => path)
                         .OrderBy(group => group.Key)
                         .ToList();
@@ -303,14 +305,10 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                             console.Out.WriteLine(FormattableString.CurrentCulture($"Found Season  {series.Name}:{s.Number}"));
 
                             var episoides = seasonGroup
-                                .Select(path =>
+                                .Select(path => episode switch
                                 {
-                                    if (episode == -1 && regex.Match(path.Name) is System.Text.RegularExpressions.Match match)
-                                    {
-                                        return (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture), Path: path);
-                                    }
-
-                                    return (Episode: episode, Path: path);
+                                    -1 when regex.Match(path.Name) is System.Text.RegularExpressions.Match match => (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture), Path: path),
+                                    _ => (Episode: episode, Path: path),
                                 })
                                 .OrderBy(ep => ep.Episode)
                                 .ToList();
@@ -338,7 +336,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                                     var updater = host.Services.GetRequiredService<IUpdater>();
                                     updater.UpdateEpisode(ep.Path.FullName, e with { Image = s.Image ?? series.Image ?? e.Image }, GetLanguages(lang));
 
-                                    // remove this from the path list
+                                    // remove this from the list of paths
                                     pathList.Remove(ep.Path);
                                 }
                             }
