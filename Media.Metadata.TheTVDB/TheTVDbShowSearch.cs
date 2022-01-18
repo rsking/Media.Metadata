@@ -36,18 +36,6 @@ public sealed class TheTVDbShowSearch : IShowSearch
     /// <inheritdoc/>
     async IAsyncEnumerable<Series> IShowSearch.SearchAsync(string name, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        if (!this.client.DefaultParameters
-            .Any(parameter => parameter.Type == ParameterType.HttpHeader && string.Equals(parameter.Name, "Authorization", StringComparison.Ordinal)))
-        {
-            this.tokenResponse ??= await GetTokenAsync(this.client, this.pin, cancellationToken).ConfigureAwait(false);
-            if (this.tokenResponse is null)
-            {
-                throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
-            }
-
-            this.client.AddDefaultHeader("Authorization", $"Bearer {this.tokenResponse.Token}");
-        }
-
         await foreach (var series in this
             .SearchSeriesAsync(name, cancellationToken)
             .ConfigureAwait(false))
@@ -264,66 +252,104 @@ public sealed class TheTVDbShowSearch : IShowSearch
                 }
             }
         }
+    }
 
-        async static Task<TokenResponse?> GetTokenAsync(IRestClient client, string? pin, CancellationToken cancellationToken = default)
+    private static async Task<TokenResponse?> GetTokenAsync(IRestClient client, string? pin, CancellationToken cancellationToken = default)
+    {
+        if (await GetTokenFromFile(cancellationToken: cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromFile)
         {
-            if (await GetTokenFromFile(cancellationToken: cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromFile)
-            {
-                return tokenFromFile;
-            }
+            return tokenFromFile;
+        }
 
-            if (await RequestToken(client, pin, cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromWeb)
+        if (await RequestToken(client, pin, cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromWeb)
+        {
+            // write this to the local cache
+            await WriteTokenToFile(tokenFromWeb, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return tokenFromWeb;
+        }
+
+        return default;
+
+        static async Task<TokenResponse?> RequestToken(IRestClient client, string? pin, CancellationToken cancellationToken)
+        {
+            var tokenRequest = new RestRequest("login", RestSharp.Method.POST)
+                .AddJsonBody(new TokenRequest { ApiKey = TheTVDbHelpers.ApiKey, Pin = pin });
+
+            var response = await client.ExecutePostTaskAsync<Response<TokenResponse>>(tokenRequest, cancellationToken).ConfigureAwait(false);
+            return response.IsSuccessful ? response.Data.Data : default;
+        }
+
+        static async Task<TokenResponse?> GetTokenFromFile(string? fileName = null, CancellationToken cancellationToken = default)
+        {
+            fileName ??= GenerateFileName();
+            if (File.Exists(fileName))
             {
-                // write this to the local cache
-                await WriteTokenToFile(tokenFromWeb, cancellationToken: cancellationToken).ConfigureAwait(false);
-                return tokenFromWeb;
+                using var stream = File.OpenRead(fileName);
+                return await System.Text.Json.JsonSerializer.DeserializeAsync<TokenResponse>(stream, Options, cancellationToken).ConfigureAwait(false);
             }
 
             return default;
+        }
 
-            static async Task<TokenResponse?> RequestToken(IRestClient client, string? pin, CancellationToken cancellationToken)
+        static async Task WriteTokenToFile(TokenResponse tokenResponse, string? fileName = null, CancellationToken cancellationToken = default)
+        {
+            fileName ??= GenerateFileName();
+            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+            using var stream = File.OpenWrite(fileName);
+            await System.Text.Json.JsonSerializer.SerializeAsync(stream, tokenResponse, Options, cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+
+        static string GenerateFileName()
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Media.Metadata", "TheTVDb.token.json");
+        }
+    }
+
+    private static bool IsAuthorizationParameter(Parameter parameter) => parameter.Type == ParameterType.HttpHeader && string.Equals(parameter.Name, "Authorization", StringComparison.Ordinal);
+
+    private async Task AddTokenAsync(IRestClient client, string pin, CancellationToken cancellationToken = default)
+    {
+        if (!client.DefaultParameters
+            .Any(IsAuthorizationParameter))
+        {
+            this.tokenResponse ??= await GetTokenAsync(client, pin, cancellationToken).ConfigureAwait(false);
+            if (this.tokenResponse is null)
             {
-                var tokenRequest = new RestRequest("login", RestSharp.Method.POST)
-                    .AddJsonBody(new TokenRequest { ApiKey = TheTVDbHelpers.ApiKey, Pin = pin });
-
-                var response = await client.ExecutePostTaskAsync<Response<TokenResponse>>(tokenRequest, cancellationToken).ConfigureAwait(false);
-                return response.IsSuccessful ? response.Data.Data : default;
+                throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
             }
 
-            static async Task<TokenResponse?> GetTokenFromFile(string? fileName = null, CancellationToken cancellationToken = default)
-            {
-                fileName ??= GenerateFileName();
-                if (File.Exists(fileName))
-                {
-                    using var stream = File.OpenRead(fileName);
-                    return await System.Text.Json.JsonSerializer.DeserializeAsync<TokenResponse>(stream, Options, cancellationToken).ConfigureAwait(false);
-                }
+            client.AddDefaultHeader("Authorization", $"Bearer {this.tokenResponse.Token}");
+        }
+    }
 
-                return default;
-            }
+    private async Task UpdateTokenAsync(IRestClient client, string pin, CancellationToken cancellationToken = default)
+    {
+        this.tokenResponse = await GetTokenAsync(client, pin, cancellationToken).ConfigureAwait(false);
+        if (this.tokenResponse is null)
+        {
+            throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
+        }
 
-            static async Task WriteTokenToFile(TokenResponse tokenResponse, string? fileName = null, CancellationToken cancellationToken = default)
-            {
-                fileName ??= GenerateFileName();
-                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                using var stream = File.OpenWrite(fileName);
-                await System.Text.Json.JsonSerializer.SerializeAsync(stream, tokenResponse, Options, cancellationToken: cancellationToken).ConfigureAwait(false);
-            }
-
-            static string GenerateFileName()
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Media.Metadata", "TheTVDb.token.json");
-            }
+        foreach (var parameter in client.DefaultParameters.Where(IsAuthorizationParameter))
+        {
+            parameter.Value = $"Bearer {this.tokenResponse.Token}";
         }
     }
 
     private async IAsyncEnumerable<SearchResult> SearchSeriesAsync(string name, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
+        await this.AddTokenAsync(this.client, this.pin, cancellationToken).ConfigureAwait(false);
+
         var request = new RestRequest("search")
             .AddQueryParameter("q", name)
             .AddQueryParameter("type", "series");
 
         var response = await this.client.ExecuteGetTaskAsync<Response<ICollection<SearchResult>>>(request, cancellationToken).ConfigureAwait(false);
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            await this.UpdateTokenAsync(this.client, this.pin, cancellationToken).ConfigureAwait(false);
+        }
+
         if (response.IsSuccessful && response.Data?.Data is not null)
         {
             foreach (var series in response.Data.Data)
