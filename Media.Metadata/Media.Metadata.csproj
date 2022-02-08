@@ -34,7 +34,7 @@
     <PackageReference Include="System.Linq.Async" Version="5.1.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
     <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.20348" />
-    <PackageReference Include="TMDbLib" Version="1.8.1" />
+    <PackageReference Include="TMDbLib" Version="1.9.1" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
