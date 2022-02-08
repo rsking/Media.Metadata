@@ -165,17 +165,19 @@ static Command CreateReadEpisode()
 static Command CreateSearchShow()
 {
     var nameArgument = new Argument<string>("name");
+    var yearOption = new Option<int>(new[] { "--year", "-y" }, "The show year");
     var command = new Command("show")
     {
         nameArgument,
+        yearOption,
     };
 
     command.SetHandler(
-        async (IHost host, string name, CancellationToken cancellationToken) =>
+        async (IHost host, string name, int year, CancellationToken cancellationToken) =>
         {
             foreach (var search in host.Services.GetServices<IShowSearch>())
             {
-                await foreach (var show in search.SearchAsync(name, cancellationToken: cancellationToken).ConfigureAwait(false))
+                await foreach (var show in search.SearchAsync(name, year, cancellationToken: cancellationToken).ConfigureAwait(false))
                 {
                     Console.WriteLine("{0}", show.Name);
                     foreach (var season in show.Seasons.OrderBy(season => season.Number))
@@ -194,7 +196,8 @@ static Command CreateSearchShow()
                 }
             }
         },
-        nameArgument);
+        nameArgument,
+        yearOption);
 
     return command;
 }
@@ -247,6 +250,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
 {
     var pathArgument = new Argument<FileInfo[]>("path", ParseFileInfo);
     var nameOption = new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true };
+    var yearOption = new Option<int>(new[] { "--year", "-y" }, () => -1, "The series year");
     var seasonOption = new Option<int>(new[] { "--season", "-s" }, () => -1, "The season number");
     var episodeOption = new Option<int>(new[] { "--episode", "-e" }, () => -1, "The episode number");
 
@@ -254,19 +258,20 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
     {
         pathArgument,
         nameOption,
+        yearOption,
         seasonOption,
         episodeOption,
     };
 
     command.SetHandler(
-        async (IConsole console, IHost host, FileInfo[] paths, string name, int season, int episode, string[]? lang, CancellationToken cancellationToken) =>
+        async (IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, string[]? lang, CancellationToken cancellationToken) =>
         {
             var regex = new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1));
             var pathList = paths.ToList();
 
             foreach (var search in host.Services.GetServices<IShowSearch>())
             {
-                await foreach (var series in search.SearchAsync(name, cancellationToken: cancellationToken).ConfigureAwait(false))
+                await foreach (var series in search.SearchAsync(name, year, cancellationToken: cancellationToken).ConfigureAwait(false))
                 {
                     var seasons = pathList
                         .Where(path => path.Exists)
@@ -347,6 +352,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
         },
         pathArgument,
         nameOption,
+        yearOption,
         seasonOption,
         episodeOption,
         langOption);

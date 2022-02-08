@@ -34,10 +34,10 @@ public sealed class TheTVDbShowSearch : IShowSearch
     }
 
     /// <inheritdoc/>
-    async IAsyncEnumerable<Series> IShowSearch.SearchAsync(string name, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+    async IAsyncEnumerable<Series> IShowSearch.SearchAsync(string name, int year, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
     {
         await foreach (var series in this
-            .SearchSeriesAsync(name, cancellationToken)
+            .SearchSeriesAsync(name, year, cancellationToken)
             .ConfigureAwait(false))
         {
             if (series is null || series.Name is null)
@@ -336,13 +336,19 @@ public sealed class TheTVDbShowSearch : IShowSearch
         }
     }
 
-    private async IAsyncEnumerable<SearchResult> SearchSeriesAsync(string name, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+    private async IAsyncEnumerable<SearchResult> SearchSeriesAsync(string name, int year, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         await this.AddTokenAsync(this.client, this.pin, cancellationToken).ConfigureAwait(false);
 
         var request = new RestRequest("search")
-            .AddQueryParameter("q", name)
+            .AddQueryParameter("query", name)
             .AddQueryParameter("type", "series");
+
+        if (year > 0)
+        {
+            request = request
+                .AddQueryParameter("year", year.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        }
 
         var response = await this.client.ExecuteGetTaskAsync<Response<ICollection<SearchResult>>>(request, cancellationToken).ConfigureAwait(false);
         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
