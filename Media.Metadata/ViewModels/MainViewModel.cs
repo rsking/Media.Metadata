@@ -22,9 +22,17 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(SelectedEditableVideo))]
+    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(CanSave))]
+    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyCanExecuteFor(nameof(SaveCommand))]
+    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(CanSearch))]
+    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyCanExecuteFor(nameof(SearchCommand))]
     private Video? selectedVideo;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(CanSave))]
+    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyCanExecuteFor(nameof(SaveCommand))]
+    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(CanSearch))]
+    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyCanExecuteFor(nameof(SearchCommand))]
     private bool isSaving;
 
     /// <summary>
@@ -52,6 +60,16 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Gets the selected videos.
     /// </summary>
     public IList<Video> SelectedVideos { get; } = new System.Collections.ObjectModel.ObservableCollection<Video>();
+
+    /// <summary>
+    /// Gets a value indicating whether this instance can save.
+    /// </summary>
+    public bool CanSave => !this.IsSaving && this.SelectedEditableVideo is not null;
+
+    /// <summary>
+    /// Gets a value indicating whether this instance can search.
+    /// </summary>
+    public bool CanSearch => !this.IsSaving && this.SelectedEditableVideo is not null;
 
     /// <summary>
     /// Adds videos.
@@ -118,7 +136,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Saves the current video.
     /// </summary>
     /// <returns>The task.</returns>
-    [ICommand]
+    [ICommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSave))]
     public async Task Save()
     {
         if (this.SelectedEditableVideo is not null)
@@ -176,7 +194,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Searches for the current video.
     /// </summary>
     /// <returns>The task.</returns>
-    [ICommand]
+    [ICommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSearch))]
     public async Task Search()
     {
         VideoSearchViewModel? viewModel = this.SelectedEditableVideo switch

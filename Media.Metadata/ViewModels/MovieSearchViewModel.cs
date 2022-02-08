@@ -19,10 +19,7 @@ internal partial class MovieSearchViewModel : VideoSearchViewModel
     /// Initialises a new instance of the <see cref="MovieSearchViewModel"/> class.
     /// </summary>
     /// <param name="movieSearch">The movie search.</param>
-    public MovieSearchViewModel(IMovieSearch movieSearch)
-    {
-        this.movieSearch = movieSearch;
-    }
+    public MovieSearchViewModel(IMovieSearch movieSearch) => this.movieSearch = movieSearch;
 
     /// <summary>
     /// Gets or sets the year.
@@ -34,6 +31,6 @@ internal partial class MovieSearchViewModel : VideoSearchViewModel
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The task.</returns>
-    [ICommand]
+    [ICommand(AllowConcurrentExecutions = false)]
     public Task Search() => this.SetVideos(this.movieSearch.SearchAsync(this.Name!, this.Year ?? 0, this.SelectedCountry?.Abbreviation ?? Country.Australia.Abbreviation));
 }

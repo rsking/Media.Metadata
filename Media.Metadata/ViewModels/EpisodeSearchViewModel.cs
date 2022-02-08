@@ -30,10 +30,7 @@ internal partial class EpisodeSearchViewModel : VideoSearchViewModel
     /// Initialises a new instance of the <see cref="EpisodeSearchViewModel"/> class.
     /// </summary>
     /// <param name="showSearch">The series search.</param>
-    public EpisodeSearchViewModel(IShowSearch showSearch)
-    {
-        this.showSearch = showSearch;
-    }
+    public EpisodeSearchViewModel(IShowSearch showSearch) => this.showSearch = showSearch;
 
     /// <summary>
     /// Gets the series.
@@ -49,7 +46,7 @@ internal partial class EpisodeSearchViewModel : VideoSearchViewModel
     /// Searches for the episode.
     /// </summary>
     /// <returns>The task.</returns>
-    [ICommand]
+    [ICommand(AllowConcurrentExecutions = false)]
     public async Task SearchSeries()
     {
         this.series.Clear();
