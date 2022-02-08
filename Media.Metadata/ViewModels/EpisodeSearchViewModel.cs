@@ -43,6 +43,11 @@ internal partial class EpisodeSearchViewModel : VideoSearchViewModel
     public IEnumerable<Season> Seasons => this.seasons;
 
     /// <summary>
+    /// Gets or sets the year.
+    /// </summary>
+    public int? Year { get; set; }
+
+    /// <summary>
     /// Searches for the episode.
     /// </summary>
     /// <returns>The task.</returns>
@@ -50,7 +55,7 @@ internal partial class EpisodeSearchViewModel : VideoSearchViewModel
     public async Task SearchSeries()
     {
         this.series.Clear();
-        await foreach (var s in this.showSearch.SearchAsync(this.Name!, this.SelectedCountry?.Abbreviation ?? Country.Australia.Abbreviation).ConfigureAwait(true))
+        await foreach (var s in this.showSearch.SearchAsync(this.Name!, this.Year ?? 0, this.SelectedCountry?.Abbreviation ?? Country.Australia.Abbreviation).ConfigureAwait(true))
         {
             this.series.Add(s);
         }
