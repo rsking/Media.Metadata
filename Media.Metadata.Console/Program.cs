@@ -253,6 +253,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
     var yearOption = new Option<int>(new[] { "--year", "-y" }, () => -1, "The series year");
     var seasonOption = new Option<int>(new[] { "--season", "-s" }, () => -1, "The season number");
     var episodeOption = new Option<int>(new[] { "--episode", "-e" }, () => -1, "The episode number");
+    var ignoreOption = new Option<bool>(new[] { "--ignore", "-i" }, "Ignore files that already have a valid episode");
 
     var command = new Command("episode")
     {
@@ -261,13 +262,18 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
         yearOption,
         seasonOption,
         episodeOption,
+        ignoreOption,
     };
 
     command.SetHandler(
-        async (IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, string[]? lang, CancellationToken cancellationToken) =>
+        async (IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, bool ignore, string[]? lang, CancellationToken cancellationToken) =>
         {
             var regex = new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1));
-            var pathList = paths.ToList();
+            var reader = host.Services.GetRequiredService<IReader>();
+            var pathList = paths
+                .Where(path => ShouldProcess(path, reader, ignore))
+                .ToList();
+            var updater = host.Services.GetRequiredService<IUpdater>();
 
             foreach (var search in host.Services.GetServices<IShowSearch>())
             {
@@ -338,7 +344,6 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                                 if (e is not null && e.Number == ep.Episode)
                                 {
                                     console.Out.WriteLine(FormattableString.CurrentCulture($"Found Episode {series.Name}:{s.Number}:{e.Name}"));
-                                    var updater = host.Services.GetRequiredService<IUpdater>();
                                     updater.UpdateEpisode(ep.Path.FullName, e with { Image = s.Image ?? series.Image ?? e.Image }, GetLanguages(lang));
 
                                     // remove this from the list of paths
@@ -349,12 +354,30 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                     }
                 }
             }
+
+            static bool ShouldProcess(FileInfo path, IReader reader, bool ignore)
+            {
+                if (!path.Exists)
+                {
+                    return false;
+                }
+
+                if (!ignore)
+                {
+                    return true;
+                }
+
+                // read the file to see if it has an episode
+                using var f = reader.ReadEpisode(path.FullName);
+                return f.Show is null || f.Season < 0 || f.Number < 0;
+            }
         },
         pathArgument,
         nameOption,
         yearOption,
         seasonOption,
         episodeOption,
+        ignoreOption,
         langOption);
 
     return command;
