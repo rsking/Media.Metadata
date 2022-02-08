@@ -16,6 +16,12 @@
     <AnalysisLevel>preview</AnalysisLevel>
   </PropertyGroup>
 
+  <PropertyGroup Label="Versions">
+    <DotnetVersion>6.0</DotnetVersion>
+    <DotnetMinorVersion>$(DotnetVersion).0</DotnetMinorVersion>
+    <DotnetPatchVersion>$(DotnetVersion).1</DotnetPatchVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <AdditionalFiles Include="$([MSBuild]::GetPathOfFileAbove(stylecop.json))" />
   </ItemGroup>

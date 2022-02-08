@@ -17,12 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(DotnetPatchVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.15.0" />
-    <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.21617.1" />
-    <PackageReference Include="System.Linq.Async" Version="5.1.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+    <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22106.2" />
+    <PackageReference Include="System.Linq.Async" Version="$(DotnetPatchVersion)" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="$(DotnetMinorVersion)" />
     <PackageReference Include="TMDbLib" Version="1.9.1" />
   </ItemGroup>
 
