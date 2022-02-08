@@ -268,7 +268,12 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
     command.SetHandler(
         async (IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, bool ignore, string[]? lang, CancellationToken cancellationToken) =>
         {
-            var regex = new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1));
+            var regex = new[]
+            {
+                new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
+                new System.Text.RegularExpressions.Regex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
+            };
+
             var reader = host.Services.GetRequiredService<IReader>();
             var pathList = paths
                 .Where(path => ShouldProcess(path, reader, ignore))
@@ -284,7 +289,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                         .GroupBy(
                             path => season switch
                             {
-                                -1 when regex.Match(path.Name) is System.Text.RegularExpressions.Match match => int.Parse(match.Groups["season"].Value, System.Globalization.CultureInfo.CurrentCulture),
+                                -1 when GetMatch(path.Name) is System.Text.RegularExpressions.Match match => int.Parse(match.Groups["season"].Value, System.Globalization.CultureInfo.CurrentCulture),
                                 _ => season,
                             },
                             path => path)
@@ -318,7 +323,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                             var episoides = seasonGroup
                                 .Select(path => episode switch
                                 {
-                                    -1 when regex.Match(path.Name) is System.Text.RegularExpressions.Match match => (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture), Path: path),
+                                    -1 when GetMatch(path.Name) is System.Text.RegularExpressions.Match match => (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture), Path: path),
                                     _ => (Episode: episode, Path: path),
                                 })
                                 .OrderBy(ep => ep.Episode)
@@ -353,6 +358,19 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                         }
                     }
                 }
+            }
+
+            System.Text.RegularExpressions.Match? GetMatch(string input)
+            {
+                foreach (var r in regex)
+                {
+                    if (r.Match(input) is System.Text.RegularExpressions.Match { Success: true } match)
+                    {
+                        return match;
+                    }
+                }
+
+                return default;
             }
 
             static bool ShouldProcess(FileInfo path, IReader reader, bool ignore)
