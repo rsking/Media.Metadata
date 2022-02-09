@@ -15,9 +15,11 @@ public sealed class TheTVDbShowSearch : IShowSearch
 {
     private static readonly System.Text.Json.JsonSerializerOptions Options = new() { PropertyNamingPolicy = new LowerCaseJsonNamingPolicy() };
 
-    private readonly IRestClient client;
+    private readonly RestClient client;
 
     private readonly string pin;
+
+    private readonly Uri baseUrl;
 
     private TokenResponse? tokenResponse;
 
@@ -26,10 +28,10 @@ public sealed class TheTVDbShowSearch : IShowSearch
     /// </summary>
     /// <param name="restClient">The rest client.</param>
     /// <param name="options">The options.</param>
-    public TheTVDbShowSearch(IRestClient restClient, Microsoft.Extensions.Options.IOptions<TheTVDbOptions> options)
+    public TheTVDbShowSearch(RestClient restClient, Microsoft.Extensions.Options.IOptions<TheTVDbOptions> options)
     {
         this.client = restClient;
-        this.client.BaseUrl = new Uri(options.Value.Url);
+        this.baseUrl = new Uri(options.Value.Url);
         this.pin = options.Value.Pin ?? throw new ArgumentNullException(nameof(options), "Pin cannot be null");
     }
 
@@ -50,7 +52,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
                 englishName = series.Name;
             }
 
-            yield return new RemoteSeries(englishName, GetSeasons(this.client, series.TvDbId, englishName, country, cancellationToken).ToEnumerable())
+            yield return new RemoteSeries(englishName, GetSeasons(this.client, this.baseUrl, series.TvDbId, englishName, country, cancellationToken).ToEnumerable())
             {
                 ImageUri = GetUri(series.ImageUrl),
             };
@@ -63,14 +65,20 @@ public sealed class TheTVDbShowSearch : IShowSearch
                 : default;
         }
 
-        static async IAsyncEnumerable<RemoteSeason> GetSeasons(IRestClient client, string? id, string? name, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+        static async IAsyncEnumerable<RemoteSeason> GetSeasons(RestClient client, Uri baseUrl, string? id, string? name, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            IRestRequest request = new RestRequest("/series/{id}/extended")
-                .AddUrlSegment("id", id);
+            var request = new RestRequest(new Uri(baseUrl, "series/{id}/extended"));
+            if (id is not null)
+            {
+                request.AddUrlSegment("id", id);
+            }
 
-            var seriesResponse = await client.ExecuteGetTaskAsync<Response<SeriesExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
+            var seriesResponse = await client.ExecuteGetAsync<Response<SeriesExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
-            if (!seriesResponse.IsSuccessful || seriesResponse.Data.Data is null || seriesResponse.Data.Data.Seasons is null)
+            if (!seriesResponse.IsSuccessful
+                || seriesResponse.Data is null
+                || seriesResponse.Data.Data is null
+                || seriesResponse.Data.Data.Seasons is null)
             {
                 yield break;
             }
@@ -88,6 +96,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     season.Number,
                     GetEpisodes(
                         client,
+                        baseUrl,
                         name,
                         season.Id,
                         country,
@@ -99,14 +108,15 @@ public sealed class TheTVDbShowSearch : IShowSearch
                 };
             }
 
-            static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(IRestClient client, string? name, int seasonId, string country, IEnumerable<Character> characters, IEnumerable<Company> companies, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+            static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(RestClient client, Uri baseUrl, string? name, int seasonId, string country, IEnumerable<Character> characters, IEnumerable<Company> companies, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
             {
-                IRestRequest request = new RestRequest("/seasons/{id}/extended")
+                var request = new RestRequest(new Uri(baseUrl, "seasons/{id}/extended"))
                     .AddUrlSegment("id", seasonId);
 
-                var seasonResponse = await client.ExecuteGetTaskAsync<Response<SeasonExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
+                var seasonResponse = await client.ExecuteGetAsync<Response<SeasonExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
-                if (!seasonResponse.IsSuccessful || seasonResponse.Data.Data is null || seasonResponse.Data.Data.Episodes is null)
+                if (!seasonResponse.IsSuccessful
+                    || seasonResponse.Data?.Data?.Episodes is null)
                 {
                     yield break;
                 }
@@ -118,19 +128,19 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     .ToAsyncEnumerable()
                     .SelectAwait(async episode =>
                     {
-                        IRestRequest request = new RestRequest("/episodes/{id}/extended")
+                        var request = new RestRequest(new Uri(baseUrl, "episodes/{id}/extended"))
                             .AddUrlSegment("id", episode.Id);
 
-                        var episodeResponse = await client.ExecuteGetTaskAsync<Response<EpisodeExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
+                        var episodeResponse = await client.ExecuteGetAsync<Response<EpisodeExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
-                        if (episodeResponse.Data.Data is EpisodeExtendedRecord extendedEpisode)
+                        if (episodeResponse.Data?.Data is EpisodeExtendedRecord extendedEpisode)
                         {
-                            request = new RestRequest("/episodes/{id}/translations/{language}")
+                            request = new RestRequest(new Uri(baseUrl, "episodes/{id}/translations/{language}"))
                                 .AddUrlSegment("id", episode.Id)
                                 .AddUrlSegment("language", "eng");
 
-                            var translationResponse = await client.ExecuteGetTaskAsync<Response<Translation>>(request, cancellationToken).ConfigureAwait(false);
-                            return translationResponse.IsSuccessful && translationResponse.Data.Data is not null
+                            var translationResponse = await client.ExecuteGetAsync<Response<Translation>>(request, cancellationToken).ConfigureAwait(false);
+                            return translationResponse.IsSuccessful && translationResponse.Data?.Data is not null
                                 ? extendedEpisode with { Name = translationResponse.Data.Data.Name, Overview = translationResponse.Data.Data.Overview }
                                 : extendedEpisode;
                         }
@@ -254,14 +264,14 @@ public sealed class TheTVDbShowSearch : IShowSearch
         }
     }
 
-    private static async Task<TokenResponse?> GetTokenAsync(IRestClient client, string? pin, CancellationToken cancellationToken = default)
+    private static async Task<TokenResponse?> GetTokenAsync(RestClient client, Uri baseUrl, string? pin, CancellationToken cancellationToken = default)
     {
         if (await GetTokenFromFile(cancellationToken: cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromFile)
         {
             return tokenFromFile;
         }
 
-        if (await RequestToken(client, pin, cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromWeb)
+        if (await RequestToken(client, baseUrl, pin, cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromWeb)
         {
             // write this to the local cache
             await WriteTokenToFile(tokenFromWeb, cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -270,13 +280,13 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         return default;
 
-        static async Task<TokenResponse?> RequestToken(IRestClient client, string? pin, CancellationToken cancellationToken)
+        static async Task<TokenResponse?> RequestToken(RestClient client, Uri baseUrl, string? pin, CancellationToken cancellationToken)
         {
-            var tokenRequest = new RestRequest("login", RestSharp.Method.POST)
+            var tokenRequest = new RestRequest(new Uri(baseUrl, "login"), Method.Post)
                 .AddJsonBody(new TokenRequest { ApiKey = TheTVDbHelpers.ApiKey, Pin = pin });
 
-            var response = await client.ExecutePostTaskAsync<Response<TokenResponse>>(tokenRequest, cancellationToken).ConfigureAwait(false);
-            return response.IsSuccessful ? response.Data.Data : default;
+            var response = await client.ExecutePostAsync<Response<TokenResponse>>(tokenRequest, cancellationToken).ConfigureAwait(false);
+            return response.IsSuccessful ? response.Data?.Data : default;
         }
 
         static async Task<TokenResponse?> GetTokenFromFile(string? fileName = null, CancellationToken cancellationToken = default)
@@ -307,12 +317,12 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
     private static bool IsAuthorizationParameter(Parameter parameter) => parameter.Type == ParameterType.HttpHeader && string.Equals(parameter.Name, "Authorization", StringComparison.Ordinal);
 
-    private async Task AddTokenAsync(IRestClient client, string pin, CancellationToken cancellationToken = default)
+    private async Task AddTokenAsync(RestClient client, Uri baseUrl, string pin, CancellationToken cancellationToken = default)
     {
         if (!client.DefaultParameters
             .Any(IsAuthorizationParameter))
         {
-            this.tokenResponse ??= await GetTokenAsync(client, pin, cancellationToken).ConfigureAwait(false);
+            this.tokenResponse ??= await GetTokenAsync(client, baseUrl, pin, cancellationToken).ConfigureAwait(false);
             if (this.tokenResponse is null)
             {
                 throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
@@ -322,23 +332,26 @@ public sealed class TheTVDbShowSearch : IShowSearch
         }
     }
 
-    private async Task UpdateTokenAsync(IRestClient client, string pin, CancellationToken cancellationToken = default)
+    private async Task UpdateTokenAsync(RestClient client, Uri baseUrl, string pin, CancellationToken cancellationToken = default)
     {
-        this.tokenResponse = await GetTokenAsync(client, pin, cancellationToken).ConfigureAwait(false);
+        this.tokenResponse = await GetTokenAsync(client, baseUrl, pin, cancellationToken).ConfigureAwait(false);
         if (this.tokenResponse is null)
         {
             throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
         }
 
-        foreach (var parameter in client.DefaultParameters.Where(IsAuthorizationParameter))
+        var parameters = client.DefaultParameters.Where(IsAuthorizationParameter).ToList();
+        foreach (var parameter in parameters)
         {
-            parameter.Value = $"Bearer {this.tokenResponse.Token}";
+            client.DefaultParameters.RemoveParameter(parameter);
         }
+
+        client.DefaultParameters.AddParameters(parameters.Select(parameter => parameter with { Value = $"Bearer {this.tokenResponse.Token}" }));
     }
 
     private async IAsyncEnumerable<SearchResult> SearchSeriesAsync(string name, int year, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        await this.AddTokenAsync(this.client, this.pin, cancellationToken).ConfigureAwait(false);
+        await this.AddTokenAsync(this.client, this.baseUrl, this.pin, cancellationToken).ConfigureAwait(false);
 
         var request = new RestRequest("search")
             .AddQueryParameter("query", name)
@@ -346,14 +359,13 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         if (year > 0)
         {
-            request = request
-                .AddQueryParameter("year", year.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            request.AddQueryParameter("year", year.ToString(System.Globalization.CultureInfo.InvariantCulture));
         }
 
-        var response = await this.client.ExecuteGetTaskAsync<Response<ICollection<SearchResult>>>(request, cancellationToken).ConfigureAwait(false);
+        var response = await this.client.ExecuteGetAsync<Response<ICollection<SearchResult>>>(request, cancellationToken).ConfigureAwait(false);
         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
-            await this.UpdateTokenAsync(this.client, this.pin, cancellationToken).ConfigureAwait(false);
+            await this.UpdateTokenAsync(this.client, this.baseUrl, this.pin, cancellationToken).ConfigureAwait(false);
         }
 
         if (response.IsSuccessful && response.Data?.Data is not null)

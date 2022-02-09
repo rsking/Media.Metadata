@@ -25,14 +25,14 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview1" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Input" Version="7.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(DotnetPatchVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.8" />
-    <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.15.0" />
-    <PackageReference Include="System.Linq.Async" Version="5.1.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+    <PackageReference Include="RestSharp" Version="107.2.1" />
+    <PackageReference Include="System.Linq.Async" Version="$(DotnetPatchVersion)" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="$(DotnetMinorVersion)" />
     <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.20348" />
     <PackageReference Include="TMDbLib" Version="1.9.1" />
     <Manifest Include="$(ApplicationManifest)" />

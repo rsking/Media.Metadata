@@ -13,7 +13,7 @@ using Media.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Hosting;
-using RestSharp.Serializers.SystemTextJson;
+using RestSharp.Serializers.Json;
 
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
@@ -61,14 +61,6 @@ await commandBuilder
                 .AddTheTVDB(builder.Configuration)
                 .AddMp4v2(Path.PathSeparator)
                 .AddTagLib();
-
-            services
-                .AddTransient<RestSharp.IRestClient>(_ =>
-                    new RestSharp.RestClient().UseSystemTextJson(new System.Text.Json.JsonSerializerOptions
-                    {
-                        Converters = { new JsonDateConverter() },
-                        PropertyNameCaseInsensitive = true,
-                    }));
 
             services
                 .Configure<InvocationLifetimeOptions>(options => options.SuppressStatusMessages = true);

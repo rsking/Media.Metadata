@@ -8,6 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using RestSharp.Serializers.Json;
 
 /// <summary>
 /// Extension methods for <see cref="IServiceCollection"/>.
@@ -30,7 +31,10 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The services.</param>
     /// <returns>The input services.</returns>
-    public static IServiceCollection AddTMDb(this IServiceCollection services) => services.AddTransient<Media.Metadata.IMovieSearch, Media.Metadata.TMDb.TMDbMovieSearch>();
+    public static IServiceCollection AddTMDb(this IServiceCollection services) =>
+        services
+            .AddRestSharp()
+            .AddTransient<Media.Metadata.IMovieSearch, Media.Metadata.TMDb.TMDbMovieSearch>();
 
     /// <summary>
     /// Adds the <see cref="TagLib"/> services.
@@ -66,5 +70,23 @@ public static class ServiceCollectionExtensions
 
             AppDomain.CurrentDomain.AddNativePath(new string(pathSeparator, 1));
         }
+    }
+
+    /// <summary>
+    /// Adds rest sharp to the services.
+    /// </summary>
+    /// <param name="services">The services.</param>
+    /// <returns>The input services.</returns>
+    public static IServiceCollection AddRestSharp(this IServiceCollection services)
+    {
+        services
+            .TryAddTransient(_ =>
+                new RestSharp.RestClient().UseSystemTextJson(new System.Text.Json.JsonSerializerOptions
+                {
+                    Converters = { new Media.Metadata.JsonDateConverter() },
+                    PropertyNameCaseInsensitive = true,
+                }));
+
+        return services;
     }
 }
