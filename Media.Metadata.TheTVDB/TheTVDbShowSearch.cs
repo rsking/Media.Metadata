@@ -67,7 +67,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         static async IAsyncEnumerable<RemoteSeason> GetSeasons(RestClient client, Uri baseUrl, string? id, string? name, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var request = new RestRequest(new Uri(baseUrl, "series/{id}/extended"));
+            var request = new RestRequest(CreateUri(baseUrl, "series/{id}/extended"));
             if (id is not null)
             {
                 request.AddUrlSegment("id", id);
@@ -110,7 +110,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
             static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(RestClient client, Uri baseUrl, string? name, int seasonId, string country, IEnumerable<Character> characters, IEnumerable<Company> companies, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
             {
-                var request = new RestRequest(new Uri(baseUrl, "seasons/{id}/extended"))
+                var request = new RestRequest(CreateUri(baseUrl, "seasons/{id}/extended"))
                     .AddUrlSegment("id", seasonId);
 
                 var seasonResponse = await client.ExecuteGetAsync<Response<SeasonExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
@@ -128,14 +128,14 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     .ToAsyncEnumerable()
                     .SelectAwait(async episode =>
                     {
-                        var request = new RestRequest(new Uri(baseUrl, "episodes/{id}/extended"))
+                        var request = new RestRequest(CreateUri(baseUrl, "episodes/{id}/extended"))
                             .AddUrlSegment("id", episode.Id);
 
                         var episodeResponse = await client.ExecuteGetAsync<Response<EpisodeExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
 
                         if (episodeResponse.Data?.Data is EpisodeExtendedRecord extendedEpisode)
                         {
-                            request = new RestRequest(new Uri(baseUrl, "episodes/{id}/translations/{language}"))
+                            request = new RestRequest(CreateUri(baseUrl, "episodes/{id}/translations/{language}"))
                                 .AddUrlSegment("id", episode.Id)
                                 .AddUrlSegment("language", "eng");
 
@@ -282,7 +282,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         static async Task<TokenResponse?> RequestToken(RestClient client, Uri baseUrl, string? pin, CancellationToken cancellationToken)
         {
-            var tokenRequest = new RestRequest(new Uri(baseUrl, "login"), Method.Post)
+            var tokenRequest = new RestRequest(CreateUri(baseUrl, "login"), Method.Post)
                 .AddJsonBody(new TokenRequest { ApiKey = TheTVDbHelpers.ApiKey, Pin = pin });
 
             var response = await client.ExecutePostAsync<Response<TokenResponse>>(tokenRequest, cancellationToken).ConfigureAwait(false);
@@ -349,11 +349,21 @@ public sealed class TheTVDbShowSearch : IShowSearch
         client.DefaultParameters.AddParameters(parameters.Select(parameter => parameter with { Value = $"Bearer {this.tokenResponse.Token}" }));
     }
 
+    private Uri CreateUri(string? resource)
+    {
+        return CreateUri(this.baseUrl, resource);
+    }
+
+    private static Uri CreateUri(Uri baseUrl, string? resource)
+    {
+        return baseUrl.MergeBaseUrlAndResource(resource);
+    }
+
     private async IAsyncEnumerable<SearchResult> SearchSeriesAsync(string name, int year, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         await this.AddTokenAsync(this.client, this.baseUrl, this.pin, cancellationToken).ConfigureAwait(false);
 
-        var request = new RestRequest("search")
+        var request = new RestRequest(this.CreateUri("search"))
             .AddQueryParameter("query", name)
             .AddQueryParameter("type", "series");
 
