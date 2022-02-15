@@ -683,10 +683,10 @@ internal class MetadataTags : IDisposable
 
         this.ArtworkFormat = artworkStructure.type switch
         {
-            NativeMethods.ArtworkType.Bmp => ImageFormat.Bmp,
-            NativeMethods.ArtworkType.Gif => ImageFormat.Gif,
-            NativeMethods.ArtworkType.Jpeg => ImageFormat.Jpeg,
-            NativeMethods.ArtworkType.Png => ImageFormat.Png,
+            NativeMethods.MP4TagArtworkType.Bmp => ImageFormat.Bmp,
+            NativeMethods.MP4TagArtworkType.Gif => ImageFormat.Gif,
+            NativeMethods.MP4TagArtworkType.Jpeg => ImageFormat.Jpeg,
+            NativeMethods.MP4TagArtworkType.Png => ImageFormat.Png,
             _ => ImageFormat.MemoryBmp,
         };
     }
@@ -711,11 +711,11 @@ internal class MetadataTags : IDisposable
 
         newArtwork.type = this.ArtworkFormat switch
         {
-            not null when this.ArtworkFormat.Equals(ImageFormat.Bmp) => NativeMethods.ArtworkType.Bmp,
-            not null when this.ArtworkFormat.Equals(ImageFormat.Jpeg) => NativeMethods.ArtworkType.Jpeg,
-            not null when this.ArtworkFormat.Equals(ImageFormat.Gif) => NativeMethods.ArtworkType.Gif,
-            not null when this.ArtworkFormat.Equals(ImageFormat.Png) => NativeMethods.ArtworkType.Png,
-            _ => NativeMethods.ArtworkType.Undefined,
+            not null when this.ArtworkFormat.Equals(ImageFormat.Bmp) => NativeMethods.MP4TagArtworkType.Bmp,
+            not null when this.ArtworkFormat.Equals(ImageFormat.Jpeg) => NativeMethods.MP4TagArtworkType.Jpeg,
+            not null when this.ArtworkFormat.Equals(ImageFormat.Gif) => NativeMethods.MP4TagArtworkType.Gif,
+            not null when this.ArtworkFormat.Equals(ImageFormat.Png) => NativeMethods.MP4TagArtworkType.Png,
+            _ => NativeMethods.MP4TagArtworkType.Undefined,
         };
 
         var newArtworkPtr = Marshal.AllocHGlobal(Marshal.SizeOf(newArtwork));

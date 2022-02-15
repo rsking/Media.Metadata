@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="NativeMethods.*.cs" DependentUpon="NativeMethods.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Media.Metadata.Core\Media.Metadata.Core.csproj" />
   </ItemGroup>
 
