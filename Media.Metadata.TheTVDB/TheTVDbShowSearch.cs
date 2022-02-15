@@ -264,9 +264,9 @@ public sealed class TheTVDbShowSearch : IShowSearch
         }
     }
 
-    private static async Task<TokenResponse?> GetTokenAsync(RestClient client, Uri baseUrl, string? pin, CancellationToken cancellationToken = default)
+    private static async Task<TokenResponse?> GetTokenAsync(RestClient client, Uri baseUrl, string? pin, bool force, CancellationToken cancellationToken = default)
     {
-        if (await GetTokenFromFile(cancellationToken: cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromFile)
+        if (!force && await GetTokenFromFile(cancellationToken: cancellationToken).ConfigureAwait(false) is TokenResponse tokenFromFile)
         {
             return tokenFromFile;
         }
@@ -315,49 +315,50 @@ public sealed class TheTVDbShowSearch : IShowSearch
         }
     }
 
-    private static bool IsAuthorizationParameter(Parameter parameter) => parameter.Type == ParameterType.HttpHeader && string.Equals(parameter.Name, "Authorization", StringComparison.Ordinal);
+    private static bool IsAuthorizationParameter(Parameter parameter) => parameter.Type == ParameterType.HttpHeader && string.Equals(parameter.Name, KnownHeaders.Authorization, StringComparison.Ordinal);
+
+    private static Uri CreateUri(Uri baseUrl, string? resource) => baseUrl.MergeBaseUrlAndResource(resource);
 
     private async Task AddTokenAsync(RestClient client, Uri baseUrl, string pin, CancellationToken cancellationToken = default)
     {
         if (!client.DefaultParameters
             .Any(IsAuthorizationParameter))
         {
-            this.tokenResponse ??= await GetTokenAsync(client, baseUrl, pin, cancellationToken).ConfigureAwait(false);
+            this.tokenResponse ??= await GetTokenAsync(client, baseUrl, pin, force: false, cancellationToken).ConfigureAwait(false);
             if (this.tokenResponse is null)
             {
                 throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
             }
 
-            client.AddDefaultHeader("Authorization", $"Bearer {this.tokenResponse.Token}");
+            client.AddDefaultHeader(KnownHeaders.Authorization, $"Bearer {this.tokenResponse.Token}");
         }
     }
 
     private async Task UpdateTokenAsync(RestClient client, Uri baseUrl, string pin, CancellationToken cancellationToken = default)
     {
-        this.tokenResponse = await GetTokenAsync(client, baseUrl, pin, cancellationToken).ConfigureAwait(false);
+        this.tokenResponse = await GetTokenAsync(client, baseUrl, pin, force: true, cancellationToken).ConfigureAwait(false);
         if (this.tokenResponse is null)
         {
             throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
         }
 
+        // see if we need to
+        var value = $"Bearer {this.tokenResponse.Token}";
         var parameters = client.DefaultParameters.Where(IsAuthorizationParameter).ToList();
+        if (parameters.Any(parameter => string.Equals(parameter.Value?.ToString(), value, StringComparison.Ordinal)))
+        {
+            return;
+        }
+
         foreach (var parameter in parameters)
         {
             client.DefaultParameters.RemoveParameter(parameter);
         }
 
-        client.DefaultParameters.AddParameters(parameters.Select(parameter => parameter with { Value = $"Bearer {this.tokenResponse.Token}" }));
+        client.DefaultParameters.AddParameters(parameters.Select(parameter => Parameter.CreateParameter(parameter.Name, value, parameter.Type, parameter.Encode)));
     }
 
-    private Uri CreateUri(string? resource)
-    {
-        return CreateUri(this.baseUrl, resource);
-    }
-
-    private static Uri CreateUri(Uri baseUrl, string? resource)
-    {
-        return baseUrl.MergeBaseUrlAndResource(resource);
-    }
+    private Uri CreateUri(string? resource) => CreateUri(this.baseUrl, resource);
 
     private async IAsyncEnumerable<SearchResult> SearchSeriesAsync(string name, int year, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
@@ -376,6 +377,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             await this.UpdateTokenAsync(this.client, this.baseUrl, this.pin, cancellationToken).ConfigureAwait(false);
+            response = await this.client.ExecuteGetAsync<Response<ICollection<SearchResult>>>(request, cancellationToken).ConfigureAwait(false);
         }
 
         if (response.IsSuccessful && response.Data?.Data is not null)
