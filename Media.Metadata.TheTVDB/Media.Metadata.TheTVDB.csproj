@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Media.Metadata.Core\Media.Metadata.Core.csproj" />
+    <ProjectReference Include="..\Media.Metadata.Rest\Media.Metadata.Rest.csproj" />
   </ItemGroup>
 
   <ItemGroup>

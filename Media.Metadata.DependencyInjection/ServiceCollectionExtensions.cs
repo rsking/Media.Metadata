@@ -27,6 +27,17 @@ public static class ServiceCollectionExtensions
             .AddTransient<Media.Metadata.IShowSearch, Media.Metadata.TheTVDB.TheTVDbShowSearch>();
 
     /// <summary>
+    /// Adds the TV Maze services.
+    /// </summary>
+    /// <param name="services">The services.</param>
+    /// <param name="configuration">The configuration.</param>
+    /// <returns>The input services.</returns>
+    public static IServiceCollection AddTvMaze(this IServiceCollection services, IConfiguration configuration) =>
+        services
+            .Configure<Media.Metadata.TvMaze.TvMazeOptions>(configuration.GetSection("TvMaze"))
+            .AddTransient<Media.Metadata.IShowSearch, Media.Metadata.TvMaze.TvMazeShowSearch>();
+
+    /// <summary>
     /// Adds the TMDb services.
     /// </summary>
     /// <param name="services">The services.</param>

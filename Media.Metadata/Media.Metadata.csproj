@@ -30,7 +30,7 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.8" />
-    <PackageReference Include="RestSharp" Version="107.2.1" />
+    <PackageReference Include="RestSharp" Version="107.3.0" />
     <PackageReference Include="System.Linq.Async" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="$(DotnetMinorVersion)" />
     <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.20348" />

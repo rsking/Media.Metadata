@@ -4,12 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Media.Metadata.TheTVDB;
+namespace Media.Metadata;
 
 /// <summary>
-/// <see cref="Uri"/> extensions.
+/// Extensions for <see cref="Uri"/> instances.
 /// </summary>
-internal static class UriExtensions
+public static class UriExtensions
 {
     /// <summary>
     /// Merges the base URL and the resource.
