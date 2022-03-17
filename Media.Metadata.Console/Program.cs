@@ -263,6 +263,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
             {
                 new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
                 new System.Text.RegularExpressions.Regex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
+                new System.Text.RegularExpressions.Regex("Series (?<season>\\d+) Ep (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
             };
 
             var reader = host.Services.GetRequiredService<IReader>();
