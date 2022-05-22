@@ -9,7 +9,7 @@ namespace Media.Metadata.TvMaze;
 using RestSharp;
 
 /// <summary>
-/// The TV Maze show search
+/// The TV Maze show search.
 /// </summary>
 public class TvMazeShowSearch : IShowSearch
 {
@@ -33,6 +33,11 @@ public class TvMazeShowSearch : IShowSearch
     {
         await foreach (var series in this.SearchSeriesAsync(name, cancellationToken).ConfigureAwait(false))
         {
+            if (series.Show is null)
+            {
+                continue;
+            }
+
             var castLock = new NeoSmart.AsyncLock.AsyncLock();
             ICollection<Cast>? cast = default;
 
@@ -163,7 +168,7 @@ public class TvMazeShowSearch : IShowSearch
     {
         public double Score { get; set; }
 
-        public Show Show { get; set; }
+        public Show? Show { get; set; }
     }
 
     private sealed record class Show
