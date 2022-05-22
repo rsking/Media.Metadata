@@ -88,6 +88,7 @@ public class Mp4Reader : IReader
         Network = tags.TVNetwork,
         Number = tags.EpisodeNumber ?? -1,
         Id = tags.EpisodeId,
+        Part = tags.ContentId,
     };
 
     private static T Update<T>(T video, MetadataTags tags, TrackList? trackList)

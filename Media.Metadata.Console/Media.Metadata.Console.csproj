@@ -23,7 +23,7 @@
     <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22114.1" />
     <PackageReference Include="System.Linq.Async" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="$(DotnetMinorVersion)" />
-    <PackageReference Include="TMDbLib" Version="1.9.1" />
+    <PackageReference Include="TMDbLib" Version="1.9.2" />
   </ItemGroup>
 
   <ItemGroup>

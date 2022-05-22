@@ -46,6 +46,7 @@ public class Mp4Writer : IUpdater
             file.Tags.TVShow = episode.Show;
             file.Tags.EpisodeId = episode.Id;
             file.Tags.TVNetwork = episode.Network;
+            file.Tags.ContentId = episode.Part;
         }
 
         file.Save();

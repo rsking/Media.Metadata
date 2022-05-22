@@ -57,6 +57,7 @@ internal record class EpisodeWithImageSource(
             Season = episode.Season,
             Number = episode.Number,
             Id = episode.Id,
+            Part = episode.Part,
             SoftwareBitmap = softwareBitmap,
             ImageSource = imageSource,
         };

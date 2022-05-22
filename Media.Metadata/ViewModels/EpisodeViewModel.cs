@@ -26,6 +26,9 @@ internal partial class EpisodeViewModel : VideoViewModel
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? id;
 
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    private int? part;
+
     /// <summary>
     /// Initialises a new instance of the <see cref="EpisodeViewModel"/> class.
     /// </summary>
@@ -38,6 +41,7 @@ internal partial class EpisodeViewModel : VideoViewModel
         this.Season = episode.Season;
         this.Number = episode.Number;
         this.Id = episode.Id;
+        this.Part = episode.Part;
     }
 
     /// <inheritdoc/>
@@ -50,6 +54,7 @@ internal partial class EpisodeViewModel : VideoViewModel
         Season = this.Season,
         Number = this.Number,
         Id = this.Id,
+        Part = this.Part,
         Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
         Image = await this.CreateImageAsync().ConfigureAwait(false),
     };
@@ -66,6 +71,7 @@ internal partial class EpisodeViewModel : VideoViewModel
             this.Season = episode.Season;
             this.Number = episode.Number;
             this.Id = episode.Id;
+            this.Part = episode.Part;
         }
     }
 }

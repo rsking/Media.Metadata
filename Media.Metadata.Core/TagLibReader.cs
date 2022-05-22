@@ -79,6 +79,7 @@ public class TagLibReader : IReader
             Season = GetInt32(appleTag, "tvsn").SingleOrDefault(),
             Number = GetInt32(appleTag, "tves").SingleOrDefault(),
             Id = appleTag.GetText("tven").SingleOrDefault(),
+            Part = GetInt32(appleTag, "cnID").FirstOrDefault(),
         };
 
         static int[] GetInt32(TagLib.Mpeg4.AppleTag appleTag, TagLib.ByteVector byteVector)

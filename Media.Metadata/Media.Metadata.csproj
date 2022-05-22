@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Input" Version="7.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(DotnetPatchVersion)" />
@@ -34,7 +34,7 @@
     <PackageReference Include="System.Linq.Async" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="$(DotnetMinorVersion)" />
     <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.20348" />
-    <PackageReference Include="TMDbLib" Version="1.9.1" />
+    <PackageReference Include="TMDbLib" Version="1.9.2" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 

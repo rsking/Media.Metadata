@@ -44,4 +44,9 @@ public abstract record Episode(
     /// Gets the ID.
     /// </summary>
     public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the part.
+    /// </summary>
+    public int? Part { get; init; } = default;
 }

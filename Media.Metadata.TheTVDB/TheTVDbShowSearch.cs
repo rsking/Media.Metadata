@@ -686,7 +686,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         public ICollection<string>? OverviewTranslations { get; init; }
 
-        public ICollection<string>? Aliases { get; init; }
+        public ICollection<Alias>? Aliases { get; init; }
 
         public string? Country { get; init; }
 

@@ -2,8 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:behaviors="using:Media.Metadata.Behaviors"
-             xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
              xmlns:c="using:Media.Metadata.Controls"
+             xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
              xmlns:converters="using:Media.Metadata.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="using:Microsoft.Xaml.Interactivity"
@@ -11,9 +11,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:models="using:Media.Metadata.Models"
              xmlns:vm="using:Media.Metadata.ViewModels"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type=vm:MainViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=vm:MainViewModel,
+                                              IsDesignTimeCreatable=False}"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,7 +27,9 @@
     </UserControl.Resources>
 
     <Grid>
-        <SplitView DisplayMode="Inline" IsPaneOpen="True" PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
+        <SplitView DisplayMode="Inline"
+                   IsPaneOpen="True"
+                   PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -33,9 +37,13 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <CommandBar DefaultLabelPosition="Right" Grid.Row="0">
-                        <AppBarButton Command="{Binding AddVideosCommand, Mode=OneWay}" Icon="Add" Label="Add" />
-                        <AppBarButton Command="{Binding RemoveVideoCommand, Mode=OneWay}" Icon="Remove" Label="Remove" />
+                    <CommandBar Grid.Row="0" DefaultLabelPosition="Right">
+                        <AppBarButton Command="{Binding AddVideosCommand, Mode=OneWay}"
+                                      Icon="Add"
+                                      Label="Add" />
+                        <AppBarButton Command="{Binding RemoveVideoCommand, Mode=OneWay}"
+                                      Icon="Remove"
+                                      Label="Remove" />
                     </CommandBar>
 
                     <ListBox Grid.Row="1"
@@ -56,8 +64,15 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
-                                    <Image Grid.RowSpan="2" Width="80" Height="120" Margin="5" Source="{Binding ImageSource, Mode=OneWay}" />
-                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Margin="5" />
+                                    <Image Grid.RowSpan="2"
+                                           Width="80"
+                                           Height="120"
+                                           Margin="5"
+                                           Source="{Binding ImageSource, Mode=OneWay}" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="1"
+                                               Margin="5"
+                                               Text="{Binding Name}" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -71,12 +86,16 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <CommandBar DefaultLabelPosition="Right">
-                    <AppBarButton Command="{Binding SearchCommand, Mode=OneWay}" Icon="Find" Label="Search" />
-                    <AppBarButton Command="{Binding SaveCommand, Mode=OneWay}" Icon="Save" Label="Save" />
+                    <AppBarButton Command="{Binding SearchCommand, Mode=OneWay}"
+                                  Icon="Find"
+                                  Label="Search" />
+                    <AppBarButton Command="{Binding SaveCommand, Mode=OneWay}"
+                                  Icon="Save"
+                                  Label="Save" />
                 </CommandBar>
 
-                <ScrollViewer DataContext="{Binding SelectedEditableVideo}"
-                              Grid.Row="1"
+                <ScrollViewer Grid.Row="1"
+                              DataContext="{Binding SelectedEditableVideo}"
                               HorizontalScrollBarVisibility="Disabled"
                               HorizontalScrollMode="Disabled"
                               VerticalScrollBarVisibility="Auto"
@@ -93,9 +112,19 @@
                                     <ColumnDefinition Width="150" />
                                     <ColumnDefinition Width="200" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Id}" Margin="2" Grid.Column="0" />
-                                <TextBox Header="Type" IsReadOnly="True" Text="{x:Bind Type}" Margin="2" Grid.Column="1" />
-                                <ComboBox Header="Language" ItemsSource="{x:Bind Languages}" SelectedItem="{x:Bind SelectedLanguage, Mode=TwoWay}" Margin="2" Grid.Column="2">
+                                <TextBlock Grid.Column="0"
+                                           Margin="2"
+                                           Text="{Binding Id}" />
+                                <TextBox Grid.Column="1"
+                                         Margin="2"
+                                         Header="Type"
+                                         IsReadOnly="True"
+                                         Text="{x:Bind Type}" />
+                                <ComboBox Grid.Column="2"
+                                          Margin="2"
+                                          Header="Language"
+                                          ItemsSource="{x:Bind Languages}"
+                                          SelectedItem="{x:Bind SelectedLanguage, Mode=TwoWay}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Converter={StaticResource Iso639ToNameConverter}}" />
@@ -107,38 +136,70 @@
                         <c:EditableVideoTemplateSelector x:Key="EditableVideoTemplateSelector">
                             <c:EditableVideoTemplateSelector.EpisodeTemplate>
                                 <DataTemplate x:DataType="vm:EpisodeViewModel">
-                                    <StackPanel Grid.Column="1"
-                                                Grid.Row="1">
+                                    <StackPanel Grid.Row="1" Grid.Column="1">
+                                        <StackPanel.Resources>
+                                            <converters:NullableIntToDoubleConverter x:Key="NullableIntToDoubleConverter" />
+                                        </StackPanel.Resources>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" TextWrapping="Wrap" />
-                                            <ToggleSwitch Grid.Column="1" OffContent="SD" OnContent="HD" Margin="2" />
+                                            <TextBox Margin="2"
+                                                     Header="Name"
+                                                     Text="{Binding Name, Mode=TwoWay}"
+                                                     TextWrapping="Wrap" />
+                                            <ToggleSwitch Grid.Column="1"
+                                                          Margin="2"
+                                                          OffContent="SD"
+                                                          OnContent="HD" />
                                         </Grid>
-                                        <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" />
+                                        <TextBox Height="200"
+                                                 Margin="2"
+                                                 AcceptsReturn="True"
+                                                 Header="Description"
+                                                 IsSpellCheckEnabled="True"
+                                                 Text="{Binding Description, Mode=TwoWay}"
+                                                 TextWrapping="Wrap" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Header="Producers" Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
-                                            <TextBox Grid.Column="1" Header="Directors" Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                            <TextBox Margin="2"
+                                                     Header="Producers"
+                                                     Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}"
+                                                     TextWrapping="Wrap" />
+                                            <TextBox Grid.Column="1"
+                                                     Margin="2"
+                                                     Header="Directors"
+                                                     Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}"
+                                                     TextWrapping="Wrap" />
                                         </Grid>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Header="Studios" Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                            <TextBox Margin="2"
+                                                     Header="Studios"
+                                                     Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}"
+                                                     TextWrapping="Wrap" />
                                             <Grid Grid.Column="1" DataContext="{Binding Rating, Mode=OneWay}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
-                                                <ComboBox Header="Country" Grid.Column="0" Margin="2" ItemsSource="{Binding Countries, Mode=OneWay}" SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
-                                                <ComboBox Header="Rating" Grid.Column="1" Margin="2" ItemsSource="{Binding Ratings, Mode=OneWay}" SelectedItem="{Binding SelectedRating, Mode=TwoWay}">
+                                                <ComboBox Grid.Column="0"
+                                                          Margin="2"
+                                                          Header="Country"
+                                                          ItemsSource="{Binding Countries, Mode=OneWay}"
+                                                          SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
+                                                <ComboBox Grid.Column="1"
+                                                          Margin="2"
+                                                          Header="Rating"
+                                                          ItemsSource="{Binding Ratings, Mode=OneWay}"
+                                                          SelectedItem="{Binding SelectedRating, Mode=TwoWay}">
                                                     <ComboBox.ItemTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding ContentRating, Mode=OneWay}" />
@@ -147,54 +208,110 @@
                                                 </ComboBox>
                                             </Grid>
                                         </Grid>
-                                        <TextBox Header="Screen Writers" Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
-                                        <TextBox Header="Cast" Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
-                                        <TextBox Header="Composers" Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
-                                        <TextBox Header="Show" Text="{Binding Show, Mode=TwoWay}" Margin="2" TextWrapping="Wrap" />
-                                        <TextBox Header="Network" Text="{Binding Network, Mode=TwoWay}" Margin="2" TextWrapping="Wrap" />
-                                        <NumberBox Header="Season" Value="{Binding Season, Mode=TwoWay}" Margin="2" />
-                                        <NumberBox Header="Number" Value="{Binding Number, Mode=TwoWay}" Margin="2" />
-                                        <TextBox Header="Episode ID" Text="{Binding Id, Mode=TwoWay}" Margin="2" TextWrapping="Wrap" />
-                                        <DatePicker Header="Release Date" Date="{Binding Release, Mode=TwoWay}" Margin="2" />
+                                        <TextBox Margin="2"
+                                                 Header="Screen Writers"
+                                                 Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}"
+                                                 TextWrapping="Wrap" />
+                                        <TextBox Margin="2"
+                                                 Header="Cast"
+                                                 Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}"
+                                                 TextWrapping="Wrap" />
+                                        <TextBox Margin="2"
+                                                 Header="Composers"
+                                                 Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}"
+                                                 TextWrapping="Wrap" />
+                                        <TextBox Margin="2"
+                                                 Header="Show"
+                                                 Text="{Binding Show, Mode=TwoWay}"
+                                                 TextWrapping="Wrap" />
+                                        <TextBox Margin="2"
+                                                 Header="Network"
+                                                 Text="{Binding Network, Mode=TwoWay}"
+                                                 TextWrapping="Wrap" />
+                                        <NumberBox Margin="2"
+                                                   Header="Season"
+                                                   Value="{Binding Season, Mode=TwoWay}" />
+                                        <NumberBox Margin="2"
+                                                   Header="Number"
+                                                   Value="{Binding Number, Mode=TwoWay}" />
+                                        <NumberBox Margin="2"
+                                                   Header="Part"
+                                                   Value="{Binding Part, Mode=TwoWay, Converter={StaticResource NullableIntToDoubleConverter}}" />
+                                        <TextBox Margin="2"
+                                                 Header="Episode ID"
+                                                 Text="{Binding Id, Mode=TwoWay}"
+                                                 TextWrapping="Wrap" />
+                                        <DatePicker Margin="2"
+                                                    Date="{Binding Release, Mode=TwoWay}"
+                                                    Header="Release Date" />
                                         <TextBlock Text="Tracks" />
-                                        <ItemsControl ItemsSource="{Binding Tracks, Mode=OneWay}" ItemTemplate="{StaticResource TrackTemplate}" />
+                                        <ItemsControl ItemTemplate="{StaticResource TrackTemplate}" ItemsSource="{Binding Tracks, Mode=OneWay}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </c:EditableVideoTemplateSelector.EpisodeTemplate>
                             <c:EditableVideoTemplateSelector.MovieTemplate>
                                 <DataTemplate x:DataType="vm:MovieViewModel">
-                                    <StackPanel Grid.Column="1"
-                                                Grid.Row="1">
+                                    <StackPanel Grid.Row="1" Grid.Column="1">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Text="{Binding Name, Mode=TwoWay}" Header="Name" Margin="2" TextWrapping="Wrap" />
-                                            <ToggleSwitch Grid.Column="1" OffContent="SD" OnContent="HD" Margin="2" />
+                                            <TextBox Margin="2"
+                                                     Header="Name"
+                                                     Text="{Binding Name, Mode=TwoWay}"
+                                                     TextWrapping="Wrap" />
+                                            <ToggleSwitch Grid.Column="1"
+                                                          Margin="2"
+                                                          OffContent="SD"
+                                                          OnContent="HD" />
                                         </Grid>
-                                        <TextBox Header="Description" Text="{Binding Description, Mode=TwoWay}" Height="200" Margin="2" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" />
+                                        <TextBox Height="200"
+                                                 Margin="2"
+                                                 AcceptsReturn="True"
+                                                 Header="Description"
+                                                 IsSpellCheckEnabled="True"
+                                                 Text="{Binding Description, Mode=TwoWay}"
+                                                 TextWrapping="Wrap" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Header="Producers" Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
-                                            <TextBox Grid.Column="1" Header="Directors" Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                            <TextBox Margin="2"
+                                                     Header="Producers"
+                                                     Text="{Binding Producers, Converter={StaticResource ArrayToStringConverter}}"
+                                                     TextWrapping="Wrap" />
+                                            <TextBox Grid.Column="1"
+                                                     Margin="2"
+                                                     Header="Directors"
+                                                     Text="{Binding Directors, Converter={StaticResource ArrayToStringConverter}}"
+                                                     TextWrapping="Wrap" />
                                         </Grid>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Header="Studios" Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
+                                            <TextBox Margin="2"
+                                                     Header="Studios"
+                                                     Text="{Binding Studios, Converter={StaticResource ArrayToStringConverter}}"
+                                                     TextWrapping="Wrap" />
                                             <Grid Grid.Column="1" DataContext="{Binding Rating, Mode=OneWay}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
-                                                <ComboBox Header="Country" Grid.Column="0" Margin="2" ItemsSource="{Binding Countries, Mode=OneWay}" SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
-                                                <ComboBox Header="Rating" Grid.Column="1" Margin="2" ItemsSource="{Binding Ratings, Mode=OneWay}" SelectedItem="{Binding SelectedRating, Mode=TwoWay}">
+                                                <ComboBox Grid.Column="0"
+                                                          Margin="2"
+                                                          Header="Country"
+                                                          ItemsSource="{Binding Countries, Mode=OneWay}"
+                                                          SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
+                                                <ComboBox Grid.Column="1"
+                                                          Margin="2"
+                                                          Header="Rating"
+                                                          ItemsSource="{Binding Ratings, Mode=OneWay}"
+                                                          SelectedItem="{Binding SelectedRating, Mode=TwoWay}">
                                                     <ComboBox.ItemTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding ContentRating, Mode=OneWay}" />
@@ -203,18 +320,34 @@
                                                 </ComboBox>
                                             </Grid>
                                         </Grid>
-                                        <TextBox Header="Screen Writers" Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
-                                        <TextBox Header="Cast" Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
-                                        <TextBox Header="Composers" Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}" Margin="2" TextWrapping="Wrap" />
-                                        <DatePicker Header="Release Date" Date="{Binding Release, Mode=TwoWay}" Margin="2" />
-                                        <ItemsControl ItemsSource="{Binding Tracks, Mode=OneWay}" ItemTemplate="{StaticResource TrackTemplate}" />
+                                        <TextBox Margin="2"
+                                                 Header="Screen Writers"
+                                                 Text="{Binding ScreenWriters, Converter={StaticResource ArrayToStringConverter}}"
+                                                 TextWrapping="Wrap" />
+                                        <TextBox Margin="2"
+                                                 Header="Cast"
+                                                 Text="{Binding Cast, Converter={StaticResource ArrayToStringConverter}}"
+                                                 TextWrapping="Wrap" />
+                                        <TextBox Margin="2"
+                                                 Header="Composers"
+                                                 Text="{Binding Composers, Converter={StaticResource ArrayToStringConverter}}"
+                                                 TextWrapping="Wrap" />
+                                        <DatePicker Margin="2"
+                                                    Date="{Binding Release, Mode=TwoWay}"
+                                                    Header="Release Date" />
+                                        <ItemsControl ItemTemplate="{StaticResource TrackTemplate}" ItemsSource="{Binding Tracks, Mode=OneWay}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </c:EditableVideoTemplateSelector.MovieTemplate>
                             <c:EditableVideoTemplateSelector.VideoTemplate>
                                 <DataTemplate x:DataType="vm:VideoViewModel">
                                     <Grid>
-                                        <ComboBox Grid.Column="1" Header="Video Type" Margin="2" ItemsSource="{markup:EnumValuesExtension EnumType=models:VideoType}" SelectedItem="{Binding VideoType, Mode=TwoWay}" Width="100">
+                                        <ComboBox Grid.Column="1"
+                                                  Width="100"
+                                                  Margin="2"
+                                                  Header="Video Type"
+                                                  ItemsSource="{markup:EnumValuesExtension EnumType=models:VideoType}"
+                                                  SelectedItem="{Binding VideoType, Mode=TwoWay}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
@@ -226,15 +359,20 @@
                             </c:EditableVideoTemplateSelector.VideoTemplate>
                         </c:EditableVideoTemplateSelector>
                     </ScrollViewer.Resources>
-                    <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource EditableVideoTemplateSelector}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+                    <ContentControl HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
+                                    Content="{Binding}"
+                                    ContentTemplateSelector="{StaticResource EditableVideoTemplateSelector}" />
                 </ScrollViewer>
             </Grid>
         </SplitView>
 
-        <!-- progress -->
+        <!--  progress  -->
         <Grid Visibility="{Binding IsSaving, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Rectangle Fill="{ThemeResource AcrylicInAppFillColorDefaultBrush}" Opacity="0.4" />
-            <ProgressRing Width="200" Height="200" IsActive="{Binding IsSaving, Mode=OneWay}" />
+            <ProgressRing Width="200"
+                          Height="200"
+                          IsActive="{Binding IsSaving, Mode=OneWay}" />
         </Grid>
     </Grid>
 </UserControl>
