@@ -264,6 +264,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                 new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
                 new System.Text.RegularExpressions.Regex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
                 new System.Text.RegularExpressions.Regex("Series (?<season>\\d+) Ep (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
+                new System.Text.RegularExpressions.Regex("ZW(\\d+)A(?<episode>\\d+)S(\\d+)-(.*)", System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
             };
 
             var reader = host.Services.GetRequiredService<IReader>();
@@ -307,9 +308,8 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                             // loop until we have the correct season.
                         }
 
-                        if (seasonEnumerator.Current is not null && seasonEnumerator.Current.Number == seasonGroup.Key)
+                        if (seasonEnumerator.Current is Season s && s.Number == seasonGroup.Key)
                         {
-                            var s = seasonEnumerator.Current;
                             console.Out.WriteLine(FormattableString.CurrentCulture($"Found Season  {series.Name}:{s.Number}"));
 
                             var episoides = seasonGroup
@@ -337,8 +337,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                                     // loop until we have the correct episode.
                                 }
 
-                                var e = episodeEnumerator.Current;
-                                if (e is not null && e.Number == ep.Episode)
+                                if (episodeEnumerator.Current is Episode e && e.Number == ep.Episode)
                                 {
                                     console.Out.WriteLine(FormattableString.CurrentCulture($"Found Episode {series.Name}:{s.Number}:{e.Name}"));
                                     updater.UpdateEpisode(ep.Path.FullName, e with { Image = s.Image ?? series.Image ?? e.Image }, GetLanguages(lang));
