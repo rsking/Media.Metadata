@@ -64,6 +64,19 @@ public sealed class ColorDifference : IEquatable<ColorDifference>
     }
 
     /// <summary>
+    /// Initialises a new instance of the <see cref="ColorDifference"/> class.
+    /// </summary>
+    /// <param name="color">The color.</param>
+    public ColorDifference(Color color)
+    {
+        var rgba = color.ToPixel<SixLabors.ImageSharp.PixelFormats.Rgba32>();
+        this.Red = rgba.R;
+        this.Green = rgba.G;
+        this.Blue = rgba.B;
+        this.Alpha = rgba.A;
+    }
+
+    /// <summary>
     /// Gets or sets the alpha.
     /// </summary>
     public byte Alpha { get; set; }
@@ -125,5 +138,5 @@ public sealed class ColorDifference : IEquatable<ColorDifference>
     /// </summary>
     /// <param name="tolerance">The tolerance.</param>
     /// <returns>The margin.</returns>
-    internal System.Drawing.Color CalculateMargin(ColorDifference tolerance) => System.Drawing.Color.FromArgb(Math.Abs(this.Alpha - tolerance.Alpha), Math.Abs(this.Red - tolerance.Red), Math.Abs(this.Green - tolerance.Green), Math.Abs(this.Blue - tolerance.Blue));
+    internal Color CalculateMargin(ColorDifference tolerance) => Color.FromRgba((byte)Math.Abs(this.Red - tolerance.Red), (byte)Math.Abs(this.Green - tolerance.Green), (byte)Math.Abs(this.Blue - tolerance.Blue), (byte)Math.Abs(this.Alpha - tolerance.Alpha));
 }

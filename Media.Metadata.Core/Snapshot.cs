@@ -11,14 +11,14 @@ namespace Media.Metadata;
 /// </summary>
 internal class Snapshot
 {
-    private readonly System.Drawing.Color[,] buffer;
+    private readonly Color[,] buffer;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="Snapshot"/> class.
     /// </summary>
     /// <param name="height">The height.</param>
     /// <param name="width">The width.</param>
-    internal Snapshot(int height, int width) => this.buffer = new System.Drawing.Color[height, width];
+    internal Snapshot(int height, int width) => this.buffer = new Color[height, width];
 
     /// <summary>
     /// Initialises a new instance of the <see cref="Snapshot"/> class.
@@ -44,7 +44,7 @@ internal class Snapshot
     /// <param name="row">The row.</param>
     /// <param name="column">The column.</param>
     /// <returns>The color.</returns>
-    internal virtual System.Drawing.Color this[int row, int column]
+    internal virtual Color this[int row, int column]
     {
         get => this.buffer[row, column];
         set => this.buffer[row, column] = value;
@@ -74,8 +74,7 @@ internal class Snapshot
                 for (var j = 0; j < pixelRow.Length; j++)
                 {
                     // Get a reference to the pixel at position j
-                    ref var pixel = ref pixelRow[j];
-                    snapshot[i, j] = System.Drawing.Color.FromArgb(pixel.A, pixel.R, pixel.G, pixel.B);
+                    snapshot[i, j] = pixelRow[j];
                 }
             }
         });
@@ -102,11 +101,9 @@ internal class Snapshot
 
                     for (var j = 0; j < pixelRow.Length; j++)
                     {
-                        var colour = this[i, j];
-
                         // Get a reference to the pixel at position j
                         ref var pixel = ref pixelRow[j];
-                        pixel = new SixLabors.ImageSharp.PixelFormats.Rgba32(colour.R, colour.G, colour.B, colour.A);
+                        pixel = this[i, j];
                     }
                 }
             });
@@ -119,7 +116,7 @@ internal class Snapshot
     /// Sets all the pixels.
     /// </summary>
     /// <param name="colorToSet">The color to set.</param>
-    internal void SetAllPixels(System.Drawing.Color colorToSet)
+    internal void SetAllPixels(Color colorToSet)
     {
         for (var i = 0; i < this.Height; i++)
         {

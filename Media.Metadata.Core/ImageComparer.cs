@@ -66,13 +66,18 @@ public static class ImageComparer
     /// <returns><see langword="true"/> if images are the same; otherwise <see langword="false"/>.</returns>
     public static bool Compare(Image actualImage, Image expectedImage, IList<ToleranceRectangle> rectangleList, out Image? diffImage) => CompareInternal(actualImage, expectedImage, rectangleList, out diffImage, createOutImage: true);
 
-    private static ColorDifference Compare(System.Drawing.Color color1, System.Drawing.Color color2) => new()
+    private static ColorDifference Compare(Color color1, Color color2)
     {
-        Alpha = (byte)Math.Abs(color1.A - color2.A),
-        Red = (byte)Math.Abs(color1.R - color2.R),
-        Green = (byte)Math.Abs(color1.G - color2.G),
-        Blue = (byte)Math.Abs(color1.B - color2.B),
-    };
+        var first = (System.Numerics.Vector4)color1;
+        var second = (System.Numerics.Vector4)color2;
+        return new()
+        {
+            Alpha = (byte)Math.Abs(first.W - second.W),
+            Red = (byte)Math.Abs(first.X - second.X),
+            Green = (byte)Math.Abs(first.Y - second.Y),
+            Blue = (byte)Math.Abs(first.Z - second.Z),
+        };
+    }
 
     private static bool CompareInternal(Image actualImage, Image expectedImage, IList<ToleranceRectangle> rectangleList, out Image? diffImage, bool createOutImage)
     {
@@ -142,7 +147,7 @@ public static class ImageComparer
             throw new InvalidOperationException(Properties.Resources.ImageSizesNotEqual);
         }
 
-        var toleranceMap = new SingleValueToleranceMap(System.Drawing.Color.FromArgb(argbTolerance.Alpha, argbTolerance.Red, argbTolerance.Green, argbTolerance.Blue));
+        var toleranceMap = new SingleValueToleranceMap(Color.FromRgba(argbTolerance.Red, argbTolerance.Green, argbTolerance.Blue, argbTolerance.Alpha));
         return CompareInternal(snapshot, snapshot2, toleranceMap, out diffImage, createOutImage);
     }
 
@@ -159,7 +164,7 @@ public static class ImageComparer
         if (createOutImage)
         {
             snapshot = new Snapshot(actualSnapshot.Height, actualSnapshot.Width);
-            snapshot.SetAllPixels(System.Drawing.Color.FromArgb(255, 0, 0, 0));
+            snapshot.SetAllPixels(Color.FromRgba(0, 0, 0, 255));
         }
 
         for (var i = 0; i < actualSnapshot.Height; i++)
@@ -167,12 +172,12 @@ public static class ImageComparer
             for (var j = 0; j < actualSnapshot.Width; j++)
             {
                 var colorDifference = Compare(actualSnapshot[i, j], expectedSnapshot[i, j]);
-                if (!colorDifference.MeetsTolerance(new ColorDifference(toleranceMap[i, j].A, toleranceMap[i, j].R, toleranceMap[i, j].G, toleranceMap[i, j].B)))
+                if (!colorDifference.MeetsTolerance(new ColorDifference(toleranceMap[i, j])))
                 {
                     result = false;
                     if (snapshot is not null)
                     {
-                        snapshot[i, j] = colorDifference.CalculateMargin(new ColorDifference(toleranceMap[i, j].A, toleranceMap[i, j].R, toleranceMap[i, j].G, toleranceMap[i, j].B));
+                        snapshot[i, j] = colorDifference.CalculateMargin(new ColorDifference(toleranceMap[i, j]));
                     }
                     else
                     {
@@ -193,7 +198,7 @@ public static class ImageComparer
     private static Snapshot CreateToleranceMap(IList<ToleranceRectangle> rectangleList, int height, int width)
     {
         var snapshot = new Snapshot(height, width);
-        snapshot.SetAllPixels(System.Drawing.Color.White);
+        snapshot.SetAllPixels(Color.White);
         for (var i = 0; i < rectangleList.Count; i++)
         {
             if (rectangleList[i].Rectangle.Left < 0 || rectangleList[i].Rectangle.Top < 0 || rectangleList[i].Rectangle.Right > width || rectangleList[i].Rectangle.Bottom > height)
@@ -205,7 +210,7 @@ public static class ImageComparer
             {
                 for (var k = rectangleList[i].Rectangle.Left; k < rectangleList[i].Rectangle.Right; k++)
                 {
-                    snapshot[j, k] = System.Drawing.Color.FromArgb(rectangleList[i].Difference.Alpha, rectangleList[i].Difference.Red, rectangleList[i].Difference.Green, rectangleList[i].Difference.Blue);
+                    snapshot[j, k] = Color.FromRgba(rectangleList[i].Difference.Red, rectangleList[i].Difference.Green, rectangleList[i].Difference.Blue, rectangleList[i].Difference.Alpha);
                 }
             }
         }

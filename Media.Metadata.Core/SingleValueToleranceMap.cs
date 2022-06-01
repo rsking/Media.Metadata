@@ -11,19 +11,18 @@ namespace Media.Metadata;
 /// </summary>
 internal class SingleValueToleranceMap : Snapshot
 {
-    private System.Drawing.Color toleraceColor;
+    private readonly Color toleraceColor;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="SingleValueToleranceMap"/> class.
     /// </summary>
     /// <param name="color">The single color.</param>
-    internal SingleValueToleranceMap(System.Drawing.Color color) => this.toleraceColor = color;
+    internal SingleValueToleranceMap(Color color) => this.toleraceColor = color;
 
     /// <inheritdoc/>
-    internal override System.Drawing.Color this[int row, int column]
+    internal override Color this[int row, int column]
     {
         get => this.toleraceColor;
-
         set => throw new NotSupportedException();
     }
 }
