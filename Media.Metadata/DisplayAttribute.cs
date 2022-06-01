@@ -154,7 +154,7 @@ public sealed class DisplayAttribute : Attribute
     }
 
     /// <summary>
-    ///     Gets or sets the <see cref="System.Type" /> that contains the resources for <see cref="ShortName" />,
+    ///     Gets or sets the <see cref="Type" /> that contains the resources for <see cref="ShortName" />,
     ///     <see cref="Name" />, <see cref="Description" />, <see cref="Prompt" />, and <see cref="GroupName" />.
     ///     Using <see cref="ResourceType" /> along with these Key properties, allows the <see cref="GetShortName" />,
     ///     <see cref="GetName" />, <see cref="GetDescription" />, <see cref="GetPrompt" />, and <see cref="GetGroupName" />
@@ -198,7 +198,7 @@ public sealed class DisplayAttribute : Attribute
     /// Setting this property allows an override of the default behavior of the presentation layer.
     /// <para>Consumers must use the <see cref="GetAutoGenerateFilter" /> method to retrieve the value, as this property getter will throw an exception if the value has not been set.</para>
     /// </summary>
-    /// <exception cref="System.InvalidOperationException">If the getter of this property is invoked when the value has not been explicitly set using the setter.</exception>
+    /// <exception cref="InvalidOperationException">If the getter of this property is invoked when the value has not been explicitly set using the setter.</exception>
     public bool AutoGenerateFilter
     {
         get => this.autoGenerateFilter.HasValue ? this.autoGenerateFilter.GetValueOrDefault() : throw new InvalidOperationException("DisplayAttribute_PropertyNotSet");
@@ -214,7 +214,7 @@ public sealed class DisplayAttribute : Attribute
     ///         an exception if the value has not been set.
     ///     </para>
     /// </summary>
-    /// <exception cref="System.InvalidOperationException">
+    /// <exception cref="InvalidOperationException">
     ///     If the getter of this property is invoked when the value has not been explicitly set using the setter.
     /// </exception>
     public int Order
@@ -244,7 +244,7 @@ public sealed class DisplayAttribute : Attribute
     /// <para>When <see cref="ResourceType" /> has been specified and <see cref="Name" /> represents a resource key within that resource type, then the localized value will be returned.</para>
     /// <para>Can return <c>null</c> and will not fall back onto other values, as it's more likely for the consumer to want to fall back onto the property name.</para>
     /// </returns>
-    /// <exception cref="System.InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="Name" /> property, but a public static property with a name matching the <see cref="Name" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
+    /// <exception cref="InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="Name" /> property, but a public static property with a name matching the <see cref="Name" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
     public string? GetName() => this.name.GetLocalizableValue();
 
     /// <summary>
@@ -255,7 +255,7 @@ public sealed class DisplayAttribute : Attribute
     /// When <see cref="ResourceType" /> has not been specified, the value of <see cref="Description" /> will be returned.
     /// <para>When <see cref="ResourceType" /> has been specified and <see cref="Description" /> represents a resource key within that resource type, then the localized value will be returned.</para>
     /// </returns>
-    /// <exception cref="System.InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="Description" /> property, but a public static property with a name matching the <see cref="Description" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
+    /// <exception cref="InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="Description" /> property, but a public static property with a name matching the <see cref="Description" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
     public string? GetDescription() => this.description.GetLocalizableValue();
 
     /// <summary>
@@ -266,7 +266,7 @@ public sealed class DisplayAttribute : Attribute
     /// When <see cref="ResourceType" /> has not been specified, the value of <see cref="Prompt" /> will be returned.
     /// <para>When <see cref="ResourceType" /> has been specified and <see cref="Prompt" /> represents a resource key within that resource type, then the localized value will be returned.</para>
     /// </returns>
-    /// <exception cref="System.InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="Prompt" /> property, but a public static property with a name matching the <see cref="Prompt" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
+    /// <exception cref="InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="Prompt" /> property, but a public static property with a name matching the <see cref="Prompt" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
     public string? GetPrompt() => this.prompt.GetLocalizableValue();
 
     /// <summary>
@@ -277,7 +277,7 @@ public sealed class DisplayAttribute : Attribute
     /// When <see cref="ResourceType" /> has not been specified, the value of <see cref="GroupName" /> will be returned.
     /// <para>When <see cref="ResourceType" /> has been specified and <see cref="GroupName" /> represents a resource key within that resource type, then the localized value will be returned.</para>
     /// </returns>
-    /// <exception cref="System.InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="GroupName" /> property, but a public static property with a name matching the <see cref="GroupName" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
+    /// <exception cref="InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="GroupName" /> property, but a public static property with a name matching the <see cref="GroupName" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
     public string? GetGroupName() => this.groupName.GetLocalizableValue();
 
     /// <summary>

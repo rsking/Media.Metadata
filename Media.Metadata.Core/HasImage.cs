@@ -13,39 +13,20 @@ public abstract record class HasImage : IAsyncDisposable, IDisposable
 {
     private bool imageRetrived;
 
-    private System.Drawing.Image? image;
+    private SixLabors.ImageSharp.Formats.IImageFormat? imageFormat;
+
+    private Image? image;
 
     private bool disposedValue;
 
     /// <summary>
     /// Gets the image.
     /// </summary>
-    public System.Drawing.Image? Image
+    public Image? Image
     {
         get
         {
-            if (!this.imageRetrived)
-            {
-                this.image = GetImage(this.GetImageAsync());
-                this.imageRetrived = true;
-
-                static System.Drawing.Image? GetImage(ValueTask<System.Drawing.Image?> task)
-                {
-                    if (task.IsCompletedSuccessfully)
-                    {
-                        return task.Result;
-                    }
-
-                    if (task.IsFaulted)
-                    {
-                        // this should throw the exception.
-                        return task.GetAwaiter().GetResult();
-                    }
-
-                    return task.AsTask().Result;
-                }
-            }
-
+            this.EnsureImage();
             return this.image;
         }
 
@@ -54,6 +35,20 @@ public abstract record class HasImage : IAsyncDisposable, IDisposable
             this.image = value;
             this.imageRetrived = true;
         }
+    }
+
+    /// <summary>
+    /// Gets the image format.
+    /// </summary>
+    public SixLabors.ImageSharp.Formats.IImageFormat? ImageFormat
+    {
+        get
+        {
+            this.EnsureImage();
+            return this.imageFormat;
+        }
+
+        init => this.imageFormat = value;
     }
 
     /// <inheritdoc/>
@@ -80,7 +75,7 @@ public abstract record class HasImage : IAsyncDisposable, IDisposable
     /// Gets the image.
     /// </summary>
     /// <returns>The image.</returns>
-    protected virtual ValueTask<System.Drawing.Image?> GetImageAsync() => default;
+    protected virtual ValueTask<(Image Image, SixLabors.ImageSharp.Formats.IImageFormat ImageFormat)> GetImageAsync() => default;
 
     /// <summary>
     /// Disposes this instance.
@@ -125,5 +120,30 @@ public abstract record class HasImage : IAsyncDisposable, IDisposable
 
         this.image = default;
         this.imageRetrived = false;
+    }
+
+    private void EnsureImage()
+    {
+        if (!this.imageRetrived)
+        {
+            (this.image, this.imageFormat) = GetImage(this.GetImageAsync());
+            this.imageRetrived = true;
+
+            static T GetImage<T>(ValueTask<T> task)
+            {
+                if (task.IsCompletedSuccessfully)
+                {
+                    return task.Result;
+                }
+
+                if (task.IsFaulted)
+                {
+                    // this should throw the exception.
+                    return task.GetAwaiter().GetResult();
+                }
+
+                return task.AsTask().Result;
+            }
+        }
     }
 }

@@ -117,8 +117,8 @@ public class TagLibReader : IReader
         if (appleTag.Pictures?.Length > 0)
         {
             var picture = appleTag.Pictures[0];
-            using var stream = new MemoryStream(picture.Data.Data);
-            video = video with { Image = System.Drawing.Image.FromStream(stream) };
+            var image = Image.Load(picture.Data.Data, out var imageFormat);
+            video = video with { Image = image, ImageFormat = imageFormat };
         }
 
         return video;

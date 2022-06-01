@@ -340,7 +340,25 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                                 if (episodeEnumerator.Current is Episode e && e.Number == ep.Episode)
                                 {
                                     console.Out.WriteLine(FormattableString.CurrentCulture($"Found Episode {series.Name}:{s.Number}:{e.Name}"));
-                                    updater.UpdateEpisode(ep.Path.FullName, e with { Image = s.Image ?? series.Image ?? e.Image }, GetLanguages(lang));
+                                    SixLabors.ImageSharp.Image? image = default;
+                                    SixLabors.ImageSharp.Formats.IImageFormat? imageFormat = default;
+                                    if (s.Image is not null)
+                                    {
+                                        image = s.Image;
+                                        imageFormat = s.ImageFormat;
+                                    }
+                                    else if (series.Image is not null)
+                                    {
+                                        image = series.Image;
+                                        imageFormat = series.ImageFormat;
+                                    }
+                                    else if (e.Image is not null)
+                                    {
+                                        image = e.Image;
+                                        imageFormat = e.ImageFormat;
+                                    }
+
+                                    updater.UpdateEpisode(ep.Path.FullName, e with { Image = image, ImageFormat = imageFormat }, GetLanguages(lang));
 
                                     // remove this from the list of paths
                                     pathList.Remove(ep.Path);
@@ -450,11 +468,11 @@ static IDictionary<MediaTrackType, string>? GetLanguages(string[]? lang)
 
 static FileInfo[] ParseFileInfo(ArgumentResult argumentResult)
 {
-    return Process(argumentResult.Tokens.Select(token => token.Value)).SelectMany(results => results.Select(file => new System.IO.FileInfo(file))).ToArray();
+    return Process(argumentResult.Tokens.Select(token => token.Value)).SelectMany(results => results.Select(file => new FileInfo(file))).ToArray();
 
     static IEnumerable<IEnumerable<string>> Process(IEnumerable<string> tokens)
     {
-        var normalisedTokens = tokens.Select(token => token.Replace(Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar)).ToArray();
+        var normalisedTokens = tokens.Select(token => token.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)).ToArray();
         var rooted = normalisedTokens.Where(Path.IsPathRooted).ToArray();
         foreach (var root in rooted)
         {

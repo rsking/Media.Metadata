@@ -50,22 +50,35 @@ internal class Snapshot
         set => this.buffer[row, column] = value;
     }
 
-       /// <summary>
+    /// <summary>
     /// Creates a <see cref="Snapshot"/> from the source image.
     /// </summary>
     /// <param name="sourceImage">The source image.</param>
     /// <returns>The snap shot.</returns>
-    internal static Snapshot FromImage(System.Drawing.Image sourceImage)
+    internal static Snapshot FromImage(Image sourceImage) => FromImage(sourceImage.CloneAs<SixLabors.ImageSharp.PixelFormats.Rgba32>());
+
+    /// <summary>
+    /// Creates a <see cref="Snapshot"/> from the source image.
+    /// </summary>
+    /// <param name="sourceImage">The source image.</param>
+    /// <returns>The snap shot.</returns>
+    internal static Snapshot FromImage(Image<SixLabors.ImageSharp.PixelFormats.Rgba32> sourceImage)
     {
         var snapshot = new Snapshot(sourceImage.Height, sourceImage.Width);
-        var bitmap = new System.Drawing.Bitmap(sourceImage);
-        for (var i = 0; i < bitmap.Height; i++)
+        sourceImage.ProcessPixelRows(accessor =>
         {
-            for (var j = 0; j < bitmap.Width; j++)
+            for (var i = 0; i < accessor.Height; i++)
             {
-                snapshot[i, j] = bitmap.GetPixel(j, i);
+                var pixelRow = accessor.GetRowSpan(i);
+
+                for (var j = 0; j < pixelRow.Length; j++)
+                {
+                    // Get a reference to the pixel at position j
+                    ref var pixel = ref pixelRow[j];
+                    snapshot[i, j] = System.Drawing.Color.FromArgb(pixel.A, pixel.R, pixel.G, pixel.B);
+                }
             }
-        }
+        });
 
         return snapshot;
     }
@@ -74,7 +87,33 @@ internal class Snapshot
     /// Converts this instance to an image.
     /// </summary>
     /// <returns>The image.</returns>
-    internal System.Drawing.Image ToImage() => this.CreateBitmap();
+    internal Image ToImage()
+    {
+        return CreateBitmap();
+
+        Image CreateBitmap()
+        {
+            var image = new Image<SixLabors.ImageSharp.PixelFormats.Rgba32>(this.Width, this.Height);
+            image.ProcessPixelRows(accessor =>
+            {
+                for (var i = 0; i < accessor.Height; i++)
+                {
+                    var pixelRow = accessor.GetRowSpan(i);
+
+                    for (var j = 0; j < pixelRow.Length; j++)
+                    {
+                        var colour = this[i, j];
+
+                        // Get a reference to the pixel at position j
+                        ref var pixel = ref pixelRow[j];
+                        pixel = new SixLabors.ImageSharp.PixelFormats.Rgba32(colour.R, colour.G, colour.B, colour.A);
+                    }
+                }
+            });
+
+            return image;
+        }
+    }
 
     /// <summary>
     /// Sets all the pixels.
@@ -89,19 +128,5 @@ internal class Snapshot
                 this[i, j] = colorToSet;
             }
         }
-    }
-
-    private System.Drawing.Bitmap CreateBitmap()
-    {
-        var bitmap = new System.Drawing.Bitmap(this.Width, this.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-        for (var i = 0; i < this.Height; i++)
-        {
-            for (var j = 0; j < this.Width; j++)
-            {
-                bitmap.SetPixel(j, i, this.buffer[i, j]);
-            }
-        }
-
-        return bitmap;
     }
 }

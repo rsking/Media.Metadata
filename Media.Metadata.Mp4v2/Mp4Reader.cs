@@ -108,7 +108,7 @@ public class Mp4Reader : IReader
 
         if (tags.ArtworkCount > 0)
         {
-            video = video with { Image = tags.Artwork };
+            video = video with { Image = tags.Artwork, ImageFormat = tags.ArtworkFormat };
         }
 
         if (trackList?.Count > 0)

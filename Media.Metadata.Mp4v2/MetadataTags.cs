@@ -6,16 +6,15 @@
 
 namespace Media.Metadata;
 
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 
 /// <summary>
 /// Represents the metadata tags of an MP4 file.
 /// </summary>
 internal class MetadataTags : IDisposable
 {
-    private MemoryStream? artworkStream;
-    private System.Drawing.Image? artwork;
     private bool isArtworkEdited;
 
     /// <summary>
@@ -191,7 +190,7 @@ internal class MetadataTags : IDisposable
     /// <summary>
     /// Gets the format of the artwork contained in this file.
     /// </summary>
-    public ImageFormat? ArtworkFormat { get; private set; }
+    public IImageFormat? ArtworkFormat { get; private set; }
 
     /// <summary>
     /// Gets or sets the copyright information for the content contained in this file.
@@ -314,25 +313,22 @@ internal class MetadataTags : IDisposable
     public MovieInfo? MovieInfo { get; set; }
 
     /// <summary>
-    /// Gets or sets the <see cref="System.Drawing.Image"/> used for the artwork in this file.
+    /// Gets the <see cref="Image"/> used for the artwork in this file.
     /// </summary>
-    public System.Drawing.Image? Artwork
+    public Image? Artwork { get; private set; }
+
+    /// <summary>
+    /// Sets the artwork.
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="format">The format.</param>
+    public void SetArtwork(Image? image, IImageFormat? format)
     {
-        get => this.artwork;
-
-        set
+        if (!ImagesEqual(this.Artwork, image))
         {
-            if (!ImagesEqual(this.artwork, value))
-            {
-                this.artwork = value;
-                this.ArtworkFormat = value switch
-                {
-                    not null => value.RawFormat,
-                    _ => null,
-                };
-
-                this.isArtworkEdited = true;
-            }
+            this.Artwork = image;
+            this.ArtworkFormat = format;
+            this.isArtworkEdited = true;
         }
     }
 
@@ -491,7 +487,7 @@ internal class MetadataTags : IDisposable
         // second, we are deleting the artwork that already existed.
         if (this.isArtworkEdited)
         {
-            if (this.artwork is not null)
+            if (this.Artwork is not null)
             {
                 this.WriteArtwork(tagsPtr);
             }
@@ -592,8 +588,7 @@ internal class MetadataTags : IDisposable
     {
         if (disposing)
         {
-            this.artwork?.Dispose();
-            this.artworkStream?.Dispose();
+            this.Artwork?.Dispose();
         }
     }
 
@@ -661,7 +656,7 @@ internal class MetadataTags : IDisposable
         }
     }
 
-    private static bool ImagesEqual(System.Drawing.Image? first, System.Drawing.Image? second) => (first is null && second is null) || (first is not null && second is not null && ImageComparer.Compare(first, second));
+    private static bool ImagesEqual(Image? first, Image? second) => (first is null && second is null) || (first is not null && second is not null && ImageComparer.Compare(first, second));
 
     private void ReadArtwork(IntPtr artworkStructurePointer)
     {
@@ -678,32 +673,25 @@ internal class MetadataTags : IDisposable
 
         var artworkBuffer = new byte[artworkStructure.size];
         Marshal.Copy(artworkStructure.data, artworkBuffer, 0, artworkStructure.size);
-        this.artworkStream = new MemoryStream(artworkBuffer);
-        this.artwork = System.Drawing.Image.FromStream(this.artworkStream);
-
-        this.ArtworkFormat = artworkStructure.type switch
-        {
-            NativeMethods.MP4TagArtworkType.Bmp => ImageFormat.Bmp,
-            NativeMethods.MP4TagArtworkType.Gif => ImageFormat.Gif,
-            NativeMethods.MP4TagArtworkType.Jpeg => ImageFormat.Jpeg,
-            NativeMethods.MP4TagArtworkType.Png => ImageFormat.Png,
-            _ => ImageFormat.MemoryBmp,
-        };
+        this.Artwork = Image.Load(artworkBuffer, out var format);
+        this.ArtworkFormat = format;
     }
 
     private void WriteArtwork(IntPtr tagsPtr)
     {
-        if (this.artwork is null)
+        if (this.Artwork is null)
         {
             return;
         }
 
         var newArtwork = default(NativeMethods.MP4TagArtwork);
 
-        var stream = new MemoryStream();
-        var encoder = GetEncoder(this.ArtworkFormat!.Guid);
-        this.artwork.Save(stream, encoder, default);
-        var artworkBytes = stream.ToArray();
+        byte[] artworkBytes;
+        using (var stream = new MemoryStream())
+        {
+            this.Artwork.Save(stream, this.ArtworkFormat);
+            artworkBytes = stream.ToArray();
+        }
 
         newArtwork.data = Marshal.AllocHGlobal(artworkBytes.Length);
         newArtwork.size = artworkBytes.Length;
@@ -711,10 +699,10 @@ internal class MetadataTags : IDisposable
 
         newArtwork.type = this.ArtworkFormat switch
         {
-            not null when this.ArtworkFormat.Equals(ImageFormat.Bmp) => NativeMethods.MP4TagArtworkType.Bmp,
-            not null when this.ArtworkFormat.Equals(ImageFormat.Jpeg) => NativeMethods.MP4TagArtworkType.Jpeg,
-            not null when this.ArtworkFormat.Equals(ImageFormat.Gif) => NativeMethods.MP4TagArtworkType.Gif,
-            not null when this.ArtworkFormat.Equals(ImageFormat.Png) => NativeMethods.MP4TagArtworkType.Png,
+            SixLabors.ImageSharp.Formats.Bmp.BmpFormat => NativeMethods.MP4TagArtworkType.Bmp,
+            SixLabors.ImageSharp.Formats.Jpeg.JpegFormat => NativeMethods.MP4TagArtworkType.Jpeg,
+            SixLabors.ImageSharp.Formats.Gif.GifFormat => NativeMethods.MP4TagArtworkType.Gif,
+            SixLabors.ImageSharp.Formats.Png.PngFormat => NativeMethods.MP4TagArtworkType.Png,
             _ => NativeMethods.MP4TagArtworkType.Undefined,
         };
 
@@ -731,11 +719,6 @@ internal class MetadataTags : IDisposable
 
         Marshal.FreeHGlobal(newArtwork.data);
         Marshal.FreeHGlobal(newArtworkPtr);
-
-        static ImageCodecInfo? GetEncoder(Guid guid)
-        {
-            return Array.Find(ImageCodecInfo.GetImageEncoders(), imageCodecInfo => imageCodecInfo.FormatID.Equals(guid));
-        }
     }
 
     private void ReadDiskInfo(IntPtr diskInfoPointer)

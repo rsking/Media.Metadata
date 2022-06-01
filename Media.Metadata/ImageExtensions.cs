@@ -8,6 +8,7 @@ namespace Media.Metadata;
 
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
+using SixLabors.ImageSharp;
 
 /// <summary>
 /// <see cref="Microsoft.UI.Xaml.Media.ImageSource"/> helpers.
@@ -18,17 +19,14 @@ internal static class ImageExtensions
     /// Creates an image source.
     /// </summary>
     /// <param name="video">The video.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The image source.</returns>
-    public static async Task<Windows.Graphics.Imaging.SoftwareBitmap?> CreateSoftwareBitmapAsync(this Video video)
+    public static async Task<Windows.Graphics.Imaging.SoftwareBitmap?> CreateSoftwareBitmapAsync(this Video video, CancellationToken cancellationToken = default)
     {
-        if (video.Image is System.Drawing.Image image)
+        if (video.Image is Image image)
         {
             using var stream = new MemoryStream();
-            using (var bitmap = new System.Drawing.Bitmap(image))
-            {
-                bitmap.Save(stream, image.RawFormat);
-            }
-
+            await image.SaveAsync(stream, video.ImageFormat, cancellationToken).ConfigureAwait(false);
             var bitmapDecoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream.AsRandomAccessStream());
             return await bitmapDecoder.GetSoftwareBitmapAsync();
         }
@@ -66,8 +64,9 @@ internal static class ImageExtensions
     /// Creates an image.
     /// </summary>
     /// <param name="source">The source.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The image.</returns>
-    public static async Task<System.Drawing.Image?> CreateImageAsync(this Models.IHasSoftwareBitmap source)
+    public static async Task<(Image? Image, SixLabors.ImageSharp.Formats.IImageFormat ImageFormat)> CreateImageAsync(this Models.IHasSoftwareBitmap source, CancellationToken cancellationToken = default)
     {
         if (source.SoftwareBitmap is Windows.Graphics.Imaging.SoftwareBitmap softwareBitmap)
         {
@@ -76,7 +75,7 @@ internal static class ImageExtensions
             {
                 using var stream = new MemoryStream(bytes);
                 stream.Position = 0;
-                return System.Drawing.Image.FromStream(stream);
+                return await Image.LoadWithFormatAsync(stream, cancellationToken).ConfigureAwait(false);
             }
         }
 

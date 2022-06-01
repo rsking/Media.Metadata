@@ -8,6 +8,7 @@ namespace Media.Metadata.Converters;
 
 using System;
 using Microsoft.UI.Xaml.Media.Imaging;
+using SixLabors.ImageSharp;
 using Windows.Graphics.Imaging;
 
 /// <summary>
@@ -36,13 +37,10 @@ public sealed class ImageToImageSourceConverter : Microsoft.UI.Xaml.Data.IValueC
             return source;
         }
 
-        if (value is System.Drawing.Image image)
+        if (value is Image image)
         {
             using var stream = new MemoryStream();
-            using (var bitmap = new System.Drawing.Bitmap(image))
-            {
-                bitmap.Save(stream, image.RawFormat);
-            }
+            image.SaveAsBmp(stream);
 
             var decoder = BitmapDecoder.CreateAsync(stream.AsRandomAccessStream()).AsTask().Result;
 

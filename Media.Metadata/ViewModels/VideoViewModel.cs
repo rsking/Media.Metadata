@@ -142,15 +142,18 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     /// <summary>
     /// Converts this to a video.
     /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The video.</returns>
-    public virtual async Task<Video> ToVideoAsync()
+    public virtual async Task<Video> ToVideoAsync(CancellationToken cancellationToken = default)
     {
+        var (image, imageFormat) = await this.CreateImageAsync(cancellationToken).ConfigureAwait(false);
         var localVideo = new LocalVideo(this.FileInfo, this.Name, this.Description, this.Producers, this.Directors, this.Studios, this.Genre, this.ScreenWriters, this.Cast, this.Composers)
         {
             Rating = this.Rating.SelectedRating,
             Release = this.Release?.DateTime,
             Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
-            Image = await this.CreateImageAsync().ConfigureAwait(false),
+            Image = image,
+            ImageFormat = imageFormat,
         };
 
         return this.VideoType switch

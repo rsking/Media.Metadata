@@ -6,8 +6,6 @@
 
 namespace Media.Metadata;
 
-using System.Drawing;
-
 /// <summary>
 /// The image comparer.
 /// </summary>
@@ -68,7 +66,7 @@ public static class ImageComparer
     /// <returns><see langword="true"/> if images are the same; otherwise <see langword="false"/>.</returns>
     public static bool Compare(Image actualImage, Image expectedImage, IList<ToleranceRectangle> rectangleList, out Image? diffImage) => CompareInternal(actualImage, expectedImage, rectangleList, out diffImage, createOutImage: true);
 
-    private static ColorDifference Compare(Color color1, Color color2) => new()
+    private static ColorDifference Compare(System.Drawing.Color color1, System.Drawing.Color color2) => new()
     {
         Alpha = (byte)Math.Abs(color1.A - color2.A),
         Red = (byte)Math.Abs(color1.R - color2.R),
@@ -95,7 +93,7 @@ public static class ImageComparer
 
         if (actualImage.Width != expectedImage.Width
             || actualImage.Height != expectedImage.Height
-            || actualImage.PixelFormat != expectedImage.PixelFormat)
+            || actualImage.PixelType != expectedImage.PixelType)
         {
             diffImage = default;
             return false;
@@ -131,7 +129,7 @@ public static class ImageComparer
 
         if (actualImage.Width != expectedImage.Width
             || actualImage.Height != expectedImage.Height
-            || actualImage.PixelFormat != expectedImage.PixelFormat)
+            || actualImage.PixelType != expectedImage.PixelType)
         {
             diffImage = default;
             return false;
@@ -144,7 +142,7 @@ public static class ImageComparer
             throw new InvalidOperationException(Properties.Resources.ImageSizesNotEqual);
         }
 
-        var toleranceMap = new SingleValueToleranceMap(Color.FromArgb(argbTolerance.Alpha, argbTolerance.Red, argbTolerance.Green, argbTolerance.Blue));
+        var toleranceMap = new SingleValueToleranceMap(System.Drawing.Color.FromArgb(argbTolerance.Alpha, argbTolerance.Red, argbTolerance.Green, argbTolerance.Blue));
         return CompareInternal(snapshot, snapshot2, toleranceMap, out diffImage, createOutImage);
     }
 
@@ -161,7 +159,7 @@ public static class ImageComparer
         if (createOutImage)
         {
             snapshot = new Snapshot(actualSnapshot.Height, actualSnapshot.Width);
-            snapshot.SetAllPixels(Color.FromArgb(255, 0, 0, 0));
+            snapshot.SetAllPixels(System.Drawing.Color.FromArgb(255, 0, 0, 0));
         }
 
         for (var i = 0; i < actualSnapshot.Height; i++)
@@ -195,7 +193,7 @@ public static class ImageComparer
     private static Snapshot CreateToleranceMap(IList<ToleranceRectangle> rectangleList, int height, int width)
     {
         var snapshot = new Snapshot(height, width);
-        snapshot.SetAllPixels(Color.White);
+        snapshot.SetAllPixels(System.Drawing.Color.White);
         for (var i = 0; i < rectangleList.Count; i++)
         {
             if (rectangleList[i].Rectangle.Left < 0 || rectangleList[i].Rectangle.Top < 0 || rectangleList[i].Rectangle.Right > width || rectangleList[i].Rectangle.Bottom > height)
@@ -207,7 +205,7 @@ public static class ImageComparer
             {
                 for (var k = rectangleList[i].Rectangle.Left; k < rectangleList[i].Rectangle.Right; k++)
                 {
-                    snapshot[j, k] = Color.FromArgb(rectangleList[i].Difference.Alpha, rectangleList[i].Difference.Red, rectangleList[i].Difference.Green, rectangleList[i].Difference.Blue);
+                    snapshot[j, k] = System.Drawing.Color.FromArgb(rectangleList[i].Difference.Alpha, rectangleList[i].Difference.Red, rectangleList[i].Difference.Green, rectangleList[i].Difference.Blue);
                 }
             }
         }

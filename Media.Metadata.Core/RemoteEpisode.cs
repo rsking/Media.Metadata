@@ -21,5 +21,5 @@ public record class RemoteEpisode(
     public Uri? ImageUri { get; init; }
 
     /// <inheritdoc />
-    protected override ValueTask<System.Drawing.Image?> GetImageAsync() => this.DownloadImageAsync();
+    protected override ValueTask<(Image Image, SixLabors.ImageSharp.Formats.IImageFormat ImageFormat)> GetImageAsync() => this.DownloadImageAsync();
 }

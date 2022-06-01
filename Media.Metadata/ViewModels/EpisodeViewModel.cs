@@ -45,19 +45,24 @@ internal partial class EpisodeViewModel : VideoViewModel
     }
 
     /// <inheritdoc/>
-    public override async Task<Video> ToVideoAsync() => new LocalEpisode(this.FileInfo, this.Name, this.Description, this.Producers, this.Directors, this.Studios, this.Genre, this.ScreenWriters, this.Cast, this.Composers)
+    public override async Task<Video> ToVideoAsync(CancellationToken cancellationToken = default)
     {
-        Rating = this.Rating.SelectedRating,
-        Release = this.Release?.DateTime,
-        Show = this.Show,
-        Network = this.Network,
-        Season = this.Season,
-        Number = this.Number,
-        Id = this.Id,
-        Part = this.Part,
-        Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
-        Image = await this.CreateImageAsync().ConfigureAwait(false),
-    };
+        var (image, imageFormat) = await this.CreateImageAsync(cancellationToken).ConfigureAwait(false);
+        return new LocalEpisode(this.FileInfo, this.Name, this.Description, this.Producers, this.Directors, this.Studios, this.Genre, this.ScreenWriters, this.Cast, this.Composers)
+        {
+            Rating = this.Rating.SelectedRating,
+            Release = this.Release?.DateTime,
+            Show = this.Show,
+            Network = this.Network,
+            Season = this.Season,
+            Number = this.Number,
+            Id = this.Id,
+            Part = this.Part,
+            Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
+            Image = image,
+            ImageFormat = imageFormat,
+        };
+    }
 
     /// <inheritdoc/>
     public override void Update(Video video)
