@@ -9,7 +9,7 @@ namespace Media.Metadata;
 /// <summary>
 /// A resource that has an image.
 /// </summary>
-public abstract record class HasImage : IAsyncDisposable, IDisposable
+public abstract record class HasImage : IHasImage, IAsyncDisposable, IDisposable
 {
     private bool imageRetrived;
 
@@ -19,9 +19,7 @@ public abstract record class HasImage : IAsyncDisposable, IDisposable
 
     private bool disposedValue;
 
-    /// <summary>
-    /// Gets the image.
-    /// </summary>
+    /// <inheritdoc/>
     public Image? Image
     {
         get
@@ -37,9 +35,7 @@ public abstract record class HasImage : IAsyncDisposable, IDisposable
         }
     }
 
-    /// <summary>
-    /// Gets the image format.
-    /// </summary>
+    /// <inheritdoc/>
     public SixLabors.ImageSharp.Formats.IImageFormat? ImageFormat
     {
         get

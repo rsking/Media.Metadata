@@ -19,11 +19,8 @@ internal record class MovieWithImageSource(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : Movie(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
+    IEnumerable<string>? Composers) : Movie(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource
 {
-    /// <inheritdoc/>
-    public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; init; }
-
     /// <inheritdoc/>
     public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; init; }
 
@@ -31,29 +28,15 @@ internal record class MovieWithImageSource(
     /// Creates a <see cref="MovieWithImageSource"/> from a <see cref="Movie"/>.
     /// </summary>
     /// <param name="movie">The movie.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The video with image source.</returns>
-    public static async Task<MovieWithImageSource> CreateAsync(Movie movie)
+    public static async Task<MovieWithImageSource> CreateAsync(Movie movie, CancellationToken cancellationToken = default) => new MovieWithImageSource(movie.Name, movie.Description, movie.Producers, movie.Directors, movie.Studios, movie.Genre, movie.ScreenWriters, movie.Cast, movie.Composers)
     {
-        var softwareBitmap = movie switch
-        {
-            IHasSoftwareBitmap hasSoftwareBitmap => hasSoftwareBitmap.SoftwareBitmap,
-            _ => await movie.CreateSoftwareBitmapAsync().ConfigureAwait(true),
-        };
-
-        var imageSource = (movie, softwareBitmap) switch
-        {
-            (IHasImageSource hasImageSource, _) => hasImageSource.ImageSource,
-            (_, not null) => await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
-            (_, _) => null,
-        };
-
-        return new MovieWithImageSource(movie.Name, movie.Description, movie.Producers, movie.Directors, movie.Studios, movie.Genre, movie.ScreenWriters, movie.Cast, movie.Composers)
-        {
-            Release = movie.Release,
-            Rating = movie.Rating,
-            Tracks = movie.Tracks,
-            SoftwareBitmap = softwareBitmap,
-            ImageSource = imageSource,
-        };
-    }
+        Release = movie.Release,
+        Rating = movie.Rating,
+        Tracks = movie.Tracks,
+        Image = movie.Image,
+        ImageFormat = movie.ImageFormat,
+        ImageSource = await movie.CreateImageSource(cancellationToken).ConfigureAwait(true),
+    };
 }

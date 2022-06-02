@@ -39,7 +39,8 @@ internal record class LocalEpisodeWithImageSource(
         this.Number = episode.Number;
         this.Id = episode.Id;
         this.Part = episode.Part;
-        this.SoftwareBitmap = episode.SoftwareBitmap;
+        this.Image = episode.Image;
+        this.ImageFormat = episode.ImageFormat;
         this.ImageSource = episode.ImageSource;
     }
 

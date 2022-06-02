@@ -9,7 +9,7 @@ namespace Media.Metadata.ViewModels;
 /// <summary>
 /// The editable video.
 /// </summary>
-internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, Models.IHasImageSource, Models.IHasSoftwareBitmap
+internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, IHasImage, Models.IHasImageSource, System.IAsyncDisposable, System.IDisposable
 {
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? name;
@@ -43,7 +43,9 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
 
     private Microsoft.UI.Xaml.Media.ImageSource? imageSource;
 
-    private Windows.Graphics.Imaging.SoftwareBitmap? softwareBitmap;
+    private SixLabors.ImageSharp.Image? image;
+
+    private SixLabors.ImageSharp.Formats.IImageFormat? imageFormat;
 
     private bool disposedValue;
 
@@ -52,7 +54,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     /// </summary>
     /// <param name="video">The video.</param>
     public VideoViewModel(Models.LocalVideoWithImageSource video)
-        : this(video, video.FileInfo, video.SoftwareBitmap, video.ImageSource)
+        : this(video, video.FileInfo, video.Image, video.ImageFormat, video.ImageSource)
     {
     }
 
@@ -61,9 +63,10 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     /// </summary>
     /// <param name="video">The video.</param>
     /// <param name="fileInfo">The file information.</param>
-    /// <param name="softwareBitmap">The software bitmap.</param>
+    /// <param name="image">The image.</param>
+    /// <param name="imageFormat">The image format.</param>
     /// <param name="imageSource">The image source.</param>
-    protected VideoViewModel(Video video, FileInfo fileInfo, Windows.Graphics.Imaging.SoftwareBitmap? softwareBitmap, Microsoft.UI.Xaml.Media.ImageSource? imageSource)
+    protected VideoViewModel(Video video, FileInfo fileInfo, SixLabors.ImageSharp.Image? image, SixLabors.ImageSharp.Formats.IImageFormat? imageFormat, Microsoft.UI.Xaml.Media.ImageSource? imageSource)
     {
         this.FileInfo = fileInfo;
         this.Name = video.Name;
@@ -78,7 +81,8 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
         this.Rating = new RatingViewModel(video.Rating);
         this.Tracks = video.Tracks.Select(track => new MediaTrackViewModel(track)).ToArray();
-        this.SoftwareBitmap = softwareBitmap;
+        this.Image = image;
+        this.ImageFormat = imageFormat;
         this.ImageSource = imageSource;
 
         static IList<T> Create<T>(IEnumerable<T>? source)
@@ -106,17 +110,24 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     public IEnumerable<MediaTrackViewModel> Tracks { get; init; }
 
     /// <inheritdoc/>
-    public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap
-    {
-        get => this.softwareBitmap;
-        private set => this.SetProperty(ref this.softwareBitmap, value);
-    }
-
-    /// <inheritdoc/>
     public Microsoft.UI.Xaml.Media.ImageSource? ImageSource
     {
         get => this.imageSource;
-        set => this.SetProperty(ref this.imageSource, value);
+        private set => this.SetProperty(ref this.imageSource, value);
+    }
+
+    /// <inheritdoc/>
+    public SixLabors.ImageSharp.Image? Image
+    {
+        get => this.image;
+        set => this.SetProperty(ref this.image, value);
+    }
+
+    /// <inheritdoc/>
+    public SixLabors.ImageSharp.Formats.IImageFormat? ImageFormat
+    {
+        get => this.imageFormat;
+        set => this.SetProperty(ref this.imageFormat, value);
     }
 
     /// <inheritdoc/>
@@ -144,24 +155,25 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The video.</returns>
-    public virtual async Task<Video> ToVideoAsync(CancellationToken cancellationToken = default)
+    public virtual Task<Video> ToVideoAsync(CancellationToken cancellationToken = default)
     {
-        var (image, imageFormat) = await this.CreateImageAsync(cancellationToken).ConfigureAwait(false);
         var localVideo = new LocalVideo(this.FileInfo, this.Name, this.Description, this.Producers, this.Directors, this.Studios, this.Genre, this.ScreenWriters, this.Cast, this.Composers)
         {
             Rating = this.Rating.SelectedRating,
             Release = this.Release?.DateTime,
             Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
-            Image = image,
-            ImageFormat = imageFormat,
+            Image = this.Image,
+            ImageFormat = this.ImageFormat,
         };
 
-        return this.VideoType switch
+        Video returnValue = this.VideoType switch
         {
             Models.VideoType.Movie => new LocalMovie(localVideo),
             Models.VideoType.TVShow => new LocalEpisode(localVideo),
             _ => localVideo,
         };
+
+        return Task.FromResult(returnValue);
     }
 
     /// <summary>
@@ -186,11 +198,8 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         this.Composers = Create(video.Composers);
         this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
         this.Rating.SelectedRating = video.Rating;
-
-        if (video is Models.IHasSoftwareBitmap softwareBitmap)
-        {
-            this.SoftwareBitmap = softwareBitmap.SoftwareBitmap;
-        }
+        this.Image = video.Image;
+        this.ImageFormat = video.ImageFormat;
 
         if (video is Models.IHasImageSource imageSource)
         {
@@ -218,13 +227,14 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
                     imageSourceDisposable.Dispose();
                 }
 
-                if (this.softwareBitmap is System.IDisposable softwareBitmapDisposable)
+                this.imageSource = default;
+
+                if (this.image is System.IDisposable imageDisposable)
                 {
-                    softwareBitmapDisposable.Dispose();
+                    imageDisposable.Dispose();
                 }
 
-                this.imageSource = default;
-                this.softwareBitmap = default;
+                this.image = default;
             }
 
             this.disposedValue = true;
@@ -239,8 +249,8 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     {
         await DisposeAsync(this.imageSource).ConfigureAwait(false);
         this.imageSource = default;
-        await DisposeAsync(this.softwareBitmap).ConfigureAwait(false);
-        this.softwareBitmap = default;
+        await DisposeAsync(this.image).ConfigureAwait(false);
+        this.image = default;
 
         static async ValueTask DisposeAsync(object? value)
         {

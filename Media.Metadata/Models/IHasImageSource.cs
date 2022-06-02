@@ -9,7 +9,7 @@ namespace Media.Metadata.Models;
 /// <summary>
 /// Interface for having an image source.
 /// </summary>
-internal interface IHasImageSource : System.IAsyncDisposable, System.IDisposable
+internal interface IHasImageSource
 {
     /// <summary>
     /// Gets the image source.

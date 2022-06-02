@@ -30,13 +30,6 @@ public sealed class ImageToImageSourceConverter : Microsoft.UI.Xaml.Data.IValueC
             return imageSource;
         }
 
-        if (value is SoftwareBitmap softwareBitmap)
-        {
-            var source = new SoftwareBitmapSource();
-            source.SetBitmapAsync(softwareBitmap).AsTask().Wait();
-            return source;
-        }
-
         if (value is Image image)
         {
             using var stream = new MemoryStream();

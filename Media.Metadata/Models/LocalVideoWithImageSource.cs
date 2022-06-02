@@ -33,8 +33,9 @@ internal record class LocalVideoWithImageSource(
         this.Release = video.Release;
         this.Rating = video.Rating;
         this.Tracks = video.Tracks;
+        this.Image = video.Image;
+        this.ImageFormat = video.ImageFormat;
         this.ImageSource = video.ImageSource;
-        this.SoftwareBitmap = video.SoftwareBitmap;
     }
 
     /// <summary>

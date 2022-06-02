@@ -19,12 +19,9 @@ internal record class VideoWithImageSource(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : Video(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
+    IEnumerable<string>? Composers) : Video(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource
 {
     private bool disposedValue;
-
-    /// <inheritdoc/>
-    public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; init; }
 
     /// <inheritdoc/>
     public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; init; }
@@ -33,47 +30,25 @@ internal record class VideoWithImageSource(
     /// Creates a <see cref="VideoWithImageSource"/> from a <see cref="LocalVideo"/>.
     /// </summary>
     /// <param name="video">The video.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The video with image source.</returns>
-    public static async Task<VideoWithImageSource> CreateAsync(Video video)
+    public static async Task<VideoWithImageSource> CreateAsync(Video video, CancellationToken cancellationToken = default) => new VideoWithImageSource(video.Name, video.Description, video.Producers, video.Directors, video.Studios, video.Genre, video.ScreenWriters, video.Cast, video.Composers)
     {
-        var softwareBitmap = video switch
-        {
-            IHasSoftwareBitmap hasSoftwareBitmap => hasSoftwareBitmap.SoftwareBitmap,
-            _ => await video.CreateSoftwareBitmapAsync().ConfigureAwait(true),
-        };
-
-        var imageSource = (video, softwareBitmap) switch
-        {
-            (IHasImageSource hasImageSource, _) => hasImageSource.ImageSource,
-            (_, not null) => await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
-            (_, _) => null,
-        };
-
-        return new VideoWithImageSource(video.Name, video.Description, video.Producers, video.Directors, video.Studios, video.Genre, video.ScreenWriters, video.Cast, video.Composers)
-        {
-            Release = video.Release,
-            Rating = video.Rating,
-            Tracks = video.Tracks,
-            SoftwareBitmap = softwareBitmap,
-            ImageSource = imageSource,
-        };
-    }
+        Release = video.Release,
+        Rating = video.Rating,
+        Tracks = video.Tracks,
+        Image = video.Image,
+        ImageFormat = video.ImageFormat,
+        ImageSource = await video.CreateImageSource(cancellationToken).ConfigureAwait(true),
+    };
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        if (disposing && !this.disposedValue)
+        if (disposing && !this.disposedValue && this.ImageSource is System.IDisposable imageSourceDisposable)
         {
-            if (this.ImageSource is System.IDisposable imageSourceDisposable)
-            {
-                imageSourceDisposable.Dispose();
-            }
-
-            if (this.SoftwareBitmap is System.IDisposable softwareBitmapDisposable)
-            {
-                softwareBitmapDisposable.Dispose();
-            }
+            imageSourceDisposable.Dispose();
         }
     }
 
@@ -83,7 +58,6 @@ internal record class VideoWithImageSource(
         await base.DisposeAsyncCore().ConfigureAwait(false);
 
         await DisposeAsync(this.ImageSource).ConfigureAwait(false);
-        await DisposeAsync(this.SoftwareBitmap).ConfigureAwait(false);
         this.disposedValue = true;
 
         static async ValueTask DisposeAsync(object? value)

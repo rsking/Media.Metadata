@@ -34,7 +34,7 @@ internal partial class EpisodeViewModel : VideoViewModel
     /// </summary>
     /// <param name="episode">The episode.</param>
     public EpisodeViewModel(Models.LocalEpisodeWithImageSource episode)
-        : base(episode, episode.FileInfo, episode.SoftwareBitmap, episode.ImageSource)
+        : base(episode, episode.FileInfo, episode.Image, episode.ImageFormat, episode.ImageSource)
     {
         this.Show = episode.Show;
         this.Network = episode.Network;
@@ -45,10 +45,8 @@ internal partial class EpisodeViewModel : VideoViewModel
     }
 
     /// <inheritdoc/>
-    public override async Task<Video> ToVideoAsync(CancellationToken cancellationToken = default)
-    {
-        var (image, imageFormat) = await this.CreateImageAsync(cancellationToken).ConfigureAwait(false);
-        return new LocalEpisode(this.FileInfo, this.Name, this.Description, this.Producers, this.Directors, this.Studios, this.Genre, this.ScreenWriters, this.Cast, this.Composers)
+    public override Task<Video> ToVideoAsync(CancellationToken cancellationToken = default) => Task.FromResult<Video>(
+        new LocalEpisode(this.FileInfo, this.Name, this.Description, this.Producers, this.Directors, this.Studios, this.Genre, this.ScreenWriters, this.Cast, this.Composers)
         {
             Rating = this.Rating.SelectedRating,
             Release = this.Release?.DateTime,
@@ -59,10 +57,9 @@ internal partial class EpisodeViewModel : VideoViewModel
             Id = this.Id,
             Part = this.Part,
             Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
-            Image = image,
-            ImageFormat = imageFormat,
-        };
-    }
+            Image = this.Image,
+            ImageFormat = this.ImageFormat,
+        });
 
     /// <inheritdoc/>
     public override void Update(Video video)

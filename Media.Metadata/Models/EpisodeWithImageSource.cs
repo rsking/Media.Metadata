@@ -19,11 +19,8 @@ internal record class EpisodeWithImageSource(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : Episode(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource, IHasSoftwareBitmap
+    IEnumerable<string>? Composers) : Episode(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource
 {
-    /// <inheritdoc/>
-    public Windows.Graphics.Imaging.SoftwareBitmap? SoftwareBitmap { get; init; }
-
     /// <inheritdoc/>
     public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; init; }
 
@@ -31,35 +28,21 @@ internal record class EpisodeWithImageSource(
     /// Creates a <see cref="EpisodeWithImageSource"/> from a <see cref="Episode"/>.
     /// </summary>
     /// <param name="episode">The episode.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The video with image source.</returns>
-    public static async Task<EpisodeWithImageSource> CreateAsync(Episode episode)
+    public static async Task<EpisodeWithImageSource> CreateAsync(Episode episode, CancellationToken cancellationToken = default) => new EpisodeWithImageSource(episode.Name, episode.Description, episode.Producers, episode.Directors, episode.Studios, episode.Genre, episode.ScreenWriters, episode.Cast, episode.Composers)
     {
-        var softwareBitmap = episode switch
-        {
-            IHasSoftwareBitmap hasSoftwareBitmap => hasSoftwareBitmap.SoftwareBitmap,
-            _ => await episode.CreateSoftwareBitmapAsync().ConfigureAwait(true),
-        };
-
-        var imageSource = (episode, softwareBitmap) switch
-        {
-            (IHasImageSource hasImageSource, _) => hasImageSource.ImageSource,
-            (_, not null) => await softwareBitmap.CreateImageSourceAsync().ConfigureAwait(true),
-            (_, _) => null,
-        };
-
-        return new EpisodeWithImageSource(episode.Name, episode.Description, episode.Producers, episode.Directors, episode.Studios, episode.Genre, episode.ScreenWriters, episode.Cast, episode.Composers)
-        {
-            Release = episode.Release,
-            Rating = episode.Rating,
-            Tracks = episode.Tracks,
-            Show = episode.Show,
-            Network = episode.Network,
-            Season = episode.Season,
-            Number = episode.Number,
-            Id = episode.Id,
-            Part = episode.Part,
-            SoftwareBitmap = softwareBitmap,
-            ImageSource = imageSource,
-        };
-    }
+        Release = episode.Release,
+        Rating = episode.Rating,
+        Tracks = episode.Tracks,
+        Show = episode.Show,
+        Network = episode.Network,
+        Season = episode.Season,
+        Number = episode.Number,
+        Id = episode.Id,
+        Part = episode.Part,
+        Image = episode.Image,
+        ImageFormat = episode.ImageFormat,
+        ImageSource = await episode.CreateImageSource(cancellationToken).ConfigureAwait(true),
+    };
 }

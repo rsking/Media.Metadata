@@ -33,8 +33,9 @@ internal record class LocalMovieWithImageSource(
         this.Release = movie.Release;
         this.Rating = movie.Rating;
         this.Tracks = movie.Tracks;
+        this.Image = movie.Image;
+        this.ImageFormat = movie.ImageFormat;
         this.ImageSource = movie.ImageSource;
-        this.SoftwareBitmap = movie.SoftwareBitmap;
     }
 
     /// <summary>
