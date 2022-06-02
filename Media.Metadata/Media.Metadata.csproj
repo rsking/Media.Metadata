@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <Using Remove="System" />
+    <Using Include="Microsoft.UI.Xaml.Media" />
   </ItemGroup>
 
   <ItemGroup>

@@ -14,5 +14,5 @@ internal interface IHasImageSource
     /// <summary>
     /// Gets the image source.
     /// </summary>
-    public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; }
+    public ImageSource? ImageSource { get; }
 }

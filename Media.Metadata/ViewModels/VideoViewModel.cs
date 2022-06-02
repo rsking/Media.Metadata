@@ -41,7 +41,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private System.DateTimeOffset? release;
 
-    private Microsoft.UI.Xaml.Media.ImageSource? imageSource;
+    private ImageSource? imageSource;
 
     private SixLabors.ImageSharp.Image? image;
 
@@ -66,7 +66,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     /// <param name="image">The image.</param>
     /// <param name="imageFormat">The image format.</param>
     /// <param name="imageSource">The image source.</param>
-    protected VideoViewModel(Video video, FileInfo fileInfo, SixLabors.ImageSharp.Image? image, SixLabors.ImageSharp.Formats.IImageFormat? imageFormat, Microsoft.UI.Xaml.Media.ImageSource? imageSource)
+    protected VideoViewModel(Video video, FileInfo fileInfo, SixLabors.ImageSharp.Image? image, SixLabors.ImageSharp.Formats.IImageFormat? imageFormat, ImageSource? imageSource)
     {
         this.FileInfo = fileInfo;
         this.Name = video.Name;
@@ -110,7 +110,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     public IEnumerable<MediaTrackViewModel> Tracks { get; init; }
 
     /// <inheritdoc/>
-    public Microsoft.UI.Xaml.Media.ImageSource? ImageSource
+    public ImageSource? ImageSource
     {
         get => this.imageSource;
         private set => this.SetProperty(ref this.imageSource, value);

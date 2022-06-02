@@ -11,7 +11,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using SixLabors.ImageSharp;
 
 /// <summary>
-/// <see cref="Microsoft.UI.Xaml.Media.ImageSource"/> helpers.
+/// <see cref="ImageSource"/> helpers.
 /// </summary>
 internal static class ImageExtensions
 {
@@ -56,7 +56,7 @@ internal static class ImageExtensions
     /// <param name="video">The image.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The image source.</returns>
-    public static async Task<Microsoft.UI.Xaml.Media.ImageSource?> CreateImageSource(this IHasImage video, CancellationToken cancellationToken = default)
+    public static async Task<ImageSource?> CreateImageSource(this IHasImage video, CancellationToken cancellationToken = default)
     {
         return video.Image switch
         {
@@ -72,7 +72,7 @@ internal static class ImageExtensions
     /// <param name="imageFormat">The image format.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The image source.</returns>
-    public static async Task<Microsoft.UI.Xaml.Media.ImageSource?> CreateImageSource(this Image image, SixLabors.ImageSharp.Formats.IImageFormat? imageFormat, CancellationToken cancellationToken = default)
+    public static async Task<ImageSource?> CreateImageSource(this Image image, SixLabors.ImageSharp.Formats.IImageFormat? imageFormat, CancellationToken cancellationToken = default)
     {
         using var softwareBitmap = await image.CreateSoftwareBitmapAsync(imageFormat, cancellationToken).ConfigureAwait(true);
         if (softwareBitmap is not null)

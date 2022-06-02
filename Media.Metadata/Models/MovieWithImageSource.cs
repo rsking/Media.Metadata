@@ -7,7 +7,7 @@
 namespace Media.Metadata.Models;
 
 /// <summary>
-/// A movie with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
+/// A movie with an <see cref="ImageSource"/>.
 /// </summary>
 /// <inheritdoc />
 internal record class MovieWithImageSource(
@@ -22,7 +22,7 @@ internal record class MovieWithImageSource(
     IEnumerable<string>? Composers) : Movie(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource
 {
     /// <inheritdoc/>
-    public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; init; }
+    public ImageSource? ImageSource { get; init; }
 
     /// <summary>
     /// Creates a <see cref="MovieWithImageSource"/> from a <see cref="Movie"/>.

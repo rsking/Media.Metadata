@@ -12,7 +12,7 @@ using SixLabors.ImageSharp;
 using Windows.Graphics.Imaging;
 
 /// <summary>
-/// The converter from a <see cref="System.Drawing.Image"/> to a <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
+/// The converter from a <see cref="System.Drawing.Image"/> to a <see cref="ImageSource"/>.
 /// </summary>
 public sealed class ImageToImageSourceConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
@@ -25,7 +25,7 @@ public sealed class ImageToImageSourceConverter : Microsoft.UI.Xaml.Data.IValueC
             return null;
         }
 
-        if (value is Microsoft.UI.Xaml.Media.ImageSource imageSource)
+        if (value is ImageSource imageSource)
         {
             return imageSource;
         }

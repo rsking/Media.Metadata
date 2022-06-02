@@ -7,7 +7,7 @@
 namespace Media.Metadata.Models;
 
 /// <summary>
-/// A video with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
+/// A video with an <see cref="ImageSource"/>.
 /// </summary>
 /// <inheritdoc />
 internal record class VideoWithImageSource(
@@ -24,7 +24,7 @@ internal record class VideoWithImageSource(
     private bool disposedValue;
 
     /// <inheritdoc/>
-    public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; init; }
+    public ImageSource? ImageSource { get; init; }
 
     /// <summary>
     /// Creates a <see cref="VideoWithImageSource"/> from a <see cref="LocalVideo"/>.

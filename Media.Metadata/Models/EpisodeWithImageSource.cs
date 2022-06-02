@@ -7,7 +7,7 @@
 namespace Media.Metadata.Models;
 
 /// <summary>
-/// A episode with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
+/// A episode with an <see cref="ImageSource"/>.
 /// </summary>
 /// <inheritdoc />
 internal record class EpisodeWithImageSource(
@@ -22,7 +22,7 @@ internal record class EpisodeWithImageSource(
     IEnumerable<string>? Composers) : Episode(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers), IHasImageSource
 {
     /// <inheritdoc/>
-    public Microsoft.UI.Xaml.Media.ImageSource? ImageSource { get; init; }
+    public ImageSource? ImageSource { get; init; }
 
     /// <summary>
     /// Creates a <see cref="EpisodeWithImageSource"/> from a <see cref="Episode"/>.

@@ -7,7 +7,7 @@
 namespace Media.Metadata.Models;
 
 /// <summary>
-/// A episode with an <see cref="Microsoft.UI.Xaml.Media.ImageSource"/>.
+/// A episode with an <see cref="ImageSource"/>.
 /// </summary>
 /// <inheritdoc />
 internal record class LocalEpisodeWithImageSource(
