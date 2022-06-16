@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
@@ -15,19 +15,17 @@
 
     <AssemblyName>mm</AssemblyName>
     <UserSecretsId>f4141296-1840-4f5a-9776-40b8aa343667</UserSecretsId>
-    <NoWarn>$(NoWarn);SA0001</NoWarn>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <Content Include="Assets\*.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
-    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Input" Version="7.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(DotnetPatchVersion)" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.8" />
     <PackageReference Include="RestSharp" Version="107.3.0" />
@@ -41,11 +39,6 @@
 
   <ItemGroup>
     <None Update="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Remove="System" />
-    <Using Include="Microsoft.UI.Xaml.Media" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,6 +61,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Remove="System" />
+    <Using Include="Microsoft.UI.Xaml.Media" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Media.Metadata.DependencyInjection\Media.Metadata.DependencyInjection.csproj" />
   </ItemGroup>
 
@@ -78,4 +76,10 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   
+  <Target Name="_RemoveFrameworkReferences" BeforeTargets="_ConvertItems;_CalculateInputsForGenerateCurrentProjectAppxManifest">
+    <ItemGroup>
+      <FrameworkSdkReference Remove="@(FrameworkSdkReference)" Condition="$([System.String]::Copy('%(FrameworkSdkReference.SDKName)').StartsWith('Microsoft.WindowsAppRuntime.'))" />
+    </ItemGroup>
+  </Target>
+
 </Project>

@@ -12,22 +12,16 @@ namespace Media.Metadata.Converters;
 public sealed class ArrayToStringConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
     /// <inheritdoc/>
-    public object? Convert(object value, System.Type targetType, object parameter, string language)
+    public object? Convert(object value, System.Type targetType, object parameter, string language) => value switch
     {
-        return value switch
-        {
-            IEnumerable<string> enumerable => string.Join("; ", enumerable),
-            _ => default,
-        };
-    }
+        IEnumerable<string> enumerable => string.Join("; ", enumerable),
+        _ => default,
+    };
 
     /// <inheritdoc/>
-    public object? ConvertBack(object value, System.Type targetType, object parameter, string language)
+    public object? ConvertBack(object value, System.Type targetType, object parameter, string language) => value switch
     {
-        return value switch
-        {
-            string stringValue => stringValue.Split(';').Select(x => x.Trim()).ToList(),
-            _ => default,
-        };
-    }
+        string stringValue => stringValue.Split(';').Select(x => x.Trim()).ToList(),
+        _ => default,
+    };
 }

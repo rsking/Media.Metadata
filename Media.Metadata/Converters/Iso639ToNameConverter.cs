@@ -13,31 +13,15 @@ internal class Iso639ToNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
     private static IDictionary<string, string>? codeToName;
 
-    private static IDictionary<string, string> CodeToName
-    {
-        get
-        {
-            if (codeToName is not null)
-            {
-                return codeToName;
-            }
-
-            var values = GetValues();
-            codeToName = values.ToDictionary(value => value.Bibliographic, value => value.Name, System.StringComparer.Ordinal);
-            return codeToName;
-        }
-    }
+    private static IDictionary<string, string> CodeToName => codeToName ??= GetValues().ToDictionary(value => value.Bibliographic, value => value.Name, System.StringComparer.Ordinal);
 
     /// <inheritdoc/>
-    public object? Convert(object? value, System.Type targetType, object parameter, string language)
+    public object? Convert(object? value, System.Type targetType, object parameter, string language) => value switch
     {
-        return value switch
-        {
-            string key when CodeToName.TryGetValue(key, out var name) => name,
-            string key => key,
-            _ => default,
-        };
-    }
+        string key when CodeToName.TryGetValue(key, out var name) => name,
+        string key => key,
+        _ => default,
+    };
 
     /// <inheritdoc/>
     public object ConvertBack(object value, System.Type targetType, object parameter, string language) => throw new System.NotSupportedException();

@@ -54,7 +54,7 @@ internal abstract partial class VideoSearchViewModel : CommunityToolkit.Mvvm.Com
         var dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
         await foreach (var video in videos.ConfigureAwait(true))
         {
-            dispatcher.TryEnqueue(async () => this.videos.Add(await Models.VideoWithImageSource.CreateAsync(video).ConfigureAwait(true)));
+            _ = dispatcher.TryEnqueue(async () => this.videos.Add(await Models.VideoWithImageSource.CreateAsync(video).ConfigureAwait(true)));
         }
     }
 }

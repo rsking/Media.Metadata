@@ -117,7 +117,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
 
             foreach (var video in selectedVideos)
             {
-                this.Videos.Remove(video);
+                _ = this.Videos.Remove(video);
                 if (video is IAsyncDisposable asyncDisposable)
                 {
                     await asyncDisposable.DisposeAsync().ConfigureAwait(true);

@@ -28,9 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.TheTVDB", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.DependencyInjection", "Media.Metadata.DependencyInjection\Media.Metadata.DependencyInjection.csproj", "{0EFB0CE0-76A6-4F3C-93FB-0B7224FAFDDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media.Metadata.TvMaze", "Media.Metadata.TvMaze\Media.Metadata.TvMaze.csproj", "{2023DCF8-53D6-4A68-B8AE-3DB727C4289B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.TvMaze", "Media.Metadata.TvMaze\Media.Metadata.TvMaze.csproj", "{2023DCF8-53D6-4A68-B8AE-3DB727C4289B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media.Metadata.Rest", "Media.Metadata.Rest\Media.Metadata.Rest.csproj", "{9FD013A2-090D-4031-9880-BD59235C14C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.Rest", "Media.Metadata.Rest\Media.Metadata.Rest.csproj", "{9FD013A2-090D-4031-9880-BD59235C14C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

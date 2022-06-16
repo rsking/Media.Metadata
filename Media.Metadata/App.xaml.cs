@@ -6,19 +6,17 @@
 
 namespace Media.Metadata;
 
-using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.UI.Xaml;
 
 /// <summary>
 /// Provides application-specific behavior to supplement the default Application class.
 /// </summary>
-public partial class App : Application
+public partial class App : Microsoft.UI.Xaml.Application
 {
     private readonly IHost host;
 
-    private Window? window;
+    private Microsoft.UI.Xaml.Window? window;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="App"/> class as a singleton application object.
@@ -47,15 +45,10 @@ public partial class App : Application
             })
             .Build();
 
-        Ioc.Default.ConfigureServices(this.host.Services);
+        CommunityToolkit.Mvvm.DependencyInjection.Ioc.Default.ConfigureServices(this.host.Services);
 
         Current = this;
     }
-
-    /// <summary>
-    /// Gets them main window handle.
-    /// </summary>
-    public System.IntPtr MainWindowWindowHandle { get; private set; }
 
     /// <inheritdoc cref="Application.Current" />
     internal static new App? Current { get; private set; }
@@ -64,14 +57,14 @@ public partial class App : Application
     /// Gets the window.
     /// </summary>
     /// <returns>The main window.</returns>
-    internal Window? GetWindow() => this.window;
+    internal Microsoft.UI.Xaml.Window? GetWindow() => this.window;
 
     /// <summary>
     /// Invoked when the application is launched normally by the end user.  Other entry points
     /// will be used such as when the application is launched to open a specific file.
     /// </summary>
     /// <param name="args">Details about the launch request and process.</param>
-    protected override async void OnLaunched(LaunchActivatedEventArgs args)
+    protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
         await this.host.StartAsync().ConfigureAwait(true);
 
@@ -79,7 +72,6 @@ public partial class App : Application
         this.window.Title = "Media Metadata Updater";
         this.window.ExtendsContentIntoTitleBar = true;
         this.window.Activate();
-        this.MainWindowWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(this.window);
 
         this.window.Closed += async (_, __) =>
         {

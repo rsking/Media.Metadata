@@ -7,7 +7,6 @@
 namespace Media.Metadata;
 
 using System;
-using System.Runtime.InteropServices.WindowsRuntime;
 using SixLabors.ImageSharp;
 
 /// <summary>
@@ -21,14 +20,11 @@ internal static class ImageExtensions
     /// <param name="video">The video.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The image source.</returns>
-    public static async Task<Windows.Graphics.Imaging.SoftwareBitmap?> CreateSoftwareBitmapAsync(this IHasImage video, CancellationToken cancellationToken = default)
+    public static async Task<Windows.Graphics.Imaging.SoftwareBitmap?> CreateSoftwareBitmapAsync(this IHasImage video, CancellationToken cancellationToken = default) => video.Image switch
     {
-        return video.Image switch
-        {
-            Image image => await image.CreateSoftwareBitmapAsync(video.ImageFormat, cancellationToken).ConfigureAwait(false),
-            _ => default,
-        };
-    }
+        Image image => await image.CreateSoftwareBitmapAsync(video.ImageFormat, cancellationToken).ConfigureAwait(false),
+        _ => default,
+    };
 
     /// <summary>
     /// Creates an image source.
@@ -56,14 +52,11 @@ internal static class ImageExtensions
     /// <param name="video">The image.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The image source.</returns>
-    public static async Task<ImageSource?> CreateImageSource(this IHasImage video, CancellationToken cancellationToken = default)
+    public static async Task<ImageSource?> CreateImageSource(this IHasImage video, CancellationToken cancellationToken = default) => video.Image switch
     {
-        return video.Image switch
-        {
-            Image image => await image.CreateImageSource(video.ImageFormat, cancellationToken).ConfigureAwait(true),
-            _ => default,
-        };
-    }
+        Image image => await image.CreateImageSource(video.ImageFormat, cancellationToken).ConfigureAwait(true),
+        _ => default,
+    };
 
     /// <summary>
     /// Creates an image source.

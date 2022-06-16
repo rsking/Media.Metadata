@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:behaviors="using:Media.Metadata.Behaviors"
              xmlns:c="using:Media.Metadata.Controls"
-             xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
              xmlns:converters="using:Media.Metadata.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="using:Microsoft.Xaml.Interactivity"
+             xmlns:local="using:Media.Metadata.Views"
+             xmlns:m="using:Media.Metadata.Models"
              xmlns:markup="using:Media.Metadata.Markup"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:models="using:Media.Metadata.Models"
              xmlns:vm="using:Media.Metadata.ViewModels"
              d:DataContext="{d:DesignInstance Type=vm:MainViewModel,
                                               IsDesignTimeCreatable=False}"
@@ -346,7 +346,7 @@
                                                   Width="100"
                                                   Margin="2"
                                                   Header="Video Type"
-                                                  ItemsSource="{markup:EnumValuesExtension EnumType=models:VideoType}"
+                                                  ItemsSource="{markup:EnumValuesExtension EnumType=m:VideoType}"
                                                   SelectedItem="{Binding VideoType, Mode=TwoWay}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>

@@ -5,7 +5,7 @@
 // -----------------------------------------------------------------------
 
 namespace Media.Metadata.ViewModels;
-using System.Collections.Generic;
+
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 

@@ -6,25 +6,22 @@
 
 namespace Media.Metadata.Behaviors;
 
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-
 /// <summary>
 /// <see cref="ListBox"/> selection behavior.
 /// </summary>
 /// <typeparam name="T">The type of item.</typeparam>
-internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavior<ListBox>
+internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavior<Microsoft.UI.Xaml.Controls.ListBox>
 {
     /// <summary>
     /// Identifies the <see cref="SelectedItems"/> dependency property.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "RCS1158:Static member in generic type should use a type parameter.", Justification = "Checked")]
-    public static readonly DependencyProperty SelectedItemsProperty =
-        DependencyProperty.Register(
+    public static readonly Microsoft.UI.Xaml.DependencyProperty SelectedItemsProperty =
+        Microsoft.UI.Xaml.DependencyProperty.Register(
             nameof(SelectedItems),
             typeof(System.Collections.IList),
             typeof(ListBoxSelectionBehavior<T>),
-            new PropertyMetadata(default, OnSelectedItemsChanged));
+            new Microsoft.UI.Xaml.PropertyMetadata(default, OnSelectedItemsChanged));
 
     private bool viewHandled;
 
@@ -58,7 +55,7 @@ internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavi
         }
     }
 
-    private static void OnSelectedItemsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+    private static void OnSelectedItemsChanged(Microsoft.UI.Xaml.DependencyObject sender, Microsoft.UI.Xaml.DependencyPropertyChangedEventArgs args)
     {
         var behavior = (ListBoxSelectionBehavior<T>)sender;
         if (behavior.modelHandled)
@@ -93,7 +90,7 @@ internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavi
     }
 
     // Propagate selected items from view to model
-    private void OnListBoxSelectionChanged(object sender, SelectionChangedEventArgs args)
+    private void OnListBoxSelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs args)
     {
         if (this.viewHandled)
         {
