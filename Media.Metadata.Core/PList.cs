@@ -221,13 +221,8 @@ public class PList : IDictionary<string, object>, IDictionary, IXmlSerializable
     }
 
     /// <inheritdoc />
-    public void WriteXml(XmlWriter writer)
+    public void WriteXml(XmlWriter writer!!)
     {
-        if (writer is null)
-        {
-            throw new ArgumentNullException(nameof(writer));
-        }
-
         writer.WriteAttributeString("version", "1.0");
         WriteDictionary(writer, 0, this);
     }

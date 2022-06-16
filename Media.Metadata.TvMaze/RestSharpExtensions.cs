@@ -6,8 +6,6 @@
 
 namespace Media.Metadata.TvMaze;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using RestSharp;
 
 /// <summary>

@@ -5,10 +5,6 @@
 // -----------------------------------------------------------------------
 
 namespace Media.Metadata.TvMaze;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 /// <summary>
 /// The TV Maze options.
 /// </summary>

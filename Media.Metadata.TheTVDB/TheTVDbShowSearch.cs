@@ -70,7 +70,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
             var request = new RestRequest(CreateUri(baseUrl, "series/{id}/extended"));
             if (id is not null)
             {
-                request.AddUrlSegment("id", id);
+                _ = request.AddUrlSegment("id", id);
             }
 
             var seriesResponse = await client.ExecuteGetAsync<Response<SeriesExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
@@ -304,7 +304,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         static async Task WriteTokenToFile(TokenResponse tokenResponse, string? fileName = null, CancellationToken cancellationToken = default)
         {
             fileName ??= GenerateFileName();
-            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+            _ = Directory.CreateDirectory(Path.GetDirectoryName(fileName));
             using var stream = File.OpenWrite(fileName);
             await System.Text.Json.JsonSerializer.SerializeAsync(stream, tokenResponse, Options, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
@@ -330,7 +330,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
                 throw new InvalidOperationException(Properties.Resources.FailedToGetTokenResponse);
             }
 
-            client.AddDefaultHeader(KnownHeaders.Authorization, $"Bearer {this.tokenResponse.Token}");
+            _ = client.AddDefaultHeader(KnownHeaders.Authorization, $"Bearer {this.tokenResponse.Token}");
         }
     }
 
@@ -355,7 +355,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
             client.DefaultParameters.RemoveParameter(parameter);
         }
 
-        client.DefaultParameters.AddParameters(parameters.Select(parameter => Parameter.CreateParameter(parameter.Name, value, parameter.Type, parameter.Encode)));
+        _ = client.DefaultParameters.AddParameters(parameters.Select(parameter => Parameter.CreateParameter(parameter.Name, value, parameter.Type, parameter.Encode)));
     }
 
     private Uri CreateUri(string? resource) => CreateUri(this.baseUrl, resource);
@@ -370,7 +370,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         if (year > 0)
         {
-            request.AddQueryParameter("year", year.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            _ = request.AddQueryParameter("year", year.ToString(System.Globalization.CultureInfo.InvariantCulture));
         }
 
         var response = await this.client.ExecuteGetAsync<Response<ICollection<SearchResult>>>(request, cancellationToken).ConfigureAwait(false);

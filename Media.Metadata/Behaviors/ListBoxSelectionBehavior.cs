@@ -107,7 +107,7 @@ internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavi
         {
             foreach (var item in this.AssociatedObject.SelectedItems)
             {
-                this.SelectedItems.Add(item);
+                _ = this.SelectedItems.Add(item);
             }
         }
     }

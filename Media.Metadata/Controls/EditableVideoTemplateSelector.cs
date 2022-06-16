@@ -27,16 +27,13 @@ internal class EditableVideoTemplateSelector : Microsoft.UI.Xaml.Controls.DataTe
     public Microsoft.UI.Xaml.DataTemplate? MovieTemplate { get; set; }
 
     /// <inheritdoc/>
-    protected override Microsoft.UI.Xaml.DataTemplate? SelectTemplateCore(object item)
+    protected override Microsoft.UI.Xaml.DataTemplate? SelectTemplateCore(object item) => item switch
     {
-        return item switch
-        {
-            ViewModels.EpisodeViewModel => this.EpisodeTemplate,
-            ViewModels.MovieViewModel => this.MovieTemplate,
-            ViewModels.VideoViewModel => this.VideoTemplate,
-            _ => base.SelectTemplateCore(item),
-        };
-    }
+        ViewModels.EpisodeViewModel => this.EpisodeTemplate,
+        ViewModels.MovieViewModel => this.MovieTemplate,
+        ViewModels.VideoViewModel => this.VideoTemplate,
+        _ => base.SelectTemplateCore(item),
+    };
 
     /// <inheritdoc/>
     protected override Microsoft.UI.Xaml.DataTemplate? SelectTemplateCore(object item, Microsoft.UI.Xaml.DependencyObject container) => this.SelectTemplateCore(item);

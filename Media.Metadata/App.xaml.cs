@@ -29,19 +29,19 @@ public partial class App : Microsoft.UI.Xaml.Application
         this.InitializeComponent();
 
         this.host = Host.CreateDefaultBuilder()
-            .ConfigureServices((_, services) =>
+            .ConfigureServices(services =>
             {
-                services.AddTransient<ViewModels.MainViewModel>();
-                services.AddTransient<MainWindow>();
+                _ = services.AddTransient<ViewModels.MainViewModel>();
+                _ = services.AddTransient<MainWindow>();
 
-                services
+                _ = services
                     .AddTMDb();
 
-                services
+                _ = services
                     .AddMp4v2(Path.PathSeparator)
                     .AddTagLib();
 
-                services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
+                _ = services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
             })
             .Build();
 
