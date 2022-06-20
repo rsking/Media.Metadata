@@ -51,7 +51,7 @@ internal partial class EpisodeSearchViewModel : VideoSearchViewModel
     /// Searches for the episode.
     /// </summary>
     /// <returns>The task.</returns>
-    [ICommand(AllowConcurrentExecutions = false)]
+    [RelayCommand(AllowConcurrentExecutions = false)]
     public async Task SearchSeries()
     {
         this.series.Clear();

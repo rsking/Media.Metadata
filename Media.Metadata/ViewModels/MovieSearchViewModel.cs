@@ -31,6 +31,6 @@ internal partial class MovieSearchViewModel : VideoSearchViewModel
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The task.</returns>
-    [ICommand(AllowConcurrentExecutions = false)]
+    [RelayCommand(AllowConcurrentExecutions = false)]
     public Task Search() => this.SetVideos(this.movieSearch.SearchAsync(this.Name!, this.Year ?? 0, this.SelectedCountry?.Abbreviation ?? Country.Australia.Abbreviation));
 }

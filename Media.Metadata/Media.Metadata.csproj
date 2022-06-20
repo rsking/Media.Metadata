@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.1" />

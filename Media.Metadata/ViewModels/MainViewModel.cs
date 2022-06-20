@@ -21,18 +21,18 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     private readonly IUpdater updater;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(SelectedEditableVideo))]
-    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(CanSave))]
-    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyCanExecuteFor(nameof(SaveCommand))]
-    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(CanSearch))]
-    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyCanExecuteFor(nameof(SearchCommand))]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedFor(nameof(SelectedEditableVideo))]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedFor(nameof(CanSave))]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedFor(nameof(CanSearch))]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyCanExecuteChangedFor(nameof(SearchCommand))]
     private Video? selectedVideo;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(CanSave))]
-    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyCanExecuteFor(nameof(SaveCommand))]
-    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyChangeFor(nameof(CanSearch))]
-    [CommunityToolkit.Mvvm.ComponentModel.AlsoNotifyCanExecuteFor(nameof(SearchCommand))]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedFor(nameof(CanSave))]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedFor(nameof(CanSearch))]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyCanExecuteChangedFor(nameof(SearchCommand))]
     private bool isSaving;
 
     /// <summary>
@@ -75,7 +75,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Adds videos.
     /// </summary>
     /// <returns>The task.</returns>
-    [ICommand]
+    [RelayCommand]
     public async Task AddVideos()
     {
         // Open a text file.
@@ -106,7 +106,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Removes the selected video.
     /// </summary>
     /// <returns>The task.</returns>
-    [ICommand]
+    [RelayCommand]
     public async Task RemoveVideo()
     {
         if (this.SelectedVideos.Count > 0)
@@ -136,7 +136,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Saves the current video.
     /// </summary>
     /// <returns>The task.</returns>
-    [ICommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSave))]
+    [RelayCommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSave))]
     public async Task Save()
     {
         if (this.SelectedEditableVideo is not null)
@@ -194,7 +194,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Searches for the current video.
     /// </summary>
     /// <returns>The task.</returns>
-    [ICommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSearch))]
+    [RelayCommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSearch))]
     public async Task Search()
     {
         VideoSearchViewModel? viewModel = this.SelectedEditableVideo switch
