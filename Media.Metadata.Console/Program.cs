@@ -97,6 +97,7 @@ static Command CreateSearchMovie()
                 }
             }
         },
+        HostBinder.Instance,
         nameArgument,
         yearOption);
 
@@ -123,6 +124,7 @@ static Command CreateReadMovie()
             var movie = reader.ReadMovie(path.FullName);
             Console.WriteLine(movie.Name);
         },
+        HostBinder.Instance,
         pathArgument);
 
     return command;
@@ -148,6 +150,7 @@ static Command CreateReadEpisode()
             var episode = reader.ReadEpisode(path.FullName);
             Console.WriteLine(episode.Name);
         },
+        HostBinder.Instance,
         pathArgument);
 
     return command;
@@ -187,13 +190,14 @@ static Command CreateSearchShow()
                 }
             }
         },
+        HostBinder.Instance,
         nameArgument,
         yearOption);
 
     return command;
 }
 
-static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor langOption)
+static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor<string[]> langOption)
 {
     var pathArgument = new Argument<FileInfo>("path").ExistingOnly();
     var nameArgument = new Argument<string>("name");
@@ -229,6 +233,7 @@ static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor lan
                 }
             }
         },
+        HostBinder.Instance,
         pathArgument,
         nameArgument,
         yearOption,
@@ -237,7 +242,7 @@ static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor lan
     return command;
 }
 
-static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor langOption)
+static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor<string[]> langOption)
 {
     var pathArgument = new Argument<FileInfo[]>("path", ParseFileInfo);
     var nameOption = new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true };
@@ -245,6 +250,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
     var seasonOption = new Option<int>(new[] { "--season", "-s" }, () => -1, "The season number");
     var episodeOption = new Option<int>(new[] { "--episode", "-e" }, () => -1, "The episode number");
     var ignoreOption = new Option<bool>(new[] { "--ignore", "-i" }, "Ignore files that already have a valid episode");
+    var episodeOffsetOption = new Option<int>(new[] { "--offset", "-o" }, "Offset for episode numbers");
 
     var command = new Command("episode")
     {
@@ -254,10 +260,11 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
         seasonOption,
         episodeOption,
         ignoreOption,
+        episodeOffsetOption,
     };
 
     command.SetHandler(
-        async (IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, bool ignore, string[]? lang, CancellationToken cancellationToken) =>
+        async (IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, bool ignore, int offset, string[]? lang, CancellationToken cancellationToken) =>
         {
             var regex = new[]
             {
@@ -315,8 +322,8 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                             var episoides = seasonGroup
                                 .Select(path => episode switch
                                 {
-                                    -1 when GetMatch(path.Name) is System.Text.RegularExpressions.Match match => (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture), Path: path),
-                                    _ => (Episode: episode, Path: path),
+                                    -1 when GetMatch(path.Name) is System.Text.RegularExpressions.Match match => (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture) + offset, Path: path),
+                                    _ => (Episode: episode + offset, Path: path),
                                 })
                                 .OrderBy(ep => ep.Episode)
                                 .ToList();
@@ -399,18 +406,20 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor l
                 return f.Show is null || f.Season < 0 || f.Number < 0;
             }
         },
+        HostBinder.Instance,
         pathArgument,
         nameOption,
         yearOption,
         seasonOption,
         episodeOption,
         ignoreOption,
+        episodeOffsetOption,
         langOption);
 
     return command;
 }
 
-static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor langOption)
+static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor<string[]> langOption)
 {
     var pathArgument = new Argument<FileInfo[]>("path", ParseFileInfo).ExistingOnly();
     var command = new Command("video")
@@ -418,21 +427,20 @@ static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor lan
         pathArgument,
     };
 
-    command.SetHandler(
-        (IConsole console, IHost host, FileInfo[] path, string[]? lang) =>
+    command.SetHandler((System.CommandLine.Invocation.InvocationContext context) =>
         {
+            var host = context.GetValueForHandlerParameter(HostBinder.Instance)!;
             var reader = host.Services.GetRequiredService<IReader>();
             var updater = host.Services.GetRequiredService<IUpdater>();
-            var languages = GetLanguages(lang);
+            var languages = GetLanguages(context.GetValueForHandlerParameter(langOption));
+            var path = context.ParseResult.GetValueForArgument(pathArgument);
             foreach (var p in path.Where(p => p.Exists).Select(p => p.FullName))
             {
                 var video = reader.ReadVideo(p);
-                console.Out.WriteLine(FormattableString.CurrentCulture($"Updating {video.Name}"));
+                context.Console.Out.WriteLine(FormattableString.CurrentCulture($"Updating {video.Name}"));
                 updater.UpdateVideo(p, video, languages);
             }
-        },
-        pathArgument,
-        langOption);
+        });
 
     return command;
 }
