@@ -79,8 +79,23 @@ public static class ImageComparer
         };
     }
 
-    private static bool CompareInternal(Image actualImage!!, Image expectedImage!!, IList<ToleranceRectangle> rectangleList!!, out Image? diffImage, bool createOutImage)
+    private static bool CompareInternal(Image actualImage, Image expectedImage, IList<ToleranceRectangle> rectangleList, out Image? diffImage, bool createOutImage)
     {
+        if (actualImage is null)
+        {
+            throw new ArgumentNullException(nameof(actualImage));
+        }
+
+        if (expectedImage is null)
+        {
+            throw new ArgumentNullException(nameof(expectedImage));
+        }
+
+        if (rectangleList is null)
+        {
+            throw new ArgumentNullException(nameof(rectangleList));
+        }
+
         if (actualImage.Width != expectedImage.Width
             || actualImage.Height != expectedImage.Height
             || actualImage.PixelType != expectedImage.PixelType)
@@ -100,8 +115,23 @@ public static class ImageComparer
         return CompareInternal(snapshot, snapshot2, toleranceMap, out diffImage, createOutImage);
     }
 
-    private static bool CompareInternal(Image actualImage!!, Image expectedImage!!, ColorDifference argbTolerance!!, out Image? diffImage, bool createOutImage)
+    private static bool CompareInternal(Image actualImage, Image expectedImage, ColorDifference argbTolerance, out Image? diffImage, bool createOutImage)
     {
+        if (actualImage is null)
+        {
+            throw new ArgumentNullException(nameof(actualImage));
+        }
+
+        if (expectedImage is null)
+        {
+            throw new ArgumentNullException(nameof(expectedImage));
+        }
+
+        if (argbTolerance is null)
+        {
+            throw new ArgumentNullException(nameof(argbTolerance));
+        }
+
         if (actualImage.Width != expectedImage.Width
             || actualImage.Height != expectedImage.Height
             || actualImage.PixelType != expectedImage.PixelType)
