@@ -97,9 +97,10 @@ static Command CreateSearchMovie()
                 }
             }
         },
-        HostBinder.Instance,
+        Bind.FromServiceProvider<IHost>(),
         nameArgument,
-        yearOption);
+        yearOption,
+        Bind.FromServiceProvider<CancellationToken>());
 
     return command;
 }
@@ -124,7 +125,7 @@ static Command CreateReadMovie()
             var movie = reader.ReadMovie(path.FullName);
             Console.WriteLine(movie.Name);
         },
-        HostBinder.Instance,
+        Bind.FromServiceProvider<IHost>(),
         pathArgument);
 
     return command;
@@ -150,7 +151,7 @@ static Command CreateReadEpisode()
             var episode = reader.ReadEpisode(path.FullName);
             Console.WriteLine(episode.Name);
         },
-        HostBinder.Instance,
+        Bind.FromServiceProvider<IHost>(),
         pathArgument);
 
     return command;
@@ -190,9 +191,10 @@ static Command CreateSearchShow()
                 }
             }
         },
-        HostBinder.Instance,
+        Bind.FromServiceProvider<IHost>(),
         nameArgument,
-        yearOption);
+        yearOption,
+        Bind.FromServiceProvider<CancellationToken>());
 
     return command;
 }
@@ -233,11 +235,12 @@ static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor<str
                 }
             }
         },
-        HostBinder.Instance,
+        Bind.FromServiceProvider<IHost>(),
         pathArgument,
         nameArgument,
         yearOption,
-        langOption);
+        langOption,
+        Bind.FromServiceProvider<CancellationToken>());
 
     return command;
 }
@@ -406,7 +409,7 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor<s
                 return f.Show is null || f.Season < 0 || f.Number < 0;
             }
         },
-        HostBinder.Instance,
+        Bind.FromServiceProvider<IHost>(),
         pathArgument,
         nameOption,
         yearOption,
@@ -414,7 +417,8 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor<s
         episodeOption,
         ignoreOption,
         episodeOffsetOption,
-        langOption);
+        langOption,
+        Bind.FromServiceProvider<CancellationToken>());
 
     return command;
 }
@@ -427,20 +431,23 @@ static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor<str
         pathArgument,
     };
 
-    command.SetHandler((System.CommandLine.Invocation.InvocationContext context) =>
+    command.SetHandler((IConsole console, IHost host, FileInfo[] path, string[] lang) =>
         {
-            var host = context.GetValueForHandlerParameter(HostBinder.Instance)!;
             var reader = host.Services.GetRequiredService<IReader>();
             var updater = host.Services.GetRequiredService<IUpdater>();
-            var languages = GetLanguages(context.GetValueForHandlerParameter(langOption));
-            var path = context.ParseResult.GetValueForArgument(pathArgument);
+            var languages = GetLanguages(lang);
             foreach (var p in path.Where(p => p.Exists).Select(p => p.FullName))
             {
                 var video = reader.ReadVideo(p);
                 context.Console.Out.WriteLine(FormattableString.CurrentCulture($"Updating {video.Name}"));
                 updater.UpdateVideo(p, video, languages);
             }
-        });
+        },
+        Bind.FromServiceProvider<IConsole>(),
+        Bind.FromServiceProvider<IHost>(),
+        pathArgument,
+        langOption,
+        Bind.FromServiceProvider<CancellationToken>());
 
     return command;
 }
