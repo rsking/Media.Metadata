@@ -235,6 +235,7 @@ static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor<str
                 }
             }
         },
+        Bind.FromServiceProvider<IConsole>(),
         Bind.FromServiceProvider<IHost>(),
         pathArgument,
         nameArgument,
@@ -245,7 +246,7 @@ static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor<str
     return command;
 }
 
-static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor<string[]> langOption)
+static Command CreateUpdateEpisode(Option<string[]> langOption)
 {
     var pathArgument = new Argument<FileInfo[]>("path", ParseFileInfo);
     var nameOption = new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true };
@@ -266,8 +267,21 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor<s
         episodeOffsetOption,
     };
 
-    command.SetHandler(
-        async (IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, bool ignore, int offset, string[]? lang, CancellationToken cancellationToken) =>
+    command.SetHandler(context =>
+    {
+        var host = context.BindingContext.GetRequiredService<IHost>();
+        var path = context.ParseResult.GetValueForArgument(pathArgument);
+        var name = context.ParseResult.GetValueForOption(nameOption);
+        var year = context.ParseResult.GetValueForOption(yearOption);
+        var season = context.ParseResult.GetValueForOption(seasonOption);
+        var episode = context.ParseResult.GetValueForOption(episodeOption);
+        var ignore = context.ParseResult.GetValueForOption(ignoreOption);
+        var episodeOffset = context.ParseResult.GetValueForOption(episodeOffsetOption);
+        var lang = context.ParseResult.GetValueForOption(langOption);
+
+        return Process(context.Console, host, path, name!, year, season, episode, ignore, episodeOffset, lang, context.GetCancellationToken());
+
+        static async Task Process(IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, bool ignore, int offset, string[]? lang, CancellationToken cancellationToken)
         {
             var regex = new[]
             {
@@ -408,17 +422,8 @@ static Command CreateUpdateEpisode(System.CommandLine.Binding.IValueDescriptor<s
                 using var f = reader.ReadEpisode(path.FullName);
                 return f.Show is null || f.Season < 0 || f.Number < 0;
             }
-        },
-        Bind.FromServiceProvider<IHost>(),
-        pathArgument,
-        nameOption,
-        yearOption,
-        seasonOption,
-        episodeOption,
-        ignoreOption,
-        episodeOffsetOption,
-        langOption,
-        Bind.FromServiceProvider<CancellationToken>());
+        }
+    });
 
     return command;
 }
@@ -431,7 +436,8 @@ static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor<str
         pathArgument,
     };
 
-    command.SetHandler((IConsole console, IHost host, FileInfo[] path, string[] lang) =>
+    command.SetHandler(
+        (IConsole console, IHost host, FileInfo[] path, string[] lang) =>
         {
             var reader = host.Services.GetRequiredService<IReader>();
             var updater = host.Services.GetRequiredService<IUpdater>();
@@ -439,15 +445,14 @@ static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor<str
             foreach (var p in path.Where(p => p.Exists).Select(p => p.FullName))
             {
                 var video = reader.ReadVideo(p);
-                context.Console.Out.WriteLine(FormattableString.CurrentCulture($"Updating {video.Name}"));
+                console.Out.WriteLine(FormattableString.CurrentCulture($"Updating {video.Name}"));
                 updater.UpdateVideo(p, video, languages);
             }
         },
         Bind.FromServiceProvider<IConsole>(),
         Bind.FromServiceProvider<IHost>(),
         pathArgument,
-        langOption,
-        Bind.FromServiceProvider<CancellationToken>());
+        langOption);
 
     return command;
 }
