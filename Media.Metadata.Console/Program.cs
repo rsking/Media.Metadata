@@ -42,11 +42,14 @@ var updateCommand = new Command("update")
 
 updateCommand.AddGlobalOption(langOption);
 
+var optimiseCommand = CreateOptimize();
+
 var commandBuilder = new CommandLineBuilder(new RootCommand
 {
     searchCommand,
     readCommand,
     updateCommand,
+    optimiseCommand,
 });
 
 await commandBuilder
@@ -453,6 +456,30 @@ static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor<str
         Bind.FromServiceProvider<IHost>(),
         pathArgument,
         langOption);
+
+    return command;
+}
+
+static Command CreateOptimize()
+{
+    var pathArgument = new Argument<FileInfo>("path").ExistingOnly();
+    var command = new Command("optimize")
+    {
+        pathArgument,
+    };
+
+    command.SetHandler(
+        (IOptimizer optimizer, FileInfo path) =>
+        {
+            if (!path.Exists)
+            {
+                return;
+            }
+
+            optimizer.Opimize(path.FullName);
+        },
+        Bind.FromServiceProvider<IOptimizer>(),
+        pathArgument);
 
     return command;
 }

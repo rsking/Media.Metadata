@@ -145,7 +145,7 @@ internal static class IntPtrExtensions
     /// </summary>
     /// <param name="tagsStructure">The <see cref="IntPtr"/> value pointing indicating the location of the MP4Tags structure.</param>
     /// <param name="value">The 16-bit integer value with which to call the MP4V2 API.</param>
-    /// <param name="mp4ApiFunction">The MP4V2 API method to call with the pointer to the 16-bit integer value.</param>
+    /// <param name="mp4ApiFunction">The MP4V2 API method to call with the pointer to the value.</param>
     public static void WriteInt16(this IntPtr tagsStructure, short? value, Func<IntPtr, IntPtr, bool> mp4ApiFunction)
     {
         if (value is null)

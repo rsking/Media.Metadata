@@ -77,7 +77,8 @@ public static class ServiceCollectionExtensions
         {
             _ = services
                 .AddTransient<Media.Metadata.IReader, Media.Metadata.Mp4Reader>()
-                .AddTransient<Media.Metadata.IUpdater, Media.Metadata.Mp4Writer>();
+                .AddTransient<Media.Metadata.IUpdater, Media.Metadata.Mp4Writer>()
+                .AddTransient<Media.Metadata.IOptimizer, Media.Metadata.Mp4Optimizer>();
 
             AppDomain.CurrentDomain.AddNativePath(new string(pathSeparator, 1));
         }

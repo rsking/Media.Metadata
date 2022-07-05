@@ -139,11 +139,13 @@ internal class MovieInfo : Atom, IEquatable<MovieInfo>
             this.directors = GetListOrDefault<string>(map, nameof(this.directors));
             this.producers = GetListOrDefault<string>(map, nameof(this.producers));
             this.screenwriters = GetListOrDefault<string>(map, nameof(this.screenwriters));
-            this.studio = GetOrDefault<string>(map, nameof(this.studio));
+            this.studio = GetValueOrDefault<string>(map, nameof(this.studio));
 
-            static T? GetOrDefault<T>(PList plist, string key)
+            static T? GetValueOrDefault<T>(PList plist, string key)
             {
-                return plist.ContainsKey(key) ? (T)plist[key] : default;
+                return plist.ContainsKey(key)
+                    ? (T)plist[key]
+                    : default;
             }
 
             static IList<T>? GetListOrDefault<T>(PList plist, string key)
@@ -154,7 +156,9 @@ internal class MovieInfo : Atom, IEquatable<MovieInfo>
 
                 static IEnumerable<T> Enumerate(object[] values)
                 {
-                    return values.OfType<IDictionary<string, object>>().SelectMany(dictionary => dictionary.Values.OfType<T>());
+                    return values
+                        .OfType<IDictionary<string, object>>()
+                        .SelectMany(dictionary => dictionary.Values.OfType<T>());
                 }
             }
         }

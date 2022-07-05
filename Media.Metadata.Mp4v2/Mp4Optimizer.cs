@@ -10,7 +10,7 @@ using System.Text;
 /// <summary>
 /// The MP4v2 optimizer.
 /// </summary>
-internal class Mp4Optimizer : IOptimizer
+public class Mp4Optimizer : IOptimizer
 {
     /// <inheritdoc/>
     public bool Opimize(string path) => NativeMethods.MP4Optimize(Encoding.UTF8.GetBytes(path), newName: null);
