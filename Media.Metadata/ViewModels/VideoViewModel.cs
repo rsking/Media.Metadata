@@ -78,7 +78,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         this.ScreenWriters = Create(video.ScreenWriters);
         this.Cast = Create(video.Cast);
         this.Composers = Create(video.Composers);
-        this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
+        this.Release = video.Release is null || video.Release.Value.Ticks == default ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
         this.Rating = new RatingViewModel(video.Rating);
         this.Tracks = video.Tracks.Select(track => new MediaTrackViewModel(track)).ToArray();
         this.Image = image;
