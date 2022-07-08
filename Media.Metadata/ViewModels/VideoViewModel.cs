@@ -17,26 +17,19 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? description;
 
-    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private IList<string>? producers;
+    private IList<string> producers;
 
-    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private IList<string>? directors;
+    private IList<string> directors;
 
-    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private IList<string>? studios;
+    private IList<string> studios;
 
-    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private IList<string>? genre;
+    private IList<string> genre;
 
-    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private IList<string>? screenWriters;
+    private IList<string> screenWriters;
 
-    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private IList<string>? cast;
+    private IList<string> cast;
 
-    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private IList<string>? composers;
+    private IList<string> composers;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private System.DateTimeOffset? release;
@@ -71,24 +64,19 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         this.FileInfo = fileInfo;
         this.Name = video.Name;
         this.Description = video.Description;
-        this.Producers = Create(video.Producers);
-        this.Directors = Create(video.Directors);
-        this.Studios = Create(video.Studios);
-        this.Genre = Create(video.Genre);
-        this.ScreenWriters = Create(video.ScreenWriters);
-        this.Cast = Create(video.Cast);
-        this.Composers = Create(video.Composers);
+        this.producers = CreateList(video.Producers);
+        this.directors = CreateList(video.Directors);
+        this.studios = CreateList(video.Studios);
+        this.genre = CreateList(video.Genre);
+        this.screenWriters = CreateList(video.ScreenWriters);
+        this.cast = CreateList(video.Cast);
+        this.composers = CreateList(video.Composers);
         this.Release = video.Release is null || video.Release.Value.Ticks == default ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
         this.Rating = new RatingViewModel(video.Rating);
         this.Tracks = video.Tracks.Select(track => new MediaTrackViewModel(track)).ToArray();
         this.Image = image;
         this.ImageFormat = imageFormat;
         this.ImageSource = imageSource;
-
-        static IList<T> Create<T>(IEnumerable<T>? source)
-        {
-            return source?.ToList() ?? new List<T>();
-        }
     }
 
     /// <summary>
@@ -108,6 +96,41 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     /// Gets the tracks.
     /// </summary>
     public IEnumerable<MediaTrackViewModel> Tracks { get; init; }
+
+    /// <summary>
+    /// Gets the producers.
+    /// </summary>
+    public IList<string> Producers { get => this.producers; init => this.SetProperty(ref this.producers, CreateList(value)); }
+
+    /// <summary>
+    /// Gets the directors.
+    /// </summary>
+    public IList<string> Directors { get => this.directors; init => this.SetProperty(ref this.directors, CreateList(value)); }
+
+    /// <summary>
+    /// Gets the directors.
+    /// </summary>
+    public IList<string> Studios { get => this.studios; init => this.SetProperty(ref this.studios, CreateList(value)); }
+
+    /// <summary>
+    /// Gets the directors.
+    /// </summary>
+    public IList<string> Genre { get => this.genre; init => this.SetProperty(ref this.genre, CreateList(value)); }
+
+    /// <summary>
+    /// Gets the directors.
+    /// </summary>
+    public IList<string> ScreenWriters { get => this.screenWriters; init => this.SetProperty(ref this.screenWriters, CreateList(value)); }
+
+    /// <summary>
+    /// Gets the directors.
+    /// </summary>
+    public IList<string> Cast { get => this.cast; init => this.SetProperty(ref this.cast, CreateList(value)); }
+
+    /// <summary>
+    /// Gets the directors.
+    /// </summary>
+    public IList<string> Composers { get => this.composers; init => this.SetProperty(ref this.composers, CreateList(value)); }
 
     /// <inheritdoc/>
     public ImageSource? ImageSource
@@ -189,13 +212,13 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
 
         this.Name = video.Name;
         this.Description = video.Description;
-        this.Producers = Create(video.Producers);
-        this.Directors = Create(video.Directors);
-        this.Studios = Create(video.Studios);
-        this.Genre = Create(video.Genre);
-        this.ScreenWriters = Create(video.ScreenWriters);
-        this.Cast = Create(video.Cast);
-        this.Composers = Create(video.Composers);
+        this.SetProperty(ref this.producers, CreateList(video.Producers), nameof(this.Producers));
+        this.SetProperty(ref this.directors, CreateList(video.Directors), nameof(this.Directors));
+        this.SetProperty(ref this.studios, CreateList(video.Studios), nameof(this.Studios));
+        this.SetProperty(ref this.genre, CreateList(video.Genre), nameof(this.Genre));
+        this.SetProperty(ref this.screenWriters, CreateList(video.ScreenWriters), nameof(this.ScreenWriters));
+        this.SetProperty(ref this.cast, CreateList(video.Cast), nameof(this.Cast));
+        this.SetProperty(ref this.composers, CreateList(video.Composers), nameof(this.Composers));
         this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
         this.Rating.SelectedRating = video.Rating;
         this.Image = video.Image;
@@ -204,11 +227,6 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         if (video is Models.IHasImageSource imageSource)
         {
             this.ImageSource = imageSource.ImageSource;
-        }
-
-        static IList<T> Create<T>(IEnumerable<T>? source)
-        {
-            return source?.ToList() ?? new List<T>();
         }
     }
 
@@ -263,5 +281,16 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
                 disposable.Dispose();
             }
         }
+    }
+
+    private static IList<T> CreateList<T>(IEnumerable<T>? source)
+    {
+        return source switch
+        {
+            System.Collections.ObjectModel.ObservableCollection<T> observable => observable,
+            List<T> list => new System.Collections.ObjectModel.ObservableCollection<T>(list),
+            not null => new System.Collections.ObjectModel.ObservableCollection<T>(source),
+            _ => new System.Collections.ObjectModel.ObservableCollection<T>(),
+        };
     }
 }
