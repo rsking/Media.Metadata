@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 namespace Media.Metadata.TvMaze;
+
 /// <summary>
 /// The TV Maze options.
 /// </summary>

@@ -83,7 +83,7 @@ public record class Country : IEquatable<Country>
     /// Converts a string value into an abbrevation.
     /// </summary>
     /// <param name="abbreviation">The abbreviation.</param>
-    public static implicit operator Country(string abbreviation) => All.FirstOrDefault(country => string.Equals(country.Abbreviation, abbreviation, StringComparison.Ordinal)) ?? throw new InvalidCastException();
+    public static implicit operator Country(string abbreviation) => All.FirstOrDefault(country => string.Equals(country.Abbreviation, abbreviation, StringComparison.Ordinal));
 
     /// <inheritdoc/>
     public override string ToString() => this.Name;
