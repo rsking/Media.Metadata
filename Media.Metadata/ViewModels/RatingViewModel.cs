@@ -40,21 +40,15 @@ internal partial class RatingViewModel : CommunityToolkit.Mvvm.ComponentModel.Ob
     /// </summary>
     public IEnumerable<Rating> Ratings => this.ratings;
 
-    /// <inheritdoc/>
-    protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
+    partial void OnSelectedCountryChanged(Country? value)
     {
-        if (string.Equals(e.PropertyName, nameof(this.selectedCountry), System.StringComparison.OrdinalIgnoreCase))
+        this.ratings.Clear();
+        if (value is Country country)
         {
-            this.ratings.Clear();
-            if (this.selectedCountry is Country country)
+            foreach (var rating in Rating.GetRatings(country))
             {
-                foreach (var rating in Rating.GetRatings(country))
-                {
-                    this.ratings.Add(rating);
-                }
+                this.ratings.Add(rating);
             }
         }
-
-        base.OnPropertyChanged(e);
     }
 }

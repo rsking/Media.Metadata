@@ -255,21 +255,15 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         }
     }
 
-    /// <inheritdoc/>
-    protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
+    partial void OnSelectedVideoChanged(Video? value)
     {
-        if (string.Equals(e.PropertyName, nameof(this.selectedVideo), StringComparison.OrdinalIgnoreCase))
+        this.SelectedEditableVideo = value switch
         {
-            this.SelectedEditableVideo = this.selectedVideo switch
-            {
-                Models.LocalEpisodeWithImageSource episode => new EpisodeViewModel(episode),
-                Models.LocalMovieWithImageSource movie => new MovieViewModel(movie),
-                Models.LocalVideoWithImageSource video => new VideoViewModel(video),
-                _ => default,
-            };
-        }
-
-        base.OnPropertyChanged(e);
+            Models.LocalEpisodeWithImageSource episode => new EpisodeViewModel(episode),
+            Models.LocalMovieWithImageSource movie => new MovieViewModel(movie),
+            Models.LocalVideoWithImageSource video => new VideoViewModel(video),
+            _ => default,
+        };
     }
 
     private async Task<Video?> ReadVideoAsync(string path) => this.reader.ReadVideo(path) switch
