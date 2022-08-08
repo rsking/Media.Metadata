@@ -17,19 +17,19 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? description;
 
-    private IList<string> producers;
+    private IList<string> producers = new System.Collections.ObjectModel.ObservableCollection<string>();
 
-    private IList<string> directors;
+    private IList<string> directors = new System.Collections.ObjectModel.ObservableCollection<string>();
 
-    private IList<string> studios;
+    private IList<string> studios = new System.Collections.ObjectModel.ObservableCollection<string>();
 
-    private IList<string> genre;
+    private IList<string> genre = new System.Collections.ObjectModel.ObservableCollection<string>();
 
-    private IList<string> screenWriters;
+    private IList<string> screenWriters = new System.Collections.ObjectModel.ObservableCollection<string>();
 
-    private IList<string> cast;
+    private IList<string> cast = new System.Collections.ObjectModel.ObservableCollection<string>();
 
-    private IList<string> composers;
+    private IList<string> composers = new System.Collections.ObjectModel.ObservableCollection<string>();
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private System.DateTimeOffset? release;
@@ -64,13 +64,13 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         this.FileInfo = fileInfo;
         this.Name = video.Name;
         this.Description = video.Description;
-        this.producers = CreateList(video.Producers);
-        this.directors = CreateList(video.Directors);
-        this.studios = CreateList(video.Studios);
-        this.genre = CreateList(video.Genre);
-        this.screenWriters = CreateList(video.ScreenWriters);
-        this.cast = CreateList(video.Cast);
-        this.composers = CreateList(video.Composers);
+        FillFrom(video.Producers, this.producers);
+        FillFrom(video.Directors, this.directors);
+        FillFrom(video.Studios, this.studios);
+        FillFrom(video.Genre, this.genre);
+        FillFrom(video.ScreenWriters, this.screenWriters);
+        FillFrom(video.Cast, this.cast);
+        FillFrom(video.Composers, this.composers);
         this.Release = video.Release is null || video.Release.Value.Ticks == default ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
         this.Rating = new RatingViewModel(video.Rating);
         this.Tracks = video.Tracks.Select(track => new MediaTrackViewModel(track)).ToArray();
@@ -100,37 +100,37 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     /// <summary>
     /// Gets the producers.
     /// </summary>
-    public IList<string> Producers { get => this.producers; init => this.SetProperty(ref this.producers, CreateList(value)); }
+    public IList<string> Producers { get => this.producers; init => FillFrom(value, this.producers); }
 
     /// <summary>
     /// Gets the directors.
     /// </summary>
-    public IList<string> Directors { get => this.directors; init => this.SetProperty(ref this.directors, CreateList(value)); }
+    public IList<string> Directors { get => this.directors; init => FillFrom(value, this.directors); }
 
     /// <summary>
     /// Gets the directors.
     /// </summary>
-    public IList<string> Studios { get => this.studios; init => this.SetProperty(ref this.studios, CreateList(value)); }
+    public IList<string> Studios { get => this.studios; init => FillFrom(value, this.studios); }
 
     /// <summary>
     /// Gets the directors.
     /// </summary>
-    public IList<string> Genre { get => this.genre; init => this.SetProperty(ref this.genre, CreateList(value)); }
+    public IList<string> Genre { get => this.genre; init => FillFrom(value, this.genre); }
 
     /// <summary>
     /// Gets the directors.
     /// </summary>
-    public IList<string> ScreenWriters { get => this.screenWriters; init => this.SetProperty(ref this.screenWriters, CreateList(value)); }
+    public IList<string> ScreenWriters { get => this.screenWriters; init => FillFrom(value, this.screenWriters); }
 
     /// <summary>
     /// Gets the directors.
     /// </summary>
-    public IList<string> Cast { get => this.cast; init => this.SetProperty(ref this.cast, CreateList(value)); }
+    public IList<string> Cast { get => this.cast; init => FillFrom(value, this.cast); }
 
     /// <summary>
     /// Gets the directors.
     /// </summary>
-    public IList<string> Composers { get => this.composers; init => this.SetProperty(ref this.composers, CreateList(value)); }
+    public IList<string> Composers { get => this.composers; init => FillFrom(value, this.composers); }
 
     /// <inheritdoc/>
     public ImageSource? ImageSource
@@ -212,13 +212,14 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
 
         this.Name = video.Name;
         this.Description = video.Description;
-        this.SetProperty(ref this.producers, CreateList(video.Producers), nameof(this.Producers));
-        this.SetProperty(ref this.directors, CreateList(video.Directors), nameof(this.Directors));
-        this.SetProperty(ref this.studios, CreateList(video.Studios), nameof(this.Studios));
-        this.SetProperty(ref this.genre, CreateList(video.Genre), nameof(this.Genre));
-        this.SetProperty(ref this.screenWriters, CreateList(video.ScreenWriters), nameof(this.ScreenWriters));
-        this.SetProperty(ref this.cast, CreateList(video.Cast), nameof(this.Cast));
-        this.SetProperty(ref this.composers, CreateList(video.Composers), nameof(this.Composers));
+
+        FillFrom(video.Producers, this.producers);
+        FillFrom(video.Directors, this.directors);
+        FillFrom(video.Studios, this.studios);
+        FillFrom(video.Genre, this.genre);
+        FillFrom(video.ScreenWriters, this.screenWriters);
+        FillFrom(video.Cast, this.cast);
+        FillFrom(video.Composers, this.composers);
         this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
         this.Rating.SelectedRating = video.Rating;
         this.Image = video.Image;
@@ -283,14 +284,15 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         }
     }
 
-    private static IList<T> CreateList<T>(IEnumerable<T>? source)
+    private static void FillFrom<T>(IEnumerable<T>? source, IList<T> destination)
     {
-        return source switch
+        destination.Clear();
+        if (source is not null)
         {
-            System.Collections.ObjectModel.ObservableCollection<T> observable => observable,
-            List<T> list => new System.Collections.ObjectModel.ObservableCollection<T>(list),
-            not null => new System.Collections.ObjectModel.ObservableCollection<T>(source),
-            _ => new System.Collections.ObjectModel.ObservableCollection<T>(),
-        };
+            foreach (var item in source)
+            {
+                destination.Add(item);
+            }
+        }
     }
 }

@@ -51,4 +51,13 @@ internal partial class RatingViewModel : CommunityToolkit.Mvvm.ComponentModel.Ob
             }
         }
     }
+
+    partial void OnSelectedRatingChanging(Rating? value)
+    {
+        if (value is not null)
+        {
+            // set the country
+            this.SelectedCountry = Rating.GetCountry(value.Value);
+        }
+    }
 }
