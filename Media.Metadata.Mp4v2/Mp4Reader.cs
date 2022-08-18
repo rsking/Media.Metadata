@@ -130,6 +130,7 @@ public class Mp4Reader : IReader
             {
                 "vide" => MediaTrackType.Video,
                 "soun" => MediaTrackType.Audio,
+                "text" => MediaTrackType.Text,
                 _ => MediaTrackType.Unknown,
             };
         }

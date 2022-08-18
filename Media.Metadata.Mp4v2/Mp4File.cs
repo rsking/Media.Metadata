@@ -63,12 +63,6 @@ internal sealed class Mp4File
     public void Load()
     {
         var fileHandle = NativeMethods.MP4Read(System.Text.Encoding.UTF8.GetBytes(this.fileName), IntPtr.Zero);
-        if (fileHandle == IntPtr.Zero)
-        {
-            // open for modify to see if that enables us to read
-            fileHandle = NativeMethods.MP4Modify(System.Text.Encoding.UTF8.GetBytes(this.fileName), 0);
-        }
-
         if (fileHandle != IntPtr.Zero)
         {
             try

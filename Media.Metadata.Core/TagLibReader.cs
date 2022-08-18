@@ -23,30 +23,22 @@ public class TagLibReader : IReader
     public Video ReadVideo(string path) => ReadVideo(path, ReadVideo);
 
     private static T ReadVideo<T>(string path, Func<FileInfo, TagLib.Mpeg4.AppleTag, T> func)
+        where T : Video
     {
         var fileInfo = new FileInfo(path);
         using var tagLibFile = TagLib.File.Create(fileInfo.FullName);
 
         return tagLibFile.GetTag(TagLib.TagTypes.Apple) is TagLib.Mpeg4.AppleTag appleTag
-            ? func(fileInfo, appleTag)
+            ? Update(fileInfo, func(fileInfo, appleTag), appleTag)
             : throw new ArgumentException(default, nameof(path));
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convert to conditional expression", Justification = "This would make it harder to read")]
-    private static Video ReadVideo(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag)
+    private static Video ReadVideo(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag) => appleTag switch
     {
-        if (appleTag.IsMovie())
-        {
-            return Update(ReadMovie(fileInfo, appleTag, CreatePList(appleTag)), appleTag);
-        }
-
-        if (appleTag.IsTvShow())
-        {
-            return Update(ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)), appleTag);
-        }
-
-        return new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name));
-    }
+        var t when t.IsMovie() => ReadMovie(fileInfo, appleTag, CreatePList(appleTag)),
+        var t when t.IsTvShow() => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)),
+        _ => new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name)),
+    };
 
     private static Movie ReadMovie(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag, PList plist) => new LocalMovie(
         fileInfo,
@@ -99,7 +91,8 @@ public class TagLibReader : IReader
         }
     }
 
-    private static Video Update(Video video, TagLib.Mpeg4.AppleTag appleTag)
+    private static T Update<T>(FileInfo info, T video, TagLib.Mpeg4.AppleTag appleTag)
+        where T : Video
     {
         if (appleTag.GetText(DayAtom).FirstOrDefault() is string day
             && (DateTime.TryParse(day, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.None, out var release)
@@ -121,7 +114,30 @@ public class TagLibReader : IReader
             video = video with { Image = image, ImageFormat = imageFormat };
         }
 
+        // extract chapters and tracks
+        var extractor = new Tracks.ChapterExtractor(new Tracks.StreamWrapper(info.OpenRead()));
+        extractor.Run();
+
+        if (extractor.Tracks is Tracks.TrakInfo[] tracks)
+        {
+            video = video with { Tracks = tracks.Select(MediaTrack).ToArray() };
+        }
+
         return video;
+
+        static MediaTrack MediaTrack(Tracks.TrakInfo trakInfo)
+        {
+            return new(
+                (int)trakInfo.Id,
+                trakInfo.Type switch
+                {
+                    "vide" => MediaTrackType.Video,
+                    "soun" => MediaTrackType.Audio,
+                    "text" => MediaTrackType.Text,
+                    _ => MediaTrackType.Unknown,
+                },
+                trakInfo.Language);
+        }
     }
 
     private static PList CreatePList(TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI") switch

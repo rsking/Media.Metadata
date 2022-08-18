@@ -76,7 +76,6 @@ public static class ServiceCollectionExtensions
         static void AddFileUpdaterImpl(IServiceCollection services, char pathSeparator)
         {
             _ = services
-                .AddTransient<Media.Metadata.IReader, Media.Metadata.Mp4Reader>()
                 .AddTransient<Media.Metadata.IUpdater, Media.Metadata.Mp4Writer>()
                 .AddTransient<Media.Metadata.IOptimizer, Media.Metadata.Mp4Optimizer>();
 

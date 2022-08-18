@@ -17,6 +17,11 @@ public enum MediaTrackType
     All = int.MinValue,
 
     /// <summary>
+    /// Text.
+    /// </summary>
+    Text = -4,
+
+    /// <summary>
     /// Audio.
     /// </summary>
     Audio = -3,
