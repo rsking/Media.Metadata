@@ -342,6 +342,85 @@ internal class MetadataTags : IDisposable
     }
 
     /// <summary>
+    /// Reads the tags from the tag.
+    /// </summary>
+    /// <param name="appleTag">The apple tag.</param>
+    /// <returns>A new instance of a <see cref="MetadataTags"/> object containing the values in the metadata tags.</returns>
+    internal static MetadataTags Create(TagLib.Mpeg4.AppleTag appleTag)
+    {
+        var tags = new MetadataTags
+        {
+            Title = appleTag.Title,
+            Artist = appleTag.JoinedPerformers,
+            AlbumArtist = appleTag.JoinedAlbumArtists,
+            Album = appleTag.Album,
+            Grouping = appleTag.Grouping,
+            Composer = appleTag.JoinedComposers,
+            Comment = appleTag.Comment,
+            Genre = appleTag.JoinedGenres,
+            Tempo = (short)appleTag.BeatsPerMinute,
+            IsCompilation = appleTag.IsCompilation,
+            Copyright = appleTag.Copyright,
+            EncodingTool = appleTag.GetEncodingTool(),
+            EncodedBy = appleTag.GetEncodedBy(),
+            ReleaseDate = appleTag.GetReleaseDate(),
+
+            // Tags specific to TV Episodes.
+            EpisodeNumber = appleTag.GetEpisodeNumber(),
+            SeasonNumber = appleTag.GetSeasonNumber(),
+            EpisodeId = appleTag.GetEpisodeId(),
+            TVNetwork = appleTag.GetNetwork(),
+            TVShow = appleTag.GetShowName(),
+            Description = appleTag.Description,
+            LongDescription = appleTag.GetLongDescription(),
+            Lyrics = appleTag.Lyrics,
+            SortName = appleTag.TitleSort,
+            SortArtist = appleTag.JoinedPerformersSort,
+            SortAlbumArtist = JoinGroup(appleTag.AlbumArtistsSort),
+            SortAlbum = appleTag.AlbumSort,
+            SortComposer = JoinGroup(appleTag.ComposersSort),
+            SortTVShow = appleTag.GetSortShowName(),
+            ArtworkCount = appleTag.Pictures.Length,
+
+            IsPodcast = appleTag.GetPodcast(),
+            Keywords = appleTag.GetKeywords(),
+            Category = appleTag.GetCategory(),
+
+            IsHDVideo = appleTag.GetHdVideo(),
+            MediaType = GetEnumValue(appleTag.GetMediaType(), MediaKind.NotSet),
+            ContentRating = GetEnumValue(appleTag.GetContentRating(), ContentRating.NotSet),
+            IsGapless = appleTag.GetGapless(),
+
+            MediaStoreAccount = appleTag.GetMediaStoreAccount(),
+            MediaStoreCountry = GetEnumValue(appleTag.GetMediaStoreCountry(), MediaStoreCountry.None),
+            MediaStoreAccountType = GetEnumValue(appleTag.GetMediaStoreAccountType(), MediaStoreAccountKind.NotSet),
+            ContentId = appleTag.GetContentId(),
+            ArtistId = appleTag.GetArtistId(),
+            PlaylistId = appleTag.GetPlaylistId(),
+            GenreId = appleTag.GetGenreId(),
+            ComposerId = appleTag.GetComposerId(),
+            Xid = appleTag.GetXId(),
+        };
+
+        return tags;
+
+        static T GetEnumValue<T>(int? value, T defaultValue)
+            where T : Enum
+        {
+            return value.HasValue && Enum.IsDefined(typeof(T), value.Value)
+                ? (T)Enum.ToObject(typeof(T), value.Value)
+                : defaultValue;
+        }
+
+        static string? JoinGroup(string[] group)
+        {
+            return group is not null && group.Length != 0
+                ? string.Join("; ", group)
+                : default;
+        }
+    }
+
+    /// <summary>
     /// Reads the tags from the specified file.
     /// </summary>
     /// <param name="fileHandle">The handle to the file from which to read the tags.</param>

@@ -15,6 +15,14 @@ internal sealed class ChapterList : IList<Chapter>
     private readonly IList<Chapter> chapters = new List<Chapter>();
     private readonly ICollection<Guid> hashedIndex = new HashSet<Guid>();
 
+    private ChapterList(IEnumerable<Chapter> chapters)
+    {
+        foreach (var chapter in chapters)
+        {
+            this.AddInternal(chapter);
+        }
+    }
+
     private ChapterList()
     {
     }
@@ -196,6 +204,17 @@ internal sealed class ChapterList : IList<Chapter>
     /// </summary>
     /// <returns>An <see cref="System.Collections.IEnumerator"/> object that can be used to iterate through the <see cref="ChapterList"/>.</returns>
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => this.chapters.GetEnumerator();
+
+    /// <summary>
+    /// Reads the chapter information from the chapters.
+    /// </summary>
+    /// <param name="chapters">The chapters.</param>
+    /// <returns>A new instance of a <see cref="ChapterList"/> object containing the information about the chapters for the file.</returns>
+    internal static ChapterList Create(IEnumerable<MediaChapter> chapters) => new(chapters.Select(c => new Chapter
+    {
+        Title = c.Title,
+        Duration = c.Duration,
+    }));
 
     /// <summary>
     /// Reads the chapter information from the specified file.

@@ -24,7 +24,7 @@ public class Mp4Writer : IUpdater
         }
         else
         {
-            var file = Mp4File.Open(fileName);
+            var file = Mp4File.Create(TagLib.File.Create(fileName));
             var mediaType = file.Tags is null
                 ? MediaKind.NotSet
                 : file.Tags.MediaType;
@@ -36,7 +36,7 @@ public class Mp4Writer : IUpdater
     /// <inheritdoc/>
     public void UpdateEpisode(string fileName, Episode episode, IDictionary<MediaTrackType, string>? languages = default)
     {
-        var file = Mp4File.Open(fileName);
+        var file = Mp4File.Create(TagLib.File.Create(fileName));
         Update(file, episode, MediaKind.TVShow, languages);
         if (file.Tags is not null)
         {
@@ -60,7 +60,7 @@ public class Mp4Writer : IUpdater
     /// <inheritdoc/>
     public void UpdateMovie(string fileName, Movie movie, IDictionary<MediaTrackType, string>? languages = default)
     {
-        var file = Mp4File.Open(fileName);
+        var file = Mp4File.Create(TagLib.File.Create(fileName));
         Update(file, movie, MediaKind.Movie, languages);
         file.Save();
     }

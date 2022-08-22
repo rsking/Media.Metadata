@@ -11,11 +11,11 @@ namespace Media.Metadata;
 /// </summary>
 internal sealed class TrackList : IReadOnlyList<Track>
 {
-    private readonly IList<Track> tracks = new List<Track>();
+    private readonly IList<Track> tracks;
 
-    private TrackList()
-    {
-    }
+    private TrackList(IEnumerable<Track> tracks) => this.tracks = new List<Track>(tracks);
+
+    private TrackList() => this.tracks = new List<Track>();
 
     /// <summary>
     /// Gets the number of <see cref="Track">Tracks</see> contained in this <see cref="TrackList"/>.
@@ -32,11 +32,38 @@ internal sealed class TrackList : IReadOnlyList<Track>
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => this.tracks.GetEnumerator();
 
     /// <summary>
+    /// Creates the track information from the specified video.
+    /// </summary>
+    /// <param name="video">The video.</param>
+    /// <returns>A new instance of a <see cref="TrackList"/> object containing the information about the track for the file.</returns>
+    internal static TrackList Create(Video video) => Create(video.Tracks);
+
+    /// <summary>
+    /// Creates the track information from the specified tracks.
+    /// </summary>
+    /// <param name="tracks">The tracks.</param>
+    /// <returns>A new instance of a <see cref="TrackList"/> object containing the information about the track for the file.</returns>
+    internal static TrackList Create(IEnumerable<MediaTrack> tracks)
+    {
+        return new TrackList(tracks.Select(t => new Track(t.Id, GetType(t.Type), t.Language)));
+
+        static string? GetType(MediaTrackType type)
+        {
+            return type switch
+            {
+                MediaTrackType.Video => "vide",
+                MediaTrackType.Audio => "soun",
+                MediaTrackType.Text => "text",
+                _ => default,
+            };
+        }
+    }
+
+    /// <summary>
     /// Reads the track information from the specified file.
     /// </summary>
     /// <param name="fileHandle">The handle to the file from which to read the track information.</param>
-    /// <returns>A new instance of a <see cref="ChapterList"/> object containing the information
-    /// about the track for the file.</returns>
+    /// <returns>A new instance of a <see cref="TrackList"/> object containing the information about the track for the file.</returns>
     internal static TrackList ReadFromFile(IntPtr fileHandle)
     {
         var list = new TrackList();

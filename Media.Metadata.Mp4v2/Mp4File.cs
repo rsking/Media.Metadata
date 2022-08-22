@@ -42,6 +42,22 @@ internal sealed class Mp4File
     /// </summary>
     public TrackList? Tracks { get; private set; }
 
+    public static Mp4File Create(TagLib.File file)
+    {
+        if (file.GetTag(TagLib.TagTypes.Apple) is TagLib.Mpeg4.AppleTag appleTag)
+        {
+            var fileInfo = new FileInfo(file.Name);
+            return new Mp4File(file.Name)
+            {
+                Tags = MetadataTags.Create(appleTag),
+                Chapters = ChapterList.Create(fileInfo.GetChapters()),
+                Tracks = TrackList.Create(fileInfo.GetTracks()),
+            };
+        }
+
+        throw new InvalidOperationException();
+    }
+
     /// <summary>
     /// Opens and reads the data for the specified file.
     /// </summary>
