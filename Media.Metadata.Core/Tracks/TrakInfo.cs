@@ -22,5 +22,7 @@ internal struct TrakInfo
 
     public uint TimeUnitPerSecond { get; set; }
 
+    public ulong Duration { get; set; }
+
     public string? Language { get; set; }
 }

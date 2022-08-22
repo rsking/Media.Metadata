@@ -115,29 +115,12 @@ public class TagLibReader : IReader
         }
 
         // extract chapters and tracks
-        var extractor = new Tracks.ChapterExtractor(new Tracks.StreamWrapper(info.OpenRead()));
-        extractor.Run();
-
-        if (extractor.Tracks is Tracks.TrakInfo[] tracks)
+        if (info.GetTracks().ToArray() is { Length: > 0 } tracks)
         {
-            video = video with { Tracks = tracks.Select(MediaTrack).ToArray() };
+            video = video with { Tracks = tracks };
         }
 
         return video;
-
-        static MediaTrack MediaTrack(Tracks.TrakInfo trakInfo)
-        {
-            return new(
-                (int)trakInfo.Id,
-                trakInfo.Type switch
-                {
-                    "vide" => MediaTrackType.Video,
-                    "soun" => MediaTrackType.Audio,
-                    "text" => MediaTrackType.Text,
-                    _ => MediaTrackType.Unknown,
-                },
-                trakInfo.Language);
-        }
     }
 
     private static PList CreatePList(TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI") switch

@@ -351,7 +351,11 @@ internal sealed class ChapterExtractor
         this.stream.Seek(SeekOrigin.Current, 3 + (isv8 ? 8 + 8 : 4 + 4));
         trakData.TimeUnitPerSecond = this.ReadUInt32();
 
-        this.stream.Seek(SeekOrigin.Current, isv8 ? 8 : 4);
+        // get the duration
+        trakData.Duration = isv8
+            ? this.ReadUInt64()
+            : this.ReadUInt32();
+
         var data = this.ReadUInt16();
         var code = new char[]
         {
