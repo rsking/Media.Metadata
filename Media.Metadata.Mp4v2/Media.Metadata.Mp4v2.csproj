@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Media.Metadata.Core\Media.Metadata.Core.csproj" />
+    <ProjectReference Include="..\Media.Metadata.TagLib\Media.Metadata.TagLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>

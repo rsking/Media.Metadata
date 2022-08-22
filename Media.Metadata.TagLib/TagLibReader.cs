@@ -11,8 +11,6 @@ namespace Media.Metadata;
 /// </summary>
 public class TagLibReader : IReader
 {
-    private static readonly TagLib.ReadOnlyByteVector DayAtom = new(169, 100, 97, 121);
-
     /// <inheritdoc/>
     public Episode ReadEpisode(string path) => ReadVideo(path, (fileInfo, appleTag) => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)));
 
@@ -66,35 +64,19 @@ public class TagLibReader : IReader
             GetPersonel(plist, "cast").ToArray(),
             SplitArray(appleTag.Composers).ToArray())
         {
-            Show = appleTag.GetText("tvsh").SingleOrDefault(),
-            Network = appleTag.GetText("tvnn").SingleOrDefault(),
-            Season = GetInt32(appleTag, "tvsn").SingleOrDefault(),
-            Number = GetInt32(appleTag, "tves").SingleOrDefault(),
-            Id = appleTag.GetText("tven").SingleOrDefault(),
-            Part = GetInt32(appleTag, "cnID").FirstOrDefault(),
+            Show = appleTag.GetShowName(),
+            Network = appleTag.GetNetwork(),
+            Season = appleTag.GetSeasonNumber() ?? 0,
+            Number = appleTag.GetEpisodeNumber() ?? 0,
+            Id = appleTag.GetEpisodeId(),
+            Part = appleTag.GetContentId() ?? 0,
         };
-
-        static int[] GetInt32(TagLib.Mpeg4.AppleTag appleTag, TagLib.ByteVector byteVector)
-        {
-            return appleTag
-                .DataBoxes(byteVector)
-                .Select(box =>
-                {
-                    var bytes = box.Data.Data;
-                    if (BitConverter.IsLittleEndian)
-                    {
-                        bytes = new[] { bytes[3], bytes[2], bytes[1], bytes[0] };
-                    }
-
-                    return BitConverter.ToInt32(bytes, 0);
-                }).ToArray();
-        }
     }
 
     private static T Update<T>(FileInfo info, T video, TagLib.Mpeg4.AppleTag appleTag)
         where T : Video
     {
-        if (appleTag.GetText(DayAtom).FirstOrDefault() is string day
+        if (appleTag.GetReleaseDate() is string day
             && (DateTime.TryParse(day, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.None, out var release)
             || DateTime.TryParse(day, System.Globalization.DateTimeFormatInfo.CurrentInfo, System.Globalization.DateTimeStyles.None, out release)))
         {
@@ -107,11 +89,13 @@ public class TagLibReader : IReader
             video = video with { Rating = rating };
         }
 
-        if (appleTag.Pictures?.Length > 0)
+        if (appleTag.Pictures is IList<TagLib.IPicture> { Count: > 0 } pictures)
         {
-            var picture = appleTag.Pictures[0];
-            var image = Image.Load(picture.Data.Data, out var imageFormat);
-            video = video with { Image = image, ImageFormat = imageFormat };
+            video = video with
+            {
+                Image = SixLabors.ImageSharp.Image.Load(pictures[0].Data.Data, out var imageFormat),
+                ImageFormat = imageFormat,
+            };
         }
 
         // extract chapters and tracks
