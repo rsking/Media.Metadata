@@ -337,7 +337,7 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
 
                         if (seasonEnumerator.Current is Season s && s.Number == seasonGroup.Key)
                         {
-                            console.Out.WriteLine(FormattableString.CurrentCulture($"Found Season  {series.Name}:{s.Number}"));
+                            console.Out.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Season  {series.Name}:{s.Number}"));
 
                             var episoides = seasonGroup
                                 .Select(path => episode switch
@@ -357,7 +357,7 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
 
                             foreach (var ep in episoides.Where(ep => ep.Path.Exists))
                             {
-                                console.Out.WriteLine(FormattableString.CurrentCulture($"Processing {ep.Path.Name}"));
+                                console.Out.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Processing {ep.Path.Name}"));
 
                                 while (episodeEnumerator.Current is not null && episodeEnumerator.Current.Number < ep.Episode && episodeEnumerator.MoveNext())
                                 {
@@ -366,7 +366,7 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
 
                                 if (episodeEnumerator.Current is Episode e && e.Number == ep.Episode)
                                 {
-                                    console.Out.WriteLine(FormattableString.CurrentCulture($"Found Episode {series.Name}:{s.Number}:{e.Name}"));
+                                    console.Out.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Episode {series.Name}:{s.Number}:{e.Name}"));
                                     SixLabors.ImageSharp.Image? image = default;
                                     SixLabors.ImageSharp.Formats.IImageFormat? imageFormat = default;
                                     if (s.Image is not null)
@@ -448,7 +448,7 @@ static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor<str
             foreach (var p in path.Where(p => p.Exists).Select(p => p.FullName))
             {
                 var video = reader.ReadVideo(p);
-                console.Out.WriteLine(FormattableString.CurrentCulture($"Updating {video.Name}"));
+                console.Out.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Updating {video.Name}"));
                 updater.UpdateVideo(p, video, languages);
             }
         },
