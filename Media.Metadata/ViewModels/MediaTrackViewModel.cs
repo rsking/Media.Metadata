@@ -63,7 +63,11 @@ internal partial class MediaTrackViewModel : CommunityToolkit.Mvvm.ComponentMode
             while (reader.ReadLine() is string line)
             {
                 var split = line.Split('|');
-                yield return split[0];
+                var index = split.Length > 1 && !string.IsNullOrEmpty(split[1])
+                    ? 1
+                    : 0;
+
+                yield return split[index];
             }
         }
     }

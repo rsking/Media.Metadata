@@ -11,20 +11,48 @@ namespace Media.Metadata.Converters;
 /// </summary>
 internal class Iso639ToNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
-    private static IDictionary<string, string>? codeToName;
+    private static readonly object LoadingLock = new();
 
-    private static IDictionary<string, string> CodeToName => codeToName ??= GetValues().ToDictionary(value => value.Bibliographic, value => value.Name, System.StringComparer.Ordinal);
+    private static IDictionary<string, string>? bibliographicToName;
+
+    private static IDictionary<string, string>? terminologicToName;
 
     /// <inheritdoc/>
-    public object? Convert(object? value, System.Type targetType, object parameter, string language) => value switch
+    public object? Convert(object? value, System.Type targetType, object parameter, string language)
     {
-        string key when CodeToName.TryGetValue(key, out var name) => name,
-        string key => key,
-        _ => default,
-    };
+        EnsureDictionaries();
+        return value switch
+        {
+            string key when bibliographicToName.TryGetValue(key, out var name) => name,
+            string key when terminologicToName.TryGetValue(key, out var name) => name,
+            string key => key,
+            _ => default,
+        };
+    }
 
     /// <inheritdoc/>
     public object ConvertBack(object value, System.Type targetType, object parameter, string language) => throw new System.NotSupportedException();
+
+    [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(bibliographicToName), nameof(terminologicToName))]
+    private static void EnsureDictionaries()
+    {
+        if (bibliographicToName is not null && terminologicToName is not null)
+        {
+            return;
+        }
+
+        lock (LoadingLock)
+        {
+            if (bibliographicToName is not null && terminologicToName is not null)
+            {
+                return;
+            }
+
+            var values = GetValues().ToList();
+            bibliographicToName = values.ToDictionary(value => value.Bibliographic, value => value.Name, System.StringComparer.Ordinal);
+            terminologicToName = values.Where(value => value.Terminologic is not null).ToDictionary(value => value.Terminologic!, value => value.Name, System.StringComparer.Ordinal);
+        }
+    }
 
     private static IEnumerable<Iso639> GetValues()
     {
@@ -37,9 +65,14 @@ internal class Iso639ToNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
             yield return new Iso639
             {
                 Bibliographic = split[0],
-                Terminologic = split[1],
+                Terminologic = SomethingOrNull(split[1]),
                 Name = split[3],
             };
+
+            static string? SomethingOrNull(string value)
+            {
+                return string.IsNullOrEmpty(value) ? null : value;
+            }
         }
     }
 
