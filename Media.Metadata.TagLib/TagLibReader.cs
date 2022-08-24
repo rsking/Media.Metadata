@@ -33,8 +33,8 @@ public class TagLibReader : IReader
 
     private static Video ReadVideo(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag) => appleTag switch
     {
-        var t when t.IsMovie() => ReadMovie(fileInfo, appleTag, CreatePList(appleTag)),
-        var t when t.IsTvShow() => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)),
+        var t when t.GetMediaType() == MediaType.Movie => ReadMovie(fileInfo, appleTag, CreatePList(appleTag)),
+        var t when t.GetMediaType() == MediaType.TVShow => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)),
         _ => new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name)),
     };
 

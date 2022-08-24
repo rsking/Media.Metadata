@@ -387,8 +387,8 @@ internal class MetadataTags : IDisposable
             Category = appleTag.GetCategory(),
 
             IsHDVideo = appleTag.GetHdVideo(),
-            MediaType = GetEnumValue(appleTag.GetMediaType(), MediaKind.NotSet),
-            ContentRating = GetEnumValue(appleTag.GetContentRating(), ContentRating.NotSet),
+            MediaType = (MediaKind)appleTag.GetMediaType(),
+            ContentRating = (ContentRating)appleTag.GetContentRating(),
             IsGapless = appleTag.GetGapless(),
 
             MediaStoreAccount = appleTag.GetMediaStoreAccount(),

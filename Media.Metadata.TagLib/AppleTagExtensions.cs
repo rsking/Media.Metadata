@@ -135,14 +135,14 @@ public static class AppleTagExtensions
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The media type.</returns>
-    public static int? GetMediaType(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(MediaType);
+    public static MediaType GetMediaType(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetByteOrDefault(MediaType) is byte mediaType ? (MediaType)mediaType : Metadata.MediaType.NotSet;
 
     /// <summary>
     /// Gets the content rating.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The content rating.</returns>
-    public static int? GetContentRating(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(ContentRating);
+    public static ContentRating GetContentRating(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetByteOrDefault(ContentRating) is byte contentRating ? (ContentRating)contentRating : Metadata.ContentRating.NotSet;
 
     /// <summary>
     /// Gets the HD video.
@@ -235,31 +235,9 @@ public static class AppleTagExtensions
     /// <returns>The long description.</returns>
     public static string? GetLongDescription(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(LongDescription);
 
-    /// <summary>
-    /// Returns whether the <see cref="TagLib.Mpeg4.AppleTag"/> represents a movie.
-    /// </summary>
-    /// <param name="appleTag">The apple tag.</param>
-    /// <returns><see langword="true"/> if <paramref name="appleTag"/> is a movie; otherwise <see langword="false"/>.</returns>
-    internal static bool IsMovie(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.DataBoxes(MediaType).FirstOrDefault(item => item.Data.Count == 1) is TagLib.Mpeg4.AppleDataBox stikAtom && stikAtom.Data.Data[0] == 9;
-
-    /// <summary>
-    /// Sets the apple TAG as a movie.
-    /// </summary>
-    /// <param name="appleTag">The apple tag.</param>
-    internal static void SetMovie(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.SetData(MediaType, new ByteVector("\t"u8.ToArray()), 21U);
-
-    /// <summary>
-    /// Returns whether the <see cref="TagLib.Mpeg4.AppleTag"/> represents a TV show.
-    /// </summary>
-    /// <param name="appleTag">The apple tag.</param>
-    /// <returns><see langword="true"/> if <paramref name="appleTag"/> is a TV show; otherwise <see langword="false"/>.</returns>
-    internal static bool IsTvShow(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.DataBoxes(MediaType).FirstOrDefault(item => item.Data.Count == 1) is TagLib.Mpeg4.AppleDataBox stikAtom && stikAtom.Data.Data[0] == 10;
-
-    /// <summary>
-    /// Sets the apple tag as a TV show.
-    /// </summary>
-    /// <param name="appleTag">The apple tag.</param>
-    internal static void SetTvShow(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.SetData(MediaType, new ByteVector("\n"u8.ToArray()), 21U);
+    private static byte? GetByteOrDefault(this TagLib.Mpeg4.AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count == 1) is TagLib.Mpeg4.AppleDataBox item
+        ? item.Data.Data[0]
+        : default(byte?);
 
     private static int? GetInt32OrDefault(this TagLib.Mpeg4.AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count == 4) is TagLib.Mpeg4.AppleDataBox item
         ? (int)GetUInt32(item.Data.Data)
