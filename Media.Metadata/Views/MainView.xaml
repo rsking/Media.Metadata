@@ -168,12 +168,12 @@
                                             </Grid.ColumnDefinitions>
                                             <controls:TokenizingTextBox Margin="2"
                                                                         Header="Producers"
-                                                                        ItemsSource="{Binding Producers}"
+                                                                        ItemsSource="{Binding Producers, Mode=TwoWay}"
                                                                         TokenDelimiter="," />
                                             <controls:TokenizingTextBox Grid.Column="1"
                                                                         Margin="2"
                                                                         Header="Directors"
-                                                                        ItemsSource="{Binding Directors}"
+                                                                        ItemsSource="{Binding Directors, Mode=TwoWay}"
                                                                         TokenDelimiter="," />
                                         </Grid>
                                         <Grid>
@@ -183,7 +183,7 @@
                                             </Grid.ColumnDefinitions>
                                             <controls:TokenizingTextBox Margin="2"
                                                                         Header="Studios"
-                                                                        ItemsSource="{Binding Studios}"
+                                                                        ItemsSource="{Binding Studios, Mode=TwoWay}"
                                                                         TokenDelimiter="," />
                                             <Grid Grid.Column="1" DataContext="{Binding Rating}">
                                                 <Grid.ColumnDefinitions>
@@ -210,15 +210,15 @@
                                         </Grid>
                                         <controls:TokenizingTextBox Margin="2"
                                                                     Header="Screen Writers"
-                                                                    ItemsSource="{Binding ScreenWriters}"
+                                                                    ItemsSource="{Binding ScreenWriters, Mode=TwoWay}"
                                                                     TokenDelimiter="," />
                                         <controls:TokenizingTextBox Margin="2"
                                                                     Header="Cast"
-                                                                    ItemsSource="{Binding Cast}"
+                                                                    ItemsSource="{Binding Cast, Mode=TwoWay}"
                                                                     TokenDelimiter="," />
                                         <controls:TokenizingTextBox Margin="2"
                                                                     Header="Composers"
-                                                                    ItemsSource="{Binding Composers}"
+                                                                    ItemsSource="{Binding Composers, Mode=TwoWay}"
                                                                     TokenDelimiter="," />
                                         <TextBox Margin="2"
                                                  Header="Show"
@@ -280,12 +280,12 @@
                                             </Grid.ColumnDefinitions>
                                             <controls:TokenizingTextBox Margin="2"
                                                                         Header="Producers"
-                                                                        ItemsSource="{Binding Producers}"
+                                                                        ItemsSource="{Binding Producers, Mode=TwoWay}"
                                                                         TokenDelimiter="," />
                                             <controls:TokenizingTextBox Grid.Column="1"
                                                                         Margin="2"
                                                                         Header="Directors"
-                                                                        ItemsSource="{Binding Directors}"
+                                                                        ItemsSource="{Binding Directors, Mode=TwoWay}"
                                                                         TokenDelimiter="," />
                                         </Grid>
                                         <Grid>
@@ -295,7 +295,7 @@
                                             </Grid.ColumnDefinitions>
                                             <controls:TokenizingTextBox Margin="2"
                                                                         Header="Studios"
-                                                                        ItemsSource="{Binding Studios}"
+                                                                        ItemsSource="{Binding Studios, Mode=TwoWay}"
                                                                         TokenDelimiter="," />
                                             <Grid Grid.Column="1" DataContext="{Binding Rating}">
                                                 <Grid.ColumnDefinitions>
@@ -322,15 +322,15 @@
                                         </Grid>
                                         <controls:TokenizingTextBox Margin="2"
                                                                     Header="Screen Writers"
-                                                                    ItemsSource="{Binding ScreenWriters}"
+                                                                    ItemsSource="{Binding ScreenWriters, Mode=TwoWay}"
                                                                     TokenDelimiter="," />
                                         <controls:TokenizingTextBox Margin="2"
                                                                     Header="Cast"
-                                                                    ItemsSource="{Binding Cast}"
+                                                                    ItemsSource="{Binding Cast, Mode=TwoWay}"
                                                                     TokenDelimiter="," />
                                         <controls:TokenizingTextBox Margin="2"
                                                                     Header="Composers"
-                                                                    ItemsSource="{Binding Composers}"
+                                                                    ItemsSource="{Binding Composers, Mode=TwoWay}"
                                                                     TokenDelimiter="," />
                                         <DatePicker Margin="2"
                                                     Date="{Binding Release, Mode=TwoWay}"
