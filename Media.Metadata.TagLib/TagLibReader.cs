@@ -44,7 +44,7 @@ public class TagLibReader : IReader
         appleTag.Description,
         GetPersonel(plist, "producers").ToArray(),
         GetPersonel(plist, "directors").ToArray(),
-        plist["studio"]?.ToString().Split(',').Select(studio => studio.Trim()).ToArray() ?? Enumerable.Empty<string>(),
+        plist.ContainsKey("studio") ? plist["studio"].ToString().Split(',').Select(studio => studio.Trim()).ToArray() : Enumerable.Empty<string>(),
         appleTag.Genres,
         GetPersonel(plist, "screenwriters").ToArray(),
         GetPersonel(plist, "cast").ToArray(),
