@@ -513,7 +513,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         public string? LastUpdated { get; init; }
 
-        public int AverageRuntime { get; init; }
+        public int? AverageRuntime { get; init; }
 
         public ICollection<SeasonBaseRecord>? Seasons { get; init; }
 
