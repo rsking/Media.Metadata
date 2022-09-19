@@ -85,7 +85,12 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
             var series = seriesResponse.Data.Data;
 
-            foreach (var season in series.Seasons)
+            foreach (var season in series.Seasons
+                // only official, aired dates
+                .Where(s => s.Type.Id == 1)
+
+                // order by the season number
+                .OrderBy(s => s.Number))
             {
                 if (season.Type?.Id != 1)
                 {
