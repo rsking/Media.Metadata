@@ -42,6 +42,12 @@ internal sealed class Mp4File
     /// </summary>
     public TrackList? Tracks { get; private set; }
 
+    /// <summary>
+    /// Creates the <see cref="Mp4File"/> from the <see cref="TagLib.File"/>.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <returns>The created MP4 files.</returns>
+    /// <exception cref="InvalidOperationException"><paramref name="file"/> is not an MP4 file.</exception>
     public static Mp4File Create(TagLib.File file)
     {
         if (file.GetTag(TagLib.TagTypes.Apple) is TagLib.Mpeg4.AppleTag appleTag)

@@ -9,27 +9,23 @@ namespace Media.Metadata.ViewModels;
 /// <summary>
 /// The editable video.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Bug", "S4275:Getters and setters should access the expected fields", Justification = "These are referenced.")]
 internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, IHasImage, Models.IHasImageSource, System.IAsyncDisposable, System.IDisposable
 {
+    // list backing fields
+    private readonly IList<string> producers = new System.Collections.ObjectModel.ObservableCollection<string>();
+    private readonly IList<string> directors = new System.Collections.ObjectModel.ObservableCollection<string>();
+    private readonly IList<string> studios = new System.Collections.ObjectModel.ObservableCollection<string>();
+    private readonly IList<string> genre = new System.Collections.ObjectModel.ObservableCollection<string>();
+    private readonly IList<string> screenWriters = new System.Collections.ObjectModel.ObservableCollection<string>();
+    private readonly IList<string> cast = new System.Collections.ObjectModel.ObservableCollection<string>();
+    private readonly IList<string> composers = new System.Collections.ObjectModel.ObservableCollection<string>();
+
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? name;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? description;
-
-    private IList<string> producers = new System.Collections.ObjectModel.ObservableCollection<string>();
-
-    private IList<string> directors = new System.Collections.ObjectModel.ObservableCollection<string>();
-
-    private IList<string> studios = new System.Collections.ObjectModel.ObservableCollection<string>();
-
-    private IList<string> genre = new System.Collections.ObjectModel.ObservableCollection<string>();
-
-    private IList<string> screenWriters = new System.Collections.ObjectModel.ObservableCollection<string>();
-
-    private IList<string> cast = new System.Collections.ObjectModel.ObservableCollection<string>();
-
-    private IList<string> composers = new System.Collections.ObjectModel.ObservableCollection<string>();
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private System.DateTimeOffset? release;
@@ -225,9 +221,9 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         this.Image = video.Image;
         this.ImageFormat = video.ImageFormat;
 
-        if (video is Models.IHasImageSource imageSource)
+        if (video is Models.IHasImageSource hasImageSource)
         {
-            this.ImageSource = imageSource.ImageSource;
+            this.ImageSource = hasImageSource.ImageSource;
         }
     }
 
