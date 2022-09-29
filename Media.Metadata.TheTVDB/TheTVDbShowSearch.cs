@@ -140,6 +140,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
                         if (episodeResponse.Data?.Data is EpisodeExtendedRecord extendedEpisode)
                         {
+                            extendedEpisode = extendedEpisode with { Number = episode.Number, SeasonNumber = episode.SeasonNumber };
                             request = new RestRequest(CreateUri(baseUrl, "episodes/{id}/translations/{language}"))
                                 .AddUrlSegment("id", episode.Id)
                                 .AddUrlSegment("language", "eng");
