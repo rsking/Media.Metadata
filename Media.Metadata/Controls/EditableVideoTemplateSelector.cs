@@ -29,9 +29,9 @@ internal class EditableVideoTemplateSelector : Microsoft.UI.Xaml.Controls.DataTe
     /// <inheritdoc/>
     protected override Microsoft.UI.Xaml.DataTemplate? SelectTemplateCore(object item) => item switch
     {
-        ViewModels.EpisodeViewModel => this.EpisodeTemplate,
-        ViewModels.MovieViewModel => this.MovieTemplate,
-        ViewModels.VideoViewModel => this.VideoTemplate,
+        ViewModels.EpisodeViewModel or Episode => this.EpisodeTemplate,
+        ViewModels.MovieViewModel or Movie => this.MovieTemplate,
+        ViewModels.VideoViewModel or Video => this.VideoTemplate,
         _ => base.SelectTemplateCore(item),
     };
 

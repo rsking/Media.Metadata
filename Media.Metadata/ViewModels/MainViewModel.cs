@@ -109,26 +109,55 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     [RelayCommand]
     public async Task RemoveVideo()
     {
-        if (this.SelectedVideos.Count > 0)
+        var selectedVideos = (this.SelectedVideos, this.SelectedVideo) switch
         {
-            // get the selected videos
-            var selectedVideos = new Video[this.SelectedVideos.Count];
-            this.SelectedVideos.CopyTo(selectedVideos, 0);
+            ({ Count: > 0 }, _) => GetSelectedVideos(this.SelectedVideos),
+            (_, Video v) => new[] { v },
+            _ => Enumerable.Empty<Video>(),
+        };
 
-            foreach (var video in selectedVideos)
+        foreach (var video in selectedVideos)
+        {
+            _ = this.Videos.Remove(video);
+            if (video is IAsyncDisposable asyncDisposable)
             {
-                _ = this.Videos.Remove(video);
-                if (video is IAsyncDisposable asyncDisposable)
-                {
-                    await asyncDisposable.DisposeAsync().ConfigureAwait(true);
-                }
-                else if (video is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
+                await asyncDisposable.DisposeAsync().ConfigureAwait(true);
             }
+            else if (video is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
 
-            this.SelectedVideo = default;
+        this.SelectedVideo = default;
+
+        static IEnumerable<Video> GetSelectedVideos(ICollection<Video> videos)
+        {
+            var v = new Video[videos.Count];
+            videos.CopyTo(v, 0);
+            return v;
+        }
+    }
+
+    /// <summary>
+    /// Clears the videos.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [RelayCommand]
+    public async Task ClearVideos()
+    {
+        while (this.Videos.Count > 0)
+        {
+            var video = this.Videos[0];
+            this.Videos.RemoveAt(0);
+            if (video is IAsyncDisposable asyncDisposable)
+            {
+                await asyncDisposable.DisposeAsync().ConfigureAwait(true);
+            }
+            else if (video is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
         }
     }
 
@@ -255,7 +284,11 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
         }
     }
 
-    partial void OnSelectedVideoChanged(Video? value)
+    /// <summary>
+    /// Sets the editable video.
+    /// </summary>
+    /// <param name="value">The video to edit.</param>
+    internal void SetEditableVideo(Video? value)
     {
         this.SelectedEditableVideo = value switch
         {
