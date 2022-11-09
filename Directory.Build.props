@@ -17,9 +17,9 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Versions">
-    <DotnetVersion>6.0</DotnetVersion>
+    <DotnetVersion>7.0</DotnetVersion>
     <DotnetMinorVersion>$(DotnetVersion).0</DotnetMinorVersion>
-    <DotnetPatchVersion>$(DotnetVersion).1</DotnetPatchVersion>
+    <DotnetPatchVersion>$(DotnetVersion).0</DotnetPatchVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,15 +38,15 @@
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">
-    <PackageReference Include="Meziantou.Analyzer" Version="1.0.740">
+    <PackageReference Include="Meziantou.Analyzer" Version="1.0.746">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.1.1">
+    <PackageReference Include="Roslynator.Analyzers" Version="4.1.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.47.0.55603">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.48.0.56517">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

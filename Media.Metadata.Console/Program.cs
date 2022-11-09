@@ -532,7 +532,7 @@ static FileInfo[] ParseFileInfo(ArgumentResult argumentResult)
 
         static IEnumerable<string> GetRooted(string root)
         {
-            var matcher = new Matcher(StringComparison.CurrentCulture);
+            var matcher = new Matcher(StringComparison.OrdinalIgnoreCase);
 
             // separate the root directory from the globbing
             var glob = Path.GetFileName(root);

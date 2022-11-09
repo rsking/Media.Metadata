@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>Media.Metadata</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -28,11 +28,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.5" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.1" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
     <PackageReference Include="RestSharp" Version="108.0.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
-    <PackageReference Include="System.Linq.Async" Version="$(DotnetPatchVersion)" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="$(DotnetMinorVersion)" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
     <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.22000" />
