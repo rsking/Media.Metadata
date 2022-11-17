@@ -15,10 +15,12 @@
 
     <AssemblyName>mm</AssemblyName>
     <UserSecretsId>f4141296-1840-4f5a-9776-40b8aa343667</UserSecretsId>
+    <ApplicationIcon>Assets\mm.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="Assets\*.png" />
+    <Content Include="Assets\*.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +29,7 @@
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Layout" Version="7.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(DotnetPatchVersion)" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(DotnetPatchVersion)" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.5" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.221109.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
     <PackageReference Include="RestSharp" Version="108.0.2" />
@@ -35,8 +37,9 @@
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="$(DotnetMinorVersion)" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
-    <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.22000" />
-	<PackageReference Include="TMDbLib" Version="1.9.2" />
+    <PackageReference Include="Vanara.PInvoke.Shell32" Version="3.4.11" />
+    <PackageReference Include="Vanara.PInvoke.User32" Version="3.4.11" />
+    <PackageReference Include="TMDbLib" Version="1.9.2" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 

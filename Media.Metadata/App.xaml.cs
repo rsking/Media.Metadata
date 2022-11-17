@@ -71,6 +71,7 @@ public partial class App : Microsoft.UI.Xaml.Application
         this.window = this.host.Services.GetRequiredService<MainWindow>();
         this.window.Title = "Media Metadata Updater";
         this.window.ExtendsContentIntoTitleBar = true;
+        SetTitleBarIcon(this.window);
         this.window.Activate();
 
         this.window.Closed += async (_, __) =>
@@ -80,5 +81,18 @@ public partial class App : Microsoft.UI.Xaml.Application
                 await this.host.StopAsync(System.TimeSpan.FromSeconds(5)).ConfigureAwait(true);
             }
         };
+
+        static void SetTitleBarIcon(Microsoft.UI.Xaml.Window window)
+        {
+            // get the icon from the application
+            if (WinRT.Interop.WindowNative.GetWindowHandle(window) is System.IntPtr windowHandle
+                && windowHandle != System.IntPtr.Zero
+                && Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle) is { Value: > 0UL } windowId
+                && Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId) is { Id.Value: > 0UL } appWindow
+                && Vanara.PInvoke.Shell32.ExtractIcon(Vanara.PInvoke.HINSTANCE.NULL, typeof(App).Assembly.Location, 0) is { IsInvalid: false } iconHandle)
+            {
+                appWindow.SetIcon(Microsoft.UI.Win32Interop.GetIconIdFromIcon((System.IntPtr)(Vanara.PInvoke.HICON)iconHandle));
+            }
+        }
     }
 }
