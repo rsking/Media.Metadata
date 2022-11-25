@@ -17,15 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(DotnetPatchVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(DotnetPatchVersion)" />
-    <PackageReference Include="RestSharp" Version="108.0.3" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
-    <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22272.1" />
-    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="$(DotnetMinorVersion)" />
-    <PackageReference Include="TagLibSharp" Version="2.3.0" />
-    <PackageReference Include="TMDbLib" Version="1.9.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="RestSharp" />
+    <PackageReference Include="SixLabors.ImageSharp" />
+    <PackageReference Include="System.CommandLine.Hosting" />
+    <PackageReference Include="System.Linq.Async" />
+    <PackageReference Include="System.Text.Encoding.CodePages" />
+    <PackageReference Include="TagLibSharp" />
+    <PackageReference Include="TMDbLib" />
   </ItemGroup>
 
   <ItemGroup>

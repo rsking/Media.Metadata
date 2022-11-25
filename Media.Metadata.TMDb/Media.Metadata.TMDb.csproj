@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TMDbLib" Version="1.9.1" />
+    <PackageReference Include="TMDbLib" VersionOverride="1.9.1" />
   </ItemGroup>
 
   <ItemGroup>
