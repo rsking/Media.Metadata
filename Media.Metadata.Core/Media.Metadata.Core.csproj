@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IsExternalInit">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
     <PackageReference Include="SixLabors.ImageSharp" VersionOverride="2.0.0" />
   </ItemGroup>

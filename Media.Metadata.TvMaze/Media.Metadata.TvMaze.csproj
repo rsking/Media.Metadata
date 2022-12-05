@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IsExternalInit">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Options" />
     <PackageReference Include="NeoSmart.AsyncLock" />
     <PackageReference Include="RestSharp" VersionOverride="107.1.0" />

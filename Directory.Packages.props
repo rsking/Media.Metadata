@@ -8,7 +8,6 @@
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls.Input" Version="7.1.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls.Layout" Version="7.1.2" />
-    <PackageVersion Include="IsExternalInit" Version="1.0.3" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="1.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
@@ -29,16 +28,20 @@
     <PackageVersion Include="Vanara.PInvoke.User32" Version="3.4.11" />
   </ItemGroup>
 
-  <ItemGroup Label="Reproducible Builds">
-    <GlobalPackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1" />
-    <GlobalPackageVersion Include="DotNet.ReproducibleBuilds.Isolated" Version="1.1.1" />
+  <ItemGroup Label="Source Generators">
+    <GlobalPackageReference Include="PolySharp" Version="1.8.1" />
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">
-    <GlobalPackageVersion Include="Meziantou.Analyzer" Version="1.0.752" />
-    <GlobalPackageVersion Include="Roslynator.Analyzers" Version="4.1.2" />
-    <GlobalPackageVersion Include="SonarAnalyzer.CSharp" Version="8.49.0.57237" />
-    <GlobalPackageVersion Include="StyleCop.Analyzers.Unstable" Version="1.2.0.435" />
+    <GlobalPackageReference Include="Meziantou.Analyzer" Version="1.0.756" />
+    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.2.0" />
+    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="8.49.0.57237" />
+    <GlobalPackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.435" />
+  </ItemGroup>
+
+  <ItemGroup Label="Build">
+    <GlobalPackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1" />
+    <GlobalPackageReference Include="DotNet.ReproducibleBuilds.Isolated" Version="1.1.1" />
   </ItemGroup>
   
 </Project>

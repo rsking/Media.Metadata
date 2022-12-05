@@ -286,13 +286,7 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
 
         static async Task Process(IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, bool ignore, int offset, string[]? lang, CancellationToken cancellationToken)
         {
-            var regex = new[]
-            {
-                new System.Text.RegularExpressions.Regex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
-                new System.Text.RegularExpressions.Regex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
-                new System.Text.RegularExpressions.Regex("Series (?<season>\\d+) Ep (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
-                new System.Text.RegularExpressions.Regex("..(\\d+).(?<episode>\\d+)S(\\d+)-(.*)", System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.None, TimeSpan.FromSeconds(1)),
-            };
+            var regex = Media.Metadata.Program.GetEpisodeRegexes();
 
             var reader = host.Services.GetRequiredService<IReader>();
             var pathList = paths
@@ -544,7 +538,43 @@ static FileInfo[] ParseFileInfo(ArgumentResult argumentResult)
             }
 
             matcher.AddInclude(glob);
-            return matcher.GetResultsInFullPath(directory);
+            return matcher.GetResultsInFullPath(directory ?? ".\\");
         }
+    }
+}
+
+namespace Media.Metadata
+{
+    /// <content>
+    /// Compiled <see cref="System.Text.RegularExpressions.Regex"/>.
+    /// </content>
+    internal partial class Program
+    {
+        private const int MillisecondTimeout = 1000;
+
+        /// <summary>
+        /// Gets the episode <see cref="System.Text.RegularExpressions.Regex"/> expressions.
+        /// </summary>
+        /// <returns>The episode <see cref="System.Text.RegularExpressions.Regex"/> expressions.</returns>
+        internal static IEnumerable<System.Text.RegularExpressions.Regex> GetEpisodeRegexes() =>
+            new[]
+            {
+                SbsRegex1(),
+                SbsRegex2(),
+                IViewRegex1(),
+                IViewRegex2(),
+            };
+
+        [System.Text.RegularExpressions.GeneratedRegex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+        private static partial System.Text.RegularExpressions.Regex SbsRegex1();
+
+        [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+        private static partial System.Text.RegularExpressions.Regex SbsRegex2();
+
+        [System.Text.RegularExpressions.GeneratedRegex("Series (?<season>\\d+) Ep (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+        private static partial System.Text.RegularExpressions.Regex IViewRegex1();
+
+        [System.Text.RegularExpressions.GeneratedRegex("..(\\d+).(?<episode>\\d+)S(\\d+)-(.*)", System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+        private static partial System.Text.RegularExpressions.Regex IViewRegex2();
     }
 }
