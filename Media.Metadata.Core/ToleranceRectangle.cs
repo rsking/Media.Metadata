@@ -41,7 +41,7 @@ public struct ToleranceRectangle
     public override readonly bool Equals(object obj) => obj is ToleranceRectangle toleranceRectangle && this == toleranceRectangle;
 
     /// <inheritdoc/>
-    public override readonly string ToString() => string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0}{1}", new object[2] { this.Rectangle, this.Difference });
+    public override readonly string ToString() => string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0}{1}", this.Rectangle, this.Difference);
 
     /// <inheritdoc/>
     public override readonly int GetHashCode() => StringComparer.Ordinal.GetHashCode(this.ToString());

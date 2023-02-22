@@ -203,7 +203,7 @@ public static class ImageComparer
         {
             if (rectangleList[i].Rectangle.Left < 0 || rectangleList[i].Rectangle.Top < 0 || rectangleList[i].Rectangle.Right > width || rectangleList[i].Rectangle.Bottom > height)
             {
-                throw new InvalidOperationException(string.Format(System.Globalization.CultureInfo.CurrentCulture, Properties.Resources.RectangleNotInRange, new object[1] { i }));
+                throw new InvalidOperationException(string.Format(System.Globalization.CultureInfo.CurrentCulture, Properties.Resources.RectangleNotInRange, i));
             }
 
             for (var j = rectangleList[i].Rectangle.Top; j < rectangleList[i].Rectangle.Bottom; j++)
