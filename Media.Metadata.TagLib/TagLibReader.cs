@@ -11,6 +11,8 @@ namespace Media.Metadata;
 /// </summary>
 public class TagLibReader : IReader
 {
+    private static readonly byte[] Nam = new byte[] { 0xa9, 0x6e, 0x61, 0x6d };
+
     /// <inheritdoc/>
     public Episode ReadEpisode(string path) => ReadVideo(path, (fileInfo, appleTag) => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)));
 
@@ -19,6 +21,8 @@ public class TagLibReader : IReader
 
     /// <inheritdoc/>
     public Video ReadVideo(string path) => ReadVideo(path, ReadVideo);
+
+    private static string GetTitle(TagLib.Mpeg4.AppleTag appleTag) => string.Join("; ", appleTag.GetText(Nam));
 
     private static T ReadVideo<T>(string path, Func<FileInfo, TagLib.Mpeg4.AppleTag, T> func)
         where T : Video
@@ -40,7 +44,7 @@ public class TagLibReader : IReader
 
     private static Movie ReadMovie(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag, PList plist) => new LocalMovie(
         fileInfo,
-        appleTag.Title,
+        GetTitle(appleTag),
         appleTag.Description,
         GetPersonel(plist, "producers").ToArray(),
         GetPersonel(plist, "directors").ToArray(),
@@ -54,7 +58,7 @@ public class TagLibReader : IReader
     {
         return new LocalEpisode(
             fileInfo,
-            appleTag.Title,
+            GetTitle(appleTag),
             appleTag.Description,
             GetPersonel(plist, "producers").ToArray(),
             GetPersonel(plist, "directors").ToArray(),
