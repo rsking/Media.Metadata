@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ContentRating.cs" company="RossKing">
+// <copyright file="Mp4ContentRating.cs" company="RossKing">
 // Copyright (c) RossKing. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace Media.Metadata;
 /// <summary>
 /// Specifies the value for the content rating of an MP4 file.
 /// </summary>
-internal enum ContentRating : byte
+internal enum Mp4ContentRating : byte
 {
     /// <summary>
     /// Indicates the value has been set, but there is no rating for the content of this file.

@@ -242,7 +242,7 @@ internal class MetadataTags : IDisposable
     /// <summary>
     /// Gets or sets the content rating for the content contained in this file.
     /// </summary>
-    public ContentRating ContentRating { get; set; }
+    public Mp4ContentRating ContentRating { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the content contained in this file is part of a gapless playback album.
@@ -388,7 +388,7 @@ internal class MetadataTags : IDisposable
 
             IsHDVideo = appleTag.GetHdVideo(),
             MediaType = (MediaKind)appleTag.GetMediaType(),
-            ContentRating = (ContentRating)appleTag.GetContentRating(),
+            ContentRating = (Mp4ContentRating)appleTag.GetContentRating(),
             IsGapless = appleTag.GetGapless(),
 
             MediaStoreAccount = appleTag.GetMediaStoreAccount(),
@@ -472,7 +472,7 @@ internal class MetadataTags : IDisposable
 
             IsHDVideo = tags.hdVideo.ReadBoolean(),
             MediaType = tags.mediaType.ReadEnumValue(MediaKind.NotSet),
-            ContentRating = tags.contentRating.ReadEnumValue(ContentRating.NotSet),
+            ContentRating = tags.contentRating.ReadEnumValue(Mp4ContentRating.NotSet),
             IsGapless = tags.gapless.ReadBoolean(),
 
             MediaStoreAccount = StringMarshaller.AnsiToUtf8(tags.itunesAccount),
@@ -541,7 +541,7 @@ internal class MetadataTags : IDisposable
         SetStringValue(tagsPtr, this.Category, tags.category, NativeMethods.MP4TagsSetCategory);
         SetBoolValue(tagsPtr, this.IsHDVideo, tags.hdVideo.ReadBoolean(), NativeMethods.MP4TagsSetHDVideo);
         SetEnumValue(tagsPtr, this.MediaType, tags.mediaType, MediaKind.NotSet, NativeMethods.MP4TagsSetMediaType);
-        SetEnumValue(tagsPtr, this.ContentRating, tags.contentRating, ContentRating.NotSet, NativeMethods.MP4TagsSetContentRating);
+        SetEnumValue(tagsPtr, this.ContentRating, tags.contentRating, Mp4ContentRating.NotSet, NativeMethods.MP4TagsSetContentRating);
         SetBoolValue(tagsPtr, this.IsGapless, tags.gapless.ReadBoolean(), NativeMethods.MP4TagsSetGapless);
         SetStringValue(tagsPtr, this.MediaStoreAccount, tags.itunesAccount, NativeMethods.MP4TagsSetITunesAccount);
         SetEnumValue(tagsPtr, this.MediaStoreAccountType, tags.iTunesAccountType, MediaStoreAccountKind.NotSet, NativeMethods.MP4TagsSetITunesAccountType);

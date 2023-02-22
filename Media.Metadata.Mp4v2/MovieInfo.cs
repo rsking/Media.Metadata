@@ -148,6 +148,7 @@ internal class MovieInfo : Atom, IEquatable<MovieInfo>
                     : default;
             }
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "An empty list is not the same as null")]
             static IList<T>? GetListOrDefault<T>(PList plist, string key)
             {
                 return plist.ContainsKey(key)

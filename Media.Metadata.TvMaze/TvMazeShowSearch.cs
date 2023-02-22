@@ -94,6 +94,10 @@ public class TvMazeShowSearch : IShowSearch
                                     Show = show.Name,
                                     ImageUri = episode.Image?.Original,
                                     Cast = cast.Where(c => c.Person is not null).Select(c => c.Person!.Name),
+                                    Composers = crew.Where(c => c.Person is not null && string.Equals(c.Type, "composer", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
+                                    Directors = crew.Where(c => c.Person is not null && string.Equals(c.Type, "director", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
+                                    Producers = crew.Where(c => c.Person is not null && string.Equals(c.Type, "producer", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
+                                    ScreenWriters = crew.Where(c => c.Person is not null && string.Equals(c.Type, "screenwriter", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
                                 };
                             }
                         }

@@ -478,6 +478,7 @@ static Command CreateOptimize()
     return command;
 }
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "A null result is not the same as an empty result")]
 static IDictionary<MediaTrackType, string>? GetLanguages(string[]? lang)
 {
     return lang is null
@@ -548,9 +549,13 @@ namespace Media.Metadata
     /// <content>
     /// Compiled <see cref="System.Text.RegularExpressions.Regex"/>.
     /// </content>
-    internal partial class Program
+    internal sealed partial class Program
     {
         private const int MillisecondTimeout = 1000;
+
+        private Program()
+        {
+        }
 
         /// <summary>
         /// Gets the episode <see cref="System.Text.RegularExpressions.Regex"/> expressions.
@@ -561,6 +566,7 @@ namespace Media.Metadata
             {
                 SbsRegex1(),
                 SbsRegex2(),
+                SbsRegex3(),
                 IViewRegex1(),
                 IViewRegex2(),
             };
@@ -570,6 +576,9 @@ namespace Media.Metadata
 
         [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
         private static partial System.Text.RegularExpressions.Regex SbsRegex2();
+
+        [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep. (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+        private static partial System.Text.RegularExpressions.Regex SbsRegex3();
 
         [System.Text.RegularExpressions.GeneratedRegex("Series (?<season>\\d+) Ep (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
         private static partial System.Text.RegularExpressions.Regex IViewRegex1();

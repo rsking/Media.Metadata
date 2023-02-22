@@ -34,6 +34,7 @@ internal static class IntPtrExtensions
     /// The byte array containing copies of the values pointed to by this <see cref="IntPtr"/>.
     /// Returns <see langword="null"/> if this pointer is a null pointer (<see cref="IntPtr.Zero"/>).
     /// </returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "An empty array is not the same as null.")]
     public static byte[]? ToByteArray(this IntPtr value, int bufferLength)
     {
         if (value == IntPtr.Zero)

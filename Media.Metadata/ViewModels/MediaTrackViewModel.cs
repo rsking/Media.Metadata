@@ -49,7 +49,7 @@ internal partial class MediaTrackViewModel : CommunityToolkit.Mvvm.ComponentMode
     /// Converts this to a video.
     /// </summary>
     /// <returns>The video.</returns>
-    public MediaTrack ToMediaTrack() => new(this.Id, this.Type, this.selectedLanguage);
+    public MediaTrack ToMediaTrack() => new(this.Id, this.Type, this.SelectedLanguage);
 
     private static IEnumerable<string> GetLanguages()
     {

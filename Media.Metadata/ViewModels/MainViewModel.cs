@@ -195,7 +195,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
             {
                 for (var i = 0; i < this.Videos.Count; i++)
                 {
-                    if (this.Videos[i] == this.selectedVideo)
+                    if (this.Videos[i] == this.SelectedVideo)
                     {
                         var video = await this.ReadVideoAsync(localVideo.FileInfo.FullName).ConfigureAwait(true);
                         if (video is not null)

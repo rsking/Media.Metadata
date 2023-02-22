@@ -85,11 +85,9 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
             var series = seriesResponse.Data.Data;
 
+            // only official, aired dates, ordered by the season number
             foreach (var season in series.Seasons
-                // only official, aired dates
-                .Where(s => s.Type.Id == 1)
-
-                // order by the season number
+                .Where(s => s.Type?.Id == 1)
                 .OrderBy(s => s.Number))
             {
                 if (season.Type?.Id != 1)
@@ -214,7 +212,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
                         static string? GetNetwork(ICollection<Company> companies)
                         {
-                            var company = companies.FirstOrDefault(company => string.Equals(company.CompanyType.CompanyTypeName, "Network", StringComparison.Ordinal));
+                            var company = companies.FirstOrDefault(company => string.Equals(company.CompanyType?.CompanyTypeName, "Network", StringComparison.Ordinal));
                             return company?.Name;
                         }
 
