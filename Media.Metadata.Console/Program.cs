@@ -5,9 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System.CommandLine;
-using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
-using System.CommandLine.IO;
 using System.CommandLine.Parsing;
 using Media.Metadata;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,35 +14,34 @@ using Microsoft.Extensions.Hosting;
 
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-var searchCommand = new Command("search")
+var searchCommand = new CliCommand("search")
 {
     CreateSearchMovie(),
     CreateSearchShow(),
 };
 
-var readCommand = new Command("read")
+var readCommand = new CliCommand("read")
 {
     CreateReadMovie(),
     CreateReadEpisode(),
 };
 
-var langOption = new Option<string[]>(new[] { "--lang", "-l" }, "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks")
+var langOption = new CliOption<string[]>("--lang", "-l")
 {
+    Description = "`[tkID=]LAN` Set the language. LAN is the ISO 639 code (eng, swe, ...). If no track ID is given, sets language to all tracks",
     Arity = ArgumentArity.OneOrMore,
 };
 
-var updateCommand = new Command("update")
+var updateCommand = new CliCommand("update")
 {
     CreateUpdateMovie(langOption),
     CreateUpdateEpisode(langOption),
     CreateUpdateVideo(langOption),
 };
 
-updateCommand.AddGlobalOption(langOption);
-
 var optimiseCommand = CreateOptimize();
 
-var commandBuilder = new CommandLineBuilder(new RootCommand
+var configuration = new CliConfiguration(new CliRootCommand
 {
     searchCommand,
     readCommand,
@@ -52,8 +49,7 @@ var commandBuilder = new CommandLineBuilder(new RootCommand
     optimiseCommand,
 });
 
-await commandBuilder
-    .UseDefaults()
+await configuration
     .UseHost(
         Host.CreateDefaultBuilder,
         configure => configure.ConfigureServices((builder, services) =>
@@ -67,25 +63,25 @@ await commandBuilder
             services
                 .Configure<InvocationLifetimeOptions>(options => options.SuppressStatusMessages = true);
         }))
-    .CancelOnProcessTermination()
-    .Build()
     .InvokeAsync(args)
     .ConfigureAwait(true);
 
-static Command CreateSearchMovie()
+static CliCommand CreateSearchMovie()
 {
-    var nameArgument = new Argument<string>("name");
-    var yearOption = new Option<int?>(new[] { "--year", "-y" }, "The movie year");
-    var command = new Command("movie")
+    var nameArgument = new CliArgument<string>("name");
+    var yearOption = new CliOption<int?>("--year", "-y") { Description = "The movie year" };
+    var command = new CliCommand("movie")
     {
         nameArgument,
         yearOption,
     };
 
-    command.SetHandler(
-        async (IHost host, string name, int? year, CancellationToken cancellationToken) =>
+    command.SetAction(
+        async (parseResult, cancellationToken) =>
         {
-            foreach (var search in host.Services.GetServices<IMovieSearch>())
+            var name = parseResult.GetValue(nameArgument).ThrowIfNull();
+            var year = parseResult.GetValue(yearOption);
+            foreach (var search in parseResult.GetHost().Services.GetServices<IMovieSearch>())
             {
                 await foreach (var movie in search.SearchAsync(name, year ?? 0, cancellationToken: cancellationToken).ConfigureAwait(false))
                 {
@@ -99,128 +95,108 @@ static Command CreateSearchMovie()
                     }
                 }
             }
-        },
-        Bind.FromServiceProvider<IHost>(),
-        nameArgument,
-        yearOption,
-        Bind.FromServiceProvider<CancellationToken>());
+        });
 
     return command;
 }
 
-static Command CreateReadMovie()
+static CliCommand CreateReadMovie()
 {
-    var pathArgument = new Argument<FileInfo>("path").ExistingOnly();
-    var command = new Command("movie")
+    var pathArgument = new CliArgument<FileInfo>("path").AcceptExistingOnly();
+    var command = new CliCommand("movie")
     {
         pathArgument,
     };
 
-    command.SetHandler(
-        (IHost host, FileInfo path) =>
-        {
-            if (!path.Exists)
-            {
-                return;
-            }
-
-            var reader = host.Services.GetRequiredService<IReader>();
-            var movie = reader.ReadMovie(path.FullName);
-            Console.WriteLine(movie.Name);
-        },
-        Bind.FromServiceProvider<IHost>(),
-        pathArgument);
+    command.SetAction(parseResult =>
+    {
+        var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
+        var movie = parseResult.GetHost().Services.GetRequiredService<IReader>().ReadMovie(path.FullName);
+        Console.WriteLine(movie.Name);
+    });
 
     return command;
 }
 
-static Command CreateReadEpisode()
+static CliCommand CreateReadEpisode()
 {
-    var pathArgument = new Argument<FileInfo>("path").ExistingOnly();
-    var command = new Command("episode")
+    var pathArgument = new CliArgument<FileInfo>("path").AcceptExistingOnly();
+    var command = new CliCommand("episode")
     {
         pathArgument,
     };
 
-    command.SetHandler(
-        (IHost host, FileInfo path) =>
-        {
-            if (!path.Exists)
-            {
-                return;
-            }
-
-            var reader = host.Services.GetRequiredService<IReader>();
-            var episode = reader.ReadEpisode(path.FullName);
-            Console.WriteLine(episode.Name);
-        },
-        Bind.FromServiceProvider<IHost>(),
-        pathArgument);
+    command.SetAction(parseResult =>
+    {
+        var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
+        var episode = parseResult.GetHost().Services.GetRequiredService<IReader>().ReadEpisode(path.FullName);
+        Console.WriteLine(episode.Name);
+    });
 
     return command;
 }
 
-static Command CreateSearchShow()
+static CliCommand CreateSearchShow()
 {
-    var nameArgument = new Argument<string>("name");
-    var yearOption = new Option<int>(new[] { "--year", "-y" }, "The show year");
-    var command = new Command("show")
+    var nameArgument = new CliArgument<string>("name");
+    var yearOption = new CliOption<int>("--year", "-y") { Description = "The show year" };
+    var command = new CliCommand("show")
     {
         nameArgument,
         yearOption,
     };
 
-    command.SetHandler(
-        async (IHost host, string name, int year, CancellationToken cancellationToken) =>
+    command.SetAction(async (parseResult, cancellationToken) =>
+    {
+        var name = parseResult.GetValue(nameArgument).ThrowIfNull();
+        var year = parseResult.GetValue(yearOption);
+
+        foreach (var search in parseResult.GetHost().Services.GetServices<IShowSearch>())
         {
-            foreach (var search in host.Services.GetServices<IShowSearch>())
+            await foreach (var show in search.SearchAsync(name, year, cancellationToken: cancellationToken).ConfigureAwait(false))
             {
-                await foreach (var show in search.SearchAsync(name, year, cancellationToken: cancellationToken).ConfigureAwait(false))
+                Console.WriteLine("{0}", show.Name);
+                foreach (var season in show.Seasons.OrderBy(season => season.Number))
                 {
-                    Console.WriteLine("{0}", show.Name);
-                    foreach (var season in show.Seasons.OrderBy(season => season.Number))
+                    Console.WriteLine("\tSeason {0}", season.Number);
+                    if (season.Episodes is null)
                     {
-                        Console.WriteLine("\tSeason {0}", season.Number);
-                        if (season.Episodes is null)
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        foreach (var episode in season.Episodes)
-                        {
-                            Console.WriteLine("\t\t{0}: {1}", episode.Name, episode.Description);
-                        }
+                    foreach (var episode in season.Episodes)
+                    {
+                        Console.WriteLine("\t\t{0}: {1}", episode.Name, episode.Description);
                     }
                 }
             }
-        },
-        Bind.FromServiceProvider<IHost>(),
-        nameArgument,
-        yearOption,
-        Bind.FromServiceProvider<CancellationToken>());
+        }
+    });
 
     return command;
 }
 
-static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor<string[]> langOption)
+static CliCommand CreateUpdateMovie(CliOption<string[]> langOption)
 {
-    var pathArgument = new Argument<FileInfo>("path").ExistingOnly();
-    var nameArgument = new Argument<string>("name");
-    var yearOption = new Option<int>(new[] { "--year", "-y" }, "The movie year");
-    var command = new Command("movie")
+    var pathArgument = new CliArgument<FileInfo>("path").AcceptExistingOnly();
+    var nameArgument = new CliArgument<string>("name");
+    var yearOption = new CliOption<int>("--year", "-y") { Description = "The movie year" };
+    var command = new CliCommand("movie")
     {
         pathArgument,
         nameArgument,
         yearOption,
+        langOption,
     };
 
-    command.SetHandler(
-        async (IConsole console, IHost host, FileInfo path, string name, int year, string[]? lang, CancellationToken cancellationToken) =>
+    command.SetAction(
+        async (parseResult, cancellationToken) =>
         {
-            if (!path.Exists)
-            {
-                return;
-            }
+            var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
+            var host = parseResult.GetHost();
+            var name = parseResult.GetValue(nameArgument).ThrowIfNull();
+            var year = parseResult.GetValue(yearOption);
+            var lang = parseResult.GetValue(langOption);
 
             foreach (var search in host.Services.GetServices<IMovieSearch>())
             {
@@ -228,38 +204,30 @@ static Command CreateUpdateMovie(System.CommandLine.Binding.IValueDescriptor<str
                 {
                     if (string.Equals(movie.Name, name, StringComparison.OrdinalIgnoreCase) && (year == 0 || (movie.Release.HasValue && movie.Release.Value.Year == year)))
                     {
-                        console.Out.WriteLine($"Found Movie {movie.Name} ({movie.Release?.Year})");
-                        var updater = host.Services.GetRequiredService<IUpdater>();
-                        console.Out.WriteLine($"Saving {path.Name}");
-                        updater.UpdateMovie(path.FullName, movie, GetLanguages(lang));
-                        console.Out.WriteLine($"Saved {path.Name}");
+                        await parseResult.Configuration.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Movie {movie.Name} ({movie.Release?.Year})")).ConfigureAwait(false);
+                        await parseResult.Configuration.Output.WriteLineAsync($"Saving {path.Name}").ConfigureAwait(false);
+                        host.Services.GetRequiredService<IUpdater>().UpdateMovie(path.FullName, movie, GetLanguages(lang));
+                        await parseResult.Configuration.Output.WriteLineAsync($"Saved {path.Name}").ConfigureAwait(false);
                         break;
                     }
                 }
             }
-        },
-        Bind.FromServiceProvider<IConsole>(),
-        Bind.FromServiceProvider<IHost>(),
-        pathArgument,
-        nameArgument,
-        yearOption,
-        langOption,
-        Bind.FromServiceProvider<CancellationToken>());
+        });
 
     return command;
 }
 
-static Command CreateUpdateEpisode(Option<string[]> langOption)
+static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
 {
-    var pathArgument = new Argument<FileInfo[]>("path", ParseFileInfo);
-    var nameOption = new Option<string>(new[] { "--name", "-n" }, "The series name") { IsRequired = true };
-    var yearOption = new Option<int>(new[] { "--year", "-y" }, () => -1, "The series year");
-    var seasonOption = new Option<int>(new[] { "--season", "-s" }, () => -1, "The season number");
-    var episodeOption = new Option<int>(new[] { "--episode", "-e" }, () => -1, "The episode number");
-    var ignoreOption = new Option<bool>(new[] { "--ignore", "-i" }, "Ignore files that already have a valid episode");
-    var episodeOffsetOption = new Option<int>(new[] { "--offset", "-o" }, "Offset for episode numbers");
+    var pathArgument = new CliArgument<FileInfo[]>("path") { CustomParser = ParseFileInfo };
+    var nameOption = new CliOption<string>("--name", "-n") { Description = "The series name", Required = true };
+    var yearOption = new CliOption<int>("--year", "-y") { Description = "The series year", DefaultValueFactory = _ => -1 };
+    var seasonOption = new CliOption<int>("--season", "-s") { Description = "The season number", DefaultValueFactory = _ => -1 };
+    var episodeOption = new CliOption<int>("--episode", "-e") { Description = "The episode number", DefaultValueFactory = _ => -1 };
+    var ignoreOption = new CliOption<bool>("--ignore", "-i") { Description = "Ignore files that already have a valid episode" };
+    var episodeOffsetOption = new CliOption<int>("--offset", "-o") { Description = "Offset for episode numbers" };
 
-    var command = new Command("episode")
+    var command = new CliCommand("episode")
     {
         pathArgument,
         nameOption,
@@ -268,25 +236,27 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
         episodeOption,
         ignoreOption,
         episodeOffsetOption,
+        langOption,
     };
 
-    command.SetHandler(context =>
+    command.SetAction((parseResult, cancellationToken) =>
     {
-        var host = context.BindingContext.GetRequiredService<IHost>();
-        var path = context.ParseResult.GetValueForArgument(pathArgument);
-        var name = context.ParseResult.GetValueForOption(nameOption);
-        var year = context.ParseResult.GetValueForOption(yearOption);
-        var season = context.ParseResult.GetValueForOption(seasonOption);
-        var episode = context.ParseResult.GetValueForOption(episodeOption);
-        var ignore = context.ParseResult.GetValueForOption(ignoreOption);
-        var episodeOffset = context.ParseResult.GetValueForOption(episodeOffsetOption);
-        var lang = context.ParseResult.GetValueForOption(langOption);
+        return Process(
+            parseResult.Configuration,
+            parseResult.GetHost(),
+            parseResult.GetValue(pathArgument).ThrowIfNull(),
+            parseResult.GetValue(nameOption).ThrowIfNull(),
+            parseResult.GetValue(yearOption),
+            parseResult.GetValue(seasonOption),
+            parseResult.GetValue(episodeOption),
+            parseResult.GetValue(ignoreOption),
+            parseResult.GetValue(episodeOffsetOption),
+            parseResult.GetValue(langOption),
+            cancellationToken);
 
-        return Process(context.Console, host, path, name!, year, season, episode, ignore, episodeOffset, lang, context.GetCancellationToken());
-
-        static async Task Process(IConsole console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, bool ignore, int offset, string[]? lang, CancellationToken cancellationToken)
+        static async Task Process(CliConfiguration console, IHost host, FileInfo[] paths, string name, int year, int season, int episode, bool ignore, int offset, string[]? lang, CancellationToken cancellationToken)
         {
-            var regex = Media.Metadata.Program.GetEpisodeRegexes();
+            var regex = GetEpisodeRegexes();
 
             var reader = host.Services.GetRequiredService<IReader>();
             var pathList = paths
@@ -315,7 +285,7 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
                         return;
                     }
 
-                    console.Out.WriteLine($"Found Series  {series.Name}");
+                    await console.Output.WriteLineAsync($"Found Series  {series.Name}").ConfigureAwait(false);
                     var seasonEnumerator = series.Seasons.GetEnumerator();
                     if (!seasonEnumerator.MoveNext())
                     {
@@ -331,7 +301,7 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
 
                         if (seasonEnumerator.Current is Season s && s.Number == seasonGroup.Key)
                         {
-                            console.Out.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Season  {series.Name}:{s.Number}"));
+                            await console.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Season  {series.Name}:{s.Number}")).ConfigureAwait(false);
 
                             var episoides = seasonGroup
                                 .Select(path => episode switch
@@ -351,7 +321,7 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
 
                             foreach (var ep in episoides.Where(ep => ep.Path.Exists))
                             {
-                                console.Out.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Processing {ep.Path.Name}"));
+                                await console.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Processing {ep.Path.Name}")).ConfigureAwait(false);
 
                                 while (episodeEnumerator.Current is not null && episodeEnumerator.Current.Number < ep.Episode && episodeEnumerator.MoveNext())
                                 {
@@ -360,24 +330,14 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
 
                                 if (episodeEnumerator.Current is Episode e && e.Number == ep.Episode)
                                 {
-                                    console.Out.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Episode {series.Name}:{s.Number}:{e.Name}"));
-                                    SixLabors.ImageSharp.Image? image = default;
-                                    SixLabors.ImageSharp.Formats.IImageFormat? imageFormat = default;
-                                    if (s.Image is not null)
+                                    await console.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Episode {series.Name}:{s.Number}:{e.Name}")).ConfigureAwait(false);
+                                    var (image, imageFormat) = (s, series, e) switch
                                     {
-                                        image = s.Image;
-                                        imageFormat = s.ImageFormat;
-                                    }
-                                    else if (series.Image is not null)
-                                    {
-                                        image = series.Image;
-                                        imageFormat = series.ImageFormat;
-                                    }
-                                    else if (e.Image is not null)
-                                    {
-                                        image = e.Image;
-                                        imageFormat = e.ImageFormat;
-                                    }
+                                        (IHasImage { Image: not null } i, _, _) => (i.Image, i.ImageFormat),
+                                        (_, IHasImage { Image: not null } i, _) => (i.Image, i.ImageFormat),
+                                        (_, _, IHasImage { Image: not null } i) => (i.Image, i.ImageFormat),
+                                        _ => (default, default),
+                                    };
 
                                     updater.UpdateEpisode(ep.Path.FullName, e with { Image = image, ImageFormat = imageFormat }, GetLanguages(lang));
 
@@ -425,55 +385,46 @@ static Command CreateUpdateEpisode(Option<string[]> langOption)
     return command;
 }
 
-static Command CreateUpdateVideo(System.CommandLine.Binding.IValueDescriptor<string[]> langOption)
+static CliCommand CreateUpdateVideo(CliOption<string[]> langOption)
 {
-    var pathArgument = new Argument<FileInfo[]>("path", ParseFileInfo).ExistingOnly();
-    var command = new Command("video")
+    var pathArgument = new CliArgument<FileInfo[]>("path") { CustomParser = ParseFileInfo }.AcceptExistingOnly();
+    var command = new CliCommand("video")
     {
         pathArgument,
+        langOption,
     };
 
-    command.SetHandler(
-        (IConsole console, IHost host, FileInfo[] path, string[] lang) =>
+    command.SetAction(
+        (parseResult) =>
         {
+            var host = parseResult.GetHost();
+            var path = parseResult.GetValue(pathArgument).ThrowIfNull();
+            var lang = parseResult.GetValue(langOption);
             var reader = host.Services.GetRequiredService<IReader>();
             var updater = host.Services.GetRequiredService<IUpdater>();
             var languages = GetLanguages(lang);
             foreach (var p in path.Where(p => p.Exists).Select(p => p.FullName))
             {
                 var video = reader.ReadVideo(p);
-                console.Out.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Updating {video.Name}"));
+                parseResult.Configuration.Output.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Updating {video.Name}"));
                 updater.UpdateVideo(p, video, languages);
             }
-        },
-        Bind.FromServiceProvider<IConsole>(),
-        Bind.FromServiceProvider<IHost>(),
-        pathArgument,
-        langOption);
+        });
 
     return command;
 }
 
-static Command CreateOptimize()
+static CliCommand CreateOptimize()
 {
-    var pathArgument = new Argument<FileInfo>("path").ExistingOnly();
-    var command = new Command("optimize")
-    {
-        pathArgument,
-    };
+    var pathArgument = new CliArgument<FileInfo>("path").AcceptExistingOnly();
+    var command = new CliCommand("optimize") { pathArgument };
 
-    command.SetHandler(
-        (IOptimizer optimizer, FileInfo path) =>
+    command.SetAction(
+        parseResult =>
         {
-            if (!path.Exists)
-            {
-                return;
-            }
-
-            optimizer.Opimize(path.FullName);
-        },
-        Bind.FromServiceProvider<IOptimizer>(),
-        pathArgument);
+            var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
+            parseResult.GetHost().Services.GetRequiredService<IOptimizer>().Opimize(path.FullName);
+        });
 
     return command;
 }
@@ -544,46 +495,43 @@ static FileInfo[] ParseFileInfo(ArgumentResult argumentResult)
     }
 }
 
-namespace Media.Metadata
+/// <content>
+/// Compiled <see cref="System.Text.RegularExpressions.Regex"/>.
+/// </content>
+internal sealed partial class Program
 {
-    /// <content>
-    /// Compiled <see cref="System.Text.RegularExpressions.Regex"/>.
-    /// </content>
-    internal sealed partial class Program
+    private const int MillisecondTimeout = 1000;
+
+    private Program()
     {
-        private const int MillisecondTimeout = 1000;
+    }
 
-        private Program()
+    /// <summary>
+    /// Gets the episode <see cref="System.Text.RegularExpressions.Regex"/> expressions.
+    /// </summary>
+    /// <returns>The episode <see cref="System.Text.RegularExpressions.Regex"/> expressions.</returns>
+    internal static IEnumerable<System.Text.RegularExpressions.Regex> GetEpisodeRegexes() =>
+        new[]
         {
-        }
-
-        /// <summary>
-        /// Gets the episode <see cref="System.Text.RegularExpressions.Regex"/> expressions.
-        /// </summary>
-        /// <returns>The episode <see cref="System.Text.RegularExpressions.Regex"/> expressions.</returns>
-        internal static IEnumerable<System.Text.RegularExpressions.Regex> GetEpisodeRegexes() =>
-            new[]
-            {
                 SbsRegex1(),
                 SbsRegex2(),
                 SbsRegex3(),
                 IViewRegex1(),
                 IViewRegex2(),
-            };
+        };
 
-        [System.Text.RegularExpressions.GeneratedRegex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
-        private static partial System.Text.RegularExpressions.Regex SbsRegex1();
+    [System.Text.RegularExpressions.GeneratedRegex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    private static partial System.Text.RegularExpressions.Regex SbsRegex1();
 
-        [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
-        private static partial System.Text.RegularExpressions.Regex SbsRegex2();
+    [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    private static partial System.Text.RegularExpressions.Regex SbsRegex2();
 
-        [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep. (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
-        private static partial System.Text.RegularExpressions.Regex SbsRegex3();
+    [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep. (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    private static partial System.Text.RegularExpressions.Regex SbsRegex3();
 
-        [System.Text.RegularExpressions.GeneratedRegex("Series (?<season>\\d+) Ep (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
-        private static partial System.Text.RegularExpressions.Regex IViewRegex1();
+    [System.Text.RegularExpressions.GeneratedRegex("Series (?<season>\\d+) Ep (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    private static partial System.Text.RegularExpressions.Regex IViewRegex1();
 
-        [System.Text.RegularExpressions.GeneratedRegex("..(\\d+).(?<episode>\\d+)S(\\d+)-(.*)", System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
-        private static partial System.Text.RegularExpressions.Regex IViewRegex2();
-    }
+    [System.Text.RegularExpressions.GeneratedRegex("..(\\d+).(?<episode>\\d+)S(\\d+)-(.*)", System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    private static partial System.Text.RegularExpressions.Regex IViewRegex2();
 }
