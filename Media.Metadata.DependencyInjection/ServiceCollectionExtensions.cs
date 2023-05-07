@@ -92,11 +92,11 @@ public static class ServiceCollectionExtensions
     {
         services
             .TryAddTransient(_ =>
-                new RestSharp.RestClient().UseSystemTextJson(new System.Text.Json.JsonSerializerOptions
+                new RestSharp.RestClient(configureSerialization: s => s.UseSystemTextJson(new System.Text.Json.JsonSerializerOptions
                 {
                     Converters = { new Media.Metadata.JsonDateConverter() },
                     PropertyNameCaseInsensitive = true,
-                }));
+                })));
 
         return services;
     }
