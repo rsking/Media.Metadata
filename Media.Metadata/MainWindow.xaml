@@ -5,6 +5,8 @@
         xmlns:local="using:Media.Metadata"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="using:Media.Metadata.Views"
+        xmlns:props="using:Media.Metadata.Properties"
+        xmlns:str="using:Media.Metadata.Markup"
         x:Name="ThisWindow"
         mc:Ignorable="d">
     <Grid>
@@ -15,8 +17,8 @@
         <TextBlock Name="TitleBar"
                    Margin="5"
                    HorizontalAlignment="Left"
-                   FontSize="20"
-                   Text="{Binding Title, ElementName=ThisWindow}" />
+                   FontSize="14"
+                   Text="{str:ResourceString Name=Title}" />
         <views:MainView Grid.Row="1" />
     </Grid>
 </Window>

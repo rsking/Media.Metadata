@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Media.Metadata.Properties {
+namespace Media.Metadata.UI.Properties {
     using System;
     
     
@@ -75,6 +75,15 @@ namespace Media.Metadata.Properties {
         internal static string NotSet {
             get {
                 return ResourceManager.GetString("NotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Media Metadata Updater.
+        /// </summary>
+        internal static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         

@@ -14,21 +14,21 @@ public enum VideoType
     /// <summary>
     /// Not set.
     /// </summary>
-    [System.ComponentModel.DataAnnotations.Display(ResourceType = typeof(Properties.Resources), Name = nameof(NotSet))]
-    [Display(ResourceType = typeof(Properties.Resources), Name = nameof(NotSet))]
+    [System.ComponentModel.DataAnnotations.Display(ResourceType = typeof(UI.Properties.Resources), Name = nameof(UI.Properties.Resources.NotSet))]
+    [Display(ResourceType = typeof(UI.Properties.Resources), Name = nameof(UI.Properties.Resources.NotSet))]
     NotSet,
 
     /// <summary>
     /// A Movie.
     /// </summary>
-    [System.ComponentModel.DataAnnotations.Display(ResourceType = typeof(Properties.Resources), Name = nameof(Movie))]
-    [Display(ResourceType = typeof(Properties.Resources), Name = nameof(Movie))]
+    [System.ComponentModel.DataAnnotations.Display(ResourceType = typeof(UI.Properties.Resources), Name = nameof(UI.Properties.Resources.Movie))]
+    [Display(ResourceType = typeof(UI.Properties.Resources), Name = nameof(UI.Properties.Resources.Movie))]
     Movie,
 
     /// <summary>
     /// A TV Show.
     /// </summary>
-    [System.ComponentModel.DataAnnotations.Display(ResourceType = typeof(Properties.Resources), Name = nameof(TVShow))]
-    [Display(ResourceType = typeof(Properties.Resources), Name = nameof(TVShow))]
+    [System.ComponentModel.DataAnnotations.Display(ResourceType = typeof(UI.Properties.Resources), Name = nameof(UI.Properties.Resources.TVShow))]
+    [Display(ResourceType = typeof(UI.Properties.Resources), Name = nameof(UI.Properties.Resources.TVShow))]
     TVShow,
 }
