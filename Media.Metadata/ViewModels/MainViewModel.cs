@@ -6,7 +6,6 @@
 
 namespace Media.Metadata.ViewModels;
 
-using System;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;

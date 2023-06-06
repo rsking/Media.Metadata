@@ -4,7 +4,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.CommandLine;
 using System.CommandLine.Hosting;
 using System.CommandLine.Parsing;
 using Media.Metadata;

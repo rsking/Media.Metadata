@@ -22,27 +22,27 @@ public class TagLibReader : IReader
     /// <inheritdoc/>
     public Video ReadVideo(string path) => ReadVideo(path, ReadVideo);
 
-    private static string GetTitle(TagLib.Mpeg4.AppleTag appleTag) => string.Join("; ", appleTag.GetText(Nam));
+    private static string GetTitle(AppleTag appleTag) => string.Join("; ", appleTag.GetText(Nam));
 
-    private static T ReadVideo<T>(string path, Func<FileInfo, TagLib.Mpeg4.AppleTag, T> func)
+    private static T ReadVideo<T>(string path, Func<FileInfo, AppleTag, T> func)
         where T : Video
     {
         var fileInfo = new FileInfo(path);
         using var tagLibFile = TagLib.File.Create(fileInfo.FullName);
 
-        return tagLibFile.GetTag(TagLib.TagTypes.Apple) is TagLib.Mpeg4.AppleTag appleTag
+        return tagLibFile.GetTag(TagTypes.Apple) is AppleTag appleTag
             ? Update(fileInfo, func(fileInfo, appleTag), appleTag)
             : throw new ArgumentException(default, nameof(path));
     }
 
-    private static Video ReadVideo(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag) => appleTag switch
+    private static Video ReadVideo(FileInfo fileInfo, AppleTag appleTag) => appleTag switch
     {
         var t when t.GetMediaType() == MediaType.Movie => ReadMovie(fileInfo, appleTag, CreatePList(appleTag)),
         var t when t.GetMediaType() == MediaType.TVShow => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)),
         _ => new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name)),
     };
 
-    private static Movie ReadMovie(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag, PList plist) => new LocalMovie(
+    private static Movie ReadMovie(FileInfo fileInfo, AppleTag appleTag, PList plist) => new LocalMovie(
         fileInfo,
         GetTitle(appleTag),
         appleTag.Description,
@@ -54,7 +54,7 @@ public class TagLibReader : IReader
         GetPersonel(plist, "cast").ToArray(),
         SplitArray(appleTag.Composers).ToArray());
 
-    private static Episode ReadEpisode(FileInfo fileInfo, TagLib.Mpeg4.AppleTag appleTag, PList plist)
+    private static Episode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, PList plist)
     {
         return new LocalEpisode(
             fileInfo,
@@ -77,7 +77,7 @@ public class TagLibReader : IReader
         };
     }
 
-    private static T Update<T>(FileInfo info, T video, TagLib.Mpeg4.AppleTag appleTag)
+    private static T Update<T>(FileInfo info, T video, AppleTag appleTag)
         where T : Video
     {
         if (appleTag.GetReleaseDate() is string day
@@ -93,7 +93,7 @@ public class TagLibReader : IReader
             video = video with { Rating = rating };
         }
 
-        if (appleTag.Pictures is IList<TagLib.IPicture> { Count: > 0 } pictures)
+        if (appleTag.Pictures is IList<IPicture> { Count: > 0 } pictures)
         {
             video = video with
             {
@@ -111,7 +111,7 @@ public class TagLibReader : IReader
         return video;
     }
 
-    private static PList CreatePList(TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI") switch
+    private static PList CreatePList(AppleTag appleTag) => appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI") switch
     {
         string dashBox => PList.Create(dashBox),
         _ => new PList(),

@@ -23,7 +23,7 @@ public static class UriExtensions
         var assembled = resource;
         if (IsNotEmpty(assembled) && assembled!.StartsWith("/", StringComparison.Ordinal))
         {
-            assembled = assembled.Substring(1);
+            assembled = assembled[1..];
         }
 
         if (baseUrl is null || IsEmpty(baseUrl.AbsoluteUri))

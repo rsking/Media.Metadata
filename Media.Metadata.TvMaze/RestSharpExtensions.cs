@@ -5,7 +5,7 @@
 // -----------------------------------------------------------------------
 
 namespace Media.Metadata.TvMaze;
-using System;
+
 using RestSharp;
 
 /// <summary>

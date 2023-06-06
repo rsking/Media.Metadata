@@ -6,9 +6,6 @@
 
 namespace Media.Metadata;
 
-using System;
-using System.Runtime.InteropServices;
-
 /// <content>
 /// Methods from <c>itmf_tags.h</c>.
 /// </content>

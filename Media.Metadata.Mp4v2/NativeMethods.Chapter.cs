@@ -6,8 +6,6 @@
 
 namespace Media.Metadata;
 
-using System.Runtime.InteropServices;
-
 /// <content>
 /// Methods from <c>chapter.h</c>.
 /// </content>

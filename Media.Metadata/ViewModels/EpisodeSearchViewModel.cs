@@ -6,7 +6,6 @@
 
 namespace Media.Metadata.ViewModels;
 
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 
 /// <summary>

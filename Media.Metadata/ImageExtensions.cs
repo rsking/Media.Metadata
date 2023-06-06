@@ -6,7 +6,6 @@
 
 namespace Media.Metadata;
 
-using System;
 using SixLabors.ImageSharp;
 
 /// <summary>

@@ -6,8 +6,6 @@
 
 namespace Media.Metadata.ViewModels;
 
-using Media.Metadata;
-
 /// <summary>
 /// An editable <see cref="Movie"/>.
 /// </summary>

@@ -19,4 +19,8 @@
     <None Update="runtimes\**\libmp4v2.dll" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="System.Runtime.InteropServices" />
+  </ItemGroup>
+
 </Project>

@@ -201,7 +201,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
                             {
                                 null => default,
                                 _ => characters
-                                    .Where(character => peopleTypes.Any(peopleType =>
+                                    .Where(character => Array.Exists(peopleTypes, peopleType =>
                                         string.Equals(character.PeopleType, peopleType, StringComparison.Ordinal))
                                         && character.PersonName is not null
                                         && (!character.EpisodeId.HasValue || character.EpisodeId.Value == episodeId))
@@ -349,7 +349,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
         // see if we need to
         var value = $"Bearer {this.tokenResponse.Token}";
         var parameters = client.DefaultParameters.Where(IsAuthorizationParameter).ToList();
-        if (parameters.Any(parameter => string.Equals(parameter.Value?.ToString(), value, StringComparison.Ordinal)))
+        if (parameters.Exists(parameter => string.Equals(parameter.Value?.ToString(), value, StringComparison.Ordinal)))
         {
             return;
         }

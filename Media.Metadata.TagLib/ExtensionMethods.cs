@@ -29,7 +29,7 @@ public static class ExtensionMethods
         }
 
         // create a single chapter for the full length from the video track
-        if (extractor.Tracks?.FirstOrDefault(t => string.Equals(t.Type, "vide", StringComparison.Ordinal)) is Tracks.TrakInfo videoTrack)
+        if (extractor is not null && Array.Find(extractor.Tracks, t => string.Equals(t.Type, "vide", StringComparison.Ordinal)) is Tracks.TrakInfo videoTrack)
         {
             var duration = videoTrack.Duration;
             var timeScale = videoTrack.TimeUnitPerSecond;

@@ -6,7 +6,6 @@
 
 namespace Media.Metadata.Converters;
 
-using System;
 using Microsoft.UI.Xaml.Media.Imaging;
 using SixLabors.ImageSharp;
 using Windows.Graphics.Imaging;
@@ -17,7 +16,7 @@ using Windows.Graphics.Imaging;
 public sealed class ImageToImageSourceConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
     /// <inheritdoc/>
-    public object? Convert(object? value, Type targetType, object parameter, string language)
+    public object? Convert(object? value, System.Type targetType, object parameter, string language)
     {
         // empty images are empty…
         if (value is null)
@@ -46,5 +45,5 @@ public sealed class ImageToImageSourceConverter : Microsoft.UI.Xaml.Data.IValueC
     }
 
     /// <inheritdoc/>
-    public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotSupportedException();
+    public object ConvertBack(object value, System.Type targetType, object parameter, string language) => throw new NotSupportedException();
 }

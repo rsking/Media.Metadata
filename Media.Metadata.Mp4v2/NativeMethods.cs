@@ -6,8 +6,6 @@
 
 namespace Media.Metadata;
 
-using System.Runtime.InteropServices;
-
 /// <summary>
 /// Contains methods used for interfacing with the native code MP4V2 library.
 /// </summary>

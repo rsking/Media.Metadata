@@ -6,10 +6,8 @@
 
 namespace Media.Metadata;
 
-using TagLib;
-
 /// <summary>
-/// Extensions for <see cref="TagLib.Mpeg4.AppleTag"/>.
+/// Extensions for <see cref="AppleTag"/>.
 /// </summary>
 public static class AppleTagExtensions
 {
@@ -58,196 +56,196 @@ public static class AppleTagExtensions
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The episode number.</returns>
-    public static int? GetEpisodeNumber(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(TvEpisode);
+    public static int? GetEpisodeNumber(this AppleTag appleTag) => appleTag.GetInt32OrDefault(TvEpisode);
 
     /// <summary>
     /// Gets the release date.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The release date.</returns>
-    public static string? GetReleaseDate(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(ReleaseDate);
+    public static string? GetReleaseDate(this AppleTag appleTag) => appleTag.GetJoinedText(ReleaseDate);
 
     /// <summary>
     /// Gets the show name.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The show name.</returns>
-    public static string? GetShowName(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(TvShow);
+    public static string? GetShowName(this AppleTag appleTag) => appleTag.GetJoinedText(TvShow);
 
     /// <summary>
     /// Gets the network.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The network.</returns>
-    public static string? GetNetwork(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(TvNetwork);
+    public static string? GetNetwork(this AppleTag appleTag) => appleTag.GetJoinedText(TvNetwork);
 
     /// <summary>
     /// Gets the episode ID.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The episode ID.</returns>
-    public static string? GetEpisodeId(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(TvEpisodeId);
+    public static string? GetEpisodeId(this AppleTag appleTag) => appleTag.GetJoinedText(TvEpisodeId);
 
     /// <summary>
     /// Gets the season number.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The season number.</returns>
-    public static int? GetSeasonNumber(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(TvSeason);
+    public static int? GetSeasonNumber(this AppleTag appleTag) => appleTag.GetInt32OrDefault(TvSeason);
 
     /// <summary>
     /// Gets the sort show name.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The sort show name.</returns>
-    public static string? GetSortShowName(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(SortTvShow);
+    public static string? GetSortShowName(this AppleTag appleTag) => appleTag.GetJoinedText(SortTvShow);
 
     /// <summary>
     /// Gets the keywords.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The keywords.</returns>
-    public static string? GetKeywords(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(Keywords);
+    public static string? GetKeywords(this AppleTag appleTag) => appleTag.GetJoinedText(Keywords);
 
     /// <summary>
     /// Gets the category.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The category.</returns>
-    public static string? GetCategory(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(Category);
+    public static string? GetCategory(this AppleTag appleTag) => appleTag.GetJoinedText(Category);
 
     /// <summary>
     /// Gets the encoding tool.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The encoding tool.</returns>
-    public static string? GetEncodingTool(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(EncodingTool);
+    public static string? GetEncodingTool(this AppleTag appleTag) => appleTag.GetJoinedText(EncodingTool);
 
     /// <summary>
     /// Gets the encoded by.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The encoded by.</returns>
-    public static string? GetEncodedBy(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(EncodedBy);
+    public static string? GetEncodedBy(this AppleTag appleTag) => appleTag.GetJoinedText(EncodedBy);
 
     /// <summary>
     /// Gets the media type.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The media type.</returns>
-    public static MediaType GetMediaType(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetByteOrDefault(MediaType) is byte mediaType ? (MediaType)mediaType : Metadata.MediaType.NotSet;
+    public static MediaType GetMediaType(this AppleTag appleTag) => appleTag.GetByteOrDefault(MediaType) is byte mediaType ? (MediaType)mediaType : Metadata.MediaType.NotSet;
 
     /// <summary>
     /// Gets the content rating.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The content rating.</returns>
-    public static ContentRating GetContentRating(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetByteOrDefault(ContentRating) is byte contentRating ? (ContentRating)contentRating : Metadata.ContentRating.NotSet;
+    public static ContentRating GetContentRating(this AppleTag appleTag) => appleTag.GetByteOrDefault(ContentRating) is byte contentRating ? (ContentRating)contentRating : Metadata.ContentRating.NotSet;
 
     /// <summary>
     /// Gets the HD video.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The HD video.</returns>
-    public static bool? GetHdVideo(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetBoolOrDefault(HdVideo);
+    public static bool? GetHdVideo(this AppleTag appleTag) => appleTag.GetBoolOrDefault(HdVideo);
 
     /// <summary>
     /// Gets the gapless.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The gapless.</returns>
-    public static bool? GetGapless(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetBoolOrDefault(Gapless);
+    public static bool? GetGapless(this AppleTag appleTag) => appleTag.GetBoolOrDefault(Gapless);
 
     /// <summary>
     /// Gets the podcast.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The podcast.</returns>
-    public static bool? GetPodcast(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetBoolOrDefault(Podcast);
+    public static bool? GetPodcast(this AppleTag appleTag) => appleTag.GetBoolOrDefault(Podcast);
 
     /// <summary>
     /// Gets the media store account.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The media store account.</returns>
-    public static string? GetMediaStoreAccount(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(ITunesAccount);
+    public static string? GetMediaStoreAccount(this AppleTag appleTag) => appleTag.GetJoinedText(ITunesAccount);
 
     /// <summary>
     /// Gets the media store country.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The media store country.</returns>
-    public static int? GetMediaStoreCountry(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(ITunesCountry);
+    public static int? GetMediaStoreCountry(this AppleTag appleTag) => appleTag.GetInt32OrDefault(ITunesCountry);
 
     /// <summary>
     /// Gets the media store account type.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The media store account type.</returns>
-    public static int? GetMediaStoreAccountType(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(ITunesAccountType);
+    public static int? GetMediaStoreAccountType(this AppleTag appleTag) => appleTag.GetInt32OrDefault(ITunesAccountType);
 
     /// <summary>
     /// Gets the content ID.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The content ID.</returns>
-    public static int? GetContentId(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(ContentId);
+    public static int? GetContentId(this AppleTag appleTag) => appleTag.GetInt32OrDefault(ContentId);
 
     /// <summary>
     /// Gets the artist ID.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The artist ID.</returns>
-    public static int? GetArtistId(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(ArtistId);
+    public static int? GetArtistId(this AppleTag appleTag) => appleTag.GetInt32OrDefault(ArtistId);
 
     /// <summary>
     /// Gets the playlist ID.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The playlist ID.</returns>
-    public static int? GetPlaylistId(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(PlaylistId);
+    public static int? GetPlaylistId(this AppleTag appleTag) => appleTag.GetInt32OrDefault(PlaylistId);
 
     /// <summary>
     /// Gets the genre ID.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The genre ID.</returns>
-    public static int? GetGenreId(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(GenreId);
+    public static int? GetGenreId(this AppleTag appleTag) => appleTag.GetInt32OrDefault(GenreId);
 
     /// <summary>
     /// Gets the composer ID.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The composer ID.</returns>
-    public static int? GetComposerId(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetInt32OrDefault(ComposerId);
+    public static int? GetComposerId(this AppleTag appleTag) => appleTag.GetInt32OrDefault(ComposerId);
 
     /// <summary>
     /// Gets the X ID.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The X ID.</returns>
-    public static string? GetXId(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(XId);
+    public static string? GetXId(this AppleTag appleTag) => appleTag.GetJoinedText(XId);
 
     /// <summary>
     /// Gets the long description.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The long description.</returns>
-    public static string? GetLongDescription(this TagLib.Mpeg4.AppleTag appleTag) => appleTag.GetJoinedText(LongDescription);
+    public static string? GetLongDescription(this AppleTag appleTag) => appleTag.GetJoinedText(LongDescription);
 
-    private static byte? GetByteOrDefault(this TagLib.Mpeg4.AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count == 1) is TagLib.Mpeg4.AppleDataBox item
+    private static byte? GetByteOrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count == 1) is AppleDataBox item
         ? item.Data.Data[0]
         : default(byte?);
 
-    private static int? GetInt32OrDefault(this TagLib.Mpeg4.AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count == 4) is TagLib.Mpeg4.AppleDataBox item
+    private static int? GetInt32OrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count == 4) is AppleDataBox item
         ? (int)GetUInt32(item.Data.Data)
         : default(int?);
 
-    private static bool? GetBoolOrDefault(this TagLib.Mpeg4.AppleTag appleTag, ReadOnlyByteVector type) => appleTag.GetInt32OrDefault(type) is int value
+    private static bool? GetBoolOrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.GetInt32OrDefault(type) is int value
         ? value > 0
         : default(bool?);
 
-    private static string? GetJoinedText(this TagLib.Mpeg4.AppleTag appleTag, ByteVector byteVector) => appleTag.GetText(byteVector) switch
+    private static string? GetJoinedText(this AppleTag appleTag, ByteVector byteVector) => appleTag.GetText(byteVector) switch
     {
         string[] { Length: 1 } value => value[0],
         string[] { Length: > 1 } values => string.Join("; ", values),

@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Media.Metadata.Core\Media.Metadata.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="TagLib;TagLib.Mpeg4" />
+  </ItemGroup>
+
 </Project>
