@@ -41,13 +41,13 @@ internal sealed class ChapterExtractor
 
     private static readonly byte[] Ftyp = "ftyp"u8.ToArray();
 
-    private readonly IAbstractStream stream;
+    private readonly Stream stream;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="ChapterExtractor"/> class.
     /// </summary>
     /// <param name="stream">The abstract stream.</param>
-    public ChapterExtractor(IAbstractStream stream) => this.stream = stream;
+    public ChapterExtractor(Stream stream) => this.stream = stream;
 
     /// <summary>
     /// Gets the chapters.
@@ -65,7 +65,7 @@ internal sealed class ChapterExtractor
     public void Run()
     {
         this.Chapters = null;
-        this.stream.Seek(SeekOrigin.Begin, 0);
+        this.stream.Seek(0L, SeekOrigin.Begin);
         if (this.ReadMoovInfo() is MoovInfo moovInfo)
         {
             this.Tracks = moovInfo.Tracks;
@@ -84,7 +84,7 @@ internal sealed class ChapterExtractor
             return false;
         }
 
-        this.stream.Seek(SeekOrigin.Begin, 4);
+        this.stream.Seek(4L, SeekOrigin.Begin);
         var type = this.ReadType();
         return type.Check(Ftyp);
     }
@@ -141,7 +141,7 @@ internal sealed class ChapterExtractor
                     position += TimeSpan.FromSeconds(duration / timeUnitPerSecond);
                     if (textBox.Samples is not null)
                     {
-                        this.stream.Seek(SeekOrigin.Begin, textBox.Samples[i]);
+                        this.stream.Seek(textBox.Samples[i], SeekOrigin.Begin);
                         chapterInfo.Name = this.ReadPascalString(System.Text.Encoding.UTF8);
                     }
 
@@ -300,7 +300,7 @@ internal sealed class ChapterExtractor
 
     private void ReadStts(ref TrakInfo trakData)
     {
-        this.stream.Seek(SeekOrigin.Current, 4);
+        this.stream.Seek(4L, SeekOrigin.Current);
         var len = this.ReadUInt32();
         if (len > 1024)
         {
@@ -318,7 +318,7 @@ internal sealed class ChapterExtractor
 
     private void ReadStco(ref TrakInfo trakData)
     {
-        this.stream.Seek(SeekOrigin.Current, 4);
+        this.stream.Seek(4L, SeekOrigin.Current);
         var len = this.ReadUInt32();
         if (len > 1024)
         {
@@ -334,9 +334,9 @@ internal sealed class ChapterExtractor
 
     private void ReadHdlr(ref TrakInfo trakData)
     {
-        this.stream.Seek(SeekOrigin.Current, 4 + 4);
+        this.stream.Seek(8, SeekOrigin.Current);
         var b = new byte[4];
-        _ = this.stream.Read(b, 4);
+        _ = this.stream.Read(b, 0, 4);
         var bc = new char[4];
         _ = System.Text.Encoding.ASCII.GetDecoder().GetChars(b, 0, 4, bc, 0);
         trakData.Type = new string(bc);
@@ -345,10 +345,10 @@ internal sealed class ChapterExtractor
     private void ReadMdhd(ref TrakInfo trakData)
     {
         var v = new byte[1];
-        _ = this.stream.Read(v, 1);
+        _ = this.stream.Read(v, 0, 1);
         var isv8 = v[0] == 1;
 
-        this.stream.Seek(SeekOrigin.Current, 3 + (isv8 ? 8 + 8 : 4 + 4));
+        this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
         trakData.TimeUnitPerSecond = this.ReadUInt32();
 
         // get the duration
@@ -370,25 +370,25 @@ internal sealed class ChapterExtractor
     private void ReadTkhd(ref TrakInfo trakData)
     {
         var v = new byte[1];
-        _ = this.stream.Read(v, 1);
+        _ = this.stream.Read(v, 0, 1);
         var isv8 = v[0] == 1;
-        this.stream.Seek(SeekOrigin.Current, 3 + (isv8 ? 8 + 8 : 4 + 4));
+        this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
         trakData.Id = this.ReadUInt32();
     }
 
     private void ReadMvhd(ref MoovInfo moovData)
     {
         var v = new byte[1];
-        _ = this.stream.Read(v, 1);
+        _ = this.stream.Read(v, 0, 1);
         var isv8 = v[0] == 1;
-        this.stream.Seek(SeekOrigin.Current, 3 + (isv8 ? 8 + 8 : 4 + 4));
+        this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
         moovData.TimeUnitPerSecond = this.ReadUInt32();
     }
 
     private void SeekNext(BoxInfo box)
     {
-        this.stream.Seek(SeekOrigin.Begin, box.BoxOffset);
-        this.stream.Seek(SeekOrigin.Current, box.Offset);
+        this.stream.Seek(box.BoxOffset, SeekOrigin.Begin);
+        this.stream.Seek(box.Offset, SeekOrigin.Current);
     }
 
     private BoxInfo? NextBox(long? maxLen = null)
@@ -424,7 +424,7 @@ internal sealed class ChapterExtractor
         }
         else
         {
-            this.stream.Seek(SeekOrigin.Current, 8);
+            this.stream.Seek(8L, SeekOrigin.Current);
         }
 
         return new BoxInfo()
@@ -439,14 +439,14 @@ internal sealed class ChapterExtractor
     private AsciiType ReadType()
     {
         var b = new byte[4];
-        _ = this.stream.Read(b, 4);
+        _ = this.stream.Read(b, 0, 4);
         return new AsciiType { Type = b };
     }
 
     private ushort ReadUInt16()
     {
         var bytes = new byte[2];
-        if (this.stream.Read(bytes, 2) != 2)
+        if (this.stream.Read(bytes, 0, 2) != 2)
         {
             return 0;
         }
@@ -465,7 +465,7 @@ internal sealed class ChapterExtractor
     private uint ReadUInt32()
     {
         var bytes = new byte[4];
-        if (this.stream.Read(bytes, 4) != 4)
+        if (this.stream.Read(bytes, 0, 4) != 4)
         {
             return 0;
         }
@@ -486,7 +486,7 @@ internal sealed class ChapterExtractor
     private ulong ReadUInt64()
     {
         var bytes = new byte[8];
-        if (this.stream.Read(bytes, 8) != 8)
+        if (this.stream.Read(bytes, 0, 8) != 8)
         {
             return 0;
         }
@@ -517,7 +517,7 @@ internal sealed class ChapterExtractor
         }
 
         var b = new byte[@ushort];
-        _ = this.stream.Read(b, @ushort);
+        _ = this.stream.Read(b, 0, @ushort);
         return new string(encoding.GetChars(b));
     }
 }

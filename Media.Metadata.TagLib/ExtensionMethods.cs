@@ -20,7 +20,7 @@ public static class ExtensionMethods
     public static IEnumerable<MediaChapter> GetChapters(this FileInfo info)
     {
         using var stream = info.OpenRead();
-        var extractor = new Tracks.ChapterExtractor(new Tracks.StreamWrapper(stream));
+        var extractor = new Tracks.ChapterExtractor(stream);
         extractor.Run();
 
         if (extractor.Chapters is IEnumerable<Tracks.ChapterInfo> chapters)
@@ -52,7 +52,7 @@ public static class ExtensionMethods
     public static IEnumerable<MediaTrack> GetTracks(this FileInfo info)
     {
         using var stream = info.OpenRead();
-        var extractor = new Tracks.ChapterExtractor(new Tracks.StreamWrapper(stream));
+        var extractor = new Tracks.ChapterExtractor(stream);
         extractor.Run();
 
         if (extractor.Tracks is IEnumerable<Tracks.TrakInfo> tracks)
