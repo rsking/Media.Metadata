@@ -49,12 +49,12 @@ public abstract record class Video(
     /// <inheritdoc/>
     public override string ToString()
     {
-        var plist = new PList(new Dictionary<string, object>(StringComparer.Ordinal));
+        var plist = new Formatters.PList.PList();
         plist.AddIfNotNullOrEmpty("studio", Separator, this.Studios);
         plist.AddIfNotNull("producers", this.Producers);
         plist.AddIfNotNull("directors", this.Directors);
         plist.AddIfNotNull("cast", this.Cast);
         plist.AddIfNotNull("screenwriters", this.ScreenWriters);
-        return plist.ToString();
+        return plist.Serialize();
     }
 }

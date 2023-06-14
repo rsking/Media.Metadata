@@ -125,10 +125,10 @@ internal class MovieInfo : Atom, IEquatable<MovieInfo>
     /// <inheritdoc/>
     public override void Populate(byte[] dataBuffer)
     {
-        PList map;
+        Formatters.PList.PList map;
         using (var stream = new MemoryStream(dataBuffer))
         {
-            map = PList.Create(stream);
+            map = Formatters.PList.PList.Create(stream);
         }
 
         if (map is not null)
@@ -139,7 +139,7 @@ internal class MovieInfo : Atom, IEquatable<MovieInfo>
             this.screenwriters = GetListOrDefault<string>(map, nameof(this.screenwriters));
             this.studio = GetValueOrDefault<string>(map, nameof(this.studio));
 
-            static T? GetValueOrDefault<T>(PList plist, string key)
+            static T? GetValueOrDefault<T>(Formatters.PList.PList plist, string key)
             {
                 return plist.ContainsKey(key)
                     ? (T)plist[key]
@@ -147,7 +147,7 @@ internal class MovieInfo : Atom, IEquatable<MovieInfo>
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "An empty list is not the same as null")]
-            static IList<T>? GetListOrDefault<T>(PList plist, string key)
+            static IList<T>? GetListOrDefault<T>(Formatters.PList.PList plist, string key)
             {
                 return plist.ContainsKey(key)
                     ? Enumerate((object[])plist[key]).ToList()
@@ -166,14 +166,14 @@ internal class MovieInfo : Atom, IEquatable<MovieInfo>
     /// <inheritdoc/>
     public override string ToString()
     {
-        var map = new PList();
+        var map = new Formatters.PList.PList();
         map.AddIfNotNull(nameof(this.cast), this.cast);
         map.AddIfNotNull(nameof(this.directors), this.directors);
         map.AddIfNotNull(nameof(this.producers), this.producers);
         map.AddIfNotNull(nameof(this.screenwriters), this.screenwriters);
         map.AddIfNotNullOrEmpty(nameof(this.studio), this.studio);
 
-        return map.ToString();
+        return map.Serialize();
     }
 
     /// <inheritdoc/>

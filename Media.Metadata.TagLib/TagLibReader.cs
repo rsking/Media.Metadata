@@ -42,7 +42,7 @@ public class TagLibReader : IReader
         _ => new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name)),
     };
 
-    private static Movie ReadMovie(FileInfo fileInfo, AppleTag appleTag, PList plist) => new LocalMovie(
+    private static Movie ReadMovie(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new LocalMovie(
         fileInfo,
         GetTitle(appleTag),
         appleTag.Description,
@@ -54,7 +54,7 @@ public class TagLibReader : IReader
         GetPersonel(plist, "cast").ToArray(),
         SplitArray(appleTag.Composers).ToArray());
 
-    private static Episode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, PList plist)
+    private static Episode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist)
     {
         return new LocalEpisode(
             fileInfo,
@@ -111,13 +111,13 @@ public class TagLibReader : IReader
         return video;
     }
 
-    private static PList CreatePList(AppleTag appleTag) => appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI") switch
+    private static Formatters.PList.PList CreatePList(AppleTag appleTag) => appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI") switch
     {
-        string dashBox => PList.Create(dashBox),
-        _ => new PList(),
+        string dashBox => Formatters.PList.PList.Create(dashBox),
+        _ => new Formatters.PList.PList(),
     };
 
-    private static IEnumerable<string> GetPersonel(PList plist, string key)
+    private static IEnumerable<string> GetPersonel(Formatters.PList.PList plist, string key)
     {
         if (!plist.ContainsKey(key))
         {
