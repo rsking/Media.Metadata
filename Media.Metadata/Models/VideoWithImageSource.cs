@@ -46,7 +46,7 @@ internal record class VideoWithImageSource(
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        if (disposing && !this.disposedValue && this.ImageSource is System.IDisposable imageSourceDisposable)
+        if (disposing && !this.disposedValue && this.ImageSource is IDisposable imageSourceDisposable)
         {
             imageSourceDisposable.Dispose();
         }
@@ -62,11 +62,11 @@ internal record class VideoWithImageSource(
 
         static async ValueTask DisposeAsync(object? value)
         {
-            if (value is System.IAsyncDisposable asyncDisposable)
+            if (value is IAsyncDisposable asyncDisposable)
             {
                 await asyncDisposable.DisposeAsync().ConfigureAwait(false);
             }
-            else if (value is System.IDisposable disposable)
+            else if (value is IDisposable disposable)
             {
                 disposable.Dispose();
             }

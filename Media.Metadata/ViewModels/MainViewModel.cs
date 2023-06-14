@@ -6,8 +6,6 @@
 
 namespace Media.Metadata.ViewModels;
 
-using CommunityToolkit.Mvvm.DependencyInjection;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
 
 /// <summary>
@@ -74,7 +72,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Adds videos.
     /// </summary>
     /// <returns>The task.</returns>
-    [RelayCommand]
+    [CommunityToolkit.Mvvm.Input.RelayCommand]
     public async Task AddVideos()
     {
         // Open a text file.
@@ -105,7 +103,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Removes the selected video.
     /// </summary>
     /// <returns>The task.</returns>
-    [RelayCommand]
+    [CommunityToolkit.Mvvm.Input.RelayCommand]
     public async Task RemoveVideo()
     {
         var selectedVideos = (this.SelectedVideos, this.SelectedVideo) switch
@@ -142,7 +140,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Clears the videos.
     /// </summary>
     /// <returns>The task.</returns>
-    [RelayCommand]
+    [CommunityToolkit.Mvvm.Input.RelayCommand]
     public async Task ClearVideos()
     {
         while (this.Videos.Count > 0)
@@ -164,7 +162,7 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Saves the current video.
     /// </summary>
     /// <returns>The task.</returns>
-    [RelayCommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSave))]
+    [CommunityToolkit.Mvvm.Input.RelayCommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSave))]
     public async Task Save()
     {
         if (this.SelectedEditableVideo is not null)
@@ -222,13 +220,13 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Searches for the current video.
     /// </summary>
     /// <returns>The task.</returns>
-    [RelayCommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSearch))]
+    [CommunityToolkit.Mvvm.Input.RelayCommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSearch))]
     public async Task Search()
     {
         VideoSearchViewModel? viewModel = this.SelectedEditableVideo switch
         {
-            MovieViewModel movie => new MovieSearchViewModel(Ioc.Default.GetRequiredService<IMovieSearch>()) { Name = movie.Name, Year = GetYear(movie.Release) },
-            EpisodeViewModel episode => new EpisodeSearchViewModel(Ioc.Default.GetRequiredService<IShowSearch>()) { Name = episode.Show },
+            MovieViewModel movie => new MovieSearchViewModel(CommunityToolkit.Mvvm.DependencyInjection.Ioc.Default.GetRequiredService<IMovieSearch>()) { Name = movie.Name, Year = GetYear(movie.Release) },
+            EpisodeViewModel episode => new EpisodeSearchViewModel(CommunityToolkit.Mvvm.DependencyInjection.Ioc.Default.GetRequiredService<IShowSearch>()) { Name = episode.Show },
             _ => default,
         };
 

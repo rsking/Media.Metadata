@@ -6,8 +6,6 @@
 
 namespace Media.Metadata;
 
-using System.Runtime.InteropServices;
-
 /// <summary>
 /// <see cref="IntPtr"/> extensions.
 /// </summary>
@@ -22,7 +20,7 @@ internal static class IntPtrExtensions
     /// <returns>An instance of the specified structure type.</returns>
     /// <exception cref="ArgumentNullException">Thrown when this <see cref="IntPtr"/> is a null pointer (<see cref="IntPtr.Zero"/>).</exception>
     public static T ToStructure<T>(this IntPtr value) => value == IntPtr.Zero
-        ? throw new ArgumentNullException(nameof(value), "Structures cannot be read from a null pointer (IntPtr.Zero)")
+        ? throw new ArgumentNullException(nameof(value), $"Structures cannot be read from a null pointer ({nameof(IntPtr)}.{nameof(IntPtr.Zero)})")
         : (T)Marshal.PtrToStructure(value, typeof(T));
 
     /// <summary>
@@ -34,7 +32,6 @@ internal static class IntPtrExtensions
     /// The byte array containing copies of the values pointed to by this <see cref="IntPtr"/>.
     /// Returns <see langword="null"/> if this pointer is a null pointer (<see cref="IntPtr.Zero"/>).
     /// </returns>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "An empty array is not the same as null.")]
     public static byte[]? ToByteArray(this IntPtr value, int bufferLength)
     {
         if (value == IntPtr.Zero)
@@ -55,7 +52,9 @@ internal static class IntPtrExtensions
     /// The 16-bit integer value pointed to by this <see cref="IntPtr"/>.
     /// Returns <see langword="null"/> if this pointer is a null pointer (<see cref="IntPtr.Zero"/>).
     /// </returns>
-    public static short? ReadInt16(this IntPtr value) => value == IntPtr.Zero ? null : System.Runtime.InteropServices.Marshal.ReadInt16(value);
+    public static short? ReadInt16(this IntPtr value) => value == IntPtr.Zero
+        ? null
+        : System.Runtime.InteropServices.Marshal.ReadInt16(value);
 
     /// <summary>
     /// Reads a 32-bit integer value beginning at the location pointed to in memory by the specified pointer value.
@@ -65,7 +64,9 @@ internal static class IntPtrExtensions
     /// The 32-bit integer value pointed to by this <see cref="IntPtr"/>.
     /// Returns <see langword="null"/> if this pointer is a null pointer (<see cref="IntPtr.Zero"/>).
     /// </returns>
-    public static int? ReadInt32(this IntPtr value) => value == IntPtr.Zero ? null : System.Runtime.InteropServices.Marshal.ReadInt32(value);
+    public static int? ReadInt32(this IntPtr value) => value == IntPtr.Zero
+        ? null
+        : System.Runtime.InteropServices.Marshal.ReadInt32(value);
 
     /// <summary>
     /// Reads a 64-bit integer value beginning at the location pointed to in memory by the specified pointer value.
@@ -75,7 +76,9 @@ internal static class IntPtrExtensions
     /// The 64-bit integer value pointed to by this <see cref="IntPtr"/>.
     /// Returns <see langword="null"/> if this pointer is a null pointer (<see cref="IntPtr.Zero"/>).
     /// </returns>
-    public static long? ReadInt64(this IntPtr value) => value == IntPtr.Zero ? null : System.Runtime.InteropServices.Marshal.ReadInt64(value);
+    public static long? ReadInt64(this IntPtr value) => value == IntPtr.Zero
+        ? null
+        : System.Runtime.InteropServices.Marshal.ReadInt64(value);
 
     /// <summary>
     /// Reads an 8-bit integer value beginning at the location pointed to in memory by the specified pointer value, and coerces that value into a boolean.

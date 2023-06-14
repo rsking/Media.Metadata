@@ -242,9 +242,9 @@ internal sealed class ChapterList : IList<Chapter>
                     title = System.Text.Encoding.Unicode.GetString(currentChapter.title);
                 }
 
-                title = title.Substring(0, title.IndexOf('\0'));
+                title = title[..title.IndexOf('\0')];
                 list.AddInternal(new Chapter() { Duration = duration, Title = title });
-                currentChapterPointer = IntPtr.Add(currentChapterPointer, System.Runtime.InteropServices.Marshal.SizeOf(currentChapter));
+                currentChapterPointer = IntPtr.Add(currentChapterPointer, Marshal.SizeOf(currentChapter));
             }
         }
         else

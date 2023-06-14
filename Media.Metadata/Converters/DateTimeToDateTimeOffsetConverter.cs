@@ -7,23 +7,23 @@
 namespace Media.Metadata.Converters;
 
 /// <summary>
-/// <see cref="Microsoft.UI.Xaml.Data.IValueConverter"/> to convert <see cref="System.DateTime"/> to <see cref="System.DateTimeOffset"/> instances.
+/// <see cref="Microsoft.UI.Xaml.Data.IValueConverter"/> to convert <see cref="DateTime"/> to <see cref="DateTimeOffset"/> instances.
 /// </summary>
 internal class DateTimeToDateTimeOffsetConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
     /// <inheritdoc/>
-    public object? Convert(object value, System.Type targetType, object parameter, string language) => value switch
+    public object? Convert(object value, Type targetType, object parameter, string language) => value switch
     {
-        System.DateTime dateTime => new System.DateTimeOffset(dateTime),
-        System.DateTimeOffset dateTimeOffset => dateTimeOffset,
+        DateTime dateTime => new DateTimeOffset(dateTime),
+        DateTimeOffset dateTimeOffset => dateTimeOffset,
         _ => default,
     };
 
     /// <inheritdoc/>
-    public object? ConvertBack(object value, System.Type targetType, object parameter, string language) => value switch
+    public object? ConvertBack(object value, Type targetType, object parameter, string language) => value switch
     {
-        System.DateTime dateTime => dateTime,
-        System.DateTimeOffset dateTimeOffset => dateTimeOffset.DateTime,
+        DateTime dateTime => dateTime,
+        DateTimeOffset dateTimeOffset => dateTimeOffset.DateTime,
         _ => default,
     };
 }

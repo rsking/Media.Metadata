@@ -5,7 +5,6 @@
 // -----------------------------------------------------------------------
 
 namespace Media.Metadata;
-using System.Text;
 
 /// <summary>
 /// The MP4v2 optimizer.
@@ -13,5 +12,5 @@ using System.Text;
 public class Mp4Optimizer : IOptimizer
 {
     /// <inheritdoc/>
-    public bool Opimize(string path) => NativeMethods.MP4Optimize(Encoding.UTF8.GetBytes(path), newName: null);
+    public bool Opimize(string path) => NativeMethods.MP4Optimize(System.Text.Encoding.UTF8.GetBytes(path), newName: null);
 }

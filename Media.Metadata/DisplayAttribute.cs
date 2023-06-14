@@ -6,7 +6,6 @@
 
 namespace Media.Metadata;
 
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 /// <summary>
@@ -25,7 +24,7 @@ public sealed class DisplayAttribute : Attribute
     private bool? autoGenerateFilter;
     private int? order;
 
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
+    [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
     private Type? resourceType;
 
     /// <summary>
@@ -160,7 +159,7 @@ public sealed class DisplayAttribute : Attribute
     ///     <see cref="GetName" />, <see cref="GetDescription" />, <see cref="GetPrompt" />, and <see cref="GetGroupName" />
     ///     methods to return localized values.
     /// </summary>
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
+    [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
     public Type? ResourceType
     {
         get => this.resourceType;
@@ -319,7 +318,7 @@ public sealed class DisplayAttribute : Attribute
 
         private string? propertyValue;
 
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
+        [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
         private Type? resourceType;
 
         public LocalizableString(string propertyName) => this.propertyName = propertyName;
@@ -337,7 +336,7 @@ public sealed class DisplayAttribute : Attribute
             }
         }
 
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
+        [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
         public Type? ResourceType
         {
             get => this.resourceType;

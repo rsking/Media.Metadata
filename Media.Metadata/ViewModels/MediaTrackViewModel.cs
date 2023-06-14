@@ -6,8 +6,6 @@
 
 namespace Media.Metadata.ViewModels;
 
-using System.Text;
-
 /// <summary>
 /// The <see cref="MediaTrack"/> view model.
 /// </summary>
@@ -57,8 +55,8 @@ internal partial class MediaTrackViewModel : CommunityToolkit.Mvvm.ComponentMode
 
         static IEnumerable<string> ReadLanguages()
         {
-            var stream = typeof(App).Assembly.GetManifestResourceStream(typeof(App), "ISO-639-2_utf-8.txt") ?? throw new System.InvalidOperationException();
-            using var reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: false);
+            var stream = typeof(App).Assembly.GetManifestResourceStream(typeof(App), "ISO-639-2_utf-8.txt") ?? throw new InvalidOperationException();
+            using var reader = new StreamReader(stream, System.Text.Encoding.UTF8, leaveOpen: false);
 
             while (reader.ReadLine() is string line)
             {

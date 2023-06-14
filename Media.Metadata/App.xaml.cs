@@ -78,7 +78,7 @@ public partial class App : Microsoft.UI.Xaml.Application
         {
             using (this.host)
             {
-                await this.host.StopAsync(System.TimeSpan.FromSeconds(5)).ConfigureAwait(true);
+                await this.host.StopAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(true);
             }
         };
 

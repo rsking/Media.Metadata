@@ -48,5 +48,5 @@ public abstract record Episode(
     /// <summary>
     /// Gets the part.
     /// </summary>
-    public int? Part { get; init; } = default;
+    public int? Part { get; init; }
 }

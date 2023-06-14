@@ -15,12 +15,7 @@ public class Mp4Reader : IReader
     public Video ReadVideo(string path)
     {
         var file = Mp4File.Open(path);
-        var tags = file.Tags;
-        if (tags is null)
-        {
-            throw new ArgumentException(default, nameof(path));
-        }
-
+        var tags = file.Tags ?? throw new ArgumentException(default, nameof(path));
         var video = tags.MediaType switch
         {
             MediaKind.Movie => ReadMovie(path, tags),

@@ -12,7 +12,7 @@ namespace Media.Metadata.Converters;
 internal class BooleanToVisibilityConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
     /// <inheritdoc/>
-    public object Convert(object value, System.Type targetType, object parameter, string language)
+    public object Convert(object value, Type targetType, object parameter, string language)
     {
         return value switch
         {
@@ -31,7 +31,7 @@ internal class BooleanToVisibilityConverter : Microsoft.UI.Xaml.Data.IValueConve
     }
 
     /// <inheritdoc/>
-    public object ConvertBack(object value, System.Type targetType, object parameter, string language)
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
     {
         return value switch
         {

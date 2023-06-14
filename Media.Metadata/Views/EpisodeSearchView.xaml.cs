@@ -6,12 +6,10 @@
 
 namespace Media.Metadata.Views;
 
-using Microsoft.UI.Xaml.Controls;
-
 /// <summary>
 /// The <see cref="Episode"/> search view.
 /// </summary>
-public sealed partial class EpisodeSearchView : UserControl
+public sealed partial class EpisodeSearchView : Microsoft.UI.Xaml.Controls.UserControl
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="EpisodeSearchView"/> class.

@@ -14,7 +14,7 @@ using System.Reflection;
 public class EnumDisplayNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
 {
     /// <inheritdoc/>
-    public object? Convert(object value, System.Type targetType, object parameter, string language)
+    public object? Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is null || value.ToString() is not string valueString)
         {
@@ -31,7 +31,7 @@ public class EnumDisplayNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
             }
         }
 
-        return System.Enum.GetName(value.GetType(), value);
+        return Enum.GetName(value.GetType(), value);
 
         static string? FromDisplayNameAttribute(FieldInfo fieldInfo)
         {
@@ -74,5 +74,5 @@ public class EnumDisplayNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
     }
 
     /// <inheritdoc/>
-    public object ConvertBack(object value, System.Type targetType, object parameter, string language) => throw new System.NotSupportedException();
+    public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotSupportedException();
 }

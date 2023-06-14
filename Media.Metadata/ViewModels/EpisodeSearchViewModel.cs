@@ -6,8 +6,6 @@
 
 namespace Media.Metadata.ViewModels;
 
-using CommunityToolkit.Mvvm.Input;
-
 /// <summary>
 /// The <see cref="Episode"/> <see cref="VideoSearchViewModel"/>.
 /// </summary>
@@ -50,7 +48,7 @@ internal partial class EpisodeSearchViewModel : VideoSearchViewModel
     /// Searches for the episode.
     /// </summary>
     /// <returns>The task.</returns>
-    [RelayCommand(AllowConcurrentExecutions = false)]
+    [CommunityToolkit.Mvvm.Input.RelayCommand(AllowConcurrentExecutions = false)]
     public async Task SearchSeries()
     {
         this.series.Clear();

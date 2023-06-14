@@ -6,8 +6,6 @@
 
 namespace Media.Metadata.ViewModels;
 
-using CommunityToolkit.Mvvm.Input;
-
 /// <summary>
 /// The <see cref="Movie"/> <see cref="VideoSearchViewModel"/>.
 /// </summary>
@@ -31,6 +29,6 @@ internal partial class MovieSearchViewModel : VideoSearchViewModel
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The task.</returns>
-    [RelayCommand(AllowConcurrentExecutions = false)]
-    public Task Search() => this.SetVideos(this.movieSearch.SearchAsync(this.Name!, this.Year ?? 0, this.SelectedCountry?.Abbreviation ?? Country.Australia.Abbreviation));
+    [CommunityToolkit.Mvvm.Input.RelayCommand(AllowConcurrentExecutions = false)]
+    public Task Search(CancellationToken cancellationToken) => this.SetVideos(this.movieSearch.SearchAsync(this.Name!, this.Year ?? 0, this.SelectedCountry?.Abbreviation ?? Country.Australia.Abbreviation, cancellationToken));
 }

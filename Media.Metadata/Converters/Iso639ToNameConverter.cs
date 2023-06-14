@@ -18,7 +18,7 @@ internal class Iso639ToNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
     private static IDictionary<string, string>? terminologicToName;
 
     /// <inheritdoc/>
-    public object? Convert(object? value, System.Type targetType, object parameter, string language)
+    public object? Convert(object? value, Type targetType, object parameter, string language)
     {
         EnsureDictionaries();
         return value switch
@@ -31,7 +31,7 @@ internal class Iso639ToNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
     }
 
     /// <inheritdoc/>
-    public object ConvertBack(object value, System.Type targetType, object parameter, string language) => throw new System.NotSupportedException();
+    public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotSupportedException();
 
     [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(bibliographicToName), nameof(terminologicToName))]
     private static void EnsureDictionaries()
@@ -49,14 +49,14 @@ internal class Iso639ToNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
             }
 
             var values = GetValues().ToList();
-            bibliographicToName = values.ToDictionary(value => value.Bibliographic, value => value.Name, System.StringComparer.Ordinal);
-            terminologicToName = values.Where(value => value.Terminologic is not null).ToDictionary(value => value.Terminologic!, value => value.Name, System.StringComparer.Ordinal);
+            bibliographicToName = values.ToDictionary(value => value.Bibliographic, value => value.Name, StringComparer.Ordinal);
+            terminologicToName = values.Where(value => value.Terminologic is not null).ToDictionary(value => value.Terminologic!, value => value.Name, StringComparer.Ordinal);
         }
     }
 
     private static IEnumerable<Iso639> GetValues()
     {
-        var stream = typeof(App).Assembly.GetManifestResourceStream(typeof(App), "ISO-639-2_utf-8.txt") ?? throw new System.InvalidOperationException();
+        var stream = typeof(App).Assembly.GetManifestResourceStream(typeof(App), "ISO-639-2_utf-8.txt") ?? throw new InvalidOperationException();
         using var reader = new StreamReader(stream, System.Text.Encoding.UTF8, leaveOpen: false);
 
         while (reader.ReadLine() is string line)

@@ -110,9 +110,8 @@ public sealed class ColorDifference : IEquatable<ColorDifference>
     /// <param name="left">The lhs.</param>
     /// <param name="right">The rhs.</param>
     /// <returns>The result.</returns>
-    public static bool operator ==(ColorDifference left, ColorDifference right) =>
-        ReferenceEquals(left, right)
-            || (left is not null && right is not null && left.Alpha == right.Alpha && left.Red == right.Red && left.Green == right.Green && left.Blue == right.Blue);
+    public static bool operator ==(ColorDifference left, ColorDifference right) => ReferenceEquals(left, right)
+        || (left is not null && right is not null && left.Alpha == right.Alpha && left.Red == right.Red && left.Green == right.Green && left.Blue == right.Blue);
 
     /// <inheritdoc/>
     public override bool Equals(object obj) => obj is ColorDifference colorDifference && this.Equals(colorDifference);

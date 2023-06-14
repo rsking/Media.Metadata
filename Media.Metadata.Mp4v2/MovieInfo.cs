@@ -6,8 +6,6 @@
 
 namespace Media.Metadata;
 
-using System.Text;
-
 /// <summary>
 /// The <see cref="MovieInfo"/> class is represents all of the information contained
 /// in the "iTunMOVI" atom. This information includes such items as the cast, directors,
@@ -179,7 +177,7 @@ internal class MovieInfo : Atom, IEquatable<MovieInfo>
     }
 
     /// <inheritdoc/>
-    public override byte[] ToByteArray() => Encoding.UTF8.GetBytes(this.ToString());
+    public override byte[] ToByteArray() => System.Text.Encoding.UTF8.GetBytes(this.ToString());
 
     /// <inheritdoc/>
     public override bool Equals(object obj) => obj is MovieInfo movieInfo && this.Equals(movieInfo);

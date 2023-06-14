@@ -10,7 +10,7 @@ namespace Media.Metadata.ViewModels;
 /// The editable video.
 /// </summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Bug", "S4275:Getters and setters should access the expected fields", Justification = "These are referenced.")]
-internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, IHasImage, Models.IHasImageSource, System.IAsyncDisposable, System.IDisposable
+internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, IHasImage, Models.IHasImageSource, IAsyncDisposable, IDisposable
 {
     // list backing fields
     private readonly IList<string> producers = new System.Collections.ObjectModel.ObservableCollection<string>();
@@ -28,7 +28,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     private string? description;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private System.DateTimeOffset? release;
+    private DateTimeOffset? release;
 
     private ImageSource? imageSource;
 
@@ -67,7 +67,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         FillFrom(video.ScreenWriters, this.screenWriters);
         FillFrom(video.Cast, this.cast);
         FillFrom(video.Composers, this.composers);
-        this.Release = video.Release is null || video.Release.Value.Ticks == default ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
+        this.Release = video.Release is null || video.Release.Value.Ticks == default ? default(DateTimeOffset?) : new DateTimeOffset(video.Release.Value);
         this.Rating = new RatingViewModel(video.Rating);
         this.Tracks = video.Tracks.Select(track => new MediaTrackViewModel(track)).ToArray();
         this.Image = image;
@@ -153,7 +153,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     public void Dispose()
     {
         this.Dispose(disposing: true);
-        System.GC.SuppressFinalize(this);
+        GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
@@ -166,7 +166,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         this.Dispose(disposing: false);
 
         // Suppress finalization.
-        System.GC.SuppressFinalize(this);
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -216,7 +216,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         FillFrom(video.ScreenWriters, this.screenWriters);
         FillFrom(video.Cast, this.cast);
         FillFrom(video.Composers, this.composers);
-        this.Release = video.Release is null ? default(System.DateTimeOffset?) : new System.DateTimeOffset(video.Release.Value);
+        this.Release = video.Release is null ? default(DateTimeOffset?) : new DateTimeOffset(video.Release.Value);
         this.Rating.SelectedRating = video.Rating;
         this.Image = video.Image;
         this.ImageFormat = video.ImageFormat;
@@ -237,14 +237,14 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         {
             if (disposing)
             {
-                if (this.imageSource is System.IDisposable imageSourceDisposable)
+                if (this.imageSource is IDisposable imageSourceDisposable)
                 {
                     imageSourceDisposable.Dispose();
                 }
 
                 this.imageSource = default;
 
-                if (this.image is System.IDisposable imageDisposable)
+                if (this.image is IDisposable imageDisposable)
                 {
                     imageDisposable.Dispose();
                 }
@@ -269,11 +269,11 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
 
         static async ValueTask DisposeAsync(object? value)
         {
-            if (value is System.IAsyncDisposable asyncDisposable)
+            if (value is IAsyncDisposable asyncDisposable)
             {
                 await asyncDisposable.DisposeAsync().ConfigureAwait(false);
             }
-            else if (value is System.IDisposable disposable)
+            else if (value is IDisposable disposable)
             {
                 disposable.Dispose();
             }
