@@ -56,7 +56,7 @@ await configuration
             services
                 .AddTMDb()
                 .AddTheTVDB(builder.Configuration)
-                .AddMp4v2(Path.PathSeparator)
+                .AddMp4v2()
                 .AddTagLib();
 
             services
@@ -376,7 +376,7 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
 
                 // read the file to see if it has an episode
                 using var f = reader.ReadEpisode(path.FullName);
-                return f.Show is null || f.Season < 0 || f.Number < 0;
+                return string.IsNullOrEmpty(f.Show) || f.Season < 0 || f.Number < 0 || string.IsNullOrEmpty(f.Name);
             }
         }
     });
@@ -484,7 +484,7 @@ static FileInfo[] ParseFileInfo(ArgumentResult argumentResult)
             var directory = Path.GetDirectoryName(root);
             while (directory?.Contains('*', StringComparison.OrdinalIgnoreCase) == true)
             {
-                glob = Path.GetFileName(directory) + Path.AltDirectorySeparatorChar + glob;
+                glob = $"{Path.GetFileName(directory)}{Path.AltDirectorySeparatorChar}{glob}";
                 directory = Path.GetDirectoryName(directory);
             }
 

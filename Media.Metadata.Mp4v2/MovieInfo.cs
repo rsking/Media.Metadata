@@ -141,16 +141,16 @@ internal class MovieInfo : Atom, IEquatable<MovieInfo>
 
             static T? GetValueOrDefault<T>(Formatters.PList.PList plist, string key)
             {
-                return plist.ContainsKey(key)
-                    ? (T)plist[key]
+                return plist.TryGetValue(key, out var value) && value is T t
+                    ? t
                     : default;
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "An empty list is not the same as null")]
             static IList<T>? GetListOrDefault<T>(Formatters.PList.PList plist, string key)
             {
-                return plist.ContainsKey(key)
-                    ? Enumerate((object[])plist[key]).ToList()
+                return plist.TryGetValue(key, out var value) && value is object[] objectArray
+                    ? Enumerate(objectArray).ToList()
                     : default;
 
                 static IEnumerable<T> Enumerate(object[] values)

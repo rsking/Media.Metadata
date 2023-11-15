@@ -120,9 +120,9 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
             {
                 await asyncDisposable.DisposeAsync().ConfigureAwait(true);
             }
-            else if (video is IDisposable disposable)
+            else
             {
-                disposable.Dispose();
+                video.Dispose();
             }
         }
 
@@ -151,9 +151,9 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
             {
                 await asyncDisposable.DisposeAsync().ConfigureAwait(true);
             }
-            else if (video is IDisposable disposable)
+            else
             {
-                disposable.Dispose();
+                video.Dispose();
             }
         }
     }

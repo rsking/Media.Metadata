@@ -62,24 +62,23 @@ public static class ServiceCollectionExtensions
     /// Adds the MP4 v2 services.
     /// </summary>
     /// <param name="services">The services.</param>
-    /// <param name="pathSeparator">The path separator.</param>
     /// <returns>The input services.</returns>
-    public static IServiceCollection AddMp4v2(this IServiceCollection services, char pathSeparator = ';')
+    public static IServiceCollection AddMp4v2(this IServiceCollection services)
     {
         if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
         {
-            AddFileUpdaterImpl(services, pathSeparator);
+            AddFileUpdaterImpl(services);
         }
 
         return services;
 
-        static void AddFileUpdaterImpl(IServiceCollection services, char pathSeparator)
+        static void AddFileUpdaterImpl(IServiceCollection services)
         {
             _ = services
                 .AddTransient<Media.Metadata.IUpdater, Media.Metadata.Mp4Writer>()
                 .AddTransient<Media.Metadata.IOptimizer, Media.Metadata.Mp4Optimizer>();
 
-            AppDomain.CurrentDomain.AddNativePath(new string(pathSeparator, 1));
+            AppDomain.CurrentDomain.AddNativePath();
         }
     }
 

@@ -17,9 +17,8 @@ public static class AppDomainExtensions
     /// Adds the native path.
     /// </summary>
     /// <param name="appDomain">The application domain.</param>
-    /// <param name="pathSeparator">The path separator.</param>
     /// <exception cref="InvalidOperationException">Failed to detemine native path.</exception>
-    public static void AddNativePath(this AppDomain appDomain, string pathSeparator = ";")
+    public static void AddNativePath(this AppDomain appDomain)
     {
         var potentialPaths = GetPotentialPaths()
             .Select(path => path.Replace('/', Path.DirectorySeparatorChar));
@@ -31,6 +30,7 @@ public static class AppDomainExtensions
             .Where(Directory.Exists);
 
         var path = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
+        var pathSeparator = new string(Path.PathSeparator, 1);
         path = path is null
             ? string.Join(pathSeparator, directories)
             : string.Concat(string.Join(pathSeparator, directories), Path.PathSeparator, path);

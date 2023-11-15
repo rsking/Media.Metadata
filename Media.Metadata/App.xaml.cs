@@ -38,7 +38,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                     .AddTMDb();
 
                 _ = services
-                    .AddMp4v2(Path.PathSeparator)
+                    .AddMp4v2()
                     .AddTagLib();
 
                 _ = services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
@@ -85,8 +85,8 @@ public partial class App : Microsoft.UI.Xaml.Application
         static void SetTitleBarIcon(Microsoft.UI.Xaml.Window window)
         {
             // get the icon from the application
-            if (WinRT.Interop.WindowNative.GetWindowHandle(window) is System.IntPtr windowHandle
-                && windowHandle != System.IntPtr.Zero
+            var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            if (windowHandle != default
                 && Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle) is { Value: > 0UL } windowId
                 && Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId) is { Id.Value: > 0UL } appWindow
                 && Vanara.PInvoke.Shell32.ExtractIcon(Vanara.PInvoke.HINSTANCE.NULL, typeof(App).Assembly.Location, 0) is { IsInvalid: false } iconHandle)

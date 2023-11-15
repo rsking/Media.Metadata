@@ -29,11 +29,10 @@ public static class ExtensionMethods
         }
 
         // create a single chapter for the full length from the video track
-        if (extractor is not null && Array.Find(extractor.Tracks, t => string.Equals(t.Type, "vide", StringComparison.Ordinal)) is Tracks.TrakInfo videoTrack)
+        if (extractor.Tracks is not null
+            && Array.Find(extractor.Tracks, t => string.Equals(t.Type, "vide", StringComparison.Ordinal)) is { Type: "vide" } videoTrack)
         {
-            var duration = videoTrack.Duration;
-            var timeScale = videoTrack.TimeUnitPerSecond;
-            return Create(new MediaChapter("Chapter 1", TimeSpan.FromSeconds((double)duration / timeScale)));
+            return Create(new MediaChapter("Chapter 1", TimeSpan.FromSeconds((double)videoTrack.Duration / videoTrack.TimeUnitPerSecond)));
 
             static IEnumerable<T> Create<T>(T value)
             {
