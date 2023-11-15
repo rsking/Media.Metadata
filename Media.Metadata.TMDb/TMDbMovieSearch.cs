@@ -88,7 +88,7 @@ public class TMDbMovieSearch : IMovieSearch
 
             static IEnumerable<string> GetWriters(IEnumerable<TMDbLib.Objects.General.Crew>? crew)
             {
-                return GetCrew(crew, crew => string.Equals(crew.Department, "Writing", StringComparison.OrdinalIgnoreCase) && (string.Equals(crew.Job, "Screenplay", StringComparison.OrdinalIgnoreCase) || string.Equals(crew.Job, "Author", StringComparison.OrdinalIgnoreCase)));
+                return GetCrew(crew, crew => string.Equals(crew.Department, "Writing", StringComparison.OrdinalIgnoreCase) && (string.Equals(crew.Job, "Screenplay", StringComparison.OrdinalIgnoreCase) || string.Equals(crew.Job, "Author", StringComparison.OrdinalIgnoreCase) || string.Equals(crew.Job, "Writer", StringComparison.OrdinalIgnoreCase)));
             }
 
             static IEnumerable<string> GetComposers(IEnumerable<TMDbLib.Objects.General.Crew>? crew)
