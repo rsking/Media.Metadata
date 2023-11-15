@@ -86,7 +86,7 @@ internal sealed class ChapterExtractor
 
         this.stream.Seek(4L, SeekOrigin.Begin);
         var type = this.ReadType();
-        return type.Check(Ftyp);
+        return type == Ftyp;
     }
 
     private static T? FirstOrDefaultNullable<T>(IEnumerable<T> source)
@@ -153,7 +153,7 @@ internal sealed class ChapterExtractor
 
     private BoxInfo? FindBox(byte[] type)
     {
-        return FirstOrDefaultNullable(this.EnumerateBoxes().Where(box => box.Type.Check(type)));
+        return FirstOrDefaultNullable(this.EnumerateBoxes().Where(box => box.Type == type));
     }
 
     private IEnumerable<BoxInfo> EnumerateBoxes(long? maximumLength = null)
@@ -183,12 +183,12 @@ internal sealed class ChapterExtractor
             var maximumLength = moovBox.BoxOffset + moovBox.Offset;
             foreach (var box in this.EnumerateBoxes(maximumLength))
             {
-                if (box.Type.Check(Mvhd))
+                if (box.Type == Mvhd)
                 {
                     this.ReadMvhd(ref moovData);
                 }
 
-                if (box.Type.Check(Trak))
+                if (box.Type == Trak)
                 {
                     tracks.Add(this.ReadTrak(box));
                 }
@@ -207,17 +207,17 @@ internal sealed class ChapterExtractor
         var trakData = default(TrakInfo);
         foreach (var box in this.EnumerateBoxes(maximumLength))
         {
-            if (box.Type.Check(Tkhd))
+            if (box.Type == Tkhd)
             {
                 this.ReadTkhd(ref trakData);
             }
 
-            if (box.Type.Check(Mdia))
+            if (box.Type == Mdia)
             {
                 this.ReadMdia(ref trakData, box);
             }
 
-            if (box.Type.Check(Tref))
+            if (box.Type == Tref)
             {
                 this.ReadTref(ref trakData, box);
             }
@@ -230,7 +230,7 @@ internal sealed class ChapterExtractor
     {
         foreach (var box in this
             .EnumerateBoxes(box2.BoxOffset + box2.Offset)
-            .Where(box => box.Type.Check(Chap)))
+            .Where(box => box.Type == Chap))
         {
             this.ReadChap(ref trakData, box);
         }
@@ -253,17 +253,17 @@ internal sealed class ChapterExtractor
     {
         foreach (var box in this.EnumerateBoxes(mdiaBox.BoxOffset + mdiaBox.Offset))
         {
-            if (box.Type.Check(Mdhd))
+            if (box.Type == Mdhd)
             {
                 this.ReadMdhd(ref trackData);
             }
 
-            if (box.Type.Check(Hdlr))
+            if (box.Type == Hdlr)
             {
                 this.ReadHdlr(ref trackData);
             }
 
-            if (box.Type.Check(Minf))
+            if (box.Type == Minf)
             {
                 this.ReadMinf(ref trackData, box);
             }
@@ -274,7 +274,7 @@ internal sealed class ChapterExtractor
     {
         foreach (var box in this
             .EnumerateBoxes(box2.BoxOffset + box2.Offset)
-            .Where(box => box.Type.Check(Stbl)))
+            .Where(box => box.Type == Stbl))
         {
             this.ReadStbl(ref trakData, box);
         }
@@ -286,12 +286,12 @@ internal sealed class ChapterExtractor
             .EnumerateBoxes(box2.BoxOffset + box2.Offset)
             .Select(box => box.Type))
         {
-            if (boxType.Check(Stco))
+            if (boxType == Stco)
             {
                 this.ReadStco(ref trakData);
             }
 
-            if (boxType.Check(Stts))
+            if (boxType == Stts)
             {
                 this.ReadStts(ref trakData);
             }
@@ -402,7 +402,7 @@ internal sealed class ChapterExtractor
 
         long ofs = this.ReadUInt32();
         var at = this.ReadType();
-        if (!at.Check(Mdat))
+        if (at != Mdat)
         {
             return new BoxInfo()
             {
