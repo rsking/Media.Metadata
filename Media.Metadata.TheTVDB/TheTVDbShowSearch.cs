@@ -178,6 +178,7 @@ public sealed class TheTVDbShowSearch : IShowSearch
                             Network = GetNetwork(fullCompanies),
                             Rating = GetRating(episode.ContentRatings, country),
                             ImageUri = GetImageUri(episode.Image),
+                            Producers = GetProducers(fullCharacters, episode.Id),
                         };
 
                         static IEnumerable<string>? GetWriters(IEnumerable<Character>? characters, int episodeId)
@@ -188,6 +189,11 @@ public sealed class TheTVDbShowSearch : IShowSearch
                         static IEnumerable<string>? GetDirectors(IEnumerable<Character>? characters, int episodeId)
                         {
                             return GetCharacters(characters, episodeId, "Director").ToList();
+                        }
+
+                        static IEnumerable<string>? GetProducers(IEnumerable<Character>? characters, int episodeId)
+                        {
+                            return GetCharacters(characters, episodeId, "Producer", "Executive Producer").ToList();
                         }
 
                         static IEnumerable<string>? GetCast(IEnumerable<Character>? characters, int episodeId)
