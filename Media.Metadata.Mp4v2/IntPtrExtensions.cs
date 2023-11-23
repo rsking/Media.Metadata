@@ -52,9 +52,7 @@ internal static class IntPtrExtensions
     /// The 16-bit integer value pointed to by this <see cref="IntPtr"/>.
     /// Returns <see langword="null"/> if this pointer is a null pointer (<see cref="IntPtr.Zero"/>).
     /// </returns>
-    public static short? ReadInt16(this IntPtr value) => value == IntPtr.Zero
-        ? null
-        : System.Runtime.InteropServices.Marshal.ReadInt16(value);
+    public static short? ReadInt16(this IntPtr value) => value == IntPtr.Zero ? null : System.Runtime.InteropServices.Marshal.ReadInt16(value);
 
     /// <summary>
     /// Reads a 32-bit integer value beginning at the location pointed to in memory by the specified pointer value.
@@ -64,9 +62,7 @@ internal static class IntPtrExtensions
     /// The 32-bit integer value pointed to by this <see cref="IntPtr"/>.
     /// Returns <see langword="null"/> if this pointer is a null pointer (<see cref="IntPtr.Zero"/>).
     /// </returns>
-    public static int? ReadInt32(this IntPtr value) => value == IntPtr.Zero
-        ? null
-        : System.Runtime.InteropServices.Marshal.ReadInt32(value);
+    public static int? ReadInt32(this IntPtr value) => value == IntPtr.Zero ? null : System.Runtime.InteropServices.Marshal.ReadInt32(value);
 
     /// <summary>
     /// Reads a 64-bit integer value beginning at the location pointed to in memory by the specified pointer value.
@@ -76,9 +72,7 @@ internal static class IntPtrExtensions
     /// The 64-bit integer value pointed to by this <see cref="IntPtr"/>.
     /// Returns <see langword="null"/> if this pointer is a null pointer (<see cref="IntPtr.Zero"/>).
     /// </returns>
-    public static long? ReadInt64(this IntPtr value) => value == IntPtr.Zero
-        ? null
-        : System.Runtime.InteropServices.Marshal.ReadInt64(value);
+    public static long? ReadInt64(this IntPtr value) => value == IntPtr.Zero ? null : System.Runtime.InteropServices.Marshal.ReadInt64(value);
 
     /// <summary>
     /// Reads an 8-bit integer value beginning at the location pointed to in memory by the specified pointer value, and coerces that value into a boolean.
