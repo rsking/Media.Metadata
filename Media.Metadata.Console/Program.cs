@@ -512,14 +512,14 @@ internal sealed partial class Program
     internal static IEnumerable<System.Text.RegularExpressions.Regex> GetEpisodeRegexes() =>
         new[]
         {
-                SbsRegex1(),
-                SbsRegex2(),
-                SbsRegex3(),
-                IViewRegex1(),
-                IViewRegex2(),
+            SbsRegex1(),
+            SbsRegex2(),
+            SbsRegex3(),
+            IViewRegex1(),
+            IViewRegex2(),
         };
 
-    [System.Text.RegularExpressions.GeneratedRegex("s(?<season>\\d{2})e(?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    [System.Text.RegularExpressions.GeneratedRegex("[Ss](?<season>\\d{2})[Ee](?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
     private static partial System.Text.RegularExpressions.Regex SbsRegex1();
 
     [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
