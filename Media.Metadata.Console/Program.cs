@@ -107,11 +107,12 @@ static CliCommand CreateReadMovie()
         pathArgument,
     };
 
-    command.SetAction(parseResult =>
+    command.SetAction((parseResult, _) =>
     {
         var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
         var movie = parseResult.GetHost().Services.GetRequiredService<IReader>().ReadMovie(path.FullName);
         Console.WriteLine(movie.Name);
+        return Task.CompletedTask;
     });
 
     return command;
@@ -125,11 +126,12 @@ static CliCommand CreateReadEpisode()
         pathArgument,
     };
 
-    command.SetAction(parseResult =>
+    command.SetAction((parseResult, _) =>
     {
         var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
         var episode = parseResult.GetHost().Services.GetRequiredService<IReader>().ReadEpisode(path.FullName);
         Console.WriteLine(episode.Name);
+        return Task.CompletedTask;
     });
 
     return command;
@@ -394,7 +396,7 @@ static CliCommand CreateUpdateVideo(CliOption<string[]> langOption)
     };
 
     command.SetAction(
-        (parseResult) =>
+        async (parseResult, _) =>
         {
             var host = parseResult.GetHost();
             var path = parseResult.GetValue(pathArgument).ThrowIfNull();
@@ -405,7 +407,7 @@ static CliCommand CreateUpdateVideo(CliOption<string[]> langOption)
             foreach (var p in path.Where(p => p.Exists).Select(p => p.FullName))
             {
                 var video = reader.ReadVideo(p);
-                parseResult.Configuration.Output.WriteLine(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Updating {video.Name}"));
+                await parseResult.Configuration.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Updating {video.Name}")).ConfigureAwait(true);
                 updater.UpdateVideo(p, video, languages);
             }
         });
@@ -419,11 +421,13 @@ static CliCommand CreateOptimize()
     var command = new CliCommand("optimize") { pathArgument };
 
     command.SetAction(
-        parseResult =>
-        {
-            var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
-            parseResult.GetHost().Services.GetRequiredService<IOptimizer>().Opimize(path.FullName);
-        });
+        (parseResult, cancellationToken) => Task.Run(
+            () =>
+            {
+                var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
+                parseResult.GetHost().Services.GetRequiredService<IOptimizer>().Opimize(path.FullName);
+            },
+            cancellationToken));
 
     return command;
 }
