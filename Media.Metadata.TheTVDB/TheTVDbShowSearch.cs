@@ -67,13 +67,13 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         static async IAsyncEnumerable<RemoteSeason> GetSeasons(RestClient client, Uri baseUrl, string? id, string? name, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var request = new RestRequest(CreateUri(baseUrl, "series/{id}/extended"));
+            var seriesRequest = new RestRequest(CreateUri(baseUrl, "series/{id}/extended"));
             if (id is not null)
             {
-                _ = request.AddUrlSegment("id", id);
+                _ = seriesRequest.AddUrlSegment("id", id);
             }
 
-            var seriesResponse = await client.ExecuteGetAsync<Response<SeriesExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
+            var seriesResponse = await client.ExecuteGetAsync<Response<SeriesExtendedRecord>>(seriesRequest, cancellationToken).ConfigureAwait(false);
 
             if (!seriesResponse.IsSuccessful
                 || seriesResponse.Data is null
@@ -95,38 +95,50 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     continue;
                 }
 
+                // get the extended season
+                var extendedRequest = new RestRequest(CreateUri(baseUrl, "seasons/{id}/extended"))
+                    .AddUrlSegment("id", season.Id);
+
+                var extendedSeasonResponse = await client.ExecuteGetAsync<Response<SeasonExtendedRecord>>(extendedRequest, cancellationToken).ConfigureAwait(false);
+
+                if (!extendedSeasonResponse.IsSuccessful
+                    || extendedSeasonResponse.Data?.Data?.Episodes is null)
+                {
+                    yield break;
+                }
+
+                var extendedSeason = extendedSeasonResponse.Data.Data;
+
                 yield return new RemoteSeason(
-                    season.Number,
+                    extendedSeason.Number,
                     GetEpisodes(
                         client,
                         baseUrl,
                         name,
-                        season.Id,
+                        extendedSeason.Episodes,
                         country,
                         seriesResponse.Data.Data.Characters ?? Array.Empty<Character>(),
                         seriesResponse.Data.Data.Companies ?? Array.Empty<Company>(),
                         cancellationToken).ToEnumerable())
                 {
-                    ImageUri = GetUri(season.Image),
+                    ImageUri = GetUriFromArtwork(extendedSeason.Artwork, "eng") ?? GetUri(extendedSeason.Image),
                 };
+
+
+                static Uri? GetUriFromArtwork(IEnumerable<ArtworkBaseRecord>? artwork, string language)
+                {
+                    if (artwork is null)
+                    {
+                        return default;
+                    }
+
+                    return artwork.Where(a => string.Equals(a.Language, language)).Select(a => GetUri(a.Image)).FirstOrDefault();
+                }
             }
 
-            static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(RestClient client, Uri baseUrl, string? name, int seasonId, string country, IEnumerable<Character> characters, IEnumerable<Company> companies, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+            static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(RestClient client, Uri baseUrl, string? name, IEnumerable<EpisodeBaseRecord> episodes, string country, IEnumerable<Character> characters, IEnumerable<Company> companies, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
             {
-                var request = new RestRequest(CreateUri(baseUrl, "seasons/{id}/extended"))
-                    .AddUrlSegment("id", seasonId);
-
-                var seasonResponse = await client.ExecuteGetAsync<Response<SeasonExtendedRecord>>(request, cancellationToken).ConfigureAwait(false);
-
-                if (!seasonResponse.IsSuccessful
-                    || seasonResponse.Data?.Data?.Episodes is null)
-                {
-                    yield break;
-                }
-
-                var season = seasonResponse.Data.Data;
-
-                var extendedEpisodes = season.Episodes
+                var extendedEpisodes = episodes
                     .OrderBy(ebr => ebr.Number)
                     .ToAsyncEnumerable()
                     .SelectAwait(async episode =>
@@ -362,10 +374,9 @@ public sealed class TheTVDbShowSearch : IShowSearch
 
         foreach (var parameter in parameters)
         {
-            client.DefaultParameters.RemoveParameter(parameter);
+            var valueProperty = parameter.GetType().GetProperty(nameof(parameter.Value));
+            valueProperty.SetValue(parameter, value);
         }
-
-        _ = client.DefaultParameters.AddParameters(parameters.Select(parameter => Parameter.CreateParameter(parameter.Name, value, parameter.Type, parameter.Encode)));
     }
 
     private Uri CreateUri(string? resource) => CreateUri(this.baseUrl, resource);
@@ -582,8 +593,31 @@ public sealed class TheTVDbShowSearch : IShowSearch
         public string? Type { get; init; }
     }
 
+    private sealed record class ArtworkBaseRecord
+    {
+        public int Id { get; init; }
+
+        public int Height { get; init; }
+
+        public int Width { get; init; }
+
+        public string? Image { get; init; }
+
+        public int Type { get; init; }
+
+        public bool IncludesText { get; init; }
+
+        public string? Language { get; init; }
+
+        public double Score { get; init; }
+
+        public string? Thumbnail { get; init; }
+    }
+
     private sealed record class SeasonExtendedRecord : SeasonBaseRecord
     {
+        public ICollection<ArtworkBaseRecord>? Artwork { get; init; }
+
         public ICollection<EpisodeBaseRecord>? Episodes { get; init; }
     }
 
