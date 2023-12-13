@@ -22,10 +22,7 @@ public sealed partial class MainView : Microsoft.UI.Xaml.Controls.UserControl
     }
 
     /// <inheritdoc/>
-    protected override void OnApplyTemplate()
-    {
-        this.UpdateMapDetails();
-    }
+    protected override void OnApplyTemplate() => this.UpdateMapDetails();
 
     private void UpdateMapDetails()
     {

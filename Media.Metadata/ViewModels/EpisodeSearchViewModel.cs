@@ -11,9 +11,9 @@ namespace Media.Metadata.ViewModels;
 /// </summary>
 internal partial class EpisodeSearchViewModel : VideoSearchViewModel
 {
-    private readonly System.Collections.ObjectModel.ObservableCollection<Series> series = new();
+    private readonly System.Collections.ObjectModel.ObservableCollection<Series> series = [];
 
-    private readonly System.Collections.ObjectModel.ObservableCollection<Season> seasons = new();
+    private readonly System.Collections.ObjectModel.ObservableCollection<Season> seasons = [];
 
     private readonly IShowSearch showSearch;
 

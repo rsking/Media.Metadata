@@ -53,13 +53,13 @@ await configuration
         Host.CreateDefaultBuilder,
         configure => configure.ConfigureServices((builder, services) =>
         {
-            services
+            _ = services
                 .AddTMDb()
                 .AddTheTVDB(builder.Configuration)
                 .AddMp4v2()
                 .AddTagLib();
 
-            services
+            _ = services
                 .Configure<InvocationLifetimeOptions>(options => options.SuppressStatusMessages = true);
         }))
     .InvokeAsync(args)
@@ -343,7 +343,7 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
                                     updater.UpdateEpisode(ep.Path.FullName, e with { Image = image, ImageFormat = imageFormat }, GetLanguages(lang));
 
                                     // remove this from the list of paths
-                                    pathList.Remove(ep.Path);
+                                    _ = pathList.Remove(ep.Path);
                                 }
                             }
                         }
@@ -425,7 +425,7 @@ static CliCommand CreateOptimize()
             () =>
             {
                 var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
-                parseResult.GetHost().Services.GetRequiredService<IOptimizer>().Opimize(path.FullName);
+                _ = parseResult.GetHost().Services.GetRequiredService<IOptimizer>().Opimize(path.FullName);
             },
             cancellationToken));
 
@@ -492,7 +492,7 @@ static FileInfo[] ParseFileInfo(ArgumentResult argumentResult)
                 directory = Path.GetDirectoryName(directory);
             }
 
-            matcher.AddInclude(glob);
+            _ = matcher.AddInclude(glob);
             return matcher.GetResultsInFullPath(directory ?? ".\\");
         }
     }

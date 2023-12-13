@@ -148,13 +148,13 @@ internal static class IntPtrExtensions
     {
         if (value is null)
         {
-            mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
         else
         {
             var valuePtr = Marshal.AllocHGlobal(sizeof(short));
             Marshal.WriteInt16(valuePtr, value.Value);
-            mp4ApiFunction(tagsStructure, valuePtr);
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
             Marshal.FreeHGlobal(valuePtr);
         }
     }
@@ -169,13 +169,13 @@ internal static class IntPtrExtensions
     {
         if (value is null)
         {
-            mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
         else
         {
             var valuePtr = Marshal.AllocHGlobal(sizeof(int));
             Marshal.WriteInt32(valuePtr, value.Value);
-            mp4ApiFunction(tagsStructure, valuePtr);
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
             Marshal.FreeHGlobal(valuePtr);
         }
     }
@@ -190,13 +190,13 @@ internal static class IntPtrExtensions
     {
         if (value is null)
         {
-            mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
         else
         {
             var valuePtr = Marshal.AllocHGlobal(sizeof(long));
             Marshal.WriteInt64(valuePtr, value.Value);
-            mp4ApiFunction(tagsStructure, valuePtr);
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
             Marshal.FreeHGlobal(valuePtr);
         }
     }
@@ -211,13 +211,13 @@ internal static class IntPtrExtensions
     {
         if (value is null)
         {
-            mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
         else
         {
             var valuePtr = Marshal.AllocHGlobal(sizeof(byte));
             Marshal.WriteByte(valuePtr, value.Value);
-            mp4ApiFunction(tagsStructure, valuePtr);
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
             Marshal.FreeHGlobal(valuePtr);
         }
     }
@@ -232,14 +232,14 @@ internal static class IntPtrExtensions
     {
         if (value is null)
         {
-            mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
         else
         {
             var valuePtr = Marshal.AllocHGlobal(sizeof(byte));
             var actualValue = Convert.ToByte(value.Value ? 1 : 0);
             Marshal.WriteByte(valuePtr, actualValue);
-            mp4ApiFunction(tagsStructure, valuePtr);
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
             Marshal.FreeHGlobal(valuePtr);
         }
     }

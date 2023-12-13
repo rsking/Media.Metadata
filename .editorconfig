@@ -153,6 +153,11 @@ roslynator_enum_has_flag_style = operator
 # RCS1250: Use implicit/explicit object creation
 roslynator_object_creation_type_style = implicit_when_type_is_obvious
 
+#### STYLECOP ####
+
+# SA1010: Opening square brackets should be spaced correctly
+dotnet_diagnostic.SA1010.severity = none
+
 #### C# Coding Conventions ####
 [*.cs]
 
@@ -252,3 +257,6 @@ csharp_space_between_square_brackets = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
+csharp_style_prefer_method_group_conversion = true:silent
+csharp_style_prefer_top_level_statements = true:silent
+csharp_style_prefer_primary_constructors = true:suggestion

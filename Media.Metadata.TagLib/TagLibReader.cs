@@ -54,9 +54,7 @@ public class TagLibReader : IReader
         GetPersonel(plist, "cast").ToArray(),
         SplitArray(appleTag.Composers).ToArray());
 
-    private static Episode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist)
-    {
-        return new LocalEpisode(
+    private static Episode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new LocalEpisode(
             fileInfo,
             GetTitle(appleTag),
             appleTag.Description,
@@ -67,15 +65,14 @@ public class TagLibReader : IReader
             GetPersonel(plist, "screenwriters").ToArray(),
             GetPersonel(plist, "cast").ToArray(),
             SplitArray(appleTag.Composers).ToArray())
-        {
-            Show = appleTag.GetShowName(),
-            Network = appleTag.GetNetwork(),
-            Season = appleTag.GetSeasonNumber() ?? 0,
-            Number = appleTag.GetEpisodeNumber() ?? 0,
-            Id = appleTag.GetEpisodeId(),
-            Part = appleTag.GetContentId() ?? 0,
-        };
-    }
+    {
+        Show = appleTag.GetShowName(),
+        Network = appleTag.GetNetwork(),
+        Season = appleTag.GetSeasonNumber() ?? 0,
+        Number = appleTag.GetEpisodeNumber() ?? 0,
+        Id = appleTag.GetEpisodeId(),
+        Part = appleTag.GetContentId() ?? 0,
+    };
 
     private static T Update<T>(FileInfo info, T video, AppleTag appleTag)
         where T : Video
@@ -114,7 +111,7 @@ public class TagLibReader : IReader
     private static Formatters.PList.PList CreatePList(AppleTag appleTag) => appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI") switch
     {
         string dashBox => Formatters.PList.PList.Create(dashBox),
-        _ => new Formatters.PList.PList(),
+        _ => [],
     };
 
     private static IEnumerable<string> GetPersonel(Formatters.PList.PList plist, string key)

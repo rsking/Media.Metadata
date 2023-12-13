@@ -11,7 +11,7 @@ namespace Media.Metadata.ViewModels;
 /// </summary>
 internal abstract partial class VideoSearchViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
-    private readonly System.Collections.ObjectModel.ObservableCollection<Video> videos = new();
+    private readonly System.Collections.ObjectModel.ObservableCollection<Video> videos = [];
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private Video? selectedVideo;

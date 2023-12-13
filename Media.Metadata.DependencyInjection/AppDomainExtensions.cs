@@ -4,7 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+#pragma warning disable IDE0130
 namespace Microsoft.Extensions.DependencyInjection;
+#pragma warning restore IDE0130
 
 using System.Runtime.InteropServices;
 

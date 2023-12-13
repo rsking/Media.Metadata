@@ -11,29 +11,22 @@ using RestSharp;
 /// <summary>
 /// The TVDb show search.
 /// </summary>
-public sealed class TheTVDbShowSearch : IShowSearch
+/// <remarks>
+/// Initialises a new instance of the <see cref="TheTVDbShowSearch"/> class.
+/// </remarks>
+/// <param name="restClient">The rest client.</param>
+/// <param name="options">The options.</param>
+public sealed class TheTVDbShowSearch(RestClient restClient, Microsoft.Extensions.Options.IOptions<TheTVDbOptions> options) : IShowSearch
 {
     private static readonly System.Text.Json.JsonSerializerOptions Options = new() { PropertyNamingPolicy = new LowerCaseJsonNamingPolicy() };
 
-    private readonly RestClient client;
+    private readonly RestClient client = restClient;
 
-    private readonly string pin;
+    private readonly string pin = options.Value.Pin ?? throw new ArgumentNullException(nameof(options), "Pin cannot be null");
 
-    private readonly Uri baseUrl;
+    private readonly Uri baseUrl = new(options.Value.Url);
 
     private TokenResponse? tokenResponse;
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="TheTVDbShowSearch"/> class.
-    /// </summary>
-    /// <param name="restClient">The rest client.</param>
-    /// <param name="options">The options.</param>
-    public TheTVDbShowSearch(RestClient restClient, Microsoft.Extensions.Options.IOptions<TheTVDbOptions> options)
-    {
-        this.client = restClient;
-        this.baseUrl = new Uri(options.Value.Url);
-        this.pin = options.Value.Pin ?? throw new ArgumentNullException(nameof(options), "Pin cannot be null");
-    }
 
     /// <inheritdoc/>
     async IAsyncEnumerable<Series> IShowSearch.SearchAsync(string name, int year, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
@@ -124,15 +117,13 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     ImageUri = GetUriFromArtwork(extendedSeason.Artwork, "eng") ?? GetUri(extendedSeason.Image),
                 };
 
-
                 static Uri? GetUriFromArtwork(IEnumerable<ArtworkBaseRecord>? artwork, string language)
                 {
-                    if (artwork is null)
+                    return artwork switch
                     {
-                        return default;
-                    }
-
-                    return artwork.Where(a => string.Equals(a.Language, language)).Select(a => GetUri(a.Image)).FirstOrDefault();
+                        { } a => a.Where(a => string.Equals(a.Language, language)).Select(a => GetUri(a.Image)).FirstOrDefault(),
+                        _ => default,
+                    };
                 }
             }
 
@@ -171,11 +162,11 @@ public sealed class TheTVDbShowSearch : IShowSearch
                     {
                         var fullCharacters = episode.Characters is null
                             ? characters.ToList()
-                            : episode.Characters.Concat(characters).ToList();
+                            : [.. episode.Characters, .. characters];
 
                         var fullCompanies = episode.Companies is null
                             ? companies.ToList()
-                            : episode.Companies.Concat(companies).ToList();
+                            : [.. episode.Companies, .. companies];
 
                         return new RemoteEpisode(episode.Name, episode.Overview)
                         {

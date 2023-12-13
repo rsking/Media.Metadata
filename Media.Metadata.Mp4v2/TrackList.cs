@@ -92,7 +92,7 @@ internal sealed class TrackList : IReadOnlyList<Track>
             {
                 var languageToSet = new byte[4];
                 System.Text.Encoding.ASCII.GetBytes(language).CopyTo(languageToSet, 0);
-                NativeMethods.MP4SetTrackLanguage(fileHandle, track.Id, languageToSet);
+                _ = NativeMethods.MP4SetTrackLanguage(fileHandle, track.Id, languageToSet);
             }
         }
     }

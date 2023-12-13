@@ -173,7 +173,7 @@ internal sealed class ChapterList : IList<Chapter>
         if (isRemoved)
         {
             item.Changed -= this.OnChapterChanged;
-            this.hashedIndex.Remove(item.Id);
+            _ = this.hashedIndex.Remove(item.Id);
         }
 
         return isRemoved;
@@ -187,7 +187,7 @@ internal sealed class ChapterList : IList<Chapter>
     public void RemoveAt(int index)
     {
         var toRemove = this[index];
-        this.hashedIndex.Remove(toRemove.Id);
+        _ = this.hashedIndex.Remove(toRemove.Id);
         toRemove.Changed -= this.OnChapterChanged;
         this.chapters.RemoveAt(index);
         this.IsDirty = true;
@@ -322,7 +322,7 @@ internal sealed class ChapterList : IList<Chapter>
             }
 
             var chapterArray = nativeChapters.ToArray();
-            NativeMethods.MP4SetChapters(fileHandle, chapterArray, chapterArray.Length, NativeMethods.MP4ChapterType.Qt);
+            _ = NativeMethods.MP4SetChapters(fileHandle, chapterArray, chapterArray.Length, NativeMethods.MP4ChapterType.Qt);
         }
     }
 

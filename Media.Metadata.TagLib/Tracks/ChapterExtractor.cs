@@ -65,7 +65,7 @@ internal sealed class ChapterExtractor
     public void Run()
     {
         this.Chapters = null;
-        this.stream.Seek(0L, SeekOrigin.Begin);
+        _ = this.stream.Seek(0L, SeekOrigin.Begin);
         if (this.ReadMoovInfo() is MoovInfo moovInfo)
         {
             this.Tracks = moovInfo.Tracks;
@@ -84,7 +84,7 @@ internal sealed class ChapterExtractor
             return false;
         }
 
-        this.stream.Seek(4L, SeekOrigin.Begin);
+        _ = this.stream.Seek(4L, SeekOrigin.Begin);
         var type = this.ReadType();
         return type == Ftyp;
     }
@@ -141,7 +141,7 @@ internal sealed class ChapterExtractor
                     position += TimeSpan.FromSeconds(duration / timeUnitPerSecond);
                     if (textBox.Samples is not null)
                     {
-                        this.stream.Seek(textBox.Samples[i], SeekOrigin.Begin);
+                        _ = this.stream.Seek(textBox.Samples[i], SeekOrigin.Begin);
                         chapterInfo.Name = this.ReadPascalString(System.Text.Encoding.UTF8);
                     }
 
@@ -151,10 +151,7 @@ internal sealed class ChapterExtractor
         }
     }
 
-    private BoxInfo? FindBox(byte[] type)
-    {
-        return FirstOrDefaultNullable(this.EnumerateBoxes().Where(box => box.Type == type));
-    }
+    private BoxInfo? FindBox(byte[] type) => FirstOrDefaultNullable(this.EnumerateBoxes().Where(box => box.Type == type));
 
     private IEnumerable<BoxInfo> EnumerateBoxes(long? maximumLength = null)
     {
@@ -300,7 +297,7 @@ internal sealed class ChapterExtractor
 
     private void ReadStts(ref TrakInfo trakData)
     {
-        this.stream.Seek(4L, SeekOrigin.Current);
+        _ = this.stream.Seek(4L, SeekOrigin.Current);
         var len = this.ReadUInt32();
         if (len > 1024)
         {
@@ -318,7 +315,7 @@ internal sealed class ChapterExtractor
 
     private void ReadStco(ref TrakInfo trakData)
     {
-        this.stream.Seek(4L, SeekOrigin.Current);
+        _ = this.stream.Seek(4L, SeekOrigin.Current);
         var len = this.ReadUInt32();
         if (len > 1024)
         {
@@ -334,7 +331,7 @@ internal sealed class ChapterExtractor
 
     private void ReadHdlr(ref TrakInfo trakData)
     {
-        this.stream.Seek(8, SeekOrigin.Current);
+        _ = this.stream.Seek(8, SeekOrigin.Current);
         var b = new byte[4];
         _ = this.stream.Read(b, 0, 4);
         var bc = new char[4];
@@ -348,7 +345,7 @@ internal sealed class ChapterExtractor
         _ = this.stream.Read(v, 0, 1);
         var isv8 = v[0] == 1;
 
-        this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
+        _ = this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
         trakData.TimeUnitPerSecond = this.ReadUInt32();
 
         // get the duration
@@ -372,7 +369,7 @@ internal sealed class ChapterExtractor
         var v = new byte[1];
         _ = this.stream.Read(v, 0, 1);
         var isv8 = v[0] == 1;
-        this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
+        _ = this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
         trakData.Id = this.ReadUInt32();
     }
 
@@ -381,14 +378,14 @@ internal sealed class ChapterExtractor
         var v = new byte[1];
         _ = this.stream.Read(v, 0, 1);
         var isv8 = v[0] == 1;
-        this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
+        _ = this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
         moovData.TimeUnitPerSecond = this.ReadUInt32();
     }
 
     private void SeekNext(BoxInfo box)
     {
-        this.stream.Seek(box.BoxOffset, SeekOrigin.Begin);
-        this.stream.Seek(box.Offset, SeekOrigin.Current);
+        _ = this.stream.Seek(box.BoxOffset, SeekOrigin.Begin);
+        _ = this.stream.Seek(box.Offset, SeekOrigin.Current);
     }
 
     private BoxInfo? NextBox(long? maxLen = null)
@@ -424,7 +421,7 @@ internal sealed class ChapterExtractor
         }
         else
         {
-            this.stream.Seek(8L, SeekOrigin.Current);
+            _ = this.stream.Seek(8L, SeekOrigin.Current);
         }
 
         return new BoxInfo()

@@ -91,7 +91,7 @@ public partial class App : Microsoft.UI.Xaml.Application
                 && Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId) is { Id.Value: > 0UL } appWindow
                 && Vanara.PInvoke.Shell32.ExtractIcon(Vanara.PInvoke.HINSTANCE.NULL, typeof(App).Assembly.Location, 0) is { IsInvalid: false } iconHandle)
             {
-                appWindow.SetIcon(Microsoft.UI.Win32Interop.GetIconIdFromIcon((System.IntPtr)(Vanara.PInvoke.HICON)iconHandle));
+                appWindow.SetIcon(Microsoft.UI.Win32Interop.GetIconIdFromIcon((nint)(Vanara.PInvoke.HICON)iconHandle));
             }
         }
     }

@@ -285,22 +285,19 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     /// Sets the editable video.
     /// </summary>
     /// <param name="value">The video to edit.</param>
-    internal void SetEditableVideo(Video? value)
+    internal void SetEditableVideo(Video? value) => this.SelectedEditableVideo = value switch
     {
-        this.SelectedEditableVideo = value switch
-        {
-            Models.LocalEpisodeWithImageSource episode => new EpisodeViewModel(episode),
-            Models.LocalMovieWithImageSource movie => new MovieViewModel(movie),
-            Models.LocalVideoWithImageSource video => new VideoViewModel(video),
-            _ => default,
-        };
-    }
+        Models.LocalEpisodeWithImageSource episode => new EpisodeViewModel(episode),
+        Models.LocalMovieWithImageSource movie => new MovieViewModel(movie),
+        Models.LocalVideoWithImageSource video => new VideoViewModel(video),
+        _ => default,
+    };
 
     private async Task<Video?> ReadVideoAsync(string path) => this.reader.ReadVideo(path) switch
     {
         LocalMovie movie => await Models.LocalMovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
         LocalEpisode episode => await Models.LocalEpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
         LocalVideo video => await Models.LocalVideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
-        _ => default(Video?),
+        _ => default,
     };
 }
