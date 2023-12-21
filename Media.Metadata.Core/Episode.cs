@@ -33,12 +33,12 @@ public abstract record Episode(
     /// <summary>
     /// Gets the season.
     /// </summary>
-    public int Season { get; init; } = -1;
+    public int? Season { get; init; }
 
     /// <summary>
     /// Gets the number.
     /// </summary>
-    public int Number { get; init; }
+    public int? Number { get; init; }
 
     /// <summary>
     /// Gets the ID.

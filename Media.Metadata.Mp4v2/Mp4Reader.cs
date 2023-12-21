@@ -54,7 +54,7 @@ public class Mp4Reader : IReader
         tags.MovieInfo?.Cast,
         Split(tags.Composer));
 
-    private static Movie ReadMovie(string path, MetadataTags tags) => new LocalMovie(
+    private static LocalMovie ReadMovie(string path, MetadataTags tags) => new(
         new FileInfo(path),
         tags.Title ?? Path.GetFileNameWithoutExtension(path),
         tags.Description,
@@ -66,7 +66,7 @@ public class Mp4Reader : IReader
         tags.MovieInfo?.Cast,
         Split(tags.Composer));
 
-    private static Episode ReadEpisode(string path, MetadataTags tags) => new LocalEpisode(
+    private static LocalEpisode ReadEpisode(string path, MetadataTags tags) => new(
         new FileInfo(path),
         tags.Title ?? Path.GetFileNameWithoutExtension(path),
         tags.Description,
@@ -79,9 +79,9 @@ public class Mp4Reader : IReader
         Split(tags.Composer))
     {
         Show = tags.TVShow,
-        Season = tags.SeasonNumber ?? -1,
+        Season = tags.SeasonNumber,
         Network = tags.TVNetwork,
-        Number = tags.EpisodeNumber ?? -1,
+        Number = tags.EpisodeNumber,
         Id = tags.EpisodeId,
         Part = tags.ContentId,
     };

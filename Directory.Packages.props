@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Source Generators">
-    <GlobalPackageReference Include="PolySharp" Version="1.14.0" />
+    <GlobalPackageReference Include="PolySharp" Version="1.14.1" />
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">

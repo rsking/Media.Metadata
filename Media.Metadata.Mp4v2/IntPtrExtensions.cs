@@ -82,7 +82,7 @@ internal static class IntPtrExtensions
     /// <see langword="true"/> if the value pointed to by this <see cref="IntPtr"/> is non-zero; <see langword="false"/> if the value pointed to is zero.
     /// Returns <see langword="null"/> if this pointer is a null pointer (<see cref="IntPtr.Zero"/>).
     /// </returns>
-    public static bool? ReadBoolean(this IntPtr value) => value == IntPtr.Zero ? null : System.Runtime.InteropServices.Marshal.ReadByte(value) != 0;
+    public static bool? ReadBoolean(this IntPtr value) => value == IntPtr.Zero ? null : System.Runtime.InteropServices.Marshal.ReadByte(value) is not 0;
 
     /// <summary>
     /// Reads an 8-bit integer value beginning at the location pointed to in memory by the specified pointer value.

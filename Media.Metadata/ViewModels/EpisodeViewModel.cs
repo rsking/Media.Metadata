@@ -18,10 +18,10 @@ internal partial class EpisodeViewModel : VideoViewModel
     private string? network;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private int season;
+    private int? season;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-    private int number;
+    private int? number;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? id;

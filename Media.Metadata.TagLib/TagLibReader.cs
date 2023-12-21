@@ -42,7 +42,7 @@ public class TagLibReader : IReader
         _ => new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name)),
     };
 
-    private static Movie ReadMovie(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new LocalMovie(
+    private static LocalMovie ReadMovie(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new(
         fileInfo,
         GetTitle(appleTag),
         appleTag.Description,
@@ -54,7 +54,7 @@ public class TagLibReader : IReader
         GetPersonel(plist, "cast").ToArray(),
         SplitArray(appleTag.Composers).ToArray());
 
-    private static Episode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new LocalEpisode(
+    private static LocalEpisode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new(
             fileInfo,
             GetTitle(appleTag),
             appleTag.Description,
@@ -68,10 +68,10 @@ public class TagLibReader : IReader
     {
         Show = appleTag.GetShowName(),
         Network = appleTag.GetNetwork(),
-        Season = appleTag.GetSeasonNumber() ?? 0,
-        Number = appleTag.GetEpisodeNumber() ?? 0,
+        Season = appleTag.GetSeasonNumber(),
+        Number = appleTag.GetEpisodeNumber(),
         Id = appleTag.GetEpisodeId(),
-        Part = appleTag.GetContentId() ?? 0,
+        Part = appleTag.GetContentId(),
     };
 
     private static T Update<T>(FileInfo info, T video, AppleTag appleTag)

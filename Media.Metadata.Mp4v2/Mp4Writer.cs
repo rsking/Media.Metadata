@@ -41,8 +41,8 @@ public class Mp4Writer : IUpdater
         if (file.Tags is not null)
         {
             // episode
-            file.Tags.EpisodeNumber = ValueOrNull(episode.Number);
-            file.Tags.SeasonNumber = ValueOrNull(episode.Season);
+            file.Tags.EpisodeNumber = episode.Number;
+            file.Tags.SeasonNumber = episode.Season;
             file.Tags.TVShow = episode.Show;
             file.Tags.EpisodeId = episode.Id;
             file.Tags.TVNetwork = episode.Network;
@@ -50,11 +50,6 @@ public class Mp4Writer : IUpdater
         }
 
         file.Save();
-
-        static int? ValueOrNull(int value)
-        {
-            return value < 0 ? null : value;
-        }
     }
 
     /// <inheritdoc/>

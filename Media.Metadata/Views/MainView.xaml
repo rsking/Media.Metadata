@@ -162,10 +162,10 @@
                                          TextWrapping="Wrap" />
                                 <NumberBox Margin="2"
                                            Header="Season"
-                                           Value="{Binding Season, Mode=TwoWay}" />
+                                           Value="{Binding Season, Mode=TwoWay, Converter={StaticResource NullableIntToDoubleConverter}}" />
                                 <NumberBox Margin="2"
                                            Header="Number"
-                                           Value="{Binding Number, Mode=TwoWay}" />
+                                           Value="{Binding Number, Mode=TwoWay, Converter={StaticResource NullableIntToDoubleConverter}}" />
                                 <NumberBox Margin="2"
                                            Header="Part"
                                            Value="{Binding Part, Mode=TwoWay, Converter={StaticResource NullableIntToDoubleConverter}}" />
