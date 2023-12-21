@@ -9,15 +9,5 @@ namespace Media.Metadata.Tracks;
 /// <summary>
 /// The chapter info.
 /// </summary>
-internal struct ChapterInfo
-{
-    /// <summary>
-    /// The time span.
-    /// </summary>
-    public TimeSpan Time;
-
-    /// <summary>
-    /// The name.
-    /// </summary>
-    public string Name;
-}
+[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+internal readonly record struct ChapterInfo(TimeSpan Time, string Name);

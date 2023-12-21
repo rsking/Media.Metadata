@@ -14,7 +14,7 @@ namespace Media.Metadata;
 /// </remarks>
 /// <param name="Id">Gets the ID.</param>
 /// <param name="Type">Gets the type.</param>
-internal record class Track(int Id, string? Type)
+internal sealed record class Track(int Id, string? Type)
 {
     /// <summary>
     /// Gets or sets the language.

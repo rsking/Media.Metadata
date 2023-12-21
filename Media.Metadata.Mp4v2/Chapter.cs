@@ -9,16 +9,14 @@ namespace Media.Metadata;
 /// <summary>
 /// Represents a chapter in an MP4 file.
 /// </summary>
-internal sealed class Chapter
+internal sealed class Chapter : System.ComponentModel.INotifyPropertyChanged
 {
     private Guid id = Guid.NewGuid();
     private string title = string.Empty;
     private TimeSpan duration = TimeSpan.FromSeconds(0);
 
-    /// <summary>
-    /// Occurs when the value of any property is changed.
-    /// </summary>
-    internal event EventHandler? Changed;
+    /// <inheritdoc />
+    public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
     /// <summary>
     /// Gets or sets the title of this chapter.
@@ -31,7 +29,7 @@ internal sealed class Chapter
             if (!string.Equals(this.title, value, StringComparison.Ordinal))
             {
                 this.title = value;
-                this.OnChanged(EventArgs.Empty);
+                this.OnPropertyChanged(nameof(this.Title));
             }
         }
     }
@@ -47,7 +45,7 @@ internal sealed class Chapter
             if (this.duration != value)
             {
                 this.duration = value;
-                this.OnChanged(EventArgs.Empty);
+                this.OnPropertyChanged(nameof(this.Duration));
             }
         }
     }
@@ -78,5 +76,5 @@ internal sealed class Chapter
     /// is the same as this instance; otherwise, <see langword="false"/>.</returns>
     public override bool Equals(object obj) => obj is Chapter other && string.Equals(this.Title, other.Title, StringComparison.Ordinal) && this.Duration == other.Duration;
 
-    private void OnChanged(EventArgs e) => this.Changed?.Invoke(this, e);
+    private void OnPropertyChanged(string propertyName) => this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
 }

@@ -66,7 +66,7 @@ internal sealed class ChapterList : IList<Chapter>
             }
 
             this.chapters[index] = value;
-            value.Changed += this.OnChapterChanged;
+            value.PropertyChanged += this.OnChapterChanged;
             this.hashedIndex.Add(value.Id);
             this.IsDirty = true;
         }
@@ -91,7 +91,7 @@ internal sealed class ChapterList : IList<Chapter>
         }
 
         this.chapters.Add(item);
-        item.Changed += this.OnChapterChanged;
+        item.PropertyChanged += this.OnChapterChanged;
         this.hashedIndex.Add(item.Id);
         this.IsDirty = true;
     }
@@ -154,7 +154,7 @@ internal sealed class ChapterList : IList<Chapter>
         }
 
         this.chapters.Insert(index, item);
-        item.Changed += this.OnChapterChanged;
+        item.PropertyChanged += this.OnChapterChanged;
         this.hashedIndex.Add(item.Id);
         this.IsDirty = true;
     }
@@ -172,7 +172,7 @@ internal sealed class ChapterList : IList<Chapter>
         this.IsDirty = this.IsDirty || isRemoved;
         if (isRemoved)
         {
-            item.Changed -= this.OnChapterChanged;
+            item.PropertyChanged -= this.OnChapterChanged;
             _ = this.hashedIndex.Remove(item.Id);
         }
 
@@ -188,7 +188,7 @@ internal sealed class ChapterList : IList<Chapter>
     {
         var toRemove = this[index];
         _ = this.hashedIndex.Remove(toRemove.Id);
-        toRemove.Changed -= this.OnChapterChanged;
+        toRemove.PropertyChanged -= this.OnChapterChanged;
         this.chapters.RemoveAt(index);
         this.IsDirty = true;
     }
@@ -333,7 +333,7 @@ internal sealed class ChapterList : IList<Chapter>
     private void AddInternal(Chapter toAdd)
     {
         this.chapters.Add(toAdd);
-        toAdd.Changed += this.OnChapterChanged;
+        toAdd.PropertyChanged += this.OnChapterChanged;
         this.hashedIndex.Add(toAdd.Id);
     }
 

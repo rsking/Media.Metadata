@@ -10,15 +10,4 @@ namespace Media.Metadata.Tracks;
 /// The MOOV info.
 /// </summary>
 [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-internal struct MoovInfo
-{
-    /// <summary>
-    /// Gets or sets the time unit per second.
-    /// </summary>
-    public uint TimeUnitPerSecond { get; set; }
-
-    /// <summary>
-    /// Gets or sets the tracks.
-    /// </summary>
-    public TrakInfo[] Tracks { get; set; }
-}
+internal readonly record struct MoovInfo(uint? TimeUnitPerSecond, TrakInfo[]? Tracks);

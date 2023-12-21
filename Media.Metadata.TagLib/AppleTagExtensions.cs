@@ -238,7 +238,7 @@ public static class AppleTagExtensions
         : default(byte?);
 
     private static int? GetInt32OrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count == 4) is AppleDataBox item
-        ? (int)GetUInt32(item.Data.Data)
+        ? (int)System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(item.Data.Data)
         : default(int?);
 
     private static bool? GetBoolOrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.GetInt32OrDefault(type) is int value
@@ -251,20 +251,6 @@ public static class AppleTagExtensions
         string[] { Length: > 1 } values => string.Join("; ", values),
         _ => default,
     };
-
-    private static uint GetUInt32(byte[] data)
-    {
-        var bytes = BitConverter.IsLittleEndian
-            ? SwitchBytes(data)
-            : data;
-
-        return BitConverter.ToUInt32(bytes, 0);
-
-        static byte[] SwitchBytes(byte[] data)
-        {
-            return [data[3], data[2], data[1], data[0]];
-        }
-    }
 
     private static ReadOnlyByteVector FixId(ByteVector id) => id switch
     {

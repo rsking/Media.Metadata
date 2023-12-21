@@ -32,7 +32,8 @@ public static class ExtensionMethods
         if (extractor.Tracks is not null
             && Array.Find(extractor.Tracks, t => string.Equals(t.Type, "vide", StringComparison.Ordinal)) is { Type: "vide" } videoTrack)
         {
-            return Create(new MediaChapter("Chapter 1", TimeSpan.FromSeconds((double)videoTrack.Duration / videoTrack.TimeUnitPerSecond)));
+            var duration = (videoTrack.Duration ?? 0D) / (videoTrack.TimeUnitPerSecond ?? 1D);
+            return Create(new MediaChapter("Chapter 1", TimeSpan.FromSeconds(duration)));
 
             static IEnumerable<T> Create<T>(T value)
             {
@@ -61,11 +62,11 @@ public static class ExtensionMethods
             static MediaTrack MediaTrack(Tracks.TrakInfo trakInfo)
             {
                 return new(
-                    (int)trakInfo.Id,
+                    (int)(trakInfo.Id ?? 0),
                     GetTrackType(trakInfo.Type),
                     trakInfo.Language);
 
-                static MediaTrackType GetTrackType(string type)
+                static MediaTrackType GetTrackType(string? type)
                 {
                     return type switch
                     {
