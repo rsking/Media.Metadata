@@ -521,20 +521,24 @@ internal sealed partial class Program
             SbsRegex3(),
             IViewRegex1(),
             IViewRegex2(),
+            Season(),
         };
 
-    [System.Text.RegularExpressions.GeneratedRegex("[Ss](?<season>\\d{2})[Ee](?<episode>\\d{2})", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    [System.Text.RegularExpressions.GeneratedRegex(@"[Ss](?<season>\d{2})[Ee](?<episode>\d{2})", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
     private static partial System.Text.RegularExpressions.Regex SbsRegex1();
 
-    [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep(?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    [System.Text.RegularExpressions.GeneratedRegex(@"S(?<season>\d+) Ep(?<episode>\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
     private static partial System.Text.RegularExpressions.Regex SbsRegex2();
 
-    [System.Text.RegularExpressions.GeneratedRegex("S(?<season>\\d+) Ep. (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    [System.Text.RegularExpressions.GeneratedRegex(@"S(?<season>\d+) Ep. (?<episode>\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
     private static partial System.Text.RegularExpressions.Regex SbsRegex3();
 
-    [System.Text.RegularExpressions.GeneratedRegex("Series (?<season>\\d+) Ep (?<episode>\\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    [System.Text.RegularExpressions.GeneratedRegex(@"Series (?<season>\d+) Ep (?<episode>\d+)", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
     private static partial System.Text.RegularExpressions.Regex IViewRegex1();
 
-    [System.Text.RegularExpressions.GeneratedRegex("..(\\d+).(?<episode>\\d+)S(\\d+)-(.*)", System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    [System.Text.RegularExpressions.GeneratedRegex(@"..(\d+).(?<episode>\d{3})S(\d{2})", System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
     private static partial System.Text.RegularExpressions.Regex IViewRegex2();
+
+    [System.Text.RegularExpressions.GeneratedRegex(@"Season (?<season>\d{2})", System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
+    private static partial System.Text.RegularExpressions.Regex Season();
 }
