@@ -9,25 +9,23 @@ namespace Media.Metadata.ViewModels;
 /// <summary>
 /// The <see cref="Episode"/> <see cref="VideoSearchViewModel"/>.
 /// </summary>
-internal partial class EpisodeSearchViewModel : VideoSearchViewModel
+/// <remarks>
+/// Initialises a new instance of the <see cref="EpisodeSearchViewModel"/> class.
+/// </remarks>
+/// <param name="showSearch">The series search.</param>
+internal partial class EpisodeSearchViewModel(IShowSearch showSearch) : VideoSearchViewModel
 {
     private readonly System.Collections.ObjectModel.ObservableCollection<Series> series = [];
 
     private readonly System.Collections.ObjectModel.ObservableCollection<Season> seasons = [];
 
-    private readonly IShowSearch showSearch;
+    private readonly IShowSearch showSearch = showSearch;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private Series? selectedSeries;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private Season? selectedSeason;
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="EpisodeSearchViewModel"/> class.
-    /// </summary>
-    /// <param name="showSearch">The series search.</param>
-    public EpisodeSearchViewModel(IShowSearch showSearch) => this.showSearch = showSearch;
 
     /// <summary>
     /// Gets the series.

@@ -11,11 +11,16 @@ using Microsoft.UI.Xaml.Controls;
 /// <summary>
 /// The main view model.
 /// </summary>
-internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+/// <remarks>
+/// Initialises a new instance of the <see cref="MainViewModel"/> class.
+/// </remarks>
+/// <param name="reader">The reader.</param>
+/// <param name="updater">The updater.</param>
+internal partial class MainViewModel(IReader reader, IUpdater updater) : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
-    private readonly IReader reader;
+    private readonly IReader reader = reader;
 
-    private readonly IUpdater updater;
+    private readonly IUpdater updater = updater;
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     [CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedFor(nameof(SelectedEditableVideo))]
@@ -31,17 +36,6 @@ internal partial class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     [CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedFor(nameof(CanSearch))]
     [CommunityToolkit.Mvvm.ComponentModel.NotifyCanExecuteChangedFor(nameof(SearchCommand))]
     private bool isSaving;
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="MainViewModel"/> class.
-    /// </summary>
-    /// <param name="reader">The reader.</param>
-    /// <param name="updater">The updater.</param>
-    public MainViewModel(IReader reader, IUpdater updater)
-    {
-        this.reader = reader;
-        this.updater = updater;
-    }
 
     /// <summary>
     /// Gets the videos.
