@@ -353,15 +353,9 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
 
             System.Text.RegularExpressions.Match? GetMatch(string input)
             {
-                foreach (var r in regex)
-                {
-                    if (r.Match(input) is System.Text.RegularExpressions.Match { Success: true } match)
-                    {
-                        return match;
-                    }
-                }
-
-                return default;
+                return regex
+                    .Select(r => r.Match(input))
+                    .FirstOrDefault(m => m is { Success: true });
             }
 
             static bool ShouldProcess(FileInfo path, IReader reader, bool ignore)
