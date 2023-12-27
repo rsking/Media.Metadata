@@ -332,6 +332,11 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
                                 if (episodeEnumerator.Current is Episode e && e.Number == ep.Episode)
                                 {
                                     await console.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Episode {series.Name}:{s.Number}:{e.Name}")).ConfigureAwait(false);
+                                    if (e.Rating is null)
+                                    {
+                                        await console.Error.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Failed to get rating for {e.Name}")).ConfigureAwait(false);
+                                    }
+
                                     var (image, imageFormat) = (s, series, e) switch
                                     {
                                         (IHasImage { Image: not null } i, _, _) => (i.Image, i.ImageFormat),
