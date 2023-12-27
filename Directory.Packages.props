@@ -32,10 +32,10 @@
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">
-    <GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.120" />
+    <GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.127" />
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.7.0" />
-    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.15.0.81779" />
-    <GlobalPackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.507" />
+    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.16.0.82469" />
+    <GlobalPackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
   </ItemGroup>
 
   <ItemGroup Label="Build">
