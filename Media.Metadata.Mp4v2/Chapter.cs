@@ -9,7 +9,7 @@ namespace Media.Metadata;
 /// <summary>
 /// Represents a chapter in an MP4 file.
 /// </summary>
-internal class Chapter
+internal sealed class Chapter
 {
     private Guid id = Guid.NewGuid();
     private string title = string.Empty;
@@ -78,9 +78,5 @@ internal class Chapter
     /// is the same as this instance; otherwise, <see langword="false"/>.</returns>
     public override bool Equals(object obj) => obj is Chapter other && string.Equals(this.Title, other.Title, StringComparison.Ordinal) && this.Duration == other.Duration;
 
-    /// <summary>
-    /// Raises the <see cref="Changed"/> event.
-    /// </summary>
-    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-    protected void OnChanged(EventArgs e) => this.Changed?.Invoke(this, e);
+    private void OnChanged(EventArgs e) => this.Changed?.Invoke(this, e);
 }

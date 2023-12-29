@@ -11,7 +11,7 @@ namespace Media.Metadata;
 /// </summary>
 public class TagLibReader : IReader
 {
-    private static readonly byte[] Nam = new byte[] { 0xa9, 0x6e, 0x61, 0x6d };
+    private static readonly byte[] Nam = [0xa9, 0x6e, 0x61, 0x6d];
 
     /// <inheritdoc/>
     public Episode ReadEpisode(string path) => ReadVideo(path, (fileInfo, appleTag) => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)));

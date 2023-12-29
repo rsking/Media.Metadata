@@ -11,7 +11,7 @@ using System.Buffers;
 /// <summary>
 /// A <see cref="System.Text.Json.Serialization.JsonConverter{T}"/> for <see cref="Nullable{DateTime}"/>.
 /// </summary>
-internal class JsonDateConverter : System.Text.Json.Serialization.JsonConverter<DateTime?>
+internal sealed class JsonDateConverter : System.Text.Json.Serialization.JsonConverter<DateTime?>
 {
     /// <inheritdoc/>
     public override DateTime? Read(ref System.Text.Json.Utf8JsonReader reader, Type typeToConvert, System.Text.Json.JsonSerializerOptions options)

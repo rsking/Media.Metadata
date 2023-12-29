@@ -11,7 +11,7 @@ namespace Media.Metadata;
 /// in the "iTunEXTC" atom. This information includes information about the parental
 /// advisory ratings of the content.
 /// </summary>
-internal class RatingInfo : Atom, IEquatable<RatingInfo>
+internal sealed class RatingInfo : Atom, IEquatable<RatingInfo>
 {
     /// <summary>
     /// Gets or sets the string that represents the rating (e.g., 'PG').

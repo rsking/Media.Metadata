@@ -45,7 +45,7 @@ internal sealed class TrackList : IReadOnlyList<Track>
     /// <returns>A new instance of a <see cref="TrackList"/> object containing the information about the track for the file.</returns>
     internal static TrackList Create(IEnumerable<MediaTrack> tracks)
     {
-        return new TrackList(tracks.Select(t => new Track(t.Id, GetType(t.Type), t.Language)));
+        return new TrackList(tracks.Select(t => new Track(t.Id, GetType(t.Type)) { Language = t.Language }));
 
         static string? GetType(MediaTrackType type)
         {
@@ -72,7 +72,7 @@ internal sealed class TrackList : IReadOnlyList<Track>
             var currentTrackId = NativeMethods.MP4FindTrackId(fileHandle, i, type: null, 0);
             var trackType = NativeMethods.MP4GetTrackType(fileHandle, currentTrackId);
             var language = GetLanguage(fileHandle, currentTrackId);
-            list.tracks.Add(new Track(currentTrackId, trackType, language));
+            list.tracks.Add(new Track(currentTrackId, trackType) { Language = language });
         }
 
         return list;

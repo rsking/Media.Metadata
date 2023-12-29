@@ -11,12 +11,18 @@ namespace Media.Metadata;
 /// </content>
 internal static partial class NativeMethods
 {
+#pragma warning disable RCS1222
+#pragma warning disable IDE0079
+#pragma warning disable S1144
     /// <summary>
     /// The should parse atom call back.
     /// </summary>
     /// <param name="atom">The atom.</param>
     /// <returns><see langword="true"/> to parse the atom.</returns>
     public delegate bool ShouldParseAtomCallback(uint atom);
+#pragma warning restore S1144
+#pragma warning restore IDE0079
+#pragma warning restore RCS1222
 
     /// <summary>
     /// Close an mp4 file.

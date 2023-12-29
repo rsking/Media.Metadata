@@ -27,5 +27,5 @@ internal static class ReferenceExtensions
     /// <param name="value">The file information.</param>
     /// <returns>The existing file.</returns>
     /// <exception cref="FileNotFoundException"><paramref name="value"/> does not exist.</exception>
-    public static FileInfo ThrowIfNotExists(this FileInfo value) => value.Exists ? value : throw new FileNotFoundException(null, value.FullName);
+    public static FileInfo ThrowIfNotExists(this FileInfo value) => value.Exists ? value : throw new FileNotFoundException(message: null, value.FullName);
 }

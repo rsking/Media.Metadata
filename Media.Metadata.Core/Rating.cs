@@ -11,7 +11,7 @@ namespace Media.Metadata;
 /// </summary>
 public readonly record struct Rating(string Standard, string ContentRating, int Score = default, string? Annotation = default)
 {
-    private static readonly IDictionary<Country, ILookup<RatingType, Rating>> Ratings = LoadRatings();
+    private static readonly Dictionary<Country, ILookup<RatingType, Rating>> Ratings = LoadRatings();
 
     /// <inheritdoc/>
     public override string ToString() => FormattableString.Invariant($"{this.Standard}|{this.ContentRating}|{this.Score}|{this.Annotation ?? string.Empty}");
@@ -93,18 +93,18 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
     /// <returns>The ratings.</returns>
     public static IEnumerable<Rating> GetRatings(Country country, RatingType type = default)
     {
-        if (!Ratings.ContainsKey(country))
+        if (!Ratings.TryGetValue(country, out var value))
         {
             return Enumerable.Empty<Rating>();
         }
 
-        var countryRatings = Ratings[country];
+        var countryRatings = value;
         return type == RatingType.None
             ? countryRatings.SelectMany(group => group)
             : countryRatings[type];
     }
 
-    private static IDictionary<Country, ILookup<RatingType, Rating>> LoadRatings(IEqualityComparer<string>? comparer = default)
+    private static Dictionary<Country, ILookup<RatingType, Rating>> LoadRatings(IEqualityComparer<string>? comparer = default)
     {
         comparer ??= StringComparer.Ordinal;
         return GetRatings()

@@ -9,7 +9,11 @@ namespace Media.Metadata.Tracks;
 /// <summary>
 /// The Chapter extractor.
 /// </summary>
-internal sealed class ChapterExtractor
+/// <remarks>
+/// Initialises a new instance of the <see cref="ChapterExtractor"/> class.
+/// </remarks>
+/// <param name="stream">The abstract stream.</param>
+internal sealed class ChapterExtractor(Stream stream)
 {
     private static readonly byte[] Tref = "tref"u8.ToArray();
 
@@ -41,13 +45,7 @@ internal sealed class ChapterExtractor
 
     private static readonly byte[] Ftyp = "ftyp"u8.ToArray();
 
-    private readonly Stream stream;
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="ChapterExtractor"/> class.
-    /// </summary>
-    /// <param name="stream">The abstract stream.</param>
-    public ChapterExtractor(Stream stream) => this.stream = stream;
+    private readonly Stream stream = stream;
 
     /// <summary>
     /// Gets the chapters.
@@ -191,7 +189,7 @@ internal sealed class ChapterExtractor
                 }
             }
 
-            moovData.Tracks = tracks.ToArray();
+            moovData.Tracks = [.. tracks];
             return moovData;
         }
 

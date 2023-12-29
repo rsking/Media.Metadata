@@ -11,22 +11,16 @@ using RestSharp;
 /// <summary>
 /// The TV Maze show search.
 /// </summary>
-public class TvMazeShowSearch : IShowSearch
+/// <remarks>
+/// Initialises a new instance of the <see cref="TvMazeShowSearch"/> class.
+/// </remarks>
+/// <param name="restClient">The rest client.</param>
+/// <param name="options">The options.</param>
+public class TvMazeShowSearch(RestClient restClient, Microsoft.Extensions.Options.IOptions<TvMazeOptions> options) : IShowSearch
 {
-    private readonly RestClient client;
+    private readonly RestClient client = restClient;
 
-    private readonly Uri baseUrl;
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="TvMazeShowSearch"/> class.
-    /// </summary>
-    /// <param name="restClient">The rest client.</param>
-    /// <param name="options">The options.</param>
-    public TvMazeShowSearch(RestClient restClient, Microsoft.Extensions.Options.IOptions<TvMazeOptions> options)
-    {
-        this.client = restClient;
-        this.baseUrl = new Uri(options.Value.Url);
-    }
+    private readonly Uri baseUrl = new(options.Value.Url);
 
     /// <inheritdoc/>
     public async IAsyncEnumerable<Series> SearchAsync(string name, int year = 0, string country = "AU", [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)

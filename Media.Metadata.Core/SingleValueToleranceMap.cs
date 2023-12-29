@@ -9,7 +9,7 @@ namespace Media.Metadata;
 /// <summary>
 /// Single value tolerance map.
 /// </summary>
-internal class SingleValueToleranceMap : Snapshot
+internal sealed class SingleValueToleranceMap : Snapshot
 {
     private readonly Color toleraceColor;
 

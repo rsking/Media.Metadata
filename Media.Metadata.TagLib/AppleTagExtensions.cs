@@ -262,7 +262,7 @@ public static class AppleTagExtensions
 
         static byte[] SwitchBytes(byte[] data)
         {
-            return new[] { data[3], data[2], data[1], data[0] };
+            return [data[3], data[2], data[1], data[0]];
         }
     }
 

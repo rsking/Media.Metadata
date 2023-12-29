@@ -121,7 +121,7 @@ public sealed class TheTVDbShowSearch(RestClient restClient, Microsoft.Extension
                 {
                     return artwork switch
                     {
-                        { } a => a.Where(a => string.Equals(a.Language, language)).Select(a => GetUri(a.Image)).FirstOrDefault(),
+                        { } a => a.Where(a => string.Equals(a.Language, language, StringComparison.Ordinal)).Select(a => GetUri(a.Image)).FirstOrDefault(),
                         _ => default,
                     };
                 }

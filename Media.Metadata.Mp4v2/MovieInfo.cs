@@ -11,7 +11,7 @@ namespace Media.Metadata;
 /// in the "iTunMOVI" atom. This information includes such items as the cast, directors,
 /// producers, and writers.
 /// </summary>
-internal class MovieInfo : Atom, IEquatable<MovieInfo>
+internal sealed class MovieInfo : Atom, IEquatable<MovieInfo>
 {
     private IList<string>? cast;
     private IList<string>? directors;

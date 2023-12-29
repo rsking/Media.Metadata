@@ -16,7 +16,7 @@ public class Mp4Reader : IReader
     {
         var file = Mp4File.Open(path);
         var tags = file.Tags ?? throw new ArgumentException(default, nameof(path));
-        var video = tags.MediaType switch
+        Video video = tags.MediaType switch
         {
             MediaKind.Movie => ReadMovie(path, tags),
             MediaKind.TVShow => ReadEpisode(path, tags),
@@ -42,7 +42,7 @@ public class Mp4Reader : IReader
         return Update(ReadEpisode(path, tags), tags, file.Tracks);
     }
 
-    private static Video ReadVideo(string path, MetadataTags tags) => new LocalVideo(
+    private static LocalVideo ReadVideo(string path, MetadataTags tags) => new(
         new FileInfo(path),
         tags.Title ?? Path.GetFileNameWithoutExtension(path),
         tags.Description,
