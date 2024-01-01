@@ -91,94 +91,88 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
     /// <param name="country">The country.</param>
     /// <param name="type">The type.</param>
     /// <returns>The ratings.</returns>
-    public static IEnumerable<Rating> GetRatings(Country country, RatingType type = default)
+    public static IEnumerable<Rating> GetRatings(Country country, RatingType type = default) => (Ratings.TryGetValue(country, out var value), type) switch
     {
-        if (!Ratings.TryGetValue(country, out var value))
-        {
-            return Enumerable.Empty<Rating>();
-        }
-
-        var countryRatings = value;
-        return type == RatingType.None
-            ? countryRatings.SelectMany(group => group)
-            : countryRatings[type];
-    }
+        (true, RatingType.None) => value.SelectMany(group => group),
+        (true, var t) => value[t],
+        _ => Enumerable.Empty<Rating>(),
+    };
 
     private static Dictionary<Country, ILookup<RatingType, Rating>> LoadRatings(IEqualityComparer<string>? comparer = default)
     {
         comparer ??= StringComparer.Ordinal;
         return GetRatings()
-            .ToLookup(tuple => tuple.Item1)
+            .ToLookup(tuple => tuple.Country)
             .ToDictionary(
                 group => group.Key,
                 group => group.ToLookup(
-                    tuple => tuple.Item2,
-                    tuple => new Rating(tuple.Item3, tuple.Item5, tuple.Item4)));
+                    tuple => tuple.Type,
+                    tuple => new Rating(tuple.Key, tuple.Rating, tuple.Score)));
 
-        static IEnumerable<Tuple<Country, RatingType, string, int, string>> GetRatings()
+        static IEnumerable<(Country Country, RatingType Type, string Key, int Score, string Rating)> GetRatings()
         {
-            yield return Tuple.Create(Country.Australia, RatingType.Movie, "au-movie", 0, "Not Rated");
-            yield return Tuple.Create(Country.Australia, RatingType.Movie, "au-movie", 100, "G");
-            yield return Tuple.Create(Country.Australia, RatingType.Movie, "au-movie", 200, "PG");
-            yield return Tuple.Create(Country.Australia, RatingType.Movie, "au-movie", 350, "M");
-            yield return Tuple.Create(Country.Australia, RatingType.Movie, "au-movie", 375, "MA 15+");
-            yield return Tuple.Create(Country.Australia, RatingType.Movie, "au-movie", 400, "R18+");
-            yield return Tuple.Create(Country.Canada, RatingType.Movie, "ca-movie", 0, "Not Rated");
-            yield return Tuple.Create(Country.Canada, RatingType.Movie, "ca-movie", 100, "G");
-            yield return Tuple.Create(Country.Canada, RatingType.Movie, "ca-movie", 200, "PG");
-            yield return Tuple.Create(Country.Canada, RatingType.Movie, "ca-movie", 325, "14");
-            yield return Tuple.Create(Country.Canada, RatingType.Movie, "ca-movie", 400, "18");
-            yield return Tuple.Create(Country.Canada, RatingType.Movie, "ca-movie", 500, "R");
-            yield return Tuple.Create(Country.Canada, RatingType.TV, "ca-tv", 0, "Not Rated");
-            yield return Tuple.Create(Country.Canada, RatingType.TV, "ca-tv", 100, "C");
-            yield return Tuple.Create(Country.Canada, RatingType.TV, "ca-tv", 200, "C8");
-            yield return Tuple.Create(Country.Canada, RatingType.TV, "ca-tv", 300, "G");
-            yield return Tuple.Create(Country.Canada, RatingType.TV, "ca-tv", 400, "PG");
-            yield return Tuple.Create(Country.Canada, RatingType.TV, "ca-tv", 500, "14+");
-            yield return Tuple.Create(Country.Canada, RatingType.TV, "ca-tv", 600, "18+");
-            yield return Tuple.Create(Country.France, RatingType.TV, "fr-tv", 0, "Not Rated");
-            yield return Tuple.Create(Country.France, RatingType.TV, "fr-tv", 100, "-10");
-            yield return Tuple.Create(Country.France, RatingType.TV, "fr-tv", 200, "-12");
-            yield return Tuple.Create(Country.France, RatingType.TV, "fr-tv", 500, "-16");
-            yield return Tuple.Create(Country.France, RatingType.TV, "fr-tv", 600, "-18");
-            yield return Tuple.Create(Country.Germany, RatingType.TV, "de-tv", 0, "Not Rated");
-            yield return Tuple.Create(Country.Germany, RatingType.TV, "de-tv", 100, "ab 6 Jahren");
-            yield return Tuple.Create(Country.Germany, RatingType.TV, "de-tv", 200, "ab 12 Jahren");
-            yield return Tuple.Create(Country.Germany, RatingType.TV, "de-tv", 500, "ab 16 Jahren");
-            yield return Tuple.Create(Country.Germany, RatingType.TV, "de-tv", 600, "ab 18 Jahren");
-            yield return Tuple.Create(Country.NewZealand, RatingType.Movie, "nz-movie", 0, "Not Rated");
-            yield return Tuple.Create(Country.NewZealand, RatingType.Movie, "nz-movie", 100, "G");
-            yield return Tuple.Create(Country.NewZealand, RatingType.Movie, "nz-movie", 200, "PG");
-            yield return Tuple.Create(Country.NewZealand, RatingType.Movie, "nz-movie", 300, "M");
-            yield return Tuple.Create(Country.NewZealand, RatingType.Movie, "nz-movie", 325, "R13");
-            yield return Tuple.Create(Country.NewZealand, RatingType.Movie, "nz-movie", 350, "R15");
-            yield return Tuple.Create(Country.NewZealand, RatingType.Movie, "nz-movie", 375, "R16");
-            yield return Tuple.Create(Country.NewZealand, RatingType.Movie, "nz-movie", 400, "R18");
-            yield return Tuple.Create(Country.NewZealand, RatingType.Movie, "nz-movie", 500, "R");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.Movie, "uk-movie", 0, "Not Rated");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.Movie, "uk-movie", 100, "U");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.Movie, "uk-movie", 150, "Uc");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.Movie, "uk-movie", 200, "PG");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.Movie, "uk-movie", 300, "12");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.Movie, "uk-movie", 325, "12A");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.Movie, "uk-movie", 350, "15");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.Movie, "uk-movie", 400, "18");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.Movie, "uk-movie", 600, "E");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.TV, "uk-tv", 0, "Not Rated");
-            yield return Tuple.Create(Country.GreatBritan, RatingType.TV, "uk-tv", 500, "CAUTION");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.Movie, "mpaa", 0, "Not Rated");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.Movie, "mpaa", 100, "G");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.Movie, "mpaa", 200, "PG");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.Movie, "mpaa", 300, "PG-13");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.Movie, "mpaa", 400, "R");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.Movie, "mpaa", 500, "NC-17");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.TV, "us-tv", 0, "Not Rated");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.TV, "us-tv", 100, "TV-Y");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.TV, "us-tv", 200, "TV-Y7");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.TV, "us-tv", 300, "TV-G");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.TV, "us-tv", 400, "TV-PG");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.TV, "us-tv", 500, "TV-14");
-            yield return Tuple.Create(Country.UnitedStates, RatingType.TV, "us-tv", 600, "TV-MA");
+            yield return (Country.Australia, RatingType.Movie, "au-movie", 0, "Not Rated");
+            yield return (Country.Australia, RatingType.Movie, "au-movie", 100, "G");
+            yield return (Country.Australia, RatingType.Movie, "au-movie", 200, "PG");
+            yield return (Country.Australia, RatingType.Movie, "au-movie", 350, "M");
+            yield return (Country.Australia, RatingType.Movie, "au-movie", 375, "MA 15+");
+            yield return (Country.Australia, RatingType.Movie, "au-movie", 400, "R18+");
+            yield return (Country.Canada, RatingType.Movie, "ca-movie", 0, "Not Rated");
+            yield return (Country.Canada, RatingType.Movie, "ca-movie", 100, "G");
+            yield return (Country.Canada, RatingType.Movie, "ca-movie", 200, "PG");
+            yield return (Country.Canada, RatingType.Movie, "ca-movie", 325, "14");
+            yield return (Country.Canada, RatingType.Movie, "ca-movie", 400, "18");
+            yield return (Country.Canada, RatingType.Movie, "ca-movie", 500, "R");
+            yield return (Country.Canada, RatingType.TV, "ca-tv", 0, "Not Rated");
+            yield return (Country.Canada, RatingType.TV, "ca-tv", 100, "C");
+            yield return (Country.Canada, RatingType.TV, "ca-tv", 200, "C8");
+            yield return (Country.Canada, RatingType.TV, "ca-tv", 300, "G");
+            yield return (Country.Canada, RatingType.TV, "ca-tv", 400, "PG");
+            yield return (Country.Canada, RatingType.TV, "ca-tv", 500, "14+");
+            yield return (Country.Canada, RatingType.TV, "ca-tv", 600, "18+");
+            yield return (Country.France, RatingType.TV, "fr-tv", 0, "Not Rated");
+            yield return (Country.France, RatingType.TV, "fr-tv", 100, "-10");
+            yield return (Country.France, RatingType.TV, "fr-tv", 200, "-12");
+            yield return (Country.France, RatingType.TV, "fr-tv", 500, "-16");
+            yield return (Country.France, RatingType.TV, "fr-tv", 600, "-18");
+            yield return (Country.Germany, RatingType.TV, "de-tv", 0, "Not Rated");
+            yield return (Country.Germany, RatingType.TV, "de-tv", 100, "ab 6 Jahren");
+            yield return (Country.Germany, RatingType.TV, "de-tv", 200, "ab 12 Jahren");
+            yield return (Country.Germany, RatingType.TV, "de-tv", 500, "ab 16 Jahren");
+            yield return (Country.Germany, RatingType.TV, "de-tv", 600, "ab 18 Jahren");
+            yield return (Country.NewZealand, RatingType.Movie, "nz-movie", 0, "Not Rated");
+            yield return (Country.NewZealand, RatingType.Movie, "nz-movie", 100, "G");
+            yield return (Country.NewZealand, RatingType.Movie, "nz-movie", 200, "PG");
+            yield return (Country.NewZealand, RatingType.Movie, "nz-movie", 300, "M");
+            yield return (Country.NewZealand, RatingType.Movie, "nz-movie", 325, "R13");
+            yield return (Country.NewZealand, RatingType.Movie, "nz-movie", 350, "R15");
+            yield return (Country.NewZealand, RatingType.Movie, "nz-movie", 375, "R16");
+            yield return (Country.NewZealand, RatingType.Movie, "nz-movie", 400, "R18");
+            yield return (Country.NewZealand, RatingType.Movie, "nz-movie", 500, "R");
+            yield return (Country.GreatBritan, RatingType.Movie, "uk-movie", 0, "Not Rated");
+            yield return (Country.GreatBritan, RatingType.Movie, "uk-movie", 100, "U");
+            yield return (Country.GreatBritan, RatingType.Movie, "uk-movie", 150, "Uc");
+            yield return (Country.GreatBritan, RatingType.Movie, "uk-movie", 200, "PG");
+            yield return (Country.GreatBritan, RatingType.Movie, "uk-movie", 300, "12");
+            yield return (Country.GreatBritan, RatingType.Movie, "uk-movie", 325, "12A");
+            yield return (Country.GreatBritan, RatingType.Movie, "uk-movie", 350, "15");
+            yield return (Country.GreatBritan, RatingType.Movie, "uk-movie", 400, "18");
+            yield return (Country.GreatBritan, RatingType.Movie, "uk-movie", 600, "E");
+            yield return (Country.GreatBritan, RatingType.TV, "uk-tv", 0, "Not Rated");
+            yield return (Country.GreatBritan, RatingType.TV, "uk-tv", 500, "CAUTION");
+            yield return (Country.UnitedStates, RatingType.Movie, "mpaa", 0, "Not Rated");
+            yield return (Country.UnitedStates, RatingType.Movie, "mpaa", 100, "G");
+            yield return (Country.UnitedStates, RatingType.Movie, "mpaa", 200, "PG");
+            yield return (Country.UnitedStates, RatingType.Movie, "mpaa", 300, "PG-13");
+            yield return (Country.UnitedStates, RatingType.Movie, "mpaa", 400, "R");
+            yield return (Country.UnitedStates, RatingType.Movie, "mpaa", 500, "NC-17");
+            yield return (Country.UnitedStates, RatingType.TV, "us-tv", 0, "Not Rated");
+            yield return (Country.UnitedStates, RatingType.TV, "us-tv", 100, "TV-Y");
+            yield return (Country.UnitedStates, RatingType.TV, "us-tv", 200, "TV-Y7");
+            yield return (Country.UnitedStates, RatingType.TV, "us-tv", 300, "TV-G");
+            yield return (Country.UnitedStates, RatingType.TV, "us-tv", 400, "TV-PG");
+            yield return (Country.UnitedStates, RatingType.TV, "us-tv", 500, "TV-14");
+            yield return (Country.UnitedStates, RatingType.TV, "us-tv", 600, "TV-MA");
         }
     }
 }
