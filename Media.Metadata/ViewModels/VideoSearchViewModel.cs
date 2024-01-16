@@ -6,6 +6,8 @@
 
 namespace Media.Metadata.ViewModels;
 
+using CommunityToolkit.WinUI;
+
 /// <summary>
 /// The <see cref="Video"/> <see cref="VideoSearchViewModel"/>.
 /// </summary>
@@ -54,7 +56,7 @@ internal abstract partial class VideoSearchViewModel : CommunityToolkit.Mvvm.Com
         var dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
         await foreach (var video in videos.ConfigureAwait(true))
         {
-            _ = dispatcher.TryEnqueue(async () => this.videos.Add(await Models.VideoWithImageSource.CreateAsync(video).ConfigureAwait(true)));
+            await dispatcher.EnqueueAsync(async () => this.videos.Add(await Models.VideoWithImageSource.CreateAsync(video).ConfigureAwait(true)));
         }
     }
 }
