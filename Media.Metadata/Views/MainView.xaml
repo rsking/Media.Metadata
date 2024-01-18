@@ -267,6 +267,10 @@
                                                             Header="Composers"
                                                             ItemsSource="{Binding Composers, Mode=TwoWay}"
                                                             TokenDelimiter="," />
+                                <TextBox Margin="2"
+                                         Header="Edition"
+                                         Text="{Binding Edition, Mode=TwoWay}"
+                                         TextWrapping="Wrap" />
                                 <DatePicker Margin="2"
                                             Date="{Binding Release, Mode=TwoWay}"
                                             Header="Release Date" />

@@ -57,6 +57,11 @@ public class Mp4Writer : IUpdater
     {
         var file = Mp4File.Create(TagLib.File.Create(fileName));
         Update(file, movie, MediaKind.Movie, languages);
+        if (file.Tags is not null)
+        {
+            file.Tags.Category = movie.Edition;
+        }
+
         file.Save();
     }
 

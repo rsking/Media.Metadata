@@ -18,4 +18,10 @@ public abstract record class Movie(
     IEnumerable<string>? Genre,
     IEnumerable<string>? ScreenWriters,
     IEnumerable<string>? Cast,
-    IEnumerable<string>? Composers) : Video(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers);
+    IEnumerable<string>? Composers) : Video(Name, Description, Producers, Directors, Studios, Genre, ScreenWriters, Cast, Composers)
+{
+    /// <summary>
+    /// Gets the edition.
+    /// </summary>
+    public string? Edition { get; init; }
+}

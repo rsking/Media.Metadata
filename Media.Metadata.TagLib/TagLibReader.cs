@@ -52,7 +52,10 @@ public class TagLibReader : IReader
         appleTag.Genres,
         GetPersonel(plist, "screenwriters").ToArray(),
         GetPersonel(plist, "cast").ToArray(),
-        SplitArray(appleTag.Composers).ToArray());
+        SplitArray(appleTag.Composers).ToArray())
+    {
+        Edition = appleTag.GetCategory(),
+    };
 
     private static LocalEpisode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new(
             fileInfo,

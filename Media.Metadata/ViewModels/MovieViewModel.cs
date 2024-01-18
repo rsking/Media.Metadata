@@ -9,8 +9,11 @@ namespace Media.Metadata.ViewModels;
 /// <summary>
 /// An editable <see cref="Movie"/>.
 /// </summary>
-internal class MovieViewModel : VideoViewModel
+internal partial class MovieViewModel : VideoViewModel
 {
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    private string? edition;
+
     /// <summary>
     /// Initialises a new instance of the <see cref="MovieViewModel"/> class.
     /// </summary>
@@ -18,6 +21,7 @@ internal class MovieViewModel : VideoViewModel
     public MovieViewModel(Models.LocalMovieWithImageSource movie)
         : base(movie, movie.FileInfo, movie.Image, movie.ImageFormat, movie.ImageSource)
     {
+        this.Edition = movie.Edition;
     }
 
     /// <inheritdoc/>
@@ -27,6 +31,7 @@ internal class MovieViewModel : VideoViewModel
             Rating = this.Rating.SelectedRating,
             Release = this.Release?.DateTime,
             Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
+            Edition = this.Edition,
             Image = this.Image,
             ImageFormat = this.ImageFormat,
         });

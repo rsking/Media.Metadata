@@ -35,6 +35,7 @@ internal record class MovieWithImageSource(
         Release = movie.Release,
         Rating = movie.Rating,
         Tracks = movie.Tracks,
+        Edition = movie.Edition,
         Image = movie.Image,
         ImageFormat = movie.ImageFormat,
         ImageSource = await movie.CreateImageSource(cancellationToken).ConfigureAwait(true),

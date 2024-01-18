@@ -64,7 +64,10 @@ public class Mp4Reader : IReader
         Split(tags.Genre),
         tags.MovieInfo?.Screenwriters,
         tags.MovieInfo?.Cast,
-        Split(tags.Composer));
+        Split(tags.Composer))
+    {
+        Edition = tags.Category,
+    };
 
     private static LocalEpisode ReadEpisode(string path, MetadataTags tags) => new(
         new FileInfo(path),
