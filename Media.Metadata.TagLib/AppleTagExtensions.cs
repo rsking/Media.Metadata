@@ -31,6 +31,7 @@ public static class AppleTagExtensions
     private static readonly ReadOnlyByteVector Podcast = "pcst";
     private static readonly ReadOnlyByteVector Keywords = "keyw";
     private static readonly ReadOnlyByteVector Category = "catg";
+    private static readonly ReadOnlyByteVector Work = new([169, 119, 114, 107], 4);
 
     // video
     private static readonly ReadOnlyByteVector HdVideo = "hdvd";
@@ -113,6 +114,13 @@ public static class AppleTagExtensions
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The category.</returns>
     public static string? GetCategory(this AppleTag appleTag) => appleTag.GetJoinedText(Category);
+
+    /// <summary>
+    /// Gets the work.
+    /// </summary>
+    /// <param name="appleTag">The apple tag.</param>
+    /// <returns>The work.</returns>
+    public static string? GetWork(this AppleTag appleTag) => appleTag.GetJoinedText(Work);
 
     /// <summary>
     /// Gets the encoding tool.

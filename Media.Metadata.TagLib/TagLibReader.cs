@@ -39,7 +39,7 @@ public class TagLibReader : IReader
     {
         var t when t.GetMediaType() == MediaType.Movie => ReadMovie(fileInfo, appleTag, CreatePList(appleTag)),
         var t when t.GetMediaType() == MediaType.TVShow => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)),
-        _ => new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name)),
+        _ => new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name)) { Work = appleTag.GetWork() },
     };
 
     private static LocalMovie ReadMovie(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new(
@@ -54,21 +54,23 @@ public class TagLibReader : IReader
         GetPersonel(plist, "cast").ToArray(),
         SplitArray(appleTag.Composers).ToArray())
     {
+        Work = appleTag.GetWork(),
         Edition = appleTag.GetCategory(),
     };
 
     private static LocalEpisode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new(
-            fileInfo,
-            GetTitle(appleTag),
-            appleTag.Description,
-            GetPersonel(plist, "producers").ToArray(),
-            GetPersonel(plist, "directors").ToArray(),
-            plist.ContainsKey("studio") ? plist["studio"].ToString().Split(',').Select(studio => studio.Trim()).ToArray() : Enumerable.Empty<string>(),
-            appleTag.Genres,
-            GetPersonel(plist, "screenwriters").ToArray(),
-            GetPersonel(plist, "cast").ToArray(),
-            SplitArray(appleTag.Composers).ToArray())
+        fileInfo,
+        GetTitle(appleTag),
+        appleTag.Description,
+        GetPersonel(plist, "producers").ToArray(),
+        GetPersonel(plist, "directors").ToArray(),
+        plist.ContainsKey("studio") ? plist["studio"].ToString().Split(',').Select(studio => studio.Trim()).ToArray() : Enumerable.Empty<string>(),
+        appleTag.Genres,
+        GetPersonel(plist, "screenwriters").ToArray(),
+        GetPersonel(plist, "cast").ToArray(),
+        SplitArray(appleTag.Composers).ToArray())
     {
+        Work = appleTag.GetWork(),
         Show = appleTag.GetShowName(),
         Network = appleTag.GetNetwork(),
         Season = appleTag.GetSeasonNumber(),
@@ -111,11 +113,26 @@ public class TagLibReader : IReader
         return video;
     }
 
-    private static Formatters.PList.PList CreatePList(AppleTag appleTag) => appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI") switch
+    private static Formatters.PList.PList CreatePList(AppleTag appleTag)
     {
-        string dashBox => Formatters.PList.PList.Create(dashBox),
-        _ => [],
-    };
+        return appleTag.GetDashBox("com.apple.iTunes", "iTunMOVI") switch
+        {
+            string dashBox => CreatePList(dashBox),
+            _ => [],
+        };
+
+        static Formatters.PList.PList CreatePList(string dashBox)
+        {
+            try
+            {
+                return Formatters.PList.PList.Create(dashBox);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw;
+            }
+        }
+    }
 
     private static IEnumerable<string> GetPersonel(Formatters.PList.PList plist, string key)
     {

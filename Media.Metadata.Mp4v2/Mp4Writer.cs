@@ -78,6 +78,7 @@ public class Mp4Writer : IUpdater
             file.Tags.AlbumArtist = ToString(video.Cast);
             file.Tags.ReleaseDate = video.Release?.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             file.Tags.SetArtwork(video.Image, video.ImageFormat);
+            file.Tags.Work = video.Work;
 
             file.Tags.RatingInfo = default;
             if (video.Rating is not null)

@@ -35,6 +35,7 @@ internal record class MovieWithImageSource(
         Release = movie.Release,
         Rating = movie.Rating,
         Tracks = movie.Tracks,
+        Work = movie.Work,
         Edition = movie.Edition,
         Image = movie.Image,
         ImageFormat = movie.ImageFormat,

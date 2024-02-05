@@ -35,6 +35,7 @@ internal record class EpisodeWithImageSource(
         Release = episode.Release,
         Rating = episode.Rating,
         Tracks = episode.Tracks,
+        Work = episode.Work,
         Show = episode.Show,
         Network = episode.Network,
         Season = episode.Season,

@@ -42,6 +42,11 @@ public abstract record class Video(
     public Rating? Rating { get; init; }
 
     /// <summary>
+    /// Gets the work.
+    /// </summary>
+    public string? Work { get; init; }
+
+    /// <summary>
     /// Gets the tracks.
     /// </summary>
     public IReadOnlyList<MediaTrack> Tracks { get; init; } = Array.Empty<MediaTrack>();

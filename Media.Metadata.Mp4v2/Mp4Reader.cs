@@ -52,7 +52,10 @@ public class Mp4Reader : IReader
         Split(tags.Genre),
         tags.MovieInfo?.Screenwriters,
         tags.MovieInfo?.Cast,
-        Split(tags.Composer));
+        Split(tags.Composer))
+    {
+        Work = tags.Work,
+    };
 
     private static LocalMovie ReadMovie(string path, MetadataTags tags) => new(
         new FileInfo(path),
@@ -66,6 +69,7 @@ public class Mp4Reader : IReader
         tags.MovieInfo?.Cast,
         Split(tags.Composer))
     {
+        Work = tags.Work,
         Edition = tags.Category,
     };
 
@@ -81,6 +85,7 @@ public class Mp4Reader : IReader
         tags.MovieInfo?.Cast,
         Split(tags.Composer))
     {
+        Work = tags.Work,
         Show = tags.TVShow,
         Season = tags.SeasonNumber,
         Network = tags.TVNetwork,

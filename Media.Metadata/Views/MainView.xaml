@@ -173,6 +173,10 @@
                                          Header="Episode ID"
                                          Text="{Binding Id, Mode=TwoWay}"
                                          TextWrapping="Wrap" />
+                                <TextBox Margin="2"
+                                         Header="Work"
+                                         Text="{Binding Work, Mode=TwoWay}"
+                                         TextWrapping="Wrap" />
                                 <DatePicker Margin="2"
                                             Date="{Binding Release, Mode=TwoWay}"
                                             Header="Release Date" />
@@ -270,6 +274,10 @@
                                 <TextBox Margin="2"
                                          Header="Edition"
                                          Text="{Binding Edition, Mode=TwoWay}"
+                                         TextWrapping="Wrap" />
+                                <TextBox Margin="2"
+                                         Header="Work"
+                                         Text="{Binding Work, Mode=TwoWay}"
                                          TextWrapping="Wrap" />
                                 <DatePicker Margin="2"
                                             Date="{Binding Release, Mode=TwoWay}"

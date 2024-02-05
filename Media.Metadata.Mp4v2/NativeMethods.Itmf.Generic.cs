@@ -165,6 +165,15 @@ internal static partial class NativeMethods
     public static extern IntPtr MP4ItmfGetItemsByMeaning(IntPtr file, [MarshalAs(UnmanagedType.LPStr)] string meaning, [MarshalAs(UnmanagedType.LPStr)] string? name);
 
     /// <summary>
+    /// Get list of items by code from file.
+    /// </summary>
+    /// <param name="file">handle of file to operate on.</param>
+    /// <param name="code">four-char code identifying atom type. NULL-terminated.</param>
+    /// <returns>On succes, list of items, which must be free'd. On failure, <see cref="IntPtr.Zero"/>.</returns>
+    [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr MP4ItmfGetItemsByCode(IntPtr file, [MarshalAs(UnmanagedType.LPStr)] string code);
+
+    /// <summary>
     /// Free an item list (deep free).
     /// </summary>
     /// <param name="itemList">itemList to be free'd.</param>

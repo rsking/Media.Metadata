@@ -15,6 +15,7 @@ using SixLabors.ImageSharp.Formats;
 /// </summary>
 internal class MetadataTags : IDisposable
 {
+    private const string WorkCode = "©wrk";
     private bool isArtworkEdited;
 
     /// <summary>
@@ -229,6 +230,11 @@ internal class MetadataTags : IDisposable
     public string? Category { get; set; }
 
     /// <summary>
+    /// Gets or sets the work for this file.
+    /// </summary>
+    public string? Work { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the content contained in this file is high-definition video.
     /// May be <see langword="null"/> if the value is not set in the file.
     /// </summary>
@@ -385,6 +391,7 @@ internal class MetadataTags : IDisposable
             IsPodcast = appleTag.GetPodcast(),
             Keywords = appleTag.GetKeywords(),
             Category = appleTag.GetCategory(),
+            Work = appleTag.GetWork(),
 
             IsHDVideo = appleTag.GetHdVideo(),
             MediaType = (MediaKind)appleTag.GetMediaType(),
@@ -492,6 +499,7 @@ internal class MetadataTags : IDisposable
 
         NativeMethods.MP4TagsFree(tagPtr);
 
+        managedTags.Work = ReadRawString(fileHandle, WorkCode);
         managedTags.RatingInfo = ReadRawAtom<RatingInfo>(fileHandle);
         managedTags.MovieInfo = ReadRawAtom<MovieInfo>(fileHandle);
         return managedTags;
@@ -578,6 +586,8 @@ internal class MetadataTags : IDisposable
 
         _ = NativeMethods.MP4TagsStore(tagsPtr, fileHandle);
         NativeMethods.MP4TagsFree(tagsPtr);
+
+        WriteRawString(fileHandle, WorkCode, this.Work);
 
         var info = ReadRawAtom<RatingInfo>(fileHandle);
         if (!Equals(this.RatingInfo, info))
@@ -733,6 +743,78 @@ internal class MetadataTags : IDisposable
                 Marshal.FreeHGlobal(dataValuePointer);
             }
         }
+    }
+
+    private static void WriteRawString(IntPtr fileHandle, string code, string? value)
+    {
+        var listPtr = NativeMethods.MP4ItmfGetItemsByCode(fileHandle, code);
+        if (listPtr != IntPtr.Zero)
+        {
+            var list = listPtr.ToStructure<NativeMethods.MP4ItmfItemList>();
+            for (var i = 0; i < list.size; i++)
+            {
+                var item = list.elements[i];
+                _ = NativeMethods.MP4ItmfRemoveItem(fileHandle, item);
+            }
+
+            NativeMethods.MP4ItmfItemListFree(listPtr);
+
+            if (value is not null)
+            {
+                var newItemPtr = NativeMethods.MP4ItmfItemAlloc(code, 1);
+                var newItem = newItemPtr.ToStructure<NativeMethods.MP4ItmfItem>();
+
+                var dataBuffer = System.Text.Encoding.UTF8.GetBytes(value);
+                var data = new NativeMethods.MP4ItmfData
+                {
+                    typeCode = NativeMethods.MP4ItmfBasicType.Utf8,
+                    valueSize = dataBuffer.Length,
+                };
+
+                var dataValuePointer = Marshal.AllocHGlobal(dataBuffer.Length);
+                Marshal.Copy(dataBuffer, 0, dataValuePointer, dataBuffer.Length);
+                data.value = dataValuePointer;
+
+                var dataPointer = Marshal.AllocHGlobal(Marshal.SizeOf(data));
+                Marshal.StructureToPtr(data, dataPointer, fDeleteOld: false);
+                newItem.dataList.elements[0] = dataPointer;
+
+                Marshal.StructureToPtr(newItem, newItemPtr, fDeleteOld: false);
+                _ = NativeMethods.MP4ItmfAddItem(fileHandle, newItemPtr);
+
+                Marshal.FreeHGlobal(dataPointer);
+                Marshal.FreeHGlobal(dataValuePointer);
+            }
+        }
+    }
+
+    private static string? ReadRawString(IntPtr fileHandle, string code)
+    {
+        var returnString = default(string);
+        var listPtr = NativeMethods.MP4ItmfGetItemsByCode(fileHandle, code);
+        if (listPtr != IntPtr.Zero)
+        {
+            var list = listPtr.ToStructure<NativeMethods.MP4ItmfItemList>();
+            if (list.size == 1)
+            {
+                var itemPointer = list.elements[0];
+                var item = itemPointer.ToStructure<NativeMethods.MP4ItmfItem>();
+                var dataList = item.dataList;
+                for (var j = 0; j < dataList.size; j++)
+                {
+                    var dataListItemPointer = dataList.elements[j];
+                    var data = dataListItemPointer.ToStructure<NativeMethods.MP4ItmfData>();
+                    if (data.value.ToByteArray(data.valueSize) is byte[] dataBuffer)
+                    {
+                        returnString = System.Text.Encoding.UTF8.GetString(dataBuffer);
+                    }
+                }
+            }
+
+            NativeMethods.MP4ItmfItemListFree(listPtr);
+        }
+
+        return returnString;
     }
 
     private static bool ImagesEqual(Image? first, Image? second) => (first is null && second is null) || (first is not null && second is not null && ImageComparer.Compare(first, second));

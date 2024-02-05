@@ -36,6 +36,7 @@ internal record class VideoWithImageSource(
     {
         Release = video.Release,
         Rating = video.Rating,
+        Work = video.Work,
         Tracks = video.Tracks,
         Image = video.Image,
         ImageFormat = video.ImageFormat,

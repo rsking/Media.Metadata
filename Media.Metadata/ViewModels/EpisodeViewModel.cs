@@ -50,6 +50,7 @@ internal partial class EpisodeViewModel : VideoViewModel
         {
             Rating = this.Rating.SelectedRating,
             Release = this.Release?.DateTime,
+            Work = this.Work,
             Show = this.Show,
             Network = this.Network,
             Season = this.Season,

@@ -30,9 +30,20 @@ internal partial class MovieViewModel : VideoViewModel
         {
             Rating = this.Rating.SelectedRating,
             Release = this.Release?.DateTime,
+            Work = this.Work,
             Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
             Edition = this.Edition,
             Image = this.Image,
             ImageFormat = this.ImageFormat,
         });
+
+    /// <inheritdoc/>
+    public override void Update(Video video)
+    {
+        base.Update(video);
+        if (video is Movie movie)
+        {
+            this.Edition = movie.Edition;
+        }
+    }
 }

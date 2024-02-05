@@ -30,6 +30,9 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private DateTimeOffset? release;
 
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    private string? work;
+
     private ImageSource? imageSource;
 
     private SixLabors.ImageSharp.Image? image;
@@ -69,6 +72,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         FillFrom(video.Composers, this.composers);
         this.Release = video.Release is null || video.Release.Value.Ticks == default ? default(DateTimeOffset?) : new DateTimeOffset(video.Release.Value);
         this.Rating = new RatingViewModel(video.Rating);
+        this.work = video.Work;
         this.Tracks = video.Tracks.Select(track => new MediaTrackViewModel(track)).ToArray();
         this.Image = image;
         this.ImageFormat = imageFormat;
@@ -180,6 +184,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         {
             Rating = this.Rating.SelectedRating,
             Release = this.Release?.DateTime,
+            Work = this.Work,
             Tracks = this.Tracks.Select(track => track.ToMediaTrack()).ToList(),
             Image = this.Image,
             ImageFormat = this.ImageFormat,
@@ -218,6 +223,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         FillFrom(video.Composers, this.composers);
         this.Release = video.Release is null ? default(DateTimeOffset?) : new DateTimeOffset(video.Release.Value);
         this.Rating.SelectedRating = video.Rating;
+        this.Work = video.Work;
         this.Image = video.Image;
         this.ImageFormat = video.ImageFormat;
 
