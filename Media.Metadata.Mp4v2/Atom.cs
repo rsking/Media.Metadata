@@ -48,7 +48,7 @@ internal abstract class Atom
                 var dataList = item.dataList;
                 for (var j = 0; j < dataList.size; j++)
                 {
-                    var dataListItemPointer = dataList.elements[i];
+                    var dataListItemPointer = dataList.elements[j];
                     var data = dataListItemPointer.ToStructure<NativeMethods.MP4ItmfData>();
                     if (data.typeCode == this.DataType && data.value.ToByteArray(data.valueSize) is byte[] dataBuffer)
                     {
