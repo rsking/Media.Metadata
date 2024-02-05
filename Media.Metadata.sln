@@ -31,8 +31,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.DependencyIn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.TvMaze", "Media.Metadata.TvMaze\Media.Metadata.TvMaze.csproj", "{2023DCF8-53D6-4A68-B8AE-3DB727C4289B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.Rest", "Media.Metadata.Rest\Media.Metadata.Rest.csproj", "{9FD013A2-090D-4031-9880-BD59235C14C6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.TagLib", "Media.Metadata.TagLib\Media.Metadata.TagLib.csproj", "{4F64A40D-9469-4216-B2BC-FEE2EAAAA00A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media.Metadata.Plex", "Media.Metadata.Plex\Media.Metadata.Plex.csproj", "{331F309D-3FCA-421C-8454-C7922D2BD2CC}"
@@ -178,22 +176,6 @@ Global
 		{2023DCF8-53D6-4A68-B8AE-3DB727C4289B}.Release|x64.Build.0 = Release|Any CPU
 		{2023DCF8-53D6-4A68-B8AE-3DB727C4289B}.Release|x86.ActiveCfg = Release|Any CPU
 		{2023DCF8-53D6-4A68-B8AE-3DB727C4289B}.Release|x86.Build.0 = Release|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Debug|arm64.ActiveCfg = Debug|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Debug|arm64.Build.0 = Debug|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Debug|x64.Build.0 = Debug|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Debug|x86.Build.0 = Debug|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Release|arm64.ActiveCfg = Release|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Release|arm64.Build.0 = Release|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Release|x64.ActiveCfg = Release|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Release|x64.Build.0 = Release|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Release|x86.ActiveCfg = Release|Any CPU
-		{9FD013A2-090D-4031-9880-BD59235C14C6}.Release|x86.Build.0 = Release|Any CPU
 		{4F64A40D-9469-4216-B2BC-FEE2EAAAA00A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F64A40D-9469-4216-B2BC-FEE2EAAAA00A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F64A40D-9469-4216-B2BC-FEE2EAAAA00A}.Debug|arm64.ActiveCfg = Debug|Any CPU
