@@ -466,22 +466,15 @@ static CliCommand CreateRename()
 
         var move = parseResult.GetValue(moveOption);
         var dryRun = parseResult.GetValue(dryRunOption);
-        var inplace = parseResult.GetValue(inplaceOption);
 
         var movies = parseResult.GetValue(moviesOption);
         var tv = parseResult.GetValue(tvOption);
         tv ??= movies;
         movies ??= tv;
 
-        if (renamer is Media.Metadata.Plex.PlexRenamer plex)
+        if (movies is null || tv is null)
         {
-            if (movies is null)
-            {
-                throw new InvalidOperationException($"Either {moviesOption.Name} or {tvOption.Name} to be set.");
-            }
-
-            plex.MoviesPath = movies!.FullName;
-            plex.TVShowsPath = tv!.FullName;
+            throw new InvalidOperationException($"Either {moviesOption.Name} or {tvOption.Name} to be set.");
         }
 
         foreach (var file in source.EnumerateFiles("*.*", new EnumerationOptions { RecurseSubdirectories = recursive, IgnoreInaccessible = true, AttributesToSkip = FileAttributes.Hidden }))
@@ -509,7 +502,14 @@ static CliCommand CreateRename()
 
             if (renamer.GetFileName(file.FullName, input) is { } name)
             {
-                var path = new FileInfo(name);
+                var basePath = input switch
+                {
+                    Episode => tv.FullName,
+                    Movie => movies.FullName,
+                    _ => throw new InvalidOperationException(),
+                };
+
+                var path = new FileInfo(Path.Combine(basePath, name));
                 if (path.Exists && path.Length == file.Length)
                 {
                     await parseResult.Configuration.Output.WriteLineAsync($"{file.FullName} has the same length as {path.FullName}").ConfigureAwait(true);
@@ -523,7 +523,7 @@ static CliCommand CreateRename()
 
                 if (move)
                 {
-                    if (!path.Exists || inplace)
+                    if (!path.Exists)
                     {
                         await parseResult.Configuration.Output.WriteLineAsync($"Moving {file.FullName} to {path.FullName}").ConfigureAwait(true);
                         if (!dryRun)

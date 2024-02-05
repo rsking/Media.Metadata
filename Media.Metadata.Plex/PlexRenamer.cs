@@ -6,52 +6,17 @@
 
 namespace Media.Metadata.Plex;
 
+/// <summary>
+/// The <c>PLEX</c> <see cref="IRenamer"/>.
+/// </summary>
 public class PlexRenamer : IRenamer
 {
     private static char[]? invalidFileNameChars;
     private static char[]? invalidPathChars;
 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="PlexRenamer"/> class.
-    /// </summary>
-    public PlexRenamer()
-    {
-    }
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="PlexRenamer"/> class.
-    /// </summary>
-    /// <param name="path">The videos path.</param>
-    public PlexRenamer(string path)
-        : this(path, path)
-    {
-    }
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="PlexRenamer"/> class.
-    /// </summary>
-    /// <param name="moviesPath">The movies path.</param>
-    /// <param name="tvShowsPath">The TV shows path.</param>
-    public PlexRenamer(string moviesPath, string tvShowsPath)
-    {
-        this.MoviesPath = moviesPath;
-        this.TVShowsPath = tvShowsPath;
-    }
-
-    /// <summary>
-    /// Gets or sets the movies path.
-    /// </summary>
-    public string MoviesPath { get; set; }
-
-    /// <summary>
-    /// Gets or sets the TV Shows path.
-    /// </summary>
-    public string TVShowsPath { get; set; }
-
     /// <inheritdoc/>
     public string? GetFileName(string current, Video video)
     {
-        FileInfo? path = default;
         if (video is Movie movie)
         {
             if (movie.Name is null)
@@ -65,7 +30,7 @@ public class PlexRenamer : IRenamer
             }
 
             // copy this as a movie
-            var name = $"{movie.Name.Sanitise()} ({movie.Release?.Year})";
+            var name = FormattableString.Invariant($"{movie.Name.Sanitise()} ({movie.Release?.Year})");
             if (movie.Edition is { } edition)
             {
                 name += " {edition-";
@@ -73,7 +38,7 @@ public class PlexRenamer : IRenamer
                 name += "}";
             }
 
-            var directory = new DirectoryInfo(Path.Combine(this.MoviesPath, "Movies", name)).GetName(GetInvalidPathChars());
+            var directory = new DirectoryInfo(Path.Combine("Movies", name)).GetName(GetInvalidPathChars());
 
             if (movie.Work is { } work)
             {
@@ -85,7 +50,7 @@ public class PlexRenamer : IRenamer
                 }
             }
 
-            path = new FileInfo(Path.Combine(directory, (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars())));
+            return Path.Combine(directory, (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars()));
         }
         else if (video is Episode episode)
         {
@@ -108,8 +73,8 @@ public class PlexRenamer : IRenamer
             var seasonNumber = episode.Season;
             var episodeNumber = episode.Number;
 
-            var directory = new DirectoryInfo(Path.Combine(this.TVShowsPath, "TV Shows", showName, $"Season {seasonNumber:00}")).GetName(GetInvalidPathChars());
-            var name = $"{showName} - s{seasonNumber:00}e{episodeNumber:00}";
+            var directory = Path.Combine("TV Shows", showName, FormattableString.Invariant($"Season {seasonNumber:00}")).ReplaceAll(GetInvalidPathChars());
+            var name = FormattableString.Invariant($"{showName} - s{seasonNumber:00}e{episodeNumber:00}");
             if (episode.Part is { } part)
             {
                 // This is part of an episode
@@ -134,10 +99,10 @@ public class PlexRenamer : IRenamer
                 name += work;
             }
 
-            path = new FileInfo(Path.Combine(directory, (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars())));
+            return Path.Combine(directory, (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars()));
         }
 
-        return path?.FullName;
+        return default;
     }
 
     private static char[] GetInvalidFileNameChars()
