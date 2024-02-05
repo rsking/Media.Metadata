@@ -85,6 +85,17 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Adds the PLEX services.
+    /// </summary>
+    /// <param name="services">The services.</param>
+    /// <returns>The input services.</returns>
+    public static IServiceCollection AddPlex(this IServiceCollection services)
+    {
+        services.TryAddTransient<Media.Metadata.IRenamer, Media.Metadata.Plex.PlexRenamer>();
+        return services;
+    }
+
+    /// <summary>
     /// Adds rest sharp to the services.
     /// </summary>
     /// <param name="services">The services.</param>

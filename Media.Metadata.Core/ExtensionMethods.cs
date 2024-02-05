@@ -28,4 +28,12 @@ internal static class ExtensionMethods
         using var stream = await client.GetStreamAsync(remoteVideo.ImageUri).ConfigureAwait(false);
         return await Image.LoadWithFormatAsync(stream, cancellationToken).ConfigureAwait(false);
     }
+
+    /// <summary>
+    /// Gets the file name.
+    /// </summary>
+    /// <param name="renamer">The file name.</param>
+    /// <param name="localVideo">The local video.</param>
+    /// <returns>The renamed file name.</returns>
+    public static string? GetFileName(this IRenamer renamer, LocalVideo localVideo) => renamer.GetFileName(localVideo.FileInfo.FullName, localVideo);
 }

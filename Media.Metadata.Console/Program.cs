@@ -40,12 +40,15 @@ var updateCommand = new CliCommand("update")
 
 var optimiseCommand = CreateOptimize();
 
+var renameCommand = CreateRename();
+
 var configuration = new CliConfiguration(new CliRootCommand
 {
     searchCommand,
     readCommand,
     updateCommand,
     optimiseCommand,
+    renameCommand,
 });
 
 await configuration
@@ -57,7 +60,8 @@ await configuration
                 .AddTMDb()
                 .AddTheTVDB(builder.Configuration)
                 .AddMp4v2()
-                .AddTagLib();
+                .AddTagLib()
+                .AddPlex();
 
             _ = services
                 .Configure<InvocationLifetimeOptions>(options => options.SuppressStatusMessages = true);
@@ -427,6 +431,155 @@ static CliCommand CreateOptimize()
                 _ = parseResult.GetHost().Services.GetRequiredService<IOptimizer>().Opimize(path.FullName);
             },
             cancellationToken));
+
+    return command;
+}
+
+static CliCommand CreateRename()
+{
+    var sourceArgument = new CliArgument<DirectoryInfo>("source");
+    var moviesOption = new CliOption<DirectoryInfo>("--movies") { Description = "The destination folder for movies. If unset, defaults to \"--tv\"" }.AcceptExistingOnly();
+    var tvOption = new CliOption<DirectoryInfo>("--tv") { Description = "The destination folder for TV shows. If unset, defaults to \"--movies\"" }.AcceptExistingOnly();
+    var moveOption = new CliOption<bool>("-m", "--move") { Description = "Moves the files" };
+    var recursiveOption = new CliOption<bool>("-r", "--recursive") { Description = "Recursively searches <SOURCE>" };
+    var dryRunOption = new CliOption<bool>("-n", "--dry-run") { Description = "Don't actually move/copy any file(s). Instead, just show if they exist and would otherwise be moved/copied by the command." };
+    var inplaceOption = new CliOption<bool>("-i", "--inplace") { Description = "Renames the files in place, rather than to <DESTINATION>." };
+
+    var command = new CliCommand("rename")
+    {
+        sourceArgument,
+        moviesOption,
+        tvOption,
+        moveOption,
+        recursiveOption,
+        dryRunOption,
+        inplaceOption,
+    };
+
+    command.SetAction(async (parseResult, cancellationToken) =>
+    {
+        var host = parseResult.GetHost();
+        var reader = host.Services.GetRequiredService<IReader>();
+        var renamer = host.Services.GetRequiredService<IRenamer>();
+        var source = parseResult.GetValue(sourceArgument) ?? throw new InvalidOperationException();
+        var recursive = parseResult.GetValue(recursiveOption);
+
+        var move = parseResult.GetValue(moveOption);
+        var dryRun = parseResult.GetValue(dryRunOption);
+        var inplace = parseResult.GetValue(inplaceOption);
+
+        var movies = parseResult.GetValue(moviesOption);
+        var tv = parseResult.GetValue(tvOption);
+        tv ??= movies;
+        movies ??= tv;
+
+        if (renamer is Media.Metadata.Plex.PlexRenamer plex)
+        {
+            if (movies is null)
+            {
+                throw new InvalidOperationException($"Either {moviesOption.Name} or {tvOption.Name} to be set.");
+            }
+
+            plex.MoviesPath = movies!.FullName;
+            plex.TVShowsPath = tv!.FullName;
+        }
+
+        foreach (var file in source.EnumerateFiles("*.*", new EnumerationOptions { RecurseSubdirectories = recursive, IgnoreInaccessible = true, AttributesToSkip = FileAttributes.Hidden }))
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            if (file.Length == 0)
+            {
+                continue;
+            }
+
+            Video input;
+            try
+            {
+                input = ReadFile(reader, file.FullName);
+            }
+            catch (Exception ex)
+            {
+                await parseResult.Configuration.Output.WriteLineAsync($"Unsupported file - {file.Name} - {ex.Message}").ConfigureAwait(true);
+                continue;
+            }
+
+            if (renamer.GetFileName(file.FullName, input) is { } name)
+            {
+                var path = new FileInfo(name);
+                if (path.Exists && path.Length == file.Length)
+                {
+                    await parseResult.Configuration.Output.WriteLineAsync($"{file.FullName} has the same length as {path.FullName}").ConfigureAwait(true);
+                    continue;
+                }
+
+                if (!dryRun && path.Directory is not null)
+                {
+                    path.Directory.Create();
+                }
+
+                if (move)
+                {
+                    if (!path.Exists || inplace)
+                    {
+                        await parseResult.Configuration.Output.WriteLineAsync($"Moving {file.FullName} to {path.FullName}").ConfigureAwait(true);
+                        if (!dryRun)
+                        {
+                            file.MoveTo(path.FullName);
+                        }
+                    }
+                    else
+                    {
+                        await parseResult.Configuration.Output.WriteLineAsync($"Replacing {path.FullName} with {file.FullName} with a move").ConfigureAwait(true);
+                        if (!dryRun)
+                        {
+                            file.CopyTo(path.FullName, overwrite: true);
+                            if (file.Exists)
+                            {
+                                file.Delete();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (path.Exists)
+                    {
+                        await parseResult.Configuration.Output.WriteLineAsync($"Replacing {path.FullName} with {file.FullName} by a copy").ConfigureAwait(true);
+                    }
+                    else
+                    {
+                        await parseResult.Configuration.Output.WriteLineAsync($"Coping {file.FullName} to {path.FullName}").ConfigureAwait(true);
+                    }
+
+                    if (!dryRun)
+                    {
+                        file.CopyTo(path.FullName, overwrite: true);
+                    }
+                }
+            }
+
+            static Video ReadFile(IReader reader, string path, int retries = 3)
+            {
+                for (int i = 0; i < retries - 1; i++)
+                {
+                    try
+                    {
+                        return reader.ReadVideo(path);
+                    }
+                    catch
+                    {
+                        // this in done on a retry basis
+                    }
+                }
+
+                return reader.ReadVideo(path);
+            }
+        }
+    });
 
     return command;
 }
