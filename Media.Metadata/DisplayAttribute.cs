@@ -310,18 +310,14 @@ public sealed class DisplayAttribute : Attribute
     /// </remarks>
     public int? GetOrder() => this.order;
 
-    private sealed class LocalizableString
+    private sealed class LocalizableString(string propertyName)
     {
-        private readonly string propertyName;
-
         private Func<string?>? cachedResult;
 
         private string? propertyValue;
 
         [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
         private Type? resourceType;
-
-        public LocalizableString(string propertyName) => this.propertyName = propertyName;
 
         public string? Value
         {
@@ -385,7 +381,7 @@ public sealed class DisplayAttribute : Attribute
                     // If the property is not configured properly, then throw a missing member exception
                     if (badlyConfigured)
                     {
-                        this.cachedResult = () => throw new InvalidOperationException($"Failed to localize {this.propertyName}");
+                        this.cachedResult = () => throw new InvalidOperationException($"Failed to localize {propertyName}");
                     }
                     else
                     {
