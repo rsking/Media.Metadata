@@ -19,7 +19,7 @@ internal sealed class RatingInfo : Atom, IEquatable<RatingInfo>
     public string Rating { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the string that represents the source for the rating (e.g., 'mpaa').
+    /// Gets or sets the string that represents the source for the rating (e.g., <c>mpaa</c>).
     /// </summary>
     public string RatingSource { get; set; } = string.Empty;
 

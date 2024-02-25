@@ -54,12 +54,12 @@ public abstract record class Video(
     /// <inheritdoc/>
     public override string ToString()
     {
-        var plist = new Formatters.PList.PList();
-        plist.AddIfNotNullOrEmpty("studio", Separator, this.Studios);
-        plist.AddIfNotNull("producers", this.Producers);
-        plist.AddIfNotNull("directors", this.Directors);
-        plist.AddIfNotNull("cast", this.Cast);
-        plist.AddIfNotNull("screenwriters", this.ScreenWriters);
-        return plist.Serialize();
+        var list = new Formatters.PList.PList();
+        list.AddIfNotNullOrEmpty("studio", Separator, this.Studios);
+        list.AddIfNotNull("producers", this.Producers);
+        list.AddIfNotNull("directors", this.Directors);
+        list.AddIfNotNull("cast", this.Cast);
+        list.AddIfNotNull("screenwriters", this.ScreenWriters);
+        return list.Serialize();
     }
 }

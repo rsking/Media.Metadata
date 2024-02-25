@@ -103,7 +103,7 @@ public class TMDbMovieSearch : IMovieSearch
         }
     }
 
-    private static string GetBestPosterSize(TMDbLib.Objects.General.TMDbConfig confguration) => confguration.Images.PosterSizes.OrderByDescending(value => value, SizeComparer.Instance).FirstOrDefault();
+    private static string GetBestPosterSize(TMDbLib.Objects.General.TMDbConfig configuration) => configuration.Images.PosterSizes.OrderByDescending(value => value, SizeComparer.Instance).FirstOrDefault();
 
     private sealed class SizeComparer : IComparer<string>
     {

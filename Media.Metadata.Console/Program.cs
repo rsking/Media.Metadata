@@ -428,7 +428,7 @@ static CliCommand CreateOptimize()
             () =>
             {
                 var path = parseResult.GetValue(pathArgument).ThrowIfNull().ThrowIfNotExists();
-                _ = parseResult.GetHost().Services.GetRequiredService<IOptimizer>().Opimize(path.FullName);
+                _ = parseResult.GetHost().Services.GetRequiredService<IOptimizer>().Optimize(path.FullName);
             },
             cancellationToken));
 

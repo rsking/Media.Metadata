@@ -16,5 +16,5 @@ public interface IOptimizer
     /// </summary>
     /// <param name="path">The path.</param>
     /// <returns>Whether the file was optimized or not.</returns>
-    public bool Opimize(string path);
+    public bool Optimize(string path);
 }

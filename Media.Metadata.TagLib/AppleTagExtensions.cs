@@ -262,7 +262,7 @@ public static class AppleTagExtensions
 
     private static ReadOnlyByteVector FixId(ByteVector id) => id switch
     {
-        ReadOnlyByteVector { Count: 4 } roid => roid,
+        ReadOnlyByteVector { Count: 4 } byteVector => byteVector,
         { Count: 4 } => new ReadOnlyByteVector(id),
         { Count: 3 } => new ReadOnlyByteVector(0xa9, id[0], id[1], id[2]),
         _ => throw new InvalidCastException(),

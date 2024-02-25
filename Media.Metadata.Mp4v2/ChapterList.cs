@@ -140,7 +140,7 @@ internal sealed class ChapterList : IList<Chapter>
     /// <param name="item">The <see cref="Chapter"/> to insert into the <see cref="ChapterList"/>.</param>
     /// <exception cref="ArgumentNullException"><paramref name="item"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than 0, or <paramref name="index"/> is greater than <see cref="Count"/>.</exception>
-    /// <exception cref="ArgumentException"><paramref name="item"/> is alrady in the list.</exception>
+    /// <exception cref="ArgumentException"><paramref name="item"/> is already in the list.</exception>
     public void Insert(int index, Chapter item)
     {
         if (item is null)

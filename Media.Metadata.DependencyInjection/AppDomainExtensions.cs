@@ -19,7 +19,7 @@ public static class AppDomainExtensions
     /// Adds the native path.
     /// </summary>
     /// <param name="appDomain">The application domain.</param>
-    /// <exception cref="InvalidOperationException">Failed to detemine native path.</exception>
+    /// <exception cref="InvalidOperationException">Failed to determine native path.</exception>
     public static void AddNativePath(this AppDomain appDomain)
     {
         var potentialPaths = GetPotentialPaths()

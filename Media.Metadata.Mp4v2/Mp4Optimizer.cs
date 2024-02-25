@@ -12,5 +12,5 @@ namespace Media.Metadata;
 public class Mp4Optimizer : IOptimizer
 {
     /// <inheritdoc/>
-    public bool Opimize(string path) => NativeMethods.MP4Optimize(System.Text.Encoding.UTF8.GetBytes(path), newName: null);
+    public bool Optimize(string path) => NativeMethods.MP4Optimize(System.Text.Encoding.UTF8.GetBytes(path), newName: null);
 }

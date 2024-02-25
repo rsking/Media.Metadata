@@ -59,12 +59,12 @@ public static class ExtensionMethods
         {
             return tracks.Select(MediaTrack);
 
-            static MediaTrack MediaTrack(Tracks.TrakInfo trakInfo)
+            static MediaTrack MediaTrack(Tracks.TrakInfo trackInfo)
             {
                 return new(
-                    (int)(trakInfo.Id ?? 0),
-                    GetTrackType(trakInfo.Type),
-                    trakInfo.Language);
+                    (int)(trackInfo.Id ?? 0),
+                    GetTrackType(trackInfo.Type),
+                    trackInfo.Language);
 
                 static MediaTrackType GetTrackType(string? type)
                 {

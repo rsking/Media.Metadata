@@ -66,7 +66,7 @@ internal sealed class MovieInfo : Atom, IEquatable<MovieInfo>
     /// </summary>
     /// <remarks>
     /// The <see cref="Screenwriters"/> property is read-only, but can be modified by the normal methods of a <see cref="IList{T}"/>.
-    /// There is a distinction to be drawn between an empty list where the cast portion of the atom exists in the file, but with noentries, and the state where the writers portion does not existat all in the file.
+    /// There is a distinction to be drawn between an empty list where the cast portion of the atom exists in the file, but with no-entries, and the state where the writers portion does not exist at all in the file.
     /// To handle the latter case, use the <see cref="RemoveScreenwriters"/> method.
     /// Note that if the writers portion of the atom does not exist, accessing the <see cref="Screenwriters"/> property will create an empty list, adding an empty list to that portion of the atom.
     /// </remarks>
@@ -139,17 +139,17 @@ internal sealed class MovieInfo : Atom, IEquatable<MovieInfo>
             this.screenwriters = GetListOrDefault<string>(map, nameof(this.screenwriters));
             this.studio = GetValueOrDefault<string>(map, nameof(this.studio));
 
-            static T? GetValueOrDefault<T>(Formatters.PList.PList plist, string key)
+            static T? GetValueOrDefault<T>(Formatters.PList.PList list, string key)
             {
-                return plist.TryGetValue(key, out var value) && value is T t
+                return list.TryGetValue(key, out var value) && value is T t
                     ? t
                     : default;
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "An empty list is not the same as null")]
-            static IList<T>? GetListOrDefault<T>(Formatters.PList.PList plist, string key)
+            static IList<T>? GetListOrDefault<T>(Formatters.PList.PList list, string key)
             {
-                return plist.TryGetValue(key, out var value) && value is object[] objectArray
+                return list.TryGetValue(key, out var value) && value is object[] objectArray
                     ? Enumerate(objectArray).ToList()
                     : default;
 

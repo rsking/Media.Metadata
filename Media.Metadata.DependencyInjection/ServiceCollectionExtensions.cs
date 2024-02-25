@@ -69,12 +69,12 @@ public static class ServiceCollectionExtensions
     {
         if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
         {
-            AddFileUpdaterImpl(services);
+            AddFileUpdaterCore(services);
         }
 
         return services;
 
-        static void AddFileUpdaterImpl(IServiceCollection services)
+        static void AddFileUpdaterCore(IServiceCollection services)
         {
             _ = services
                 .AddTransient<Media.Metadata.IUpdater, Media.Metadata.Mp4Writer>()

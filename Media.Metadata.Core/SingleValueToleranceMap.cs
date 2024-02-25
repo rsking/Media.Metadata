@@ -11,18 +11,18 @@ namespace Media.Metadata;
 /// </summary>
 internal sealed class SingleValueToleranceMap : Snapshot
 {
-    private readonly Color toleraceColor;
+    private readonly Color toleranceColor;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="SingleValueToleranceMap"/> class.
     /// </summary>
     /// <param name="color">The single color.</param>
-    internal SingleValueToleranceMap(Color color) => this.toleraceColor = color;
+    internal SingleValueToleranceMap(Color color) => this.toleranceColor = color;
 
     /// <inheritdoc/>
     internal override Color this[int row, int column]
     {
-        get => this.toleraceColor;
+        get => this.toleranceColor;
         set => throw new NotSupportedException();
     }
 }
