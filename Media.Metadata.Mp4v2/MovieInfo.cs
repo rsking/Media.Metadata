@@ -37,7 +37,7 @@ internal sealed class MovieInfo : Atom, IEquatable<MovieInfo>
     /// To handle the latter case, use the <see cref="RemoveCast"/> method.
     /// Note that if the cast portion of the atom does not exist, accessing the <see cref="Cast"/> property will create an empty list, adding an empty list to that portion of the atom.
     /// </remarks>
-    public IList<string> Cast => this.cast ??= new List<string>();
+    public IList<string> Cast => this.cast ??= [];
 
     /// <summary>
     /// Gets a list of directors for this movie.
@@ -48,7 +48,7 @@ internal sealed class MovieInfo : Atom, IEquatable<MovieInfo>
     /// To handle the latter case, use the <see cref="RemoveDirectors"/> method.
     /// Note that if the directors portion of the atom does not exist, accessing the <see cref="Directors"/> property will create an empty list, adding an empty list to that portion of the atom.
     /// </remarks>
-    public IList<string> Directors => this.directors ??= new List<string>();
+    public IList<string> Directors => this.directors ??= [];
 
     /// <summary>
     /// Gets a list of producers for this movie.
@@ -59,7 +59,7 @@ internal sealed class MovieInfo : Atom, IEquatable<MovieInfo>
     /// To handle the latter case, use the <see cref="RemoveProducers"/> method.
     /// Note that if the producers portion of the atom does not exist, accessing the <see cref="Producers"/> property will create an empty list, adding an empty list to that portion of the atom.
     /// </remarks>
-    public IList<string> Producers => this.producers ??= new List<string>();
+    public IList<string> Producers => this.producers ??= [];
 
     /// <summary>
     /// Gets a list of screenwriters for this movie.
@@ -70,7 +70,7 @@ internal sealed class MovieInfo : Atom, IEquatable<MovieInfo>
     /// To handle the latter case, use the <see cref="RemoveScreenwriters"/> method.
     /// Note that if the writers portion of the atom does not exist, accessing the <see cref="Screenwriters"/> property will create an empty list, adding an empty list to that portion of the atom.
     /// </remarks>
-    public IList<string> Screenwriters => this.screenwriters ??= new List<string>();
+    public IList<string> Screenwriters => this.screenwriters ??= [];
 
     /// <summary>
     /// Gets a value indicating whether the <see cref="Cast"/> property has data, potentially including an empty list.

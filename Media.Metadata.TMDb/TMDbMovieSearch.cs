@@ -65,10 +65,10 @@ public class TMDbMovieSearch : IMovieSearch
                 movie.Overview,
                 GetProducers(movie.Credits?.Crew),
                 GetDirectors(movie.Credits?.Crew),
-                movie.ProductionCompanies?.Select(productionCompany => productionCompany.Name) ?? Enumerable.Empty<string>(),
-                movie.Genres?.Select(genre => genre.Name) ?? Enumerable.Empty<string>(),
+                movie.ProductionCompanies?.Select(productionCompany => productionCompany.Name) ?? [],
+                movie.Genres?.Select(genre => genre.Name) ?? [],
                 GetWriters(movie.Credits?.Crew),
-                movie.Credits?.Cast?.Select(cast => cast.Name) ?? Enumerable.Empty<string>(),
+                movie.Credits?.Cast?.Select(cast => cast.Name) ?? [],
                 GetComposers(movie.Credits?.Crew))
             {
                 Release = movie.ReleaseDate,
@@ -98,9 +98,7 @@ public class TMDbMovieSearch : IMovieSearch
 
             static IEnumerable<string> GetCrew(IEnumerable<TMDbLib.Objects.General.Crew>? crew, Predicate<TMDbLib.Objects.General.Crew> predicate)
             {
-                return crew is null
-                    ? Enumerable.Empty<string>()
-                    : crew.Where(crew => predicate(crew)).Select(crew => crew.Name);
+                return crew?.Where(crew => predicate(crew)).Select(crew => crew.Name) ?? [];
             }
         }
     }

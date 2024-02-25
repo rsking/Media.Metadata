@@ -12,8 +12,8 @@ namespace Media.Metadata;
 /// </summary>
 internal sealed class ChapterList : IList<Chapter>
 {
-    private readonly IList<Chapter> chapters = new List<Chapter>();
-    private readonly ICollection<Guid> hashedIndex = new HashSet<Guid>();
+    private readonly IList<Chapter> chapters = [];
+    private readonly ICollection<Guid> hashedIndex = [];
 
     private ChapterList(IEnumerable<Chapter> chapters)
     {

@@ -15,7 +15,7 @@ internal sealed class TrackList : IReadOnlyList<Track>
 
     private TrackList(IEnumerable<Track> tracks) => this.tracks = new List<Track>(tracks);
 
-    private TrackList() => this.tracks = new List<Track>();
+    private TrackList() => this.tracks = [];
 
     /// <summary>
     /// Gets the number of <see cref="Track">Tracks</see> contained in this <see cref="TrackList"/>.

@@ -79,6 +79,6 @@ public static class ExtensionMethods
             }
         }
 
-        return Enumerable.Empty<MediaTrack>();
+        return [];
     }
 }

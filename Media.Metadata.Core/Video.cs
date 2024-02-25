@@ -49,7 +49,7 @@ public abstract record class Video(
     /// <summary>
     /// Gets the tracks.
     /// </summary>
-    public IReadOnlyList<MediaTrack> Tracks { get; init; } = Array.Empty<MediaTrack>();
+    public IReadOnlyList<MediaTrack> Tracks { get; init; } = [];
 
     /// <inheritdoc/>
     public override string ToString()

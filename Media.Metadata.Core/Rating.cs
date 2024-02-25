@@ -95,7 +95,7 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
     {
         (true, RatingType.None) => value.SelectMany(group => group),
         (true, var t) => value[t],
-        _ => Enumerable.Empty<Rating>(),
+        _ => [],
     };
 
     private static Dictionary<Country, ILookup<RatingType, Rating>> LoadRatings(IEqualityComparer<string>? comparer = default)
