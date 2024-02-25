@@ -17,15 +17,9 @@ internal sealed class Mp4File
     /// Initialises a new instance of the <see cref="Mp4File"/> class.
     /// </summary>
     /// <param name="fileName">The full path and file name of the file to use.</param>
-    private Mp4File(string fileName)
-    {
-        if (string.IsNullOrEmpty(fileName) || !File.Exists(fileName))
-        {
-            throw new ArgumentException("Must specify a valid file name", nameof(fileName));
-        }
-
-        this.fileName = fileName;
-    }
+    private Mp4File(string fileName) => this.fileName = string.IsNullOrEmpty(fileName) || !File.Exists(fileName)
+        ? throw new ArgumentException("Must specify a valid file name", nameof(fileName))
+        : fileName;
 
     /// <summary>
     /// Gets the list of chapters for this file.

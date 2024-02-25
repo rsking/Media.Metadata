@@ -172,7 +172,11 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
 
                             static IEnumerable<string>? GetStudios(ICollection<ApiSdk.Models.Company> companies)
                             {
-                                return companies.Where(company => company.PrimaryCompanyType is 2).Select(company => company.Name);
+                                return companies
+                                    .Where(company => company.PrimaryCompanyType is 2)
+                                    .Select(company => company.Name)
+                                    .Where(name => name is not null)
+                                    .Cast<string>();
                             }
 
                             static Rating? GetRating(ICollection<ApiSdk.Models.ContentRating>? contentRatings, string? country)

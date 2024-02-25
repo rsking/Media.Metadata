@@ -123,14 +123,7 @@ public class TagLibReader : IReader
 
         static Formatters.PList.PList CreatePList(string dashBox)
         {
-            try
-            {
-                return Formatters.PList.PList.Create(dashBox);
-            }
-            catch (InvalidOperationException ex)
-            {
-                throw;
-            }
+            return Formatters.PList.PList.Create(dashBox);
         }
     }
 

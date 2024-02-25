@@ -39,7 +39,7 @@ internal static class ImageExtensions
             return default;
         }
 
-        using var stream = new MemoryStream();
+        await using var stream = new MemoryStream();
         await image.SaveAsync(stream, imageFormat, cancellationToken).ConfigureAwait(false);
         var bitmapDecoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream.AsRandomAccessStream());
         return await bitmapDecoder.GetSoftwareBitmapAsync();
