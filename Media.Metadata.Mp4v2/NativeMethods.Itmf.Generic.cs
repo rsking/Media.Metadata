@@ -38,7 +38,7 @@ internal static partial class NativeMethods
     ///     MP4_ITMF_BT_DATETIME  = 17,  /** in UTC, counting seconds since midnight, January 1, 1904; 32 or 64-bits */
     ///     MP4_ITMF_BT_GENRES    = 18,  /** a list of enumerated values */
     ///     MP4_ITMF_BT_INTEGER   = 21,  /** a signed big-endian integer with length one of { 1,2,3,4,8 } bytes */
-    ///     MP4_ITMF_BT_RIAA_PA   = 24,  /** RIAA parental advisory; { -1=no, 1=yes, 0=unspecified }, 8-bit ingteger */
+    ///     MP4_ITMF_BT_RIAA_PA   = 24,  /** RIAA parental advisory; { -1=no, 1=yes, 0=unspecified }, 8-bit integer */
     ///     MP4_ITMF_BT_UPC       = 25,  /** Universal Product Code, in text UTF-8 format (valid as an ID) */
     ///     MP4_ITMF_BT_BMP       = 27,  /** Windows bitmap image */
     ///     MP4_ITMF_BT_UNDEFINED = 255  /** undefined */
@@ -160,7 +160,7 @@ internal static partial class NativeMethods
     /// <param name="file">handle of file to operate on.</param>
     /// <param name="meaning">UTF-8 meaning. NULL-terminated.</param>
     /// <param name="name">may be NULL. UTF-8 name. NULL-terminated.</param>
-    /// <returns>On succes, list of items, which must be free'd. On failure, <see cref="IntPtr.Zero"/>.</returns>
+    /// <returns>On success, list of items, which must be freed. On failure, <see cref="IntPtr.Zero"/>.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr MP4ItmfGetItemsByMeaning(IntPtr file, [MarshalAs(UnmanagedType.LPStr)] string meaning, [MarshalAs(UnmanagedType.LPStr)] string? name);
 
@@ -169,14 +169,14 @@ internal static partial class NativeMethods
     /// </summary>
     /// <param name="file">handle of file to operate on.</param>
     /// <param name="code">four-char code identifying atom type. NULL-terminated.</param>
-    /// <returns>On succes, list of items, which must be free'd. On failure, <see cref="IntPtr.Zero"/>.</returns>
+    /// <returns>On success, list of items, which must be freed. On failure, <see cref="IntPtr.Zero"/>.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr MP4ItmfGetItemsByCode(IntPtr file, [MarshalAs(UnmanagedType.LPStr)] string code);
 
     /// <summary>
     /// Free an item list (deep free).
     /// </summary>
-    /// <param name="itemList">itemList to be free'd.</param>
+    /// <param name="itemList">itemList to be freed.</param>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     public static extern void MP4ItmfItemListFree(IntPtr itemList);
 
@@ -303,7 +303,7 @@ internal static partial class NativeMethods
     /// {
     ///     void* __handle; /** internal use only. */
     ///
-    ///     char*           code;     /** four-char code identifing atom type. NULL-terminated. */
+    ///     char*           code;     /** four-char code identifying atom type. NULL-terminated. */
     ///     char*           mean;     /** may be NULL. UTF-8 meaning. NULL-terminated. */
     ///     char*           name;     /** may be NULL. UTF-8 name. NULL-terminated. */
     ///     MP4ItmfDataList dataList; /** list of data. can be zero length. */

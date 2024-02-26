@@ -306,7 +306,7 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
                         {
                             await console.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Season  {series.Name}:{s.Number}")).ConfigureAwait(false);
 
-                            var episoides = seasonGroup
+                            var episodes = seasonGroup
                                 .Select(path => episode switch
                                 {
                                     -1 when GetMatch(path.Name) is { } match => (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture) + offset, Path: path),
@@ -322,7 +322,7 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
                                 continue;
                             }
 
-                            foreach (var ep in episoides.Where(ep => ep.Path.Exists))
+                            foreach (var ep in episodes.Where(ep => ep.Path.Exists))
                             {
                                 await console.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Processing {ep.Path.Name}")).ConfigureAwait(false);
 
@@ -441,7 +441,7 @@ static CliCommand CreateRename()
     var moveOption = new CliOption<bool>("-m", "--move") { Description = "Moves the files" };
     var recursiveOption = new CliOption<bool>("-r", "--recursive") { Description = "Recursively searches <SOURCE>" };
     var dryRunOption = new CliOption<bool>("-n", "--dry-run") { Description = "Don't actually move/copy any file(s). Instead, just show if they exist and would otherwise be moved/copied by the command." };
-    var inplaceOption = new CliOption<bool>("-i", "--inplace") { Description = "Renames the files in place, rather than to <DESTINATION>." };
+    var inPlaceOption = new CliOption<bool>("-i", "--in-place") { Description = "Renames the files in place, rather than to <DESTINATION>." };
 
     var command = new CliCommand("rename")
     {
@@ -451,7 +451,7 @@ static CliCommand CreateRename()
         moveOption,
         recursiveOption,
         dryRunOption,
-        inplaceOption,
+        inPlaceOption,
     };
 
     command.SetAction(async (parseResult, cancellationToken) =>
@@ -627,7 +627,7 @@ static FileInfo[] ParseFileInfo(ArgumentResult argumentResult)
         {
             var matcher = new Matcher(StringComparison.OrdinalIgnoreCase);
 
-            // separate the root directory from the globbing
+            // separate the root directory from the glob
             var glob = Path.GetFileName(root);
             var directory = Path.GetDirectoryName(root);
             while (directory?.Contains('*', StringComparison.OrdinalIgnoreCase) == true)

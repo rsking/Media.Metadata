@@ -55,8 +55,8 @@ internal static partial class NativeMethods
     /// </param>
     /// <remarks>
     /// <para>MP4Optimize reads an existing mp4 file and writes a new version of the file with the two important changes:</para>
-    /// <para>First, the mp4 control information is moved to the beginning of the file. (Frequenty it is at the end of the file due to it being constantly modified as track samples are added to an mp4 file). This optimization is useful in that in allows the mp4 file to be HTTP streamed.</para>
-    /// <para>Second, the track samples are interleaved so that the samples for a particular instant in time are colocated within the file. This eliminates disk seeks during playback of the file which results in better performance.</para>
+    /// <para>First, the mp4 control information is moved to the beginning of the file. (Frequently it is at the end of the file due to it being constantly modified as track samples are added to an mp4 file). This optimization is useful in that in allows the mp4 file to be HTTP streamed.</para>
+    /// <para>Second, the track samples are interleaved so that the samples for a particular instant in time are co-located within the file. This eliminates disk seeks during playback of the file which results in better performance.</para>
     /// <para>There are also two important side effects of <see cref="MP4Optimize"/>:</para>
     /// <para>First, any free blocks within the mp4 file are eliminated.</para>
     /// <para>Second, as a side effect of the sample interleaving process any media data chunks that are not actually referenced by the mp4 control structures are deleted. This is useful if you have called MP4DeleteTrack() which only deletes the control information for a track, and not the actual media data.</para></remarks>
@@ -70,7 +70,7 @@ internal static partial class NativeMethods
     /// </summary>
     /// <param name="fileName">pathname of the file to be read. On Windows, this should be a UTF-8 encoded string. On other platforms, it should be an 8-bit encoding that is appropriate for the platform, locale, file system, etc. (prefer to use UTF-8 when possible).</param>
     /// <param name="cb">The call back.</param>
-    /// <remarks>MP4Read is the first call that should be used when you want to just read an existing mp4 file.It is equivalent to opening a file for reading, but in addition the mp4 file is parsed and the controlinformation is loaded into memory.Note that actual track samples are notread into memory until MP4ReadSample() is called.</remarks>
+    /// <remarks>MP4Read is the first call that should be used when you want to just read an existing mp4 file.It is equivalent to opening a file for reading, but in addition the mp4 file is parsed and the control information is loaded into memory. Note that actual track samples are not read into memory until MP4ReadSample() is called.</remarks>
     /// <returns>On success a handle of the file for use in subsequent calls to the library. On error, #MP4_INVALID_FILE_HANDLE.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr MP4Read(byte[] fileName, IntPtr cb);

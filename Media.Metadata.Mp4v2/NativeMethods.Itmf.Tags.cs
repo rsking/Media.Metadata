@@ -179,7 +179,7 @@ internal static partial class NativeMethods
     /// Sets the genre type tag.
     /// </summary>
     /// <param name="tags">tags structure to fetch (write) into.</param>
-    /// <param name="genreType">gente type to set.</param>
+    /// <param name="genreType">genre type to set.</param>
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
@@ -289,7 +289,7 @@ internal static partial class NativeMethods
     /// Sets the description tag.
     /// </summary>
     /// <param name="tags">tags structure to fetch (write) into.</param>
-    /// <param name="description">desciption to set.</param>
+    /// <param name="description">description to set.</param>
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
@@ -389,7 +389,7 @@ internal static partial class NativeMethods
     /// Sets the artwork tag.
     /// </summary>
     /// <param name="tags">tags structure to fetch (write) into.</param>
-    /// <param name="index">index to set arwork at.</param>
+    /// <param name="index">index to set artwork at.</param>
     /// <param name="artwork">artwork to set.</param>
     /// <returns><b>true</b> on success, <b>false</b> on failure.</returns>
     [DllImport("libmp4v2.dll", CharSet = CharSet.Ansi, ExactSpelling = true, BestFitMapping = false, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
@@ -487,7 +487,7 @@ internal static partial class NativeMethods
     public static extern bool MP4TagsSetHDVideo(IntPtr tags, IntPtr isHDVideo);
 
     /// <summary>
-    /// Sets the mediat type tag.
+    /// Sets the media type tag.
     /// </summary>
     /// <param name="tags">tags structure to fetch (write) into.</param>
     /// <param name="mediaType">media type to set.</param>

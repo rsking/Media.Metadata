@@ -42,32 +42,32 @@ public class TagLibReader : IReader
         _ => new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name)) { Work = appleTag.GetWork() },
     };
 
-    private static LocalMovie ReadMovie(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new(
+    private static LocalMovie ReadMovie(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList list) => new(
         fileInfo,
         GetTitle(appleTag),
         appleTag.Description,
-        GetPersonel(plist, "producers").ToArray(),
-        GetPersonel(plist, "directors").ToArray(),
-        plist.ContainsKey("studio") ? plist["studio"].ToString().Split(',').Select(studio => studio.Trim()).ToArray() : Enumerable.Empty<string>(),
+        GetPersonnel(list, "producers").ToArray(),
+        GetPersonnel(list, "directors").ToArray(),
+        list.ContainsKey("studio") ? list["studio"].ToString().Split(',').Select(studio => studio.Trim()).ToArray() : Enumerable.Empty<string>(),
         appleTag.Genres,
-        GetPersonel(plist, "screenwriters").ToArray(),
-        GetPersonel(plist, "cast").ToArray(),
+        GetPersonnel(list, "screenwriters").ToArray(),
+        GetPersonnel(list, "cast").ToArray(),
         SplitArray(appleTag.Composers).ToArray())
     {
         Work = appleTag.GetWork(),
         Edition = appleTag.GetCategory(),
     };
 
-    private static LocalEpisode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList plist) => new(
+    private static LocalEpisode ReadEpisode(FileInfo fileInfo, AppleTag appleTag, Formatters.PList.PList list) => new(
         fileInfo,
         GetTitle(appleTag),
         appleTag.Description,
-        GetPersonel(plist, "producers").ToArray(),
-        GetPersonel(plist, "directors").ToArray(),
-        plist.ContainsKey("studio") ? plist["studio"].ToString().Split(',').Select(studio => studio.Trim()).ToArray() : Enumerable.Empty<string>(),
+        GetPersonnel(list, "producers").ToArray(),
+        GetPersonnel(list, "directors").ToArray(),
+        list.ContainsKey("studio") ? list["studio"].ToString().Split(',').Select(studio => studio.Trim()).ToArray() : Enumerable.Empty<string>(),
         appleTag.Genres,
-        GetPersonel(plist, "screenwriters").ToArray(),
-        GetPersonel(plist, "cast").ToArray(),
+        GetPersonnel(list, "screenwriters").ToArray(),
+        GetPersonnel(list, "cast").ToArray(),
         SplitArray(appleTag.Composers).ToArray())
     {
         Work = appleTag.GetWork(),
@@ -127,14 +127,14 @@ public class TagLibReader : IReader
         }
     }
 
-    private static IEnumerable<string> GetPersonel(Formatters.PList.PList plist, string key)
+    private static IEnumerable<string> GetPersonnel(Formatters.PList.PList list, string key)
     {
-        if (!plist.ContainsKey(key))
+        if (!list.ContainsKey(key))
         {
             yield break;
         }
 
-        var value = plist[key];
+        var value = list[key];
         if (value is object[] @array)
         {
             foreach (var item in array.OfType<IDictionary<string, object>>())

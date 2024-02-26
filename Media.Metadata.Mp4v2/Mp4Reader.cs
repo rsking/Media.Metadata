@@ -131,9 +131,9 @@ public class Mp4Reader : IReader
         {
             return type switch
             {
-                "vide" => MediaTrackType.Video,
-                "soun" => MediaTrackType.Audio,
-                "text" => MediaTrackType.Text,
+                NativeMethods.MP4VideoTrackType => MediaTrackType.Video,
+                NativeMethods.MP4AudioTrackType => MediaTrackType.Audio,
+                NativeMethods.MP4TextTrackType => MediaTrackType.Text,
                 _ => MediaTrackType.Unknown,
             };
         }

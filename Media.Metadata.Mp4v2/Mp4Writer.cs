@@ -65,6 +65,7 @@ public class Mp4Writer : IUpdater
 
     private static void Update(Mp4File file, Video video, MediaKind mediaKind, IDictionary<MediaTrackType, string>? languages)
     {
+        const string DateFormat = "yyyy-MM-dd";
         if (file.Tags is { } tags)
         {
             tags.MediaType = mediaKind;
@@ -74,7 +75,7 @@ public class Mp4Writer : IUpdater
             tags.Genre = ToString(video.Genre);
             tags.Composer = ToString(video.Composers);
             tags.AlbumArtist = ToString(video.Cast);
-            tags.ReleaseDate = video.Release?.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            tags.ReleaseDate = video.Release?.ToString(DateFormat, System.Globalization.CultureInfo.InvariantCulture);
             tags.SetArtwork(video.Image, video.ImageFormat);
             tags.Work = video.Work;
 

@@ -11,7 +11,7 @@ namespace Media.Metadata;
 /// </summary>
 public abstract record class HasImage : IHasImage, IAsyncDisposable, IDisposable
 {
-    private bool imageRetrived;
+    private bool imageRetrieved;
 
     private SixLabors.ImageSharp.Formats.IImageFormat? imageFormat;
 
@@ -31,7 +31,7 @@ public abstract record class HasImage : IHasImage, IAsyncDisposable, IDisposable
         init
         {
             this.image = value;
-            this.imageRetrived = true;
+            this.imageRetrieved = true;
         }
     }
 
@@ -83,13 +83,13 @@ public abstract record class HasImage : IHasImage, IAsyncDisposable, IDisposable
         {
             if (disposing)
             {
-                if (this.imageRetrived && this.image is { } disposable)
+                if (this.imageRetrieved && this.image is { } disposable)
                 {
                     disposable.Dispose();
                 }
 
                 this.image = default;
-                this.imageRetrived = false;
+                this.imageRetrieved = false;
             }
 
             this.disposedValue = true;
@@ -102,7 +102,7 @@ public abstract record class HasImage : IHasImage, IAsyncDisposable, IDisposable
     /// <returns>The value task.</returns>
     protected virtual async ValueTask DisposeAsyncCore()
     {
-        if (this.imageRetrived)
+        if (this.imageRetrieved)
         {
             if (this.image is IAsyncDisposable asyncDisposable)
             {
@@ -115,15 +115,15 @@ public abstract record class HasImage : IHasImage, IAsyncDisposable, IDisposable
         }
 
         this.image = default;
-        this.imageRetrived = false;
+        this.imageRetrieved = false;
     }
 
     private void EnsureImage()
     {
-        if (!this.imageRetrived)
+        if (!this.imageRetrieved)
         {
             (this.image, this.imageFormat) = GetImage(this.GetImageAsync());
-            this.imageRetrived = true;
+            this.imageRetrieved = true;
 
             static T GetImage<T>(ValueTask<T> task)
             {

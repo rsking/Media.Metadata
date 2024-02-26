@@ -165,15 +165,19 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
 
                             static IEnumerable<string>? GetStudios(ICollection<ApiSdk.Models.Company> companies)
                             {
-                                var enumerable = companies
-                                    .Where(company => company.PrimaryCompanyType is 2)
-                                    .Select(company => company.Name)
-                                    .Where(name => name is not null);
-#if NETSTANDARD2_1_OR_GREATER
-                                return enumerable.Cast<string>();
-#else
-                                return enumerable;
-#endif
+                                return WhereNotNull(companies.Where(company => company.PrimaryCompanyType is 2).Select(company => company.Name));
+
+                                [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S3267:Loops should be simplified with \"LINQ\" expressions", Justification = "This is to change nullability")]
+                                static IEnumerable<string> WhereNotNull(IEnumerable<string?> source)
+                                {
+                                    foreach (var item in source)
+                                    {
+                                        if (item is not null)
+                                        {
+                                            yield return item;
+                                        }
+                                    }
+                                }
                             }
 
                             static Rating? GetRating(ICollection<ApiSdk.Models.ContentRating>? contentRatings, string? country)

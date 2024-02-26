@@ -51,9 +51,9 @@ internal sealed class TrackList : IReadOnlyList<Track>
         {
             return type switch
             {
-                MediaTrackType.Video => "vide",
-                MediaTrackType.Audio => "soun",
-                MediaTrackType.Text => "text",
+                MediaTrackType.Video => NativeMethods.MP4VideoTrackType,
+                MediaTrackType.Audio => NativeMethods.MP4AudioTrackType,
+                MediaTrackType.Text => NativeMethods.MP4TextTrackType,
                 _ => default,
             };
         }

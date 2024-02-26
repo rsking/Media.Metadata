@@ -343,7 +343,6 @@ public class TvMazeShowSearch(RestClient restClient, Microsoft.Extensions.Option
         [System.Text.Json.Serialization.JsonConverter(typeof(TimeConverter))]
         public TimeSpan? AirTime { get; set; }
 
-        // "airstamp":"1996-05-11T01:00:00+00:00"
         public DateTime AirStamp { get; set; }
 
         public int? Runtime { get; set; }

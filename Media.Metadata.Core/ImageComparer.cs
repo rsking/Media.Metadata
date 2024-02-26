@@ -104,15 +104,15 @@ public static class ImageComparer
             return false;
         }
 
-        var snapshot = Snapshot.FromImage(actualImage);
-        var snapshot2 = Snapshot.FromImage(expectedImage);
-        if (snapshot.Width != snapshot2.Width || snapshot.Height != snapshot2.Height)
+        var actualSnapshot = Snapshot.FromImage(actualImage);
+        var expectedSnapshot = Snapshot.FromImage(expectedImage);
+        if (actualSnapshot.Width != expectedSnapshot.Width || actualSnapshot.Height != expectedSnapshot.Height)
         {
             throw new InvalidOperationException(Properties.Resources.ImageSizesNotEqual);
         }
 
-        var toleranceMap = CreateToleranceMap(rectangleList, snapshot.Height, snapshot.Width);
-        return CompareInternal(snapshot, snapshot2, toleranceMap, out diffImage, createOutImage);
+        var toleranceMap = CreateToleranceMap(rectangleList, actualSnapshot.Height, actualSnapshot.Width);
+        return CompareInternal(actualSnapshot, expectedSnapshot, toleranceMap, out diffImage, createOutImage);
     }
 
     private static bool CompareInternal(Image actualImage, Image expectedImage, ColorDifference argbTolerance, out Image? diffImage, bool createOutImage)
@@ -140,15 +140,15 @@ public static class ImageComparer
             return false;
         }
 
-        var snapshot = Snapshot.FromImage(actualImage);
-        var snapshot2 = Snapshot.FromImage(expectedImage);
-        if (snapshot.Width != snapshot2.Width || snapshot.Height != snapshot2.Height)
+        var actualSnapshot = Snapshot.FromImage(actualImage);
+        var expectedSnapshot = Snapshot.FromImage(expectedImage);
+        if (actualSnapshot.Width != expectedSnapshot.Width || actualSnapshot.Height != expectedSnapshot.Height)
         {
             throw new InvalidOperationException(Properties.Resources.ImageSizesNotEqual);
         }
 
         var toleranceMap = new SingleValueToleranceMap(Color.FromRgba(argbTolerance.Red, argbTolerance.Green, argbTolerance.Blue, argbTolerance.Alpha));
-        return CompareInternal(snapshot, snapshot2, toleranceMap, out diffImage, createOutImage);
+        return CompareInternal(actualSnapshot, expectedSnapshot, toleranceMap, out diffImage, createOutImage);
     }
 
     private static bool CompareInternal(Snapshot actualSnapshot, Snapshot expectedSnapshot, Snapshot toleranceMap, out Image? diffImage, bool createOutImage)
