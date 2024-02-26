@@ -35,24 +35,4 @@ internal static class ExtensionMethods
     /// <param name="newValue">The new value.</param>
     /// <returns><paramref name="stringValue"/> with all instances of <paramref name="oldValues" /> with <paramref name="newValue" />.</returns>
     public static string ReplaceAll(this string stringValue, char[] oldValues, char newValue = ReplacementChar) => oldValues.Aggregate(stringValue, (v, c) => v.Replace(c, newValue));
-
-    /// <summary>
-    /// Gets the directory name.
-    /// </summary>
-    /// <param name="directoryInfo">The directory information.</param>
-    /// <param name="invalidCharacters">The invalid characters.</param>
-    /// <returns>The directory name.</returns>
-    public static string GetName(this DirectoryInfo directoryInfo, char[] invalidCharacters)
-    {
-        // remove the root
-        var name = directoryInfo.FullName;
-
-        if (directoryInfo.Root?.FullName is { } rootName)
-        {
-            name = name[rootName.Length..];
-            return Path.Combine(rootName, name.ReplaceAll(invalidCharacters));
-        }
-
-        return name.ReplaceAll(invalidCharacters);
-    }
 }
