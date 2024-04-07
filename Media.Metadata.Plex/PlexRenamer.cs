@@ -17,92 +17,73 @@ public class PlexRenamer : IRenamer
     /// <inheritdoc/>
     public string? GetFileName(string current, Video video)
     {
-        if (video is Movie movie)
+        return video switch
         {
-            if (movie.Name is null)
-            {
-                throw new InvalidOperationException("Cannot rename movie with a null name.");
-            }
+            Movie movie => GetMovieName(current, movie),
+            Episode episode => GetEpisodeName(current, episode),
+            _ => default,
+        };
 
-            if (movie.Release is null)
-            {
-                throw new InvalidOperationException($"Cannot rename movie with not release year. {movie.Name}");
-            }
+        static string AddPart(string name, string part)
+        {
+            return $"{name} - {part}";
+        }
 
-            // copy this as a movie
-            var name = FormattableString.Invariant($"{movie.Name.Sanitise()} ({movie.Release?.Year})");
-            if (movie.Edition is { } edition)
+        static string GetMovieName(string current, Movie movie)
+        {
+            return movie switch
             {
-                name += " {edition-";
-                name += edition;
-                name += "}";
-            }
+                { Name: null } => throw new InvalidOperationException("Cannot rename movie with a null name."),
+                { Release: null } => throw new InvalidOperationException($"Cannot rename movie with no release year. {movie.Name}"),
+                _ => GetMovieNameCore(current, movie, movie.Name, movie.Release.Value),
+            };
 
-            var directory = new DirectoryInfo(Path.Combine("Movies", name)).GetName(GetInvalidPathChars());
-
-            if (movie.Work is { } work)
+            static string GetMovieNameCore(string current, Movie movie, string movieName, DateTime release)
             {
-                work = work.Trim();
-                if (work.Length != 0)
+                // copy this as a movie
+                var name = FormattableString.Invariant($"{movieName.Sanitise()} ({release.Year})");
+                if (movie is { Edition: { } edition })
                 {
-                    name += " - ";
-                    name += work;
+                    name += $" {{edition-{edition}}}";
                 }
-            }
 
-            return Path.Combine(directory, (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars()));
+                if (movie is { Work: { } work } && work.Trim() is { Length: not 0 } trimmedWork)
+                {
+                    name = AddPart(name, trimmedWork);
+                }
+
+                return Path.Combine(Path.Combine("Movies", name).ReplaceAll(GetInvalidPathChars()), (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars()));
+            }
         }
-        else if (video is Episode episode)
+
+        static string GetEpisodeName(string current, Episode episode)
         {
-            if (episode.Show is null)
+            return episode switch
             {
-                throw new InvalidOperationException("Cannot rename episode with no show name.");
-            }
+                { Show: null } => throw new InvalidOperationException("Cannot rename episode with no show name."),
+                { Season: null } => throw new InvalidOperationException("Cannot rename episode with no season."),
+                { Number: null } => throw new InvalidOperationException("Cannot rename episode with no number"),
+                _ => GetEpisodeNameCore(current, episode, episode.Show.Sanitise(), episode.Season.Value, episode.Number.Value),
+            };
 
-            if (episode.Season is null)
+            static string GetEpisodeNameCore(string current, Episode episode, string showName, int seasonNumber, int episodeNumber)
             {
-                throw new InvalidOperationException("Cannot rename episode with no season.");
-            }
+                var name = FormattableString.Invariant($"{showName} - s{seasonNumber:00}e{episodeNumber:00}");
+                name = episode switch
+                {
+                    { Part: { } part } => AddPart(name, FormattableString.Invariant($"{nameof(part)}{part}")),
+                    { Name: { } episodeName } => AddPart(name, episodeName),
+                    _ => throw new InvalidOperationException("Cannot rename episode with no name or part"),
+                };
 
-            if (episode.Number is null)
-            {
-                throw new InvalidOperationException("Cannot rename episode with no number");
-            }
+                if (episode.Work is { } work)
+                {
+                    name = AddPart(name, work);
+                }
 
-            var showName = episode.Show.Sanitise();
-            var seasonNumber = episode.Season;
-            var episodeNumber = episode.Number;
-
-            var directory = Path.Combine("TV Shows", showName, FormattableString.Invariant($"Season {seasonNumber:00}")).ReplaceAll(GetInvalidPathChars());
-            var name = FormattableString.Invariant($"{showName} - s{seasonNumber:00}e{episodeNumber:00}");
-            if (episode.Part is { } part)
-            {
-                // This is part of an episode
-                name += " - ";
-                name += nameof(part);
-                name += part;
+                return Path.Combine(Path.Combine("TV Shows", showName, FormattableString.Invariant($"Season {seasonNumber:00}")).ReplaceAll(GetInvalidPathChars()), (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars()));
             }
-            else if (episode.Name is { } episodeName)
-            {
-                // This is a single episode
-                name += " - ";
-                name += episodeName.Sanitise();
-            }
-            else
-            {
-                throw new InvalidOperationException("Cannot rename episode with no name or part");
-            }
-
-            if (episode.Work is { } work)
-            {
-                name += " - ";
-                name += work;
-            }
-
-            return Path.Combine(directory, (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars()));
         }
-
-        return default;
     }
 
     private static char[] GetInvalidFileNameChars()

@@ -12,29 +12,29 @@
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231219000" />
-    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
+    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" />
     <PackageVersion Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
     <PackageVersion Include="NeoSmart.AsyncLock" Version="3.2.1" />
     <PackageVersion Include="RestSharp" Version="110.2.0" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.6" />
-    <PackageVersion Include="System.CommandLine.Hosting" Version="0.4.0-alpha.23407.1" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.7" />
+    <PackageVersion Include="System.CommandLine.Hosting" Version="0.4.0-alpha.24126.1" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <PackageVersion Include="TagLibSharp" Version="2.3.0" />
-    <PackageVersion Include="TMDbLib" Version="2.1.0" />
+    <PackageVersion Include="TMDbLib" Version="2.2.0" />
     <PackageVersion Include="Vanara.PInvoke.Shell32" Version="3.4.17" />
     <PackageVersion Include="Vanara.PInvoke.User32" Version="3.4.17" />
   </ItemGroup>
 
   <ItemGroup Label="Kiota">
-    <PackageVersion Include="Microsoft.Kiota.Abstractions" Version="1.7.7" />
-    <PackageVersion Include="Microsoft.Kiota.Authentication.Azure" Version="1.1.2" />
-    <PackageVersion Include="Microsoft.Kiota.Http.HttpClientLibrary" Version="1.3.4" />
-    <PackageVersion Include="Microsoft.Kiota.Serialization.Form" Version="1.1.2" />
-    <PackageVersion Include="Microsoft.Kiota.Serialization.Json" Version="1.1.4" />
-    <PackageVersion Include="Microsoft.Kiota.Serialization.Multipart" Version="1.1.1" />
-    <PackageVersion Include="Microsoft.Kiota.Serialization.Text" Version="1.1.2" />
+    <PackageVersion Include="Microsoft.Kiota.Abstractions" Version="1.8.1" />
+    <PackageVersion Include="Microsoft.Kiota.Authentication.Azure" Version="1.1.4" />
+    <PackageVersion Include="Microsoft.Kiota.Http.HttpClientLibrary" Version="1.3.8" />
+    <PackageVersion Include="Microsoft.Kiota.Serialization.Form" Version="1.1.5" />
+    <PackageVersion Include="Microsoft.Kiota.Serialization.Json" Version="1.2.0" />
+    <PackageVersion Include="Microsoft.Kiota.Serialization.Multipart" Version="1.1.3" />
+    <PackageVersion Include="Microsoft.Kiota.Serialization.Text" Version="1.1.4" />
   </ItemGroup>
 
   <ItemGroup Label="Source Generators">
@@ -42,9 +42,9 @@
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">
-    <GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.136" />
-    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.9.0" />
-    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.16.0.82469" />
+    <GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.146" />
+    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.12.0" />
+    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.23.1.88495" />
     <GlobalPackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
   </ItemGroup>
 
