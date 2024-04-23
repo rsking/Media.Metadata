@@ -13,13 +13,13 @@ namespace Media.Metadata.ViewModels;
 internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, ILocalVideo, IHasImage, Models.IHasImageSource, IAsyncDisposable, IDisposable
 {
     // list backing fields
-    private readonly IList<string> producers = new System.Collections.ObjectModel.ObservableCollection<string>();
-    private readonly IList<string> directors = new System.Collections.ObjectModel.ObservableCollection<string>();
-    private readonly IList<string> studios = new System.Collections.ObjectModel.ObservableCollection<string>();
-    private readonly IList<string> genre = new System.Collections.ObjectModel.ObservableCollection<string>();
-    private readonly IList<string> screenWriters = new System.Collections.ObjectModel.ObservableCollection<string>();
-    private readonly IList<string> cast = new System.Collections.ObjectModel.ObservableCollection<string>();
-    private readonly IList<string> composers = new System.Collections.ObjectModel.ObservableCollection<string>();
+    private readonly System.Collections.ObjectModel.ObservableCollection<string> producers = [];
+    private readonly System.Collections.ObjectModel.ObservableCollection<string> directors = [];
+    private readonly System.Collections.ObjectModel.ObservableCollection<string> studios = [];
+    private readonly System.Collections.ObjectModel.ObservableCollection<string> genre = [];
+    private readonly System.Collections.ObjectModel.ObservableCollection<string> screenWriters = [];
+    private readonly System.Collections.ObjectModel.ObservableCollection<string> cast = [];
+    private readonly System.Collections.ObjectModel.ObservableCollection<string> composers = [];
 
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? name;
@@ -70,7 +70,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         FillFrom(video.ScreenWriters, this.screenWriters);
         FillFrom(video.Cast, this.cast);
         FillFrom(video.Composers, this.composers);
-        this.Release = video.Release is null || video.Release.Value.Ticks == default ? default(DateTimeOffset?) : new DateTimeOffset(video.Release.Value);
+        this.Release = video is { Release: { Ticks: not 0 } videoRelease } ? new DateTimeOffset(videoRelease) : default(DateTimeOffset?);
         this.Rating = new RatingViewModel(video.Rating);
         this.work = video.Work;
         this.Tracks = video.Tracks.Select(track => new MediaTrackViewModel(track)).ToArray();
@@ -221,7 +221,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         FillFrom(video.ScreenWriters, this.screenWriters);
         FillFrom(video.Cast, this.cast);
         FillFrom(video.Composers, this.composers);
-        this.Release = video.Release is null ? default(DateTimeOffset?) : new DateTimeOffset(video.Release.Value);
+        this.Release = video is { Release: { Ticks: not 0 } videoRelease } ? new DateTimeOffset(videoRelease) : default(DateTimeOffset?);
         this.Rating.SelectedRating = video.Rating;
         this.Work = video.Work;
         this.Image = video.Image;
@@ -286,7 +286,7 @@ internal partial class VideoViewModel : CommunityToolkit.Mvvm.ComponentModel.Obs
         }
     }
 
-    private static void FillFrom<T>(IEnumerable<T>? source, IList<T> destination)
+    private static void FillFrom<T>(IEnumerable<T>? source, System.Collections.ObjectModel.ObservableCollection<T> destination)
     {
         destination.Clear();
         if (source is not null)

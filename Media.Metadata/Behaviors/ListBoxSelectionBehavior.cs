@@ -49,28 +49,20 @@ internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavi
     {
         base.OnDetaching();
 
-        if (this.AssociatedObject is not null)
+        if (this.AssociatedObject is { } associatedObject)
         {
-            this.AssociatedObject.SelectionChanged -= this.OnListBoxSelectionChanged;
+            associatedObject.SelectionChanged -= this.OnListBoxSelectionChanged;
         }
     }
 
     private static void OnSelectedItemsChanged(Microsoft.UI.Xaml.DependencyObject sender, Microsoft.UI.Xaml.DependencyPropertyChangedEventArgs args)
     {
-        var behavior = (ListBoxSelectionBehavior<T>)sender;
-        if (behavior.modelHandled)
+        if (sender is ListBoxSelectionBehavior<T> { modelHandled: false, AssociatedObject: not null } behavior)
         {
-            return;
+            behavior.modelHandled = true;
+            behavior.SelectItems();
+            behavior.modelHandled = false;
         }
-
-        if (behavior.AssociatedObject is null)
-        {
-            return;
-        }
-
-        behavior.modelHandled = true;
-        behavior.SelectItems();
-        behavior.modelHandled = false;
     }
 
     // Propagate selected items from model to view
@@ -78,9 +70,9 @@ internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavi
     {
         this.viewHandled = true;
         this.AssociatedObject.SelectedItems.Clear();
-        if (this.SelectedItems is not null)
+        if (this.SelectedItems is { } selectedItems)
         {
-            foreach (var item in this.SelectedItems)
+            foreach (var item in selectedItems)
             {
                 this.AssociatedObject.SelectedItems.Add(item);
             }
@@ -92,20 +84,15 @@ internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavi
     // Propagate selected items from view to model
     private void OnListBoxSelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs args)
     {
-        if (this.viewHandled)
-        {
-            return;
-        }
-
-        if (this.AssociatedObject.ItemsSource is null)
+        if (this.viewHandled || this.AssociatedObject.ItemsSource is null)
         {
             return;
         }
 
         this.SelectedItems.Clear();
-        if (this.AssociatedObject.SelectedItems is not null)
+        if (this.AssociatedObject.SelectedItems is { } selectedItems)
         {
-            foreach (var item in this.AssociatedObject.SelectedItems)
+            foreach (var item in selectedItems)
             {
                 _ = this.SelectedItems.Add(item);
             }

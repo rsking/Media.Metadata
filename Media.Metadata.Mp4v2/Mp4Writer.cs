@@ -25,9 +25,7 @@ public class Mp4Writer : IUpdater
         else
         {
             var file = Mp4File.Create(TagLib.File.Create(fileName));
-            var mediaType = file.Tags is null
-                ? MediaKind.NotSet
-                : file.Tags.MediaType;
+            var mediaType = file.Tags?.MediaType ?? MediaKind.NotSet;
             Update(file, video, mediaType, languages);
             file.Save();
         }
@@ -38,15 +36,15 @@ public class Mp4Writer : IUpdater
     {
         var file = Mp4File.Create(TagLib.File.Create(fileName));
         Update(file, episode, MediaKind.TVShow, languages);
-        if (file.Tags is not null)
+        if (file.Tags is { } tags)
         {
             // episode
-            file.Tags.EpisodeNumber = episode.Number;
-            file.Tags.SeasonNumber = episode.Season;
-            file.Tags.TVShow = episode.Show;
-            file.Tags.EpisodeId = episode.Id;
-            file.Tags.TVNetwork = episode.Network;
-            file.Tags.ContentId = episode.Part;
+            tags.EpisodeNumber = episode.Number;
+            tags.SeasonNumber = episode.Season;
+            tags.TVShow = episode.Show;
+            tags.EpisodeId = episode.Id;
+            tags.TVNetwork = episode.Network;
+            tags.ContentId = episode.Part;
         }
 
         file.Save();
@@ -57,9 +55,9 @@ public class Mp4Writer : IUpdater
     {
         var file = Mp4File.Create(TagLib.File.Create(fileName));
         Update(file, movie, MediaKind.Movie, languages);
-        if (file.Tags is not null)
+        if (file.Tags is { } tags)
         {
-            file.Tags.Category = movie.Edition;
+            tags.Category = movie.Edition;
         }
 
         file.Save();
@@ -67,24 +65,23 @@ public class Mp4Writer : IUpdater
 
     private static void Update(Mp4File file, Video video, MediaKind mediaKind, IDictionary<MediaTrackType, string>? languages)
     {
-        if (file.Tags is not null)
+        if (file.Tags is { } tags)
         {
-            file.Tags.MediaType = mediaKind;
-            file.Tags.Title = video.Name;
-            file.Tags.Description = video.Description;
-            file.Tags.LongDescription = video.Description;
-            file.Tags.Genre = ToString(video.Genre);
-            file.Tags.Composer = ToString(video.Composers);
-            file.Tags.AlbumArtist = ToString(video.Cast);
-            file.Tags.ReleaseDate = video.Release?.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-            file.Tags.SetArtwork(video.Image, video.ImageFormat);
-            file.Tags.Work = video.Work;
+            tags.MediaType = mediaKind;
+            tags.Title = video.Name;
+            tags.Description = video.Description;
+            tags.LongDescription = video.Description;
+            tags.Genre = ToString(video.Genre);
+            tags.Composer = ToString(video.Composers);
+            tags.AlbumArtist = ToString(video.Cast);
+            tags.ReleaseDate = video.Release?.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            tags.SetArtwork(video.Image, video.ImageFormat);
+            tags.Work = video.Work;
 
-            file.Tags.RatingInfo = default;
-            if (video.Rating is not null)
+            tags.RatingInfo = default;
+            if (video.Rating is { } rating)
             {
-                var rating = video.Rating.Value;
-                file.Tags.RatingInfo = new RatingInfo
+                tags.RatingInfo = new RatingInfo
                 {
                     RatingSource = rating.Standard,
                     Rating = rating.ContentRating,
@@ -92,76 +89,44 @@ public class Mp4Writer : IUpdater
                 };
             }
 
-            file.Tags.MovieInfo ??= new MovieInfo();
-            file.Tags.MovieInfo.RemoveProducers();
-            if (video.Producers is not null)
+            tags.MovieInfo ??= new MovieInfo();
+            tags.MovieInfo.RemoveProducers();
+            if (video.Producers is { } producers)
             {
-                foreach (var producer in video.Producers)
+                foreach (var producer in producers)
                 {
-                    file.Tags.MovieInfo.Producers.Add(producer);
+                    tags.MovieInfo.Producers.Add(producer);
                 }
             }
 
-            file.Tags.MovieInfo.RemoveDirectors();
-            if (video.Directors is not null)
+            tags.MovieInfo.RemoveDirectors();
+            if (video.Directors is { } directors)
             {
-                foreach (var director in video.Directors)
+                foreach (var director in directors)
                 {
-                    file.Tags.MovieInfo.Directors.Add(director);
+                    tags.MovieInfo.Directors.Add(director);
                 }
             }
 
-            file.Tags.MovieInfo.RemoveCast();
-            if (video.Cast is not null)
+            tags.MovieInfo.RemoveCast();
+            if (video.Cast is { } cast)
             {
-                foreach (var cast in video.Cast)
+                foreach (var member in cast)
                 {
-                    file.Tags.MovieInfo.Cast.Add(cast);
+                    tags.MovieInfo.Cast.Add(member);
                 }
             }
 
-            file.Tags.MovieInfo.RemoveScreenwriters();
-            if (video.ScreenWriters is not null)
+            tags.MovieInfo.RemoveScreenwriters();
+            if (video.ScreenWriters is { } screenWriters)
             {
-                foreach (var screenWriter in video.ScreenWriters)
+                foreach (var screenWriter in screenWriters)
                 {
-                    file.Tags.MovieInfo.Screenwriters.Add(screenWriter);
+                    tags.MovieInfo.Screenwriters.Add(screenWriter);
                 }
             }
 
-            file.Tags.MovieInfo.Studio = ToString(video.Studios);
-
-            if (languages is not null && file.Tracks is not null)
-            {
-                foreach (var language in languages)
-                {
-                    foreach (var track in GetTracks(file.Tracks, language.Key))
-                    {
-                        track.Language = language.Value;
-                    }
-
-                    IEnumerable<Track> GetTracks(IEnumerable<Track> tracks, MediaTrackType key)
-                    {
-                        if (key == MediaTrackType.All)
-                        {
-                            return tracks;
-                        }
-
-                        if (key == MediaTrackType.Audio)
-                        {
-                            return tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4AudioTrackType, StringComparison.Ordinal));
-                        }
-
-                        if (key == MediaTrackType.Video)
-                        {
-                            return tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4VideoTrackType, StringComparison.Ordinal));
-                        }
-
-                        var id = (int)key;
-                        return tracks.Where(track => track.Id == id);
-                    }
-                }
-            }
+            tags.MovieInfo.Studio = ToString(video.Studios);
 
             static string? ToString(IEnumerable<string>? value)
             {
@@ -174,6 +139,38 @@ public class Mp4Writer : IUpdater
                 return string.IsNullOrEmpty(stringValue)
                     ? default
                     : stringValue;
+            }
+        }
+
+        if (languages is { } l && file.Tracks is { } tracks)
+        {
+            foreach (var language in l)
+            {
+                foreach (var track in GetTracks(tracks, language.Key))
+                {
+                    track.Language = language.Value;
+                }
+
+                IEnumerable<Track> GetTracks(IEnumerable<Track> tracks, MediaTrackType key)
+                {
+                    if (key == MediaTrackType.All)
+                    {
+                        return tracks;
+                    }
+
+                    if (key == MediaTrackType.Audio)
+                    {
+                        return tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4AudioTrackType, StringComparison.Ordinal));
+                    }
+
+                    if (key == MediaTrackType.Video)
+                    {
+                        return tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4VideoTrackType, StringComparison.Ordinal));
+                    }
+
+                    var id = (int)key;
+                    return tracks.Where(track => track.Id == id);
+                }
             }
         }
     }

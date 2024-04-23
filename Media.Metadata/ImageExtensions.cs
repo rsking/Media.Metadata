@@ -34,15 +34,18 @@ internal static class ImageExtensions
     /// <returns>The image source.</returns>
     public static async Task<Windows.Graphics.Imaging.SoftwareBitmap?> CreateSoftwareBitmapAsync(this Image image, SixLabors.ImageSharp.Formats.IImageFormat? imageFormat, CancellationToken cancellationToken = default)
     {
-        if (image is null)
+        if (image is not null)
         {
-            return default;
+            var stream = new MemoryStream();
+            await using (stream.ConfigureAwait(false))
+            {
+                await image.SaveAsync(stream, imageFormat, cancellationToken).ConfigureAwait(true);
+                var bitmapDecoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream.AsRandomAccessStream());
+                return await bitmapDecoder.GetSoftwareBitmapAsync();
+            }
         }
 
-        await using var stream = new MemoryStream();
-        await image.SaveAsync(stream, imageFormat, cancellationToken).ConfigureAwait(false);
-        var bitmapDecoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream.AsRandomAccessStream());
-        return await bitmapDecoder.GetSoftwareBitmapAsync();
+        return default;
     }
 
     /// <summary>
@@ -66,8 +69,7 @@ internal static class ImageExtensions
     /// <returns>The image source.</returns>
     public static async Task<ImageSource?> CreateImageSource(this Image image, SixLabors.ImageSharp.Formats.IImageFormat? imageFormat, CancellationToken cancellationToken = default)
     {
-        using var softwareBitmap = await image.CreateSoftwareBitmapAsync(imageFormat, cancellationToken).ConfigureAwait(true);
-        if (softwareBitmap is not null)
+        if (await image.CreateSoftwareBitmapAsync(imageFormat, cancellationToken).ConfigureAwait(true) is { } softwareBitmap)
         {
             var displayable = Windows.Graphics.Imaging.SoftwareBitmap.Convert(
                 softwareBitmap,

@@ -18,18 +18,14 @@ public sealed class ImageToImageSourceConverter : Microsoft.UI.Xaml.Data.IValueC
     /// <inheritdoc/>
     public object? Convert(object? value, Type targetType, object parameter, string language)
     {
-        // empty images are empty…
-        if (value is null)
+        return value switch
         {
-            return null;
-        }
+            ImageSource imageSource => imageSource,
+            Image image => ImageToImageSource(image),
+            _ => default,
+        };
 
-        if (value is ImageSource imageSource)
-        {
-            return imageSource;
-        }
-
-        if (value is Image image)
+        static object ImageToImageSource(Image image)
         {
             using var stream = new MemoryStream();
             image.SaveAsBmp(stream);
@@ -40,8 +36,6 @@ public sealed class ImageToImageSourceConverter : Microsoft.UI.Xaml.Data.IValueC
             source.SetBitmapAsync(decoder.GetSoftwareBitmapAsync().AsTask().Result).AsTask().Wait();
             return source;
         }
-
-        return default;
     }
 
     /// <inheritdoc/>

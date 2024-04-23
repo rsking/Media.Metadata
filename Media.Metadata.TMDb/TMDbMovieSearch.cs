@@ -43,7 +43,7 @@ public class TMDbMovieSearch : IMovieSearch
                     invariantRating = Rating.FindBest(cty.Certification, cty.Iso_3166_1);
                 }
 
-                if (country is not null && string.Equals(cty.Iso_3166_1, country, StringComparison.InvariantCultureIgnoreCase))
+                if (country is { } c && string.Equals(cty.Iso_3166_1, c, StringComparison.InvariantCultureIgnoreCase))
                 {
                     countryRating = Rating.FindBest(cty.Certification, cty.Iso_3166_1);
                 }

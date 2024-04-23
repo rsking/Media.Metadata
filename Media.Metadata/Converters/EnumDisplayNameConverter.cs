@@ -16,61 +16,58 @@ public class EnumDisplayNameConverter : Microsoft.UI.Xaml.Data.IValueConverter
     /// <inheritdoc/>
     public object? Convert(object value, Type targetType, object parameter, string language)
     {
-        if (value is null || value.ToString() is not string valueString)
+        if (value is { } v)
         {
-            return string.Empty;
-        }
+            return FromFieldInfo(v) ?? Enum.GetName(value.GetType(), v);
 
-        var fieldInfo = value.GetType().GetField(valueString);
-        if (fieldInfo is not null)
-        {
-            var displayName = FromMyDisplayAttribute(fieldInfo) ?? FromDisplayAttribute(fieldInfo) ?? FromDisplayNameAttribute(fieldInfo);
-            if (displayName is not null)
+            static string? FromFieldInfo(object v)
             {
-                return displayName;
-            }
-        }
+                return v.ToString() is { } valueString && v.GetType().GetField(valueString) is { } fieldInfo
+                    ? FromMyDisplayAttribute(fieldInfo) ?? FromDisplayAttribute(fieldInfo) ?? FromDisplayNameAttribute(fieldInfo)
+                    : default;
 
-        return Enum.GetName(value.GetType(), value);
-
-        static string? FromDisplayNameAttribute(FieldInfo fieldInfo)
-        {
-            return fieldInfo.GetCustomAttribute<System.ComponentModel.DisplayNameAttribute>() switch
-            {
-                System.ComponentModel.DisplayNameAttribute attribute => attribute.DisplayName,
-                _ => default,
-            };
-        }
-
-        static string? FromDisplayAttribute(FieldInfo fieldInfo)
-        {
-            return fieldInfo.GetCustomAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>() switch
-            {
-                System.ComponentModel.DataAnnotations.DisplayAttribute attribute when !string.IsNullOrEmpty(attribute.Name) => attribute.Name,
-                System.ComponentModel.DataAnnotations.DisplayAttribute attribute when !string.IsNullOrEmpty(attribute.ShortName) => attribute.ShortName,
-                _ => default,
-            };
-        }
-
-        static string? FromMyDisplayAttribute(FieldInfo fieldInfo)
-        {
-            if (fieldInfo.GetCustomAttribute<DisplayAttribute>() is DisplayAttribute attribute)
-            {
-                var name = attribute.GetName();
-                if (!string.IsNullOrEmpty(name))
+                static string? FromDisplayNameAttribute(FieldInfo fieldInfo)
                 {
-                    return name;
+                    return fieldInfo.GetCustomAttribute<System.ComponentModel.DisplayNameAttribute>() switch
+                    {
+                        System.ComponentModel.DisplayNameAttribute attribute => attribute.DisplayName,
+                        _ => default,
+                    };
                 }
 
-                name = attribute.GetShortName();
-                if (!string.IsNullOrEmpty(name))
+                static string? FromDisplayAttribute(FieldInfo fieldInfo)
                 {
-                    return name;
+                    return fieldInfo.GetCustomAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>() switch
+                    {
+                        System.ComponentModel.DataAnnotations.DisplayAttribute attribute when !string.IsNullOrEmpty(attribute.Name) => attribute.Name,
+                        System.ComponentModel.DataAnnotations.DisplayAttribute attribute when !string.IsNullOrEmpty(attribute.ShortName) => attribute.ShortName,
+                        _ => default,
+                    };
+                }
+
+                static string? FromMyDisplayAttribute(FieldInfo fieldInfo)
+                {
+                    if (fieldInfo.GetCustomAttribute<DisplayAttribute>() is DisplayAttribute attribute)
+                    {
+                        var name = attribute.GetName();
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            return name;
+                        }
+
+                        name = attribute.GetShortName();
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            return name;
+                        }
+                    }
+
+                    return default;
                 }
             }
-
-            return default;
         }
+
+        return string.Empty;
     }
 
     /// <inheritdoc/>

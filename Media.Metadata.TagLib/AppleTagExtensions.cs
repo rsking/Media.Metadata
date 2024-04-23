@@ -141,14 +141,14 @@ public static class AppleTagExtensions
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The media type.</returns>
-    public static MediaType GetMediaType(this AppleTag appleTag) => appleTag.GetByteOrDefault(MediaType) is byte mediaType ? (MediaType)mediaType : Metadata.MediaType.NotSet;
+    public static MediaType GetMediaType(this AppleTag appleTag) => appleTag.GetByteOrDefault(MediaType) is { } mediaType ? (MediaType)mediaType : Metadata.MediaType.NotSet;
 
     /// <summary>
     /// Gets the content rating.
     /// </summary>
     /// <param name="appleTag">The apple tag.</param>
     /// <returns>The content rating.</returns>
-    public static ContentRating GetContentRating(this AppleTag appleTag) => appleTag.GetByteOrDefault(ContentRating) is byte contentRating ? (ContentRating)contentRating : Metadata.ContentRating.NotSet;
+    public static ContentRating GetContentRating(this AppleTag appleTag) => appleTag.GetByteOrDefault(ContentRating) is { } contentRating ? (ContentRating)contentRating : Metadata.ContentRating.NotSet;
 
     /// <summary>
     /// Gets the HD video.
@@ -249,7 +249,7 @@ public static class AppleTagExtensions
         ? (int)System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(item.Data.Data)
         : default(int?);
 
-    private static bool? GetBoolOrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.GetInt32OrDefault(type) is int value
+    private static bool? GetBoolOrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.GetInt32OrDefault(type) is { } value
         ? value > 0
         : default(bool?);
 

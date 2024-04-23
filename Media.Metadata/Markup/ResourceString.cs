@@ -18,5 +18,7 @@ public sealed class ResourceString : Microsoft.UI.Xaml.Markup.MarkupExtension
     public string? Name { get; set; }
 
     /// <inheritdoc/>
-    protected override object? ProvideValue() => this.Name is string name ? UI.Properties.Resources.ResourceManager.GetString(name, UI.Properties.Resources.Culture) : default;
+    protected override object? ProvideValue() => this.Name is { } name
+        ? UI.Properties.Resources.ResourceManager.GetString(name, UI.Properties.Resources.Culture)
+        : default;
 }

@@ -64,7 +64,7 @@ internal sealed class ChapterExtractor(Stream stream)
     {
         this.Chapters = null;
         _ = this.stream.Seek(0L, SeekOrigin.Begin);
-        if (ReadMoovInfo() is MoovInfo moovInfo)
+        if (ReadMoovInfo() is { } moovInfo)
         {
             this.Tracks = moovInfo.Tracks;
             ReadChapters(moovInfo);
@@ -72,7 +72,7 @@ internal sealed class ChapterExtractor(Stream stream)
 
         MoovInfo? ReadMoovInfo()
         {
-            if (FindBox(Moov) is BoxInfo moovBox)
+            if (FindBox(Moov) is { } moovBox)
             {
                 var moovData = default(MoovInfo);
                 var tracks = new List<TrakInfo>();
@@ -333,9 +333,9 @@ internal sealed class ChapterExtractor(Stream stream)
 
                 void ReadChaptersText(TrakInfo textBox)
                 {
-                    if (textBox.Durations is not null)
+                    if (textBox.Durations is { } durations)
                     {
-                        var length = Math.Min(textBox.Durations.Count, textBox.Samples?.Count ?? int.MinValue);
+                        var length = Math.Min(durations.Count, textBox.Samples?.Count ?? int.MinValue);
                         if (length > 0)
                         {
                             this.Chapters = new ChapterInfo[length];
@@ -351,9 +351,9 @@ internal sealed class ChapterExtractor(Stream stream)
                                 var chapterInfo = new ChapterInfo { Time = position };
                                 var duration = (double)textBox.Durations[i];
                                 position += TimeSpan.FromSeconds(duration / timeUnitPerSecond);
-                                if (textBox.Samples is not null)
+                                if (textBox.Samples is { } samples)
                                 {
-                                    _ = this.stream.Seek(textBox.Samples[i], SeekOrigin.Begin);
+                                    _ = this.stream.Seek(samples[i], SeekOrigin.Begin);
                                     chapterInfo = chapterInfo with { Name = ReadPascalString(System.Text.Encoding.UTF8) };
                                 }
 
@@ -363,7 +363,7 @@ internal sealed class ChapterExtractor(Stream stream)
                             string ReadPascalString(System.Text.Encoding encoding)
                             {
                                 var @ushort = this.ReadUInt16();
-                                if (@ushort == 0)
+                                if (@ushort is 0)
                                 {
                                     return string.Empty;
                                 }
@@ -400,7 +400,7 @@ internal sealed class ChapterExtractor(Stream stream)
         do
         {
             last = true;
-            if (NextBox(maximumLength) is BoxInfo box)
+            if (NextBox(maximumLength) is { } box)
             {
                 yield return box;
 

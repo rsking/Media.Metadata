@@ -146,16 +146,16 @@ internal static class IntPtrExtensions
     /// <param name="mp4ApiFunction">The MP4V2 API method to call with the pointer to the value.</param>
     public static void WriteInt16(this IntPtr tagsStructure, short? value, Func<IntPtr, IntPtr, bool> mp4ApiFunction)
     {
-        if (value is null)
+        if (value is { } stringValue)
         {
-            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            var valuePtr = Marshal.AllocHGlobal(sizeof(short));
+            Marshal.WriteInt16(valuePtr, stringValue);
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
+            Marshal.FreeHGlobal(valuePtr);
         }
         else
         {
-            var valuePtr = Marshal.AllocHGlobal(sizeof(short));
-            Marshal.WriteInt16(valuePtr, value.Value);
-            _ = mp4ApiFunction(tagsStructure, valuePtr);
-            Marshal.FreeHGlobal(valuePtr);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
     }
 
@@ -167,16 +167,16 @@ internal static class IntPtrExtensions
     /// <param name="mp4ApiFunction">The MP4V2 API method to call with the pointer to the 32-bit integer value.</param>
     public static void WriteInt32(this IntPtr tagsStructure, int? value, Func<IntPtr, IntPtr, bool> mp4ApiFunction)
     {
-        if (value is null)
+        if (value is { } intValue)
         {
-            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            var valuePtr = Marshal.AllocHGlobal(sizeof(int));
+            Marshal.WriteInt32(valuePtr, intValue);
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
+            Marshal.FreeHGlobal(valuePtr);
         }
         else
         {
-            var valuePtr = Marshal.AllocHGlobal(sizeof(int));
-            Marshal.WriteInt32(valuePtr, value.Value);
-            _ = mp4ApiFunction(tagsStructure, valuePtr);
-            Marshal.FreeHGlobal(valuePtr);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
     }
 
@@ -188,16 +188,16 @@ internal static class IntPtrExtensions
     /// <param name="mp4ApiFunction">The MP4V2 API method to call with the pointer to the 64-bit integer value.</param>
     public static void WriteInt64(this IntPtr tagsStructure, long? value, Func<IntPtr, IntPtr, bool> mp4ApiFunction)
     {
-        if (value is null)
+        if (value is { } longValue)
         {
-            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            var valuePtr = Marshal.AllocHGlobal(sizeof(long));
+            Marshal.WriteInt64(valuePtr, longValue);
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
+            Marshal.FreeHGlobal(valuePtr);
         }
         else
         {
-            var valuePtr = Marshal.AllocHGlobal(sizeof(long));
-            Marshal.WriteInt64(valuePtr, value.Value);
-            _ = mp4ApiFunction(tagsStructure, valuePtr);
-            Marshal.FreeHGlobal(valuePtr);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
     }
 
@@ -209,16 +209,16 @@ internal static class IntPtrExtensions
     /// <param name="mp4ApiFunction">The MP4V2 API method to call with the pointer to the 8-bit integer value.</param>
     public static void WriteByte(this IntPtr tagsStructure, byte? value, Func<IntPtr, IntPtr, bool> mp4ApiFunction)
     {
-        if (value is null)
+        if (value is { } byteValue)
         {
-            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            var valuePtr = Marshal.AllocHGlobal(sizeof(byte));
+            Marshal.WriteByte(valuePtr, byteValue);
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
+            Marshal.FreeHGlobal(valuePtr);
         }
         else
         {
-            var valuePtr = Marshal.AllocHGlobal(sizeof(byte));
-            Marshal.WriteByte(valuePtr, value.Value);
-            _ = mp4ApiFunction(tagsStructure, valuePtr);
-            Marshal.FreeHGlobal(valuePtr);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
     }
 
@@ -230,17 +230,21 @@ internal static class IntPtrExtensions
     /// <param name="mp4ApiFunction">The MP4V2 API method to call with the pointer to the 8-bit integer value.</param>
     public static void WriteBoolean(this IntPtr tagsStructure, bool? value, Func<IntPtr, IntPtr, bool> mp4ApiFunction)
     {
-        if (value is null)
+        if (value is { } boolValue)
         {
-            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
+            var valuePtr = Marshal.AllocHGlobal(sizeof(byte));
+            Marshal.WriteByte(valuePtr, GetByte(boolValue));
+            _ = mp4ApiFunction(tagsStructure, valuePtr);
+            Marshal.FreeHGlobal(valuePtr);
+
+            static byte GetByte(bool value)
+            {
+                return value ? (byte)1 : (byte)0;
+            }
         }
         else
         {
-            var valuePtr = Marshal.AllocHGlobal(sizeof(byte));
-            var actualValue = Convert.ToByte(value.Value ? 1 : 0);
-            Marshal.WriteByte(valuePtr, actualValue);
-            _ = mp4ApiFunction(tagsStructure, valuePtr);
-            Marshal.FreeHGlobal(valuePtr);
+            _ = mp4ApiFunction(tagsStructure, IntPtr.Zero);
         }
     }
 }

@@ -19,14 +19,14 @@ internal static class ExtensionMethods
     /// <returns>The image.</returns>
     public static async ValueTask<(Image Image, SixLabors.ImageSharp.Formats.IImageFormat ImageFormat)> DownloadImageAsync(this IRemoteImage remoteVideo, CancellationToken cancellationToken = default)
     {
-        if (remoteVideo.ImageUri is null)
+        if (remoteVideo.ImageUri is { } imageUri)
         {
-            return default;
+            using var client = new HttpClient();
+            using var stream = await client.GetStreamAsync(imageUri).ConfigureAwait(false);
+            return await Image.LoadWithFormatAsync(stream, cancellationToken).ConfigureAwait(false);
         }
 
-        using var client = new HttpClient();
-        using var stream = await client.GetStreamAsync(remoteVideo.ImageUri).ConfigureAwait(false);
-        return await Image.LoadWithFormatAsync(stream, cancellationToken).ConfigureAwait(false);
+        return default;
     }
 
     /// <summary>

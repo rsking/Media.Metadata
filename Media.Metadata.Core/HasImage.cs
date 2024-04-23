@@ -83,9 +83,9 @@ public abstract record class HasImage : IHasImage, IAsyncDisposable, IDisposable
         {
             if (disposing)
             {
-                if (this.imageRetrived && this.image is not null)
+                if (this.imageRetrived && this.image is { } disposable)
                 {
-                    this.image.Dispose();
+                    disposable.Dispose();
                 }
 
                 this.image = default;
@@ -102,15 +102,15 @@ public abstract record class HasImage : IHasImage, IAsyncDisposable, IDisposable
     /// <returns>The value task.</returns>
     protected virtual async ValueTask DisposeAsyncCore()
     {
-        if (this.imageRetrived && this.image is not null)
+        if (this.imageRetrived)
         {
             if (this.image is IAsyncDisposable asyncDisposable)
             {
                 await asyncDisposable.DisposeAsync().ConfigureAwait(false);
             }
-            else
+            else if (this.image is IDisposable disposable)
             {
-                this.image.Dispose();
+                disposable.Dispose();
             }
         }
 

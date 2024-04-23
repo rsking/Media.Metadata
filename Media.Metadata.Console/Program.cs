@@ -164,14 +164,12 @@ static CliCommand CreateSearchShow()
                 foreach (var season in show.Seasons.OrderBy(season => season.Number))
                 {
                     Console.WriteLine("\tSeason {0}", season.Number);
-                    if (season.Episodes is null)
+                    if (season.Episodes is { } episodes)
                     {
-                        continue;
-                    }
-
-                    foreach (var episode in season.Episodes)
-                    {
-                        Console.WriteLine("\t\t{0}: {1}", episode.Name, episode.Description);
+                        foreach (var episode in episodes)
+                        {
+                            Console.WriteLine("\t\t{0}: {1}", episode.Name, episode.Description);
+                        }
                     }
                 }
             }
@@ -278,7 +276,7 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
                         .GroupBy(
                             path => season switch
                             {
-                                -1 when GetMatch(path.Name) is System.Text.RegularExpressions.Match match => int.Parse(match.Groups["season"].Value, System.Globalization.CultureInfo.CurrentCulture),
+                                -1 when GetMatch(path.Name) is { } match => int.Parse(match.Groups["season"].Value, System.Globalization.CultureInfo.CurrentCulture),
                                 _ => season,
                             },
                             path => path)
@@ -299,19 +297,19 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
 
                     foreach (var seasonGroup in seasons)
                     {
-                        while (seasonEnumerator.Current is not null && seasonEnumerator.Current.Number < seasonGroup.Key && seasonEnumerator.MoveNext())
+                        while (seasonEnumerator is { Current: { } current } && current.Number < seasonGroup.Key && seasonEnumerator.MoveNext())
                         {
                             // loop until we have the correct season.
                         }
 
-                        if (seasonEnumerator.Current is Season s && s.Number == seasonGroup.Key)
+                        if (seasonEnumerator.Current is { } s && s.Number == seasonGroup.Key)
                         {
                             await console.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Season  {series.Name}:{s.Number}")).ConfigureAwait(false);
 
                             var episoides = seasonGroup
                                 .Select(path => episode switch
                                 {
-                                    -1 when GetMatch(path.Name) is System.Text.RegularExpressions.Match match => (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture) + offset, Path: path),
+                                    -1 when GetMatch(path.Name) is { } match => (Episode: int.Parse(match.Groups["episode"].Value, System.Globalization.CultureInfo.CurrentCulture) + offset, Path: path),
                                     _ => (Episode: episode + offset, Path: path),
                                 })
                                 .OrderBy(ep => ep.Episode)
@@ -328,12 +326,12 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
                             {
                                 await console.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Processing {ep.Path.Name}")).ConfigureAwait(false);
 
-                                while (episodeEnumerator.Current is not null && episodeEnumerator.Current.Number < ep.Episode && episodeEnumerator.MoveNext())
+                                while (episodeEnumerator is { Current: { } current } && current.Number < ep.Episode && episodeEnumerator.MoveNext())
                                 {
                                     // loop until we have the correct episode.
                                 }
 
-                                if (episodeEnumerator.Current is Episode e && e.Number == ep.Episode)
+                                if (episodeEnumerator.Current is { } e && e.Number == ep.Episode)
                                 {
                                     await console.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Episode {series.Name}:{s.Number}:{e.Name}")).ConfigureAwait(false);
                                     if (e.Rating is null)
@@ -516,9 +514,9 @@ static CliCommand CreateRename()
                     continue;
                 }
 
-                if (!dryRun && path.Directory is not null)
+                if (!dryRun && path.Directory is { } directory)
                 {
-                    path.Directory.Create();
+                    directory.Create();
                 }
 
                 if (move)
@@ -585,27 +583,21 @@ static CliCommand CreateRename()
 }
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "A null result is not the same as an empty result")]
-static IDictionary<MediaTrackType, string>? GetLanguages(string[]? lang)
+static Dictionary<MediaTrackType, string>? GetLanguages(string[]? lang)
 {
-    return lang is null
-        ? default(IDictionary<MediaTrackType, string>)
-        : lang.Select(val => val.Split('=')).ToDictionary(GetId, GetLang);
+    return lang?.Select(val => val.Split('=')).ToDictionary(GetId, GetLang);
 
     static MediaTrackType GetId(string[] val)
     {
-        if (val.Length > 1)
-        {
-            var value = val[0].ToLowerInvariant();
-            return value switch
+        return val.Length > 1
+            ? val[0].ToLowerInvariant() switch
             {
                 "a" => MediaTrackType.Audio,
                 "v" => MediaTrackType.Video,
-                _ when int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.CurrentCulture, out var intValue) => (MediaTrackType)intValue,
+                { } value when int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.CurrentCulture, out var intValue) => (MediaTrackType)intValue,
                 _ => MediaTrackType.Unknown,
-            };
-        }
-
-        return MediaTrackType.All;
+            }
+            : MediaTrackType.All;
     }
 
     static string GetLang(string[] val)
@@ -666,15 +658,14 @@ internal sealed partial class Program
     /// </summary>
     /// <returns>The episode <see cref="System.Text.RegularExpressions.Regex"/> expressions.</returns>
     internal static IEnumerable<System.Text.RegularExpressions.Regex> GetEpisodeRegexes() =>
-        new[]
-        {
+        [
             SbsRegex1(),
             SbsRegex2(),
             SbsRegex3(),
             IViewRegex1(),
             IViewRegex2(),
             Season(),
-        };
+        ];
 
     [System.Text.RegularExpressions.GeneratedRegex(@"[Ss](?<season>\d{2})[Ee](?<episode>\d{2})", System.Text.RegularExpressions.RegexOptions.None, MillisecondTimeout)]
     private static partial System.Text.RegularExpressions.Regex SbsRegex1();

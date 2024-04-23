@@ -421,8 +421,8 @@ internal class MetadataTags : IDisposable
 
         static string? JoinGroup(string[] group)
         {
-            return group is not null && group.Length != 0
-                ? string.Join("; ", group)
+            return group is { Length: not 0 } g
+                ? string.Join("; ", g)
                 : default;
         }
     }
@@ -804,7 +804,7 @@ internal class MetadataTags : IDisposable
                 {
                     var dataListItemPointer = dataList.elements[j];
                     var data = dataListItemPointer.ToStructure<NativeMethods.MP4ItmfData>();
-                    if (data.value.ToByteArray(data.valueSize) is byte[] dataBuffer)
+                    if (data.value.ToByteArray(data.valueSize) is { } dataBuffer)
                     {
                         returnString = System.Text.Encoding.UTF8.GetString(dataBuffer);
                     }
@@ -891,11 +891,7 @@ internal class MetadataTags : IDisposable
 
     private void WriteDiscInfo(IntPtr tagsPtr, IntPtr discInfoPtr)
     {
-        if (this.DiscNumber is null || this.TotalDiscs is null)
-        {
-            _ = NativeMethods.MP4TagsSetDisk(tagsPtr, IntPtr.Zero);
-        }
-        else
+        if (this.DiscNumber is { } discNumber && this.TotalDiscs is { } totalDiscs)
         {
             var discInfo = default(NativeMethods.MP4TagDisk);
             if (discInfoPtr != IntPtr.Zero)
@@ -903,15 +899,19 @@ internal class MetadataTags : IDisposable
                 _ = discInfoPtr.ToStructure<NativeMethods.MP4TagDisk>();
             }
 
-            if (this.DiscNumber.Value != discInfo.index || this.TotalDiscs != discInfo.total)
+            if (discNumber != discInfo.index || totalDiscs != discInfo.total)
             {
-                discInfo.index = this.DiscNumber.Value;
-                discInfo.total = this.TotalDiscs.Value;
+                discInfo.index = discNumber;
+                discInfo.total = totalDiscs;
                 var discPtr = Marshal.AllocHGlobal(Marshal.SizeOf(discInfo));
                 Marshal.StructureToPtr(discInfo, discPtr, fDeleteOld: false);
                 _ = NativeMethods.MP4TagsSetDisk(tagsPtr, discPtr);
                 Marshal.FreeHGlobal(discPtr);
             }
+        }
+        else
+        {
+            _ = NativeMethods.MP4TagsSetDisk(tagsPtr, IntPtr.Zero);
         }
     }
 
@@ -929,11 +929,7 @@ internal class MetadataTags : IDisposable
 
     private void WriteTrackInfo(IntPtr tagsPtr, IntPtr trackInfoPtr)
     {
-        if (this.TrackNumber is null || this.TotalTracks is null)
-        {
-            _ = NativeMethods.MP4TagsSetTrack(tagsPtr, IntPtr.Zero);
-        }
-        else
+        if (this.TrackNumber is { } trackNumber && this.TotalTracks is { } totalTracks)
         {
             var trackInfo = default(NativeMethods.MP4TagTrack);
             if (trackInfoPtr != IntPtr.Zero)
@@ -941,15 +937,19 @@ internal class MetadataTags : IDisposable
                 trackInfo = trackInfoPtr.ToStructure<NativeMethods.MP4TagTrack>();
             }
 
-            if (this.TrackNumber.Value != trackInfo.index || this.TotalTracks != trackInfo.total)
+            if (trackNumber != trackInfo.index || totalTracks != trackInfo.total)
             {
-                trackInfo.index = this.TrackNumber.Value;
-                trackInfo.total = this.TotalTracks.Value;
+                trackInfo.index = trackNumber;
+                trackInfo.total = totalTracks;
                 var trackPtr = Marshal.AllocHGlobal(Marshal.SizeOf(trackInfo));
                 Marshal.StructureToPtr(trackInfo, trackPtr, fDeleteOld: false);
                 _ = NativeMethods.MP4TagsSetTrack(tagsPtr, trackPtr);
                 Marshal.FreeHGlobal(trackPtr);
             }
+        }
+        else
+        {
+            _ = NativeMethods.MP4TagsSetTrack(tagsPtr, IntPtr.Zero);
         }
     }
 }

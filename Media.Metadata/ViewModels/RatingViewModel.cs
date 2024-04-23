@@ -43,7 +43,7 @@ internal partial class RatingViewModel : CommunityToolkit.Mvvm.ComponentModel.Ob
     partial void OnSelectedCountryChanged(Country? value)
     {
         this.ratings.Clear();
-        if (value is Country country)
+        if (value is { } country)
         {
             foreach (var rating in Rating.GetRatings(country))
             {
@@ -54,10 +54,10 @@ internal partial class RatingViewModel : CommunityToolkit.Mvvm.ComponentModel.Ob
 
     partial void OnSelectedRatingChanging(Rating? value)
     {
-        if (value is not null)
+        if (value is { } rating)
         {
             // set the country
-            this.SelectedCountry = Rating.GetCountry(value.Value);
+            this.SelectedCountry = Rating.GetCountry(rating);
         }
     }
 }

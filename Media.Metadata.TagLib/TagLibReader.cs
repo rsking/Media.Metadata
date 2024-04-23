@@ -82,20 +82,20 @@ public class TagLibReader : IReader
     private static T Update<T>(FileInfo info, T video, AppleTag appleTag)
         where T : Video
     {
-        if (appleTag.GetReleaseDate() is string day
+        if (appleTag.GetReleaseDate() is { } day
             && (DateTime.TryParse(day, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.None, out var release)
             || DateTime.TryParse(day, System.Globalization.DateTimeFormatInfo.CurrentInfo, System.Globalization.DateTimeStyles.None, out release)))
         {
             video = video with { Release = release.Date };
         }
 
-        if (appleTag.GetDashBox("com.apple.iTunes", "iTunEXTC") is string ratingString
+        if (appleTag.GetDashBox("com.apple.iTunes", "iTunEXTC") is { } ratingString
             && Rating.TryParse(ratingString, out var rating))
         {
             video = video with { Rating = rating };
         }
 
-        if (appleTag.Pictures is IList<IPicture> { Count: > 0 } pictures)
+        if (appleTag.Pictures is { Length: > 0 } pictures)
         {
             video = video with
             {

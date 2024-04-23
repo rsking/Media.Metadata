@@ -131,34 +131,31 @@ internal sealed class MovieInfo : Atom, IEquatable<MovieInfo>
             map = Formatters.PList.PList.Create(stream);
         }
 
-        if (map is not null)
+        this.cast = GetListOrDefault<string>(map, nameof(this.cast));
+        this.directors = GetListOrDefault<string>(map, nameof(this.directors));
+        this.producers = GetListOrDefault<string>(map, nameof(this.producers));
+        this.screenwriters = GetListOrDefault<string>(map, nameof(this.screenwriters));
+        this.studio = GetValueOrDefault<string>(map, nameof(this.studio));
+
+        static T? GetValueOrDefault<T>(Formatters.PList.PList list, string key)
         {
-            this.cast = GetListOrDefault<string>(map, nameof(this.cast));
-            this.directors = GetListOrDefault<string>(map, nameof(this.directors));
-            this.producers = GetListOrDefault<string>(map, nameof(this.producers));
-            this.screenwriters = GetListOrDefault<string>(map, nameof(this.screenwriters));
-            this.studio = GetValueOrDefault<string>(map, nameof(this.studio));
+            return list.TryGetValue(key, out var value) && value is T t
+                ? t
+                : default;
+        }
 
-            static T? GetValueOrDefault<T>(Formatters.PList.PList list, string key)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "An empty list is not the same as null")]
+        static IList<T>? GetListOrDefault<T>(Formatters.PList.PList list, string key)
+        {
+            return list.TryGetValue(key, out var value) && value is object[] objectArray
+                ? Enumerate(objectArray).ToList()
+                : default;
+
+            static IEnumerable<T> Enumerate(object[] values)
             {
-                return list.TryGetValue(key, out var value) && value is T t
-                    ? t
-                    : default;
-            }
-
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "An empty list is not the same as null")]
-            static IList<T>? GetListOrDefault<T>(Formatters.PList.PList list, string key)
-            {
-                return list.TryGetValue(key, out var value) && value is object[] objectArray
-                    ? Enumerate(objectArray).ToList()
-                    : default;
-
-                static IEnumerable<T> Enumerate(object[] values)
-                {
-                    return values
-                        .OfType<IDictionary<string, object>>()
-                        .SelectMany(dictionary => dictionary.Values.OfType<T>());
-                }
+                return values
+                    .OfType<IDictionary<string, object>>()
+                    .SelectMany(dictionary => dictionary.Values.OfType<T>());
             }
         }
     }

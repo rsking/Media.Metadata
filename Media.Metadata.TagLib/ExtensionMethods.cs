@@ -23,14 +23,14 @@ public static class ExtensionMethods
         var extractor = new Tracks.ChapterExtractor(stream);
         extractor.Run();
 
-        if (extractor.Chapters is IEnumerable<Tracks.ChapterInfo> chapters)
+        if (extractor.Chapters is { } chapters)
         {
             return chapters.Select(chap => new MediaChapter(chap.Name, chap.Time));
         }
 
         // create a single chapter for the full length from the video track
-        if (extractor.Tracks is not null
-            && Array.Find(extractor.Tracks, t => string.Equals(t.Type, "vide", StringComparison.Ordinal)) is { Type: "vide" } videoTrack)
+        if (extractor.Tracks is { } tracks
+            && Array.Find(tracks, t => string.Equals(t.Type, "vide", StringComparison.Ordinal)) is { Type: "vide" } videoTrack)
         {
             var duration = (videoTrack.Duration ?? 0D) / (videoTrack.TimeUnitPerSecond ?? 1D);
             return Create(new MediaChapter("Chapter 1", TimeSpan.FromSeconds(duration)));
@@ -55,7 +55,7 @@ public static class ExtensionMethods
         var extractor = new Tracks.ChapterExtractor(stream);
         extractor.Run();
 
-        if (extractor.Tracks is IEnumerable<Tracks.TrakInfo> tracks)
+        if (extractor.Tracks is { } tracks)
         {
             return tracks.Select(MediaTrack);
 

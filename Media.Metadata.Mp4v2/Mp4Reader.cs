@@ -97,14 +97,14 @@ public class Mp4Reader : IReader
     private static T Update<T>(T video, MetadataTags tags, TrackList? trackList)
         where T : Video
     {
-        if (tags.ReleaseDate is not null
-            && TryParseDate(tags.ReleaseDate, out var releaseDate))
+        if (tags.ReleaseDate is { } releaseDateString
+            && TryParseDate(releaseDateString, out var releaseDate))
         {
             video = video with { Release = releaseDate };
         }
 
-        if (tags.RatingInfo is not null
-            && Rating.TryParse(tags.RatingInfo.ToString(), out var rating))
+        if (tags.RatingInfo is { } ratingInfo
+            && Rating.TryParse(ratingInfo.ToString(), out var rating))
         {
             video = video with { Rating = rating };
         }
@@ -114,9 +114,9 @@ public class Mp4Reader : IReader
             video = video with { Image = tags.Artwork, ImageFormat = tags.ArtworkFormat };
         }
 
-        if (trackList?.Count > 0)
+        if (trackList is { Count: > 0 } tl)
         {
-            video = video with { Tracks = trackList.Select(track => new MediaTrack(track.Id, GetMediaTrackType(track.Type), track.Language)).ToList() };
+            video = video with { Tracks = tl.Select(track => new MediaTrack(track.Id, GetMediaTrackType(track.Type), track.Language)).ToList() };
         }
 
         return video;

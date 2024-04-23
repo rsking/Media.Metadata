@@ -58,13 +58,10 @@ internal partial class MediaTrackViewModel : CommunityToolkit.Mvvm.ComponentMode
             var stream = typeof(App).Assembly.GetManifestResourceStream(typeof(App), "ISO-639-2_utf-8.txt") ?? throw new InvalidOperationException();
             using var reader = new StreamReader(stream, System.Text.Encoding.UTF8, leaveOpen: false);
 
-            while (reader.ReadLine() is string line)
+            while (reader.ReadLine() is { } line)
             {
                 var split = line.Split('|');
-                var index = split.Length > 1 && !string.IsNullOrEmpty(split[1])
-                    ? 1
-                    : 0;
-
+                var index = split.Length > 1 && !string.IsNullOrEmpty(split[1]) ? 1 : 0;
                 yield return split[index];
             }
         }

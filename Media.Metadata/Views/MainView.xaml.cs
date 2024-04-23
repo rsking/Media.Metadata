@@ -26,7 +26,7 @@ public sealed partial class MainView : Microsoft.UI.Xaml.Controls.UserControl
 
     private void UpdateMapDetails()
     {
-        if (this.ListDetailsView is CommunityToolkit.WinUI.UI.Controls.ListDetailsView { MapDetails: null } listDetailsView)
+        if (this.ListDetailsView is { MapDetails: null } listDetailsView)
         {
             listDetailsView.MapDetails = value =>
             {

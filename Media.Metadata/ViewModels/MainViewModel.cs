@@ -79,13 +79,11 @@ internal partial class MainViewModel(IReader reader, IUpdater updater) : Communi
 
         picker.Init();
 
-        var files = await picker.PickMultipleFilesAsync();
-
-        if (files is not null)
+        if (await picker.PickMultipleFilesAsync() is { } files)
         {
             foreach (var file in files)
             {
-                if (await this.ReadVideoAsync(file.Path).ConfigureAwait(true) is Video video)
+                if (await this.ReadVideoAsync(file.Path).ConfigureAwait(true) is { } video)
                 {
                     this.Videos.Add(video);
                 }
@@ -110,14 +108,7 @@ internal partial class MainViewModel(IReader reader, IUpdater updater) : Communi
         foreach (var video in selectedVideos)
         {
             _ = this.Videos.Remove(video);
-            if (video is IAsyncDisposable asyncDisposable)
-            {
-                await asyncDisposable.DisposeAsync().ConfigureAwait(true);
-            }
-            else
-            {
-                video.Dispose();
-            }
+            await video.DisposeAsync().ConfigureAwait(true);
         }
 
         this.SelectedVideo = default;
@@ -141,14 +132,7 @@ internal partial class MainViewModel(IReader reader, IUpdater updater) : Communi
         {
             var video = this.Videos[0];
             this.Videos.RemoveAt(0);
-            if (video is IAsyncDisposable asyncDisposable)
-            {
-                await asyncDisposable.DisposeAsync().ConfigureAwait(true);
-            }
-            else
-            {
-                video.Dispose();
-            }
+            await video.DisposeAsync().ConfigureAwait(true);
         }
     }
 
@@ -159,9 +143,9 @@ internal partial class MainViewModel(IReader reader, IUpdater updater) : Communi
     [CommunityToolkit.Mvvm.Input.RelayCommand(AllowConcurrentExecutions = false, CanExecute = nameof(CanSave))]
     public async Task Save()
     {
-        if (this.SelectedEditableVideo is not null)
+        if (this.SelectedEditableVideo is { } selectedEditableVideo)
         {
-            var video = await this.SelectedEditableVideo.ToVideoAsync().ConfigureAwait(true);
+            var video = await selectedEditableVideo.ToVideoAsync().ConfigureAwait(true);
             if (video is ILocalVideo localVideo)
             {
                 this.IsSaving = true;
@@ -188,8 +172,7 @@ internal partial class MainViewModel(IReader reader, IUpdater updater) : Communi
                 {
                     if (this.Videos[i] == this.SelectedVideo)
                     {
-                        var video = await this.ReadVideoAsync(localVideo.FileInfo.FullName).ConfigureAwait(true);
-                        if (video is not null)
+                        if (await this.ReadVideoAsync(localVideo.FileInfo.FullName).ConfigureAwait(true) is { } video)
                         {
                             if (this.Videos[i] is IAsyncDisposable asyncDisposable)
                             {
@@ -242,24 +225,12 @@ internal partial class MainViewModel(IReader reader, IUpdater updater) : Communi
             XamlRoot = GetXamlRoot(),
         };
 
-        var result = await dialog.ShowAsync(ContentDialogPlacement.Popup);
-        if (result == ContentDialogResult.Primary
-            && this.SelectedEditableVideo is not null
-            && viewModel?.SelectedVideo is not null)
+        if (await dialog.ShowAsync(ContentDialogPlacement.Popup) is ContentDialogResult.Primary
+            && this.SelectedEditableVideo is { } selectedEditableVideo
+            && await GetVideoWithImageSource(viewModel).ConfigureAwait(true) is { } videoWithImageSource)
         {
-            Video? videoWithImageSource = viewModel.SelectedVideo switch
-            {
-                Episode episode => await Models.EpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
-                Movie movie => await Models.MovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
-                Video video => await Models.VideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
-                _ => default,
-            };
-
-            if (videoWithImageSource is not null)
-            {
-                // apply this to the editable video
-                this.SelectedEditableVideo.Update(videoWithImageSource);
-            }
+            // apply this to the editable video
+            selectedEditableVideo.Update(videoWithImageSource);
         }
 
         static int? GetYear(DateTimeOffset? dateTimeOffset)
@@ -269,9 +240,20 @@ internal partial class MainViewModel(IReader reader, IUpdater updater) : Communi
 
         static Microsoft.UI.Xaml.XamlRoot? GetXamlRoot()
         {
-            return App.Current?.GetWindow() is Microsoft.UI.Xaml.Window window
+            return App.Current?.GetWindow() is { } window
                 ? window.Content.XamlRoot
                 : default;
+        }
+
+        static async Task<Video?> GetVideoWithImageSource(VideoSearchViewModel? viewModel)
+        {
+            return viewModel?.SelectedVideo switch
+            {
+                Episode episode => await Models.EpisodeWithImageSource.CreateAsync(episode).ConfigureAwait(true),
+                Movie movie => await Models.MovieWithImageSource.CreateAsync(movie).ConfigureAwait(true),
+                Video video => await Models.VideoWithImageSource.CreateAsync(video).ConfigureAwait(true),
+                _ => default,
+            };
         }
     }
 

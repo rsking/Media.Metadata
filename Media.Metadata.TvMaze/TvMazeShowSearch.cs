@@ -27,111 +27,109 @@ public class TvMazeShowSearch(RestClient restClient, Microsoft.Extensions.Option
     {
         await foreach (var series in this.SearchSeriesAsync(name, cancellationToken).ConfigureAwait(false))
         {
-            if (series.Show is null)
+            if (series.Show is { } show)
             {
-                continue;
-            }
+                var castLock = new NeoSmart.AsyncLock.AsyncLock();
+                ICollection<Cast>? cast = default;
 
-            var castLock = new NeoSmart.AsyncLock.AsyncLock();
-            ICollection<Cast>? cast = default;
+                var crewLock = new NeoSmart.AsyncLock.AsyncLock();
+                ICollection<Crew>? crew = default;
 
-            var crewLock = new NeoSmart.AsyncLock.AsyncLock();
-            ICollection<Crew>? crew = default;
-
-            yield return new RemoteSeries(series.Show.Name, GetSeasons(series.Show, this.client, this.baseUrl, GetCast, GetCrew, cancellationToken).ToEnumerable())
-            {
-                ImageUri = series.Show.Image?.Original,
-            };
-
-            static async IAsyncEnumerable<RemoteSeason> GetSeasons(Show show, RestClient client, Uri baseUrl, Func<Task<ICollection<Cast>>> getCast, Func<Task<ICollection<Crew>>> getCrew, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
-            {
-                var request = new RestRequest(CreateUri(baseUrl, "shows/{id}/seasons"))
-                    .AddUrlSegment("id", show.Id);
-
-                var response = await client.ExecuteGetAsync<ICollection<Season>>(request, cancellationToken).ConfigureAwait(false);
-
-                if (response.IsSuccessful && response.Data is not null)
+                yield return new RemoteSeries(show.Name, GetSeasons(show, this.client, this.baseUrl, GetCast, GetCrew, cancellationToken).ToEnumerable())
                 {
-                    foreach (var season in response.Data)
+                    ImageUri = show.Image?.Original,
+                };
+
+                static async IAsyncEnumerable<RemoteSeason> GetSeasons(Show show, RestClient client, Uri baseUrl, Func<Task<ICollection<Cast>>> getCast, Func<Task<ICollection<Crew>>> getCrew, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+                {
+                    var request = new RestRequest(CreateUri(baseUrl, "shows/{id}/seasons"))
+                        .AddUrlSegment("id", show.Id);
+
+                    var response = await client.ExecuteGetAsync<ICollection<Season>>(request, cancellationToken).ConfigureAwait(false);
+
+                    if (response is { IsSuccessful: true, Data: { } seasons })
                     {
-                        yield return new RemoteSeason(season.Number, GetEpisodes(show, season, client, baseUrl, getCast, getCrew, cancellationToken).ToEnumerable())
+                        foreach (var season in seasons)
                         {
-                            ImageUri = season.Image?.Original,
-                        };
-                    }
-                }
-                else if (response.ErrorException is not null)
-                {
-                    throw response.ErrorException;
-                }
-
-                static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(Show show, Season season, RestClient client, Uri baseUrl, Func<Task<ICollection<Cast>>> getCast, Func<Task<ICollection<Crew>>> getCrew, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
-                {
-                    var request = new RestRequest(CreateUri(baseUrl, "seasons/{id}/episodes"))
-                        .AddUrlSegment("id", season.Id);
-
-                    var response = await client.ExecuteGetAsync<ICollection<Episode>>(request, cancellationToken).ConfigureAwait(false);
-
-                    if (response.IsSuccessful && response.Data is not null)
-                    {
-                        foreach (var episode in response.Data)
-                        {
-                            if (episode.Number.HasValue)
+                            yield return new RemoteSeason(season.Number, GetEpisodes(show, season, client, baseUrl, getCast, getCrew, cancellationToken).ToEnumerable())
                             {
-                                var cast = await getCast().ConfigureAwait(false);
-                                var crew = await getCrew().ConfigureAwait(false);
-
-                                yield return new RemoteEpisode(episode.Name, episode.Summary)
-                                {
-                                    Season = season.Number,
-                                    Number = episode.Number.Value,
-                                    Show = show.Name,
-                                    ImageUri = episode.Image?.Original,
-                                    Cast = cast.Where(c => c.Person is not null).Select(c => c.Person!.Name),
-                                    Composers = crew.Where(c => c.Person is not null && string.Equals(c.Type, "composer", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
-                                    Directors = crew.Where(c => c.Person is not null && string.Equals(c.Type, "director", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
-                                    Producers = crew.Where(c => c.Person is not null && string.Equals(c.Type, "producer", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
-                                    ScreenWriters = crew.Where(c => c.Person is not null && string.Equals(c.Type, "screenwriter", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
-                                };
-                            }
+                                ImageUri = season.Image?.Original,
+                            };
                         }
                     }
-                    else if (response.ErrorException is not null)
+                    else if (response is { ErrorException: { } ex })
                     {
-                        throw response.ErrorException;
+                        throw ex;
+                    }
+
+                    static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(Show show, Season season, RestClient client, Uri baseUrl, Func<Task<ICollection<Cast>>> getCast, Func<Task<ICollection<Crew>>> getCrew, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+                    {
+                        var request = new RestRequest(CreateUri(baseUrl, "seasons/{id}/episodes"))
+                            .AddUrlSegment("id", season.Id);
+
+                        var response = await client.ExecuteGetAsync<ICollection<Episode>>(request, cancellationToken).ConfigureAwait(false);
+
+                        if (response is { IsSuccessful: true, Data: { } episodes })
+                        {
+                            foreach (var episode in episodes)
+                            {
+                                if (episode is { Number: { } episodeNumber })
+                                {
+                                    var cast = await getCast().ConfigureAwait(false);
+                                    var crew = await getCrew().ConfigureAwait(false);
+
+                                    yield return new RemoteEpisode(episode.Name, episode.Summary)
+                                    {
+                                        Season = season.Number,
+                                        Number = episodeNumber,
+                                        Show = show.Name,
+                                        ImageUri = episode.Image?.Original,
+                                        Cast = cast.Where(c => c.Person is not null).Select(c => c.Person!.Name),
+                                        Composers = crew.Where(c => c.Person is not null && string.Equals(c.Type, "composer", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
+                                        Directors = crew.Where(c => c.Person is not null && string.Equals(c.Type, "director", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
+                                        Producers = crew.Where(c => c.Person is not null && string.Equals(c.Type, "producer", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
+                                        ScreenWriters = crew.Where(c => c.Person is not null && string.Equals(c.Type, "screenwriter", StringComparison.OrdinalIgnoreCase)).Select(c => c.Person!.Name),
+                                    };
+                                }
+                            }
+                        }
+                        else if (response is { ErrorException: { } ex })
+                        {
+                            throw ex;
+                        }
                     }
                 }
-            }
 
-            async Task<ICollection<Cast>> GetCast()
-            {
-                using (await castLock.LockAsync(cancellationToken).ConfigureAwait(false))
+                async Task<ICollection<Cast>> GetCast()
                 {
-                    if (cast is not null)
+                    using (await castLock.LockAsync(cancellationToken).ConfigureAwait(false))
                     {
-                        return cast;
+                        if (cast is not null)
+                        {
+                            return cast;
+                        }
+
+                        var request = new RestRequest(this.CreateUri("shows/{id}/cast"))
+                            .AddUrlSegment("id", show.Id);
+
+                        return cast = await this.client.GetResponseOrThrow<ICollection<Cast>>(request, cancellationToken).ConfigureAwait(false);
                     }
-
-                    var request = new RestRequest(this.CreateUri("shows/{id}/cast"))
-                        .AddUrlSegment("id", series.Show.Id);
-
-                    return cast = await this.client.GetResponseOrThrow<ICollection<Cast>>(request, cancellationToken).ConfigureAwait(false);
                 }
-            }
 
-            async Task<ICollection<Crew>> GetCrew()
-            {
-                using (await crewLock.LockAsync(cancellationToken).ConfigureAwait(false))
+                async Task<ICollection<Crew>> GetCrew()
                 {
-                    if (crew is not null)
+                    using (await crewLock.LockAsync(cancellationToken).ConfigureAwait(false))
                     {
-                        return crew;
+                        if (crew is not null)
+                        {
+                            return crew;
+                        }
+
+                        var request = new RestRequest(this.CreateUri("shows/{id}/crew"))
+                            .AddUrlSegment("id", show.Id);
+
+                        return crew = await this.client.GetResponseOrThrow<ICollection<Crew>>(request, cancellationToken).ConfigureAwait(false);
                     }
-
-                    var request = new RestRequest(this.CreateUri("shows/{id}/crew"))
-                        .AddUrlSegment("id", series.Show.Id);
-
-                    return crew = await this.client.GetResponseOrThrow<ICollection<Crew>>(request, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -146,16 +144,16 @@ public class TvMazeShowSearch(RestClient restClient, Microsoft.Extensions.Option
 
         var response = await this.client.ExecuteGetAsync<ICollection<SearchResult>>(request, cancellationToken).ConfigureAwait(false);
 
-        if (response.IsSuccessful && response.Data is not null)
+        if (response is { IsSuccessful: true, Data: { } searchResults })
         {
-            foreach (var searchResult in response.Data)
+            foreach (var searchResult in searchResults)
             {
                 yield return searchResult;
             }
         }
-        else if (response.ErrorException is not null)
+        else if (response is { ErrorException: { } ex })
         {
-            throw response.ErrorException;
+            throw ex;
         }
     }
 

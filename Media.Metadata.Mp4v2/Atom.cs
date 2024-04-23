@@ -50,7 +50,7 @@ internal abstract class Atom
                 {
                     var dataListItemPointer = dataList.elements[j];
                     var data = dataListItemPointer.ToStructure<NativeMethods.MP4ItmfData>();
-                    if (data.typeCode == this.DataType && data.value.ToByteArray(data.valueSize) is byte[] dataBuffer)
+                    if (data.typeCode == this.DataType && data.value.ToByteArray(data.valueSize) is { } dataBuffer)
                     {
                         this.Populate(dataBuffer);
                     }

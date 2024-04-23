@@ -30,21 +30,20 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
             return default;
         }
 
-        var split = tag.Split('|');
-        if (split.Length < 3)
+        if (tag.Split('|') is { Length: >= 3 } split)
         {
-            rating = default;
-            return default;
+            var score = int.TryParse(split[2], System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out var result)
+                ? result
+                : 0;
+            var annotation = split.Length > 3
+                ? split[3]
+                : default;
+            rating = new Rating(split[0], split[1], score, string.IsNullOrEmpty(annotation) ? default : annotation);
+            return true;
         }
 
-        var score = int.TryParse(split[2], System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out var result)
-            ? result
-            : 0;
-        var annotation = split.Length > 3
-            ? split[3]
-            : default;
-        rating = new Rating(split[0], split[1], score, string.IsNullOrEmpty(annotation) ? default : annotation);
-        return true;
+        rating = default;
+        return default;
     }
 
     /// <summary>
@@ -70,20 +69,10 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
     /// </summary>
     /// <param name="rating">The rating to get the country from.</param>
     /// <returns>The country.</returns>
-    public static Country? GetCountry(Rating? rating)
-    {
-        if (rating.HasValue)
-        {
-            var ratingValue = rating.Value;
-            var country = Ratings.FirstOrDefault(country => country.Value.Any(type => type.Any(r => r == ratingValue)));
-            if (country.Key is not null)
-            {
-                return country.Key;
-            }
-        }
-
-        return default;
-    }
+    public static Country? GetCountry(Rating? rating) =>
+        rating is { } ratingValue && Ratings.FirstOrDefault(country => country.Value.Any(type => type.Any(r => r == ratingValue))) is { Key: { } country }
+            ? country
+            : default;
 
     /// <summary>
     /// Gets the ratings for the country.

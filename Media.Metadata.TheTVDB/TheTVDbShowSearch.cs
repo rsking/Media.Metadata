@@ -26,15 +26,13 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
             .SearchSeriesAsync(name, year, cancellationToken)
             .ConfigureAwait(false))
         {
-            if (series.Name is null)
+            if (series is { TvdbId: { } id, Name: { } seriesName, ImageUrl: var imageUrl })
             {
-                continue;
+                yield return new RemoteSeries(seriesName, GetSeasons(this.client, id, seriesName, country, cancellationToken).ToEnumerable())
+                {
+                    ImageUri = GetUri(imageUrl),
+                };
             }
-
-            yield return new RemoteSeries(series.Name, GetSeasons(this.client, series.TvdbId, series.Name, country, cancellationToken).ToEnumerable())
-            {
-                ImageUri = GetUri(series.ImageUrl),
-            };
         }
 
         static Uri? GetUri(string? imageUrl)
@@ -47,20 +45,15 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
         static async IAsyncEnumerable<RemoteSeason> GetSeasons(ApiSdk.ApiClient client, string? id, string? name, string country, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
         {
             if (int.TryParse(id, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var seriesId)
-                && await client.Series[(double)seriesId].Extended.GetAsync(cancellationToken: cancellationToken).ConfigureAwait(false) is { } seriesResponse
-                && seriesResponse.Data is { } series
-                && series.Seasons is not null)
+                && await client.Series[seriesId].Extended.GetAsync(cancellationToken: cancellationToken).ConfigureAwait(false) is { Data: { Seasons: { } seasons } series })
             {
                 // only official, aired dates, ordered by the season number
-                foreach (var season in series.Seasons
-                    .Where(s => s.Type?.Id == 1)
+                foreach (var season in seasons
+                    .Where(s => s is { Type.Id: 1 })
                     .OrderBy(s => s.Number))
                 {
                     if (season.Id is { } seasonId
-                        && await client.Seasons[seasonId].Extended.GetAsync(cancellationToken: cancellationToken).ConfigureAwait(false) is { } response
-                        && response.Data is { } extendedSeason
-                        && extendedSeason.Number is { } number
-                        && extendedSeason.Episodes is { } episodes)
+                        && await client.Seasons[seasonId].Extended.GetAsync(cancellationToken: cancellationToken).ConfigureAwait(false) is { Data: { Number: { } number, Episodes: { } episodes } extendedSeason })
                     {
                         yield return new RemoteSeason(
                             (int)number,
@@ -69,8 +62,8 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
                                 name,
                                 episodes,
                                 country,
-                                seriesResponse.Data.Characters ?? [],
-                                seriesResponse.Data.Companies ?? [],
+                                series.Characters ?? [],
+                                series.Companies ?? [],
                                 cancellationToken).ToEnumerable())
                         {
                             ImageUri = GetUriFromArtwork(extendedSeason.Artwork, "eng") ?? GetUri(extendedSeason.Image),
@@ -90,7 +83,7 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
                 static async IAsyncEnumerable<RemoteEpisode> GetEpisodes(ApiSdk.ApiClient client, string? name, IEnumerable<ApiSdk.Models.EpisodeBaseRecord> episodes, string country, IEnumerable<ApiSdk.Models.Character> characters, IEnumerable<ApiSdk.Models.Company> companies, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
                 {
                     var extendedEpisodes = episodes
-                        .Where(ebr => ebr.Id is not null)
+                        .Where(ebr => ebr is { Id: not null })
                         .OrderBy(ebr => ebr.Number)
                         .ToAsyncEnumerable()
                         .SelectAwait(async episode =>
@@ -98,7 +91,7 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
                             var episodeResponse = await client.Episodes[(double)episode.Id!].Extended.GetAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
                             return episodeResponse?.Data;
                         })
-                        .Where(episode => episode?.Name is not null)
+                        .Where(episode => episode is { Name: not null })
                         .Select(episode => episode!);
 
                     await foreach (var episode in extendedEpisodes
@@ -172,26 +165,28 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
 
                             static IEnumerable<string>? GetStudios(ICollection<ApiSdk.Models.Company> companies)
                             {
-                                return companies
+                                var enumerable = companies
                                     .Where(company => company.PrimaryCompanyType is 2)
                                     .Select(company => company.Name)
-                                    .Where(name => name is not null)
-                                    .Cast<string>();
+                                    .Where(name => name is not null);
+#if NETSTANDARD2_1_OR_GREATER
+                                return enumerable.Cast<string>();
+#else
+                                return enumerable;
+#endif
                             }
 
                             static Rating? GetRating(ICollection<ApiSdk.Models.ContentRating>? contentRatings, string? country)
                             {
-                                if (contentRatings == null)
+                                if (contentRatings is null)
                                 {
                                     return default;
                                 }
 
                                 country = GetCountry(country);
-
-                                var contentRating = contentRatings.FirstOrDefault(contentRating => string.Equals(contentRating.Country, country, StringComparison.OrdinalIgnoreCase));
-                                return contentRating is null || contentRating.Name is null || contentRating.Country is null
-                                    ? default
-                                    : Rating.FindBest(contentRating.Name, GetCountry(contentRating.Country));
+                                return contentRatings.FirstOrDefault(contentRating => string.Equals(contentRating.Country, country, StringComparison.OrdinalIgnoreCase)) is { Name: { } n, Country: { } c }
+                                    ? Rating.FindBest(n, GetCountry(c))
+                                    : default;
 
                                 static string GetCountry(string? country)
                                 {
@@ -258,9 +253,9 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
             },
             cancellationToken).ConfigureAwait(false);
 
-        if (response?.Data is not null)
+        if (response is { Data: { } data })
         {
-            foreach (var series in response.Data)
+            foreach (var series in data)
             {
                 yield return series;
             }
@@ -280,7 +275,7 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
 
         public async Task<string> GetAuthorizationTokenAsync(Uri uri, Dictionary<string, object>? additionalAuthenticationContext = null, CancellationToken cancellationToken = default)
         {
-            if (this.token?.Token is { } cachedToken)
+            if (this.token is { Token: { } cachedToken })
             {
                 return cachedToken;
             }
