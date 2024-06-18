@@ -23,8 +23,8 @@
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <PackageVersion Include="TagLibSharp" Version="2.3.0" />
     <PackageVersion Include="TMDbLib" Version="2.2.0" />
-    <PackageVersion Include="Vanara.PInvoke.Shell32" Version="3.4.17" />
-    <PackageVersion Include="Vanara.PInvoke.User32" Version="3.4.17" />
+    <PackageVersion Include="Vanara.PInvoke.Shell32" Version="4.0.1" />
+    <PackageVersion Include="Vanara.PInvoke.User32" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup Label="Kiota">
