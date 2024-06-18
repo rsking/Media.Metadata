@@ -9,61 +9,77 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Lists {
+namespace ApiSdk.Lists
+{
     /// <summary>
     /// Builds and executes requests for operations under \lists
     /// </summary>
-    public class ListsRequestBuilder : BaseRequestBuilder {
+    public class ListsRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The slug property</summary>
-        public SlugRequestBuilder Slug { get =>
-            new SlugRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Lists.Slug.SlugRequestBuilder Slug
+        {
+            get => new ApiSdk.Lists.Slug.SlugRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the ApiSdk.lists.item collection</summary>
         /// <param name="position">id</param>
-        public ListsItemRequestBuilder this[double position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("id", position);
-            return new ListsItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Lists.Item.ListsItemRequestBuilder"/></returns>
+        public ApiSdk.Lists.Item.ListsItemRequestBuilder this[double position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("id", position);
+                return new ApiSdk.Lists.Item.ListsItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new ListsRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Lists.ListsRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ListsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/lists{?page*}", pathParameters) {
+        public ListsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/lists{?page*}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new ListsRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Lists.ListsRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ListsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/lists{?page*}", rawUrl) {
+        public ListsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/lists{?page*}", rawUrl)
+        {
         }
         /// <summary>
         /// returns list of list base records
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Lists.ListsGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<ListsGetResponse?> GetAsync(Action<RequestConfiguration<ListsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Lists.ListsGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Lists.ListsRequestBuilder.ListsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<ListsGetResponse> GetAsync(Action<RequestConfiguration<ListsRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Lists.ListsGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Lists.ListsRequestBuilder.ListsRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<ListsGetResponse>(requestInfo, ListsGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Lists.ListsGetResponse>(requestInfo, ApiSdk.Lists.ListsGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// returns list of list base records
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ListsRequestBuilderGetQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Lists.ListsRequestBuilder.ListsRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ListsRequestBuilderGetQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Lists.ListsRequestBuilder.ListsRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -73,14 +89,17 @@ namespace ApiSdk.Lists {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Lists.ListsRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public ListsRequestBuilder WithUrl(string rawUrl) {
-            return new ListsRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Lists.ListsRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Lists.ListsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// returns list of list base records
         /// </summary>
-        public class ListsRequestBuilderGetQueryParameters {
+        public class ListsRequestBuilderGetQueryParameters 
+        {
             /// <summary>page number</summary>
             [QueryParameter("page")]
             public double? Page { get; set; }

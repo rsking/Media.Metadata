@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// search result
     /// </summary>
-    public class SearchResult : IAdditionalDataHolder, IParsable {
+    public class SearchResult : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The aliases property</summary>
@@ -133,13 +135,13 @@ namespace ApiSdk.Models {
 #else
         public string Overview { get; set; }
 #endif
-        /// <summary>The overviews property</summary>
+        /// <summary>translation simple record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<TranslationSimple>? Overviews { get; set; }
+        public ApiSdk.Models.TranslationSimple? Overviews { get; set; }
 #nullable restore
 #else
-        public List<TranslationSimple> Overviews { get; set; }
+        public ApiSdk.Models.TranslationSimple Overviews { get; set; }
 #endif
         /// <summary>The overview_translated property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -176,10 +178,10 @@ namespace ApiSdk.Models {
         /// <summary>The remote_ids property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<RemoteID>? RemoteIds { get; set; }
+        public List<ApiSdk.Models.RemoteID>? RemoteIds { get; set; }
 #nullable restore
 #else
-        public List<RemoteID> RemoteIds { get; set; }
+        public List<ApiSdk.Models.RemoteID> RemoteIds { get; set; }
 #endif
         /// <summary>The slug property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -221,13 +223,13 @@ namespace ApiSdk.Models {
 #else
         public string Title { get; set; }
 #endif
-        /// <summary>The translations property</summary>
+        /// <summary>translation simple record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<TranslationSimple>? Translations { get; set; }
+        public ApiSdk.Models.TranslationSimple? Translations { get; set; }
 #nullable restore
 #else
-        public List<TranslationSimple> Translations { get; set; }
+        public ApiSdk.Models.TranslationSimple Translations { get; set; }
 #endif
         /// <summary>The translationsWithLang property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -262,63 +264,70 @@ namespace ApiSdk.Models {
         public string Year { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new SearchResult and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.SearchResult"/> and sets the default values.
         /// </summary>
-        public SearchResult() {
+        public SearchResult()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.SearchResult"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static SearchResult CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.SearchResult CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new SearchResult();
+            return new ApiSdk.Models.SearchResult();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"aliases", n => { Aliases = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"companies", n => { Companies = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"companyType", n => { CompanyType = n.GetStringValue(); } },
-                {"country", n => { Country = n.GetStringValue(); } },
-                {"director", n => { Director = n.GetStringValue(); } },
-                {"first_air_time", n => { FirstAirTime = n.GetStringValue(); } },
-                {"genres", n => { Genres = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"id", n => { Id = n.GetStringValue(); } },
-                {"image_url", n => { ImageUrl = n.GetStringValue(); } },
-                {"is_official", n => { IsOfficial = n.GetBoolValue(); } },
-                {"name", n => { Name = n.GetStringValue(); } },
-                {"name_translated", n => { NameTranslated = n.GetStringValue(); } },
-                {"network", n => { Network = n.GetStringValue(); } },
-                {"objectID", n => { ObjectID = n.GetStringValue(); } },
-                {"officialList", n => { OfficialList = n.GetStringValue(); } },
-                {"overview", n => { Overview = n.GetStringValue(); } },
-                {"overview_translated", n => { OverviewTranslated = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"overviews", n => { Overviews = n.GetCollectionOfObjectValues<TranslationSimple>(TranslationSimple.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"poster", n => { Poster = n.GetStringValue(); } },
-                {"posters", n => { Posters = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"primary_language", n => { PrimaryLanguage = n.GetStringValue(); } },
-                {"remote_ids", n => { RemoteIds = n.GetCollectionOfObjectValues<RemoteID>(RemoteID.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"slug", n => { Slug = n.GetStringValue(); } },
-                {"status", n => { Status = n.GetStringValue(); } },
-                {"studios", n => { Studios = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"thumbnail", n => { Thumbnail = n.GetStringValue(); } },
-                {"title", n => { Title = n.GetStringValue(); } },
-                {"translations", n => { Translations = n.GetCollectionOfObjectValues<TranslationSimple>(TranslationSimple.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"translationsWithLang", n => { TranslationsWithLang = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"tvdb_id", n => { TvdbId = n.GetStringValue(); } },
-                {"type", n => { Type = n.GetStringValue(); } },
-                {"year", n => { Year = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "aliases", n => { Aliases = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "companies", n => { Companies = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "companyType", n => { CompanyType = n.GetStringValue(); } },
+                { "country", n => { Country = n.GetStringValue(); } },
+                { "director", n => { Director = n.GetStringValue(); } },
+                { "first_air_time", n => { FirstAirTime = n.GetStringValue(); } },
+                { "genres", n => { Genres = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "id", n => { Id = n.GetStringValue(); } },
+                { "image_url", n => { ImageUrl = n.GetStringValue(); } },
+                { "is_official", n => { IsOfficial = n.GetBoolValue(); } },
+                { "name", n => { Name = n.GetStringValue(); } },
+                { "name_translated", n => { NameTranslated = n.GetStringValue(); } },
+                { "network", n => { Network = n.GetStringValue(); } },
+                { "objectID", n => { ObjectID = n.GetStringValue(); } },
+                { "officialList", n => { OfficialList = n.GetStringValue(); } },
+                { "overview", n => { Overview = n.GetStringValue(); } },
+                { "overview_translated", n => { OverviewTranslated = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "overviews", n => { Overviews = n.GetObjectValue<ApiSdk.Models.TranslationSimple>(ApiSdk.Models.TranslationSimple.CreateFromDiscriminatorValue); } },
+                { "poster", n => { Poster = n.GetStringValue(); } },
+                { "posters", n => { Posters = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "primary_language", n => { PrimaryLanguage = n.GetStringValue(); } },
+                { "remote_ids", n => { RemoteIds = n.GetCollectionOfObjectValues<ApiSdk.Models.RemoteID>(ApiSdk.Models.RemoteID.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "slug", n => { Slug = n.GetStringValue(); } },
+                { "status", n => { Status = n.GetStringValue(); } },
+                { "studios", n => { Studios = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "thumbnail", n => { Thumbnail = n.GetStringValue(); } },
+                { "title", n => { Title = n.GetStringValue(); } },
+                { "translations", n => { Translations = n.GetObjectValue<ApiSdk.Models.TranslationSimple>(ApiSdk.Models.TranslationSimple.CreateFromDiscriminatorValue); } },
+                { "translationsWithLang", n => { TranslationsWithLang = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "tvdb_id", n => { TvdbId = n.GetStringValue(); } },
+                { "type", n => { Type = n.GetStringValue(); } },
+                { "year", n => { Year = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfPrimitiveValues<string>("aliases", Aliases);
             writer.WriteCollectionOfPrimitiveValues<string>("companies", Companies);
@@ -336,18 +345,18 @@ namespace ApiSdk.Models {
             writer.WriteStringValue("objectID", ObjectID);
             writer.WriteStringValue("officialList", OfficialList);
             writer.WriteStringValue("overview", Overview);
-            writer.WriteCollectionOfObjectValues<TranslationSimple>("overviews", Overviews);
+            writer.WriteObjectValue<ApiSdk.Models.TranslationSimple>("overviews", Overviews);
             writer.WriteCollectionOfPrimitiveValues<string>("overview_translated", OverviewTranslated);
             writer.WriteStringValue("poster", Poster);
             writer.WriteCollectionOfPrimitiveValues<string>("posters", Posters);
             writer.WriteStringValue("primary_language", PrimaryLanguage);
-            writer.WriteCollectionOfObjectValues<RemoteID>("remote_ids", RemoteIds);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.RemoteID>("remote_ids", RemoteIds);
             writer.WriteStringValue("slug", Slug);
             writer.WriteStringValue("status", Status);
             writer.WriteCollectionOfPrimitiveValues<string>("studios", Studios);
             writer.WriteStringValue("thumbnail", Thumbnail);
             writer.WriteStringValue("title", Title);
-            writer.WriteCollectionOfObjectValues<TranslationSimple>("translations", Translations);
+            writer.WriteObjectValue<ApiSdk.Models.TranslationSimple>("translations", Translations);
             writer.WriteCollectionOfPrimitiveValues<string>("translationsWithLang", TranslationsWithLang);
             writer.WriteStringValue("tvdb_id", TvdbId);
             writer.WriteStringValue("type", Type);

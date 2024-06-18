@@ -8,57 +8,72 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Series.Item.Episodes.Item {
+namespace ApiSdk.Series.Item.Episodes.Item
+{
     /// <summary>
     /// Builds and executes requests for operations under \series\{id}\episodes\{season-type}
     /// </summary>
-    public class SeasonTypeItemRequestBuilder : BaseRequestBuilder {
+    public class SeasonTypeItemRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>Gets an item from the ApiSdk.series.item.episodes.item.item collection</summary>
         /// <param name="position">Unique identifier of the item</param>
-        public WithLangItemRequestBuilder this[string position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("lang", position);
-            return new WithLangItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Series.Item.Episodes.Item.Item.WithLangItemRequestBuilder"/></returns>
+        public ApiSdk.Series.Item.Episodes.Item.Item.WithLangItemRequestBuilder this[string position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("lang", position);
+                return new ApiSdk.Series.Item.Episodes.Item.Item.WithLangItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new SeasonTypeItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.Item.Episodes.Item.SeasonTypeItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SeasonTypeItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}/episodes/{season%2Dtype}?page={page}{&airDate*,episodeNumber*,season*}", pathParameters) {
+        public SeasonTypeItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}/episodes/{season%2Dtype}?page={page}{&airDate*,episodeNumber*,season*}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new SeasonTypeItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.Item.Episodes.Item.SeasonTypeItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SeasonTypeItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}/episodes/{season%2Dtype}?page={page}{&airDate*,episodeNumber*,season*}", rawUrl) {
+        public SeasonTypeItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}/episodes/{season%2Dtype}?page={page}{&airDate*,episodeNumber*,season*}", rawUrl)
+        {
         }
         /// <summary>
         /// Returns series episodes from the specified season type, default returns the episodes in the series default season type
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.Item.Episodes.Item.SeasonTypeGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<SeasonTypeGetResponse?> GetAsync(Action<RequestConfiguration<SeasonTypeItemRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.Item.Episodes.Item.SeasonTypeGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Series.Item.Episodes.Item.SeasonTypeItemRequestBuilder.SeasonTypeItemRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<SeasonTypeGetResponse> GetAsync(Action<RequestConfiguration<SeasonTypeItemRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.Item.Episodes.Item.SeasonTypeGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Series.Item.Episodes.Item.SeasonTypeItemRequestBuilder.SeasonTypeItemRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<SeasonTypeGetResponse>(requestInfo, SeasonTypeGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Series.Item.Episodes.Item.SeasonTypeGetResponse>(requestInfo, ApiSdk.Series.Item.Episodes.Item.SeasonTypeGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns series episodes from the specified season type, default returns the episodes in the series default season type
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<SeasonTypeItemRequestBuilderGetQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Series.Item.Episodes.Item.SeasonTypeItemRequestBuilder.SeasonTypeItemRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<SeasonTypeItemRequestBuilderGetQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Series.Item.Episodes.Item.SeasonTypeItemRequestBuilder.SeasonTypeItemRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -68,14 +83,17 @@ namespace ApiSdk.Series.Item.Episodes.Item {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.Item.Episodes.Item.SeasonTypeItemRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public SeasonTypeItemRequestBuilder WithUrl(string rawUrl) {
-            return new SeasonTypeItemRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Series.Item.Episodes.Item.SeasonTypeItemRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Series.Item.Episodes.Item.SeasonTypeItemRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// Returns series episodes from the specified season type, default returns the episodes in the series default season type
         /// </summary>
-        public class SeasonTypeItemRequestBuilderGetQueryParameters {
+        public class SeasonTypeItemRequestBuilderGetQueryParameters 
+        {
             /// <summary>airDate of the episode, format is yyyy-mm-dd</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

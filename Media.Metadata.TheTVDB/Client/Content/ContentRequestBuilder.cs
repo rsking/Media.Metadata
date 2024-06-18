@@ -6,28 +6,33 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-namespace ApiSdk.Content {
+namespace ApiSdk.Content
+{
     /// <summary>
     /// Builds and executes requests for operations under \content
     /// </summary>
-    public class ContentRequestBuilder : BaseRequestBuilder {
+    public class ContentRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The ratings property</summary>
-        public RatingsRequestBuilder Ratings { get =>
-            new RatingsRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Content.Ratings.RatingsRequestBuilder Ratings
+        {
+            get => new ApiSdk.Content.Ratings.RatingsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new ContentRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Content.ContentRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ContentRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/content", pathParameters) {
+        public ContentRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/content", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new ContentRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Content.ContentRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ContentRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/content", rawUrl) {
+        public ContentRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/content", rawUrl)
+        {
         }
     }
 }

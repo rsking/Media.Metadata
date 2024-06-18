@@ -6,31 +6,40 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-namespace ApiSdk.Search.Remoteid {
+namespace ApiSdk.Search.Remoteid
+{
     /// <summary>
     /// Builds and executes requests for operations under \search\remoteid
     /// </summary>
-    public class RemoteidRequestBuilder : BaseRequestBuilder {
+    public class RemoteidRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>Gets an item from the ApiSdk.search.remoteid.item collection</summary>
         /// <param name="position">Search for a specific remote id.  Allows searching for an IMDB or EIDR id, for example.</param>
-        public WithRemoteItemRequestBuilder this[string position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("remoteId", position);
-            return new WithRemoteItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Search.Remoteid.Item.WithRemoteItemRequestBuilder"/></returns>
+        public ApiSdk.Search.Remoteid.Item.WithRemoteItemRequestBuilder this[string position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("remoteId", position);
+                return new ApiSdk.Search.Remoteid.Item.WithRemoteItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new RemoteidRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Search.Remoteid.RemoteidRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public RemoteidRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/search/remoteid", pathParameters) {
+        public RemoteidRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/search/remoteid", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new RemoteidRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Search.Remoteid.RemoteidRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public RemoteidRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/search/remoteid", rawUrl) {
+        public RemoteidRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/search/remoteid", rawUrl)
+        {
         }
     }
 }

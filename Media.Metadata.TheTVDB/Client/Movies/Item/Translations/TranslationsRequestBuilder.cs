@@ -6,31 +6,40 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-namespace ApiSdk.Movies.Item.Translations {
+namespace ApiSdk.Movies.Item.Translations
+{
     /// <summary>
     /// Builds and executes requests for operations under \movies\{id}\translations
     /// </summary>
-    public class TranslationsRequestBuilder : BaseRequestBuilder {
+    public class TranslationsRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>Gets an item from the ApiSdk.movies.item.translations.item collection</summary>
         /// <param name="position">language</param>
-        public WithLanguageItemRequestBuilder this[string position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("language", position);
-            return new WithLanguageItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Movies.Item.Translations.Item.WithLanguageItemRequestBuilder"/></returns>
+        public ApiSdk.Movies.Item.Translations.Item.WithLanguageItemRequestBuilder this[string position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("language", position);
+                return new ApiSdk.Movies.Item.Translations.Item.WithLanguageItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new TranslationsRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Movies.Item.Translations.TranslationsRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public TranslationsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies/{id}/translations", pathParameters) {
+        public TranslationsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies/{id}/translations", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new TranslationsRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Movies.Item.Translations.TranslationsRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public TranslationsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies/{id}/translations", rawUrl) {
+        public TranslationsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies/{id}/translations", rawUrl)
+        {
         }
     }
 }

@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// base award nominee record
     /// </summary>
-    public class AwardNomineeBaseRecord : IAdditionalDataHolder, IParsable {
+    public class AwardNomineeBaseRecord : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The category property</summary>
@@ -38,10 +40,10 @@ namespace ApiSdk.Models {
         /// <summary>base episode record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public EpisodeBaseRecord? Episode { get; set; }
+        public ApiSdk.Models.EpisodeBaseRecord? Episode { get; set; }
 #nullable restore
 #else
-        public EpisodeBaseRecord Episode { get; set; }
+        public ApiSdk.Models.EpisodeBaseRecord Episode { get; set; }
 #endif
         /// <summary>The id property</summary>
         public long? Id { get; set; }
@@ -50,10 +52,10 @@ namespace ApiSdk.Models {
         /// <summary>base movie record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public MovieBaseRecord? Movie { get; set; }
+        public ApiSdk.Models.MovieBaseRecord? Movie { get; set; }
 #nullable restore
 #else
-        public MovieBaseRecord Movie { get; set; }
+        public ApiSdk.Models.MovieBaseRecord Movie { get; set; }
 #endif
         /// <summary>The name property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -66,10 +68,10 @@ namespace ApiSdk.Models {
         /// <summary>The base record for a series. All series airs time like firstAired, lastAired, nextAired, etc. are in US EST for US series, and for all non-US series, the time of the show’s country capital or most populous city. For streaming services, is the official release time. See https://support.thetvdb.com/kb/faq.php?id=29.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public SeriesBaseRecord? Series { get; set; }
+        public ApiSdk.Models.SeriesBaseRecord? Series { get; set; }
 #nullable restore
 #else
-        public SeriesBaseRecord Series { get; set; }
+        public ApiSdk.Models.SeriesBaseRecord Series { get; set; }
 #endif
         /// <summary>The year property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -80,51 +82,58 @@ namespace ApiSdk.Models {
         public string Year { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new AwardNomineeBaseRecord and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.AwardNomineeBaseRecord"/> and sets the default values.
         /// </summary>
-        public AwardNomineeBaseRecord() {
+        public AwardNomineeBaseRecord()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.AwardNomineeBaseRecord"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static AwardNomineeBaseRecord CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.AwardNomineeBaseRecord CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new AwardNomineeBaseRecord();
+            return new ApiSdk.Models.AwardNomineeBaseRecord();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"category", n => { Category = n.GetStringValue(); } },
-                {"character", n => { Character = n.GetObjectValue<ApiSdk.Models.Character>(ApiSdk.Models.Character.CreateFromDiscriminatorValue); } },
-                {"details", n => { Details = n.GetStringValue(); } },
-                {"episode", n => { Episode = n.GetObjectValue<EpisodeBaseRecord>(EpisodeBaseRecord.CreateFromDiscriminatorValue); } },
-                {"id", n => { Id = n.GetLongValue(); } },
-                {"isWinner", n => { IsWinner = n.GetBoolValue(); } },
-                {"movie", n => { Movie = n.GetObjectValue<MovieBaseRecord>(MovieBaseRecord.CreateFromDiscriminatorValue); } },
-                {"name", n => { Name = n.GetStringValue(); } },
-                {"series", n => { Series = n.GetObjectValue<SeriesBaseRecord>(SeriesBaseRecord.CreateFromDiscriminatorValue); } },
-                {"year", n => { Year = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "category", n => { Category = n.GetStringValue(); } },
+                { "character", n => { Character = n.GetObjectValue<ApiSdk.Models.Character>(ApiSdk.Models.Character.CreateFromDiscriminatorValue); } },
+                { "details", n => { Details = n.GetStringValue(); } },
+                { "episode", n => { Episode = n.GetObjectValue<ApiSdk.Models.EpisodeBaseRecord>(ApiSdk.Models.EpisodeBaseRecord.CreateFromDiscriminatorValue); } },
+                { "id", n => { Id = n.GetLongValue(); } },
+                { "isWinner", n => { IsWinner = n.GetBoolValue(); } },
+                { "movie", n => { Movie = n.GetObjectValue<ApiSdk.Models.MovieBaseRecord>(ApiSdk.Models.MovieBaseRecord.CreateFromDiscriminatorValue); } },
+                { "name", n => { Name = n.GetStringValue(); } },
+                { "series", n => { Series = n.GetObjectValue<ApiSdk.Models.SeriesBaseRecord>(ApiSdk.Models.SeriesBaseRecord.CreateFromDiscriminatorValue); } },
+                { "year", n => { Year = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("category", Category);
             writer.WriteObjectValue<ApiSdk.Models.Character>("character", Character);
             writer.WriteStringValue("details", Details);
-            writer.WriteObjectValue<EpisodeBaseRecord>("episode", Episode);
+            writer.WriteObjectValue<ApiSdk.Models.EpisodeBaseRecord>("episode", Episode);
             writer.WriteLongValue("id", Id);
             writer.WriteBoolValue("isWinner", IsWinner);
-            writer.WriteObjectValue<MovieBaseRecord>("movie", Movie);
+            writer.WriteObjectValue<ApiSdk.Models.MovieBaseRecord>("movie", Movie);
             writer.WriteStringValue("name", Name);
-            writer.WriteObjectValue<SeriesBaseRecord>("series", Series);
+            writer.WriteObjectValue<ApiSdk.Models.SeriesBaseRecord>("series", Series);
             writer.WriteStringValue("year", Year);
             writer.WriteAdditionalData(AdditionalData);
         }

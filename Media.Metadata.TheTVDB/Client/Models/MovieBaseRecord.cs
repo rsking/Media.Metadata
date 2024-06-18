@@ -4,20 +4,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// base movie record
     /// </summary>
-    public class MovieBaseRecord : IAdditionalDataHolder, IParsable {
+    public class MovieBaseRecord : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The aliases property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Alias>? Aliases { get; set; }
+        public List<ApiSdk.Models.Alias>? Aliases { get; set; }
 #nullable restore
 #else
-        public List<Alias> Aliases { get; set; }
+        public List<ApiSdk.Models.Alias> Aliases { get; set; }
 #endif
         /// <summary>The id property</summary>
         public long? Id { get; set; }
@@ -90,45 +92,52 @@ namespace ApiSdk.Models {
         public string Year { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new MovieBaseRecord and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.MovieBaseRecord"/> and sets the default values.
         /// </summary>
-        public MovieBaseRecord() {
+        public MovieBaseRecord()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.MovieBaseRecord"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static MovieBaseRecord CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.MovieBaseRecord CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new MovieBaseRecord();
+            return new ApiSdk.Models.MovieBaseRecord();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"aliases", n => { Aliases = n.GetCollectionOfObjectValues<Alias>(Alias.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"id", n => { Id = n.GetLongValue(); } },
-                {"image", n => { Image = n.GetStringValue(); } },
-                {"lastUpdated", n => { LastUpdated = n.GetStringValue(); } },
-                {"name", n => { Name = n.GetStringValue(); } },
-                {"nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"runtime", n => { Runtime = n.GetIntValue(); } },
-                {"score", n => { Score = n.GetDoubleValue(); } },
-                {"slug", n => { Slug = n.GetStringValue(); } },
-                {"status", n => { Status = n.GetObjectValue<ApiSdk.Models.Status>(ApiSdk.Models.Status.CreateFromDiscriminatorValue); } },
-                {"year", n => { Year = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "aliases", n => { Aliases = n.GetCollectionOfObjectValues<ApiSdk.Models.Alias>(ApiSdk.Models.Alias.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "id", n => { Id = n.GetLongValue(); } },
+                { "image", n => { Image = n.GetStringValue(); } },
+                { "lastUpdated", n => { LastUpdated = n.GetStringValue(); } },
+                { "name", n => { Name = n.GetStringValue(); } },
+                { "nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "runtime", n => { Runtime = n.GetIntValue(); } },
+                { "score", n => { Score = n.GetDoubleValue(); } },
+                { "slug", n => { Slug = n.GetStringValue(); } },
+                { "status", n => { Status = n.GetObjectValue<ApiSdk.Models.Status>(ApiSdk.Models.Status.CreateFromDiscriminatorValue); } },
+                { "year", n => { Year = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<Alias>("aliases", Aliases);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Alias>("aliases", Aliases);
             writer.WriteLongValue("id", Id);
             writer.WriteStringValue("image", Image);
             writer.WriteStringValue("lastUpdated", LastUpdated);

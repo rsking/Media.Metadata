@@ -7,50 +7,60 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Updates {
+namespace ApiSdk.Updates
+{
     /// <summary>
     /// Builds and executes requests for operations under \updates
     /// </summary>
-    public class UpdatesRequestBuilder : BaseRequestBuilder {
+    public class UpdatesRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>
-        /// Instantiates a new UpdatesRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Updates.UpdatesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public UpdatesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/updates?since={since}{&action*,page*,type*}", pathParameters) {
+        public UpdatesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/updates?since={since}{&action*,page*,type*}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new UpdatesRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Updates.UpdatesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public UpdatesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/updates?since={since}{&action*,page*,type*}", rawUrl) {
+        public UpdatesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/updates?since={since}{&action*,page*,type*}", rawUrl)
+        {
         }
         /// <summary>
         /// Returns updated entities.  methodInt indicates a created record (1), an updated record (2), or a deleted record (3).  If a record is deleted because it was a duplicate of another record, the target record&apos;s information is provided in mergeToType and mergeToId.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Updates.UpdatesGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<UpdatesGetResponse?> GetAsync(Action<RequestConfiguration<UpdatesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Updates.UpdatesGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Updates.UpdatesRequestBuilder.UpdatesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<UpdatesGetResponse> GetAsync(Action<RequestConfiguration<UpdatesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Updates.UpdatesGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Updates.UpdatesRequestBuilder.UpdatesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<UpdatesGetResponse>(requestInfo, UpdatesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Updates.UpdatesGetResponse>(requestInfo, ApiSdk.Updates.UpdatesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns updated entities.  methodInt indicates a created record (1), an updated record (2), or a deleted record (3).  If a record is deleted because it was a duplicate of another record, the target record&apos;s information is provided in mergeToType and mergeToId.
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<UpdatesRequestBuilderGetQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Updates.UpdatesRequestBuilder.UpdatesRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<UpdatesRequestBuilderGetQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Updates.UpdatesRequestBuilder.UpdatesRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -60,23 +70,26 @@ namespace ApiSdk.Updates {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Updates.UpdatesRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public UpdatesRequestBuilder WithUrl(string rawUrl) {
-            return new UpdatesRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Updates.UpdatesRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Updates.UpdatesRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// Returns updated entities.  methodInt indicates a created record (1), an updated record (2), or a deleted record (3).  If a record is deleted because it was a duplicate of another record, the target record&apos;s information is provided in mergeToType and mergeToId.
         /// </summary>
-        public class UpdatesRequestBuilderGetQueryParameters {
+        public class UpdatesRequestBuilderGetQueryParameters 
+        {
             [QueryParameter("action")]
-            public GetActionQueryParameterType? Action { get; set; }
+            public ApiSdk.Updates.GetActionQueryParameterType? Action { get; set; }
             /// <summary>name</summary>
             [QueryParameter("page")]
             public double? Page { get; set; }
             [QueryParameter("since")]
             public double? Since { get; set; }
             [QueryParameter("type")]
-            public GetTypeQueryParameterType? Type { get; set; }
+            public ApiSdk.Updates.GetTypeQueryParameterType? Type { get; set; }
         }
     }
 }

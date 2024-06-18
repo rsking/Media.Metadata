@@ -7,50 +7,60 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Characters.Item {
+namespace ApiSdk.Characters.Item
+{
     /// <summary>
     /// Builds and executes requests for operations under \characters\{id}
     /// </summary>
-    public class CharactersItemRequestBuilder : BaseRequestBuilder {
+    public class CharactersItemRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>
-        /// Instantiates a new CharactersItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Characters.Item.CharactersItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CharactersItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/characters/{id}", pathParameters) {
+        public CharactersItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/characters/{id}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new CharactersItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Characters.Item.CharactersItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CharactersItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/characters/{id}", rawUrl) {
+        public CharactersItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/characters/{id}", rawUrl)
+        {
         }
         /// <summary>
         /// Returns character base record
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Characters.Item.CharactersGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<CharactersGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Characters.Item.CharactersGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<CharactersGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Characters.Item.CharactersGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<CharactersGetResponse>(requestInfo, CharactersGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Characters.Item.CharactersGetResponse>(requestInfo, ApiSdk.Characters.Item.CharactersGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns character base record
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -60,9 +70,11 @@ namespace ApiSdk.Characters.Item {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Characters.Item.CharactersItemRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public CharactersItemRequestBuilder WithUrl(string rawUrl) {
-            return new CharactersItemRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Characters.Item.CharactersItemRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Characters.Item.CharactersItemRequestBuilder(rawUrl, RequestAdapter);
         }
     }
 }

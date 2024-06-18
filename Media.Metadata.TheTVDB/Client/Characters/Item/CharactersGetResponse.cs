@@ -5,17 +5,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Characters.Item {
-    public class CharactersGetResponse : IAdditionalDataHolder, IParsable {
+namespace ApiSdk.Characters.Item
+{
+    #pragma warning disable CS1591
+    public class CharactersGetResponse : IAdditionalDataHolder, IParsable
+    #pragma warning restore CS1591
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>character record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public Character? Data { get; set; }
+        public ApiSdk.Models.Character? Data { get; set; }
 #nullable restore
 #else
-        public Character Data { get; set; }
+        public ApiSdk.Models.Character Data { get; set; }
 #endif
         /// <summary>The status property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -26,35 +30,42 @@ namespace ApiSdk.Characters.Item {
         public string Status { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new CharactersGetResponse and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Characters.Item.CharactersGetResponse"/> and sets the default values.
         /// </summary>
-        public CharactersGetResponse() {
+        public CharactersGetResponse()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Characters.Item.CharactersGetResponse"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static CharactersGetResponse CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Characters.Item.CharactersGetResponse CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new CharactersGetResponse();
+            return new ApiSdk.Characters.Item.CharactersGetResponse();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"data", n => { Data = n.GetObjectValue<Character>(Character.CreateFromDiscriminatorValue); } },
-                {"status", n => { Status = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "data", n => { Data = n.GetObjectValue<ApiSdk.Models.Character>(ApiSdk.Models.Character.CreateFromDiscriminatorValue); } },
+                { "status", n => { Status = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteObjectValue<Character>("data", Data);
+            writer.WriteObjectValue<ApiSdk.Models.Character>("data", Data);
             writer.WriteStringValue("status", Status);
             writer.WriteAdditionalData(AdditionalData);
         }

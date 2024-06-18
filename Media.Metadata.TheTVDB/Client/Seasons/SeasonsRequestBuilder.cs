@@ -9,61 +9,77 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Seasons {
+namespace ApiSdk.Seasons
+{
     /// <summary>
     /// Builds and executes requests for operations under \seasons
     /// </summary>
-    public class SeasonsRequestBuilder : BaseRequestBuilder {
+    public class SeasonsRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The types property</summary>
-        public TypesRequestBuilder Types { get =>
-            new TypesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Seasons.Types.TypesRequestBuilder Types
+        {
+            get => new ApiSdk.Seasons.Types.TypesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the ApiSdk.seasons.item collection</summary>
         /// <param name="position">id</param>
-        public SeasonsItemRequestBuilder this[double position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("id", position);
-            return new SeasonsItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Seasons.Item.SeasonsItemRequestBuilder"/></returns>
+        public ApiSdk.Seasons.Item.SeasonsItemRequestBuilder this[double position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("id", position);
+                return new ApiSdk.Seasons.Item.SeasonsItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new SeasonsRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Seasons.SeasonsRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SeasonsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/seasons{?page*}", pathParameters) {
+        public SeasonsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/seasons{?page*}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new SeasonsRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Seasons.SeasonsRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SeasonsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/seasons{?page*}", rawUrl) {
+        public SeasonsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/seasons{?page*}", rawUrl)
+        {
         }
         /// <summary>
         /// returns list of seasons base records
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Seasons.SeasonsGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<SeasonsGetResponse?> GetAsync(Action<RequestConfiguration<SeasonsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Seasons.SeasonsGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Seasons.SeasonsRequestBuilder.SeasonsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<SeasonsGetResponse> GetAsync(Action<RequestConfiguration<SeasonsRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Seasons.SeasonsGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Seasons.SeasonsRequestBuilder.SeasonsRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<SeasonsGetResponse>(requestInfo, SeasonsGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Seasons.SeasonsGetResponse>(requestInfo, ApiSdk.Seasons.SeasonsGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// returns list of seasons base records
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<SeasonsRequestBuilderGetQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Seasons.SeasonsRequestBuilder.SeasonsRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<SeasonsRequestBuilderGetQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Seasons.SeasonsRequestBuilder.SeasonsRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -73,14 +89,17 @@ namespace ApiSdk.Seasons {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Seasons.SeasonsRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public SeasonsRequestBuilder WithUrl(string rawUrl) {
-            return new SeasonsRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Seasons.SeasonsRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Seasons.SeasonsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// returns list of seasons base records
         /// </summary>
-        public class SeasonsRequestBuilderGetQueryParameters {
+        public class SeasonsRequestBuilderGetQueryParameters 
+        {
             /// <summary>page number</summary>
             [QueryParameter("page")]
             public double? Page { get; set; }

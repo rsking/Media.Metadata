@@ -11,69 +11,87 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Series {
+namespace ApiSdk.Series
+{
     /// <summary>
     /// Builds and executes requests for operations under \series
     /// </summary>
-    public class SeriesRequestBuilder : BaseRequestBuilder {
+    public class SeriesRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The filter property</summary>
-        public FilterRequestBuilder Filter { get =>
-            new FilterRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Series.Filter.FilterRequestBuilder Filter
+        {
+            get => new ApiSdk.Series.Filter.FilterRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The slug property</summary>
-        public SlugRequestBuilder Slug { get =>
-            new SlugRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Series.Slug.SlugRequestBuilder Slug
+        {
+            get => new ApiSdk.Series.Slug.SlugRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The statuses property</summary>
-        public StatusesRequestBuilder Statuses { get =>
-            new StatusesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Series.Statuses.StatusesRequestBuilder Statuses
+        {
+            get => new ApiSdk.Series.Statuses.StatusesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the ApiSdk.series.item collection</summary>
         /// <param name="position">id</param>
-        public SeriesItemRequestBuilder this[double position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("id", position);
-            return new SeriesItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Series.Item.SeriesItemRequestBuilder"/></returns>
+        public ApiSdk.Series.Item.SeriesItemRequestBuilder this[double position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("id", position);
+                return new ApiSdk.Series.Item.SeriesItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new SeriesRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.SeriesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SeriesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series{?page*}", pathParameters) {
+        public SeriesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series{?page*}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new SeriesRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.SeriesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SeriesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series{?page*}", rawUrl) {
+        public SeriesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series{?page*}", rawUrl)
+        {
         }
         /// <summary>
         /// returns list of series base records
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.SeriesGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<SeriesGetResponse?> GetAsync(Action<RequestConfiguration<SeriesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.SeriesGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Series.SeriesRequestBuilder.SeriesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<SeriesGetResponse> GetAsync(Action<RequestConfiguration<SeriesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.SeriesGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Series.SeriesRequestBuilder.SeriesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<SeriesGetResponse>(requestInfo, SeriesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Series.SeriesGetResponse>(requestInfo, ApiSdk.Series.SeriesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// returns list of series base records
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<SeriesRequestBuilderGetQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Series.SeriesRequestBuilder.SeriesRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<SeriesRequestBuilderGetQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Series.SeriesRequestBuilder.SeriesRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -83,14 +101,17 @@ namespace ApiSdk.Series {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.SeriesRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public SeriesRequestBuilder WithUrl(string rawUrl) {
-            return new SeriesRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Series.SeriesRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Series.SeriesRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// returns list of series base records
         /// </summary>
-        public class SeriesRequestBuilderGetQueryParameters {
+        public class SeriesRequestBuilderGetQueryParameters 
+        {
             /// <summary>page number</summary>
             [QueryParameter("page")]
             public double? Page { get; set; }

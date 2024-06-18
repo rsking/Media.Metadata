@@ -9,58 +9,70 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Episodes.Item {
+namespace ApiSdk.Episodes.Item
+{
     /// <summary>
     /// Builds and executes requests for operations under \episodes\{id}
     /// </summary>
-    public class EpisodesItemRequestBuilder : BaseRequestBuilder {
+    public class EpisodesItemRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The extended property</summary>
-        public ExtendedRequestBuilder Extended { get =>
-            new ExtendedRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Episodes.Item.Extended.ExtendedRequestBuilder Extended
+        {
+            get => new ApiSdk.Episodes.Item.Extended.ExtendedRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The translations property</summary>
-        public TranslationsRequestBuilder Translations { get =>
-            new TranslationsRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Episodes.Item.Translations.TranslationsRequestBuilder Translations
+        {
+            get => new ApiSdk.Episodes.Item.Translations.TranslationsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new EpisodesItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Episodes.Item.EpisodesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public EpisodesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/episodes/{id}", pathParameters) {
+        public EpisodesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/episodes/{id}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new EpisodesItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Episodes.Item.EpisodesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public EpisodesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/episodes/{id}", rawUrl) {
+        public EpisodesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/episodes/{id}", rawUrl)
+        {
         }
         /// <summary>
         /// Returns episode base record
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Episodes.Item.EpisodesGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<EpisodesGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Episodes.Item.EpisodesGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<EpisodesGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Episodes.Item.EpisodesGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<EpisodesGetResponse>(requestInfo, EpisodesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Episodes.Item.EpisodesGetResponse>(requestInfo, ApiSdk.Episodes.Item.EpisodesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns episode base record
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -70,9 +82,11 @@ namespace ApiSdk.Episodes.Item {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Episodes.Item.EpisodesItemRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public EpisodesItemRequestBuilder WithUrl(string rawUrl) {
-            return new EpisodesItemRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Episodes.Item.EpisodesItemRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Episodes.Item.EpisodesItemRequestBuilder(rawUrl, RequestAdapter);
         }
     }
 }

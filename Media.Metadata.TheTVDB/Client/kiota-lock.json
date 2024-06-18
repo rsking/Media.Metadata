@@ -1,14 +1,15 @@
 {
-  "descriptionHash": "C14CECB5137E3B62FABB68D63F0AE2E6FF29FE89DFED42F980943CB36CF593994AE8199ACAE628A5CF94EE0CB7723D654A7BAEBBE29E04CFEA7CF59AEAC618AC",
+  "descriptionHash": "5117AEBDFCAB487C0690546AFB285AF2E2A295BA3372A0B92B14C655F4C4ADCC1D923E4CDDA5EE9E0AB9E3CDD5CCBB034032649DB206CCC819A98570A3BA23DF",
   "descriptionLocation": "https://thetvdb.github.io/v4-api/swagger.yml",
   "lockFileVersion": "1.0.0",
-  "kiotaVersion": "1.11.1",
+  "kiotaVersion": "1.15.0",
   "clientClassName": "ApiClient",
   "clientNamespaceName": "ApiSdk",
   "language": "CSharp",
   "usesBackingStore": false,
   "excludeBackwardCompatible": true,
   "includeAdditionalData": true,
+  "disableSSLValidation": false,
   "serializers": [
     "Microsoft.Kiota.Serialization.Json.JsonSerializationWriterFactory",
     "Microsoft.Kiota.Serialization.Text.TextSerializationWriterFactory",

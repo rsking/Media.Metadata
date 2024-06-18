@@ -4,20 +4,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// base list record
     /// </summary>
-    public class ListBaseRecord : IAdditionalDataHolder, IParsable {
+    public class ListBaseRecord : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The aliases property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Alias>? Aliases { get; set; }
+        public List<ApiSdk.Models.Alias>? Aliases { get; set; }
 #nullable restore
 #else
-        public List<Alias> Aliases { get; set; }
+        public List<ApiSdk.Models.Alias> Aliases { get; set; }
 #endif
         /// <summary>The id property</summary>
         public long? Id { get; set; }
@@ -68,20 +70,20 @@ namespace ApiSdk.Models {
         /// <summary>The remoteIds property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<RemoteID>? RemoteIds { get; set; }
+        public List<ApiSdk.Models.RemoteID>? RemoteIds { get; set; }
 #nullable restore
 #else
-        public List<RemoteID> RemoteIds { get; set; }
+        public List<ApiSdk.Models.RemoteID> RemoteIds { get; set; }
 #endif
         /// <summary>The score property</summary>
         public int? Score { get; set; }
         /// <summary>The tags property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<TagOption>? Tags { get; set; }
+        public List<ApiSdk.Models.TagOption>? Tags { get; set; }
 #nullable restore
 #else
-        public List<TagOption> Tags { get; set; }
+        public List<ApiSdk.Models.TagOption> Tags { get; set; }
 #endif
         /// <summary>The url property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -92,46 +94,53 @@ namespace ApiSdk.Models {
         public string Url { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new ListBaseRecord and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.ListBaseRecord"/> and sets the default values.
         /// </summary>
-        public ListBaseRecord() {
+        public ListBaseRecord()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.ListBaseRecord"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static ListBaseRecord CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.ListBaseRecord CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new ListBaseRecord();
+            return new ApiSdk.Models.ListBaseRecord();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"aliases", n => { Aliases = n.GetCollectionOfObjectValues<Alias>(Alias.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"id", n => { Id = n.GetLongValue(); } },
-                {"image", n => { Image = n.GetStringValue(); } },
-                {"imageIsFallback", n => { ImageIsFallback = n.GetBoolValue(); } },
-                {"isOfficial", n => { IsOfficial = n.GetBoolValue(); } },
-                {"name", n => { Name = n.GetStringValue(); } },
-                {"nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"overview", n => { Overview = n.GetStringValue(); } },
-                {"overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"remoteIds", n => { RemoteIds = n.GetCollectionOfObjectValues<RemoteID>(RemoteID.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"score", n => { Score = n.GetIntValue(); } },
-                {"tags", n => { Tags = n.GetCollectionOfObjectValues<TagOption>(TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"url", n => { Url = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "aliases", n => { Aliases = n.GetCollectionOfObjectValues<ApiSdk.Models.Alias>(ApiSdk.Models.Alias.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "id", n => { Id = n.GetLongValue(); } },
+                { "image", n => { Image = n.GetStringValue(); } },
+                { "imageIsFallback", n => { ImageIsFallback = n.GetBoolValue(); } },
+                { "isOfficial", n => { IsOfficial = n.GetBoolValue(); } },
+                { "name", n => { Name = n.GetStringValue(); } },
+                { "nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "overview", n => { Overview = n.GetStringValue(); } },
+                { "overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "remoteIds", n => { RemoteIds = n.GetCollectionOfObjectValues<ApiSdk.Models.RemoteID>(ApiSdk.Models.RemoteID.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "score", n => { Score = n.GetIntValue(); } },
+                { "tags", n => { Tags = n.GetCollectionOfObjectValues<ApiSdk.Models.TagOption>(ApiSdk.Models.TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "url", n => { Url = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<Alias>("aliases", Aliases);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Alias>("aliases", Aliases);
             writer.WriteLongValue("id", Id);
             writer.WriteStringValue("image", Image);
             writer.WriteBoolValue("imageIsFallback", ImageIsFallback);
@@ -140,9 +149,9 @@ namespace ApiSdk.Models {
             writer.WriteCollectionOfPrimitiveValues<string>("nameTranslations", NameTranslations);
             writer.WriteStringValue("overview", Overview);
             writer.WriteCollectionOfPrimitiveValues<string>("overviewTranslations", OverviewTranslations);
-            writer.WriteCollectionOfObjectValues<RemoteID>("remoteIds", RemoteIds);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.RemoteID>("remoteIds", RemoteIds);
             writer.WriteIntValue("score", Score);
-            writer.WriteCollectionOfObjectValues<TagOption>("tags", Tags);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.TagOption>("tags", Tags);
             writer.WriteStringValue("url", Url);
             writer.WriteAdditionalData(AdditionalData);
         }

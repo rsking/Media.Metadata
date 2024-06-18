@@ -8,54 +8,65 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Search {
+namespace ApiSdk.Search
+{
     /// <summary>
     /// Builds and executes requests for operations under \search
     /// </summary>
-    public class SearchRequestBuilder : BaseRequestBuilder {
+    public class SearchRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The remoteid property</summary>
-        public RemoteidRequestBuilder Remoteid { get =>
-            new RemoteidRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Search.Remoteid.RemoteidRequestBuilder Remoteid
+        {
+            get => new ApiSdk.Search.Remoteid.RemoteidRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new SearchRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Search.SearchRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SearchRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/search{?company*,country*,director*,language*,limit*,network*,offset*,primaryType*,q*,query*,remote_id*,type*,year*}", pathParameters) {
+        public SearchRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/search{?company*,country*,director*,language*,limit*,network*,offset*,primaryType*,q*,query*,remote_id*,type*,year*}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new SearchRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Search.SearchRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SearchRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/search{?company*,country*,director*,language*,limit*,network*,offset*,primaryType*,q*,query*,remote_id*,type*,year*}", rawUrl) {
+        public SearchRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/search{?company*,country*,director*,language*,limit*,network*,offset*,primaryType*,q*,query*,remote_id*,type*,year*}", rawUrl)
+        {
         }
         /// <summary>
         /// Our search index includes series, movies, people, and companies. Search is limited to 5k results max.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Search.SearchGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<SearchGetResponse?> GetAsync(Action<RequestConfiguration<SearchRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Search.SearchGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Search.SearchRequestBuilder.SearchRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<SearchGetResponse> GetAsync(Action<RequestConfiguration<SearchRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Search.SearchGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Search.SearchRequestBuilder.SearchRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<SearchGetResponse>(requestInfo, SearchGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Search.SearchGetResponse>(requestInfo, ApiSdk.Search.SearchGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Our search index includes series, movies, people, and companies. Search is limited to 5k results max.
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<SearchRequestBuilderGetQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Search.SearchRequestBuilder.SearchRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<SearchRequestBuilderGetQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Search.SearchRequestBuilder.SearchRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -65,14 +76,17 @@ namespace ApiSdk.Search {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Search.SearchRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public SearchRequestBuilder WithUrl(string rawUrl) {
-            return new SearchRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Search.SearchRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Search.SearchRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// Our search index includes series, movies, people, and companies. Search is limited to 5k results max.
         /// </summary>
-        public class SearchRequestBuilderGetQueryParameters {
+        public class SearchRequestBuilderGetQueryParameters 
+        {
             /// <summary>Restrict results to a specific company (original network, production company, studio, etc).  As an example, &quot;The Walking Dead&quot; would have companies of &quot;AMC&quot;, &quot;AMC+&quot;, and &quot;Disney+&quot;.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

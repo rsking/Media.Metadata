@@ -11,69 +11,87 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Movies {
+namespace ApiSdk.Movies
+{
     /// <summary>
     /// Builds and executes requests for operations under \movies
     /// </summary>
-    public class MoviesRequestBuilder : BaseRequestBuilder {
+    public class MoviesRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The filter property</summary>
-        public FilterRequestBuilder Filter { get =>
-            new FilterRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Movies.Filter.FilterRequestBuilder Filter
+        {
+            get => new ApiSdk.Movies.Filter.FilterRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The slug property</summary>
-        public SlugRequestBuilder Slug { get =>
-            new SlugRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Movies.Slug.SlugRequestBuilder Slug
+        {
+            get => new ApiSdk.Movies.Slug.SlugRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The statuses property</summary>
-        public StatusesRequestBuilder Statuses { get =>
-            new StatusesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Movies.Statuses.StatusesRequestBuilder Statuses
+        {
+            get => new ApiSdk.Movies.Statuses.StatusesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the ApiSdk.movies.item collection</summary>
         /// <param name="position">id</param>
-        public MoviesItemRequestBuilder this[double position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("id", position);
-            return new MoviesItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Movies.Item.MoviesItemRequestBuilder"/></returns>
+        public ApiSdk.Movies.Item.MoviesItemRequestBuilder this[double position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("id", position);
+                return new ApiSdk.Movies.Item.MoviesItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new MoviesRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Movies.MoviesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MoviesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies{?page*}", pathParameters) {
+        public MoviesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies{?page*}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new MoviesRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Movies.MoviesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MoviesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies{?page*}", rawUrl) {
+        public MoviesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies{?page*}", rawUrl)
+        {
         }
         /// <summary>
         /// returns list of movie base records
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Movies.MoviesGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<MoviesGetResponse?> GetAsync(Action<RequestConfiguration<MoviesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Movies.MoviesGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<MoviesGetResponse> GetAsync(Action<RequestConfiguration<MoviesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Movies.MoviesGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<MoviesGetResponse>(requestInfo, MoviesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Movies.MoviesGetResponse>(requestInfo, ApiSdk.Movies.MoviesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// returns list of movie base records
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<MoviesRequestBuilderGetQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<MoviesRequestBuilderGetQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -83,14 +101,17 @@ namespace ApiSdk.Movies {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Movies.MoviesRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public MoviesRequestBuilder WithUrl(string rawUrl) {
-            return new MoviesRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Movies.MoviesRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Movies.MoviesRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// returns list of movie base records
         /// </summary>
-        public class MoviesRequestBuilderGetQueryParameters {
+        public class MoviesRequestBuilderGetQueryParameters 
+        {
             /// <summary>page number</summary>
             [QueryParameter("page")]
             public double? Page { get; set; }

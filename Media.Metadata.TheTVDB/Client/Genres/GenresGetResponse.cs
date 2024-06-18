@@ -5,17 +5,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Genres {
-    public class GenresGetResponse : IAdditionalDataHolder, IParsable {
+namespace ApiSdk.Genres
+{
+    #pragma warning disable CS1591
+    public class GenresGetResponse : IAdditionalDataHolder, IParsable
+    #pragma warning restore CS1591
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The data property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<GenreBaseRecord>? Data { get; set; }
+        public List<ApiSdk.Models.GenreBaseRecord>? Data { get; set; }
 #nullable restore
 #else
-        public List<GenreBaseRecord> Data { get; set; }
+        public List<ApiSdk.Models.GenreBaseRecord> Data { get; set; }
 #endif
         /// <summary>The status property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -26,35 +30,42 @@ namespace ApiSdk.Genres {
         public string Status { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new genresGetResponse and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Genres.GenresGetResponse"/> and sets the default values.
         /// </summary>
-        public GenresGetResponse() {
+        public GenresGetResponse()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Genres.GenresGetResponse"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static GenresGetResponse CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Genres.GenresGetResponse CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new GenresGetResponse();
+            return new ApiSdk.Genres.GenresGetResponse();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"data", n => { Data = n.GetCollectionOfObjectValues<GenreBaseRecord>(GenreBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"status", n => { Status = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "data", n => { Data = n.GetCollectionOfObjectValues<ApiSdk.Models.GenreBaseRecord>(ApiSdk.Models.GenreBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "status", n => { Status = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<GenreBaseRecord>("data", Data);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.GenreBaseRecord>("data", Data);
             writer.WriteStringValue("status", Status);
             writer.WriteAdditionalData(AdditionalData);
         }

@@ -4,28 +4,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// character record
     /// </summary>
-    public class Character : IAdditionalDataHolder, IParsable {
+    public class Character : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The aliases property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Alias>? Aliases { get; set; }
+        public List<ApiSdk.Models.Alias>? Aliases { get; set; }
 #nullable restore
 #else
-        public List<Alias> Aliases { get; set; }
+        public List<ApiSdk.Models.Alias> Aliases { get; set; }
 #endif
         /// <summary>base record info</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RecordInfo? Episode { get; set; }
+        public ApiSdk.Models.RecordInfo? Episode { get; set; }
 #nullable restore
 #else
-        public RecordInfo Episode { get; set; }
+        public ApiSdk.Models.RecordInfo Episode { get; set; }
 #endif
         /// <summary>The episodeId property</summary>
         public int? EpisodeId { get; set; }
@@ -44,10 +46,10 @@ namespace ApiSdk.Models {
         /// <summary>base record info</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RecordInfo? Movie { get; set; }
+        public ApiSdk.Models.RecordInfo? Movie { get; set; }
 #nullable restore
 #else
-        public RecordInfo Movie { get; set; }
+        public ApiSdk.Models.RecordInfo Movie { get; set; }
 #endif
         /// <summary>The movieId property</summary>
         public int? MovieId { get; set; }
@@ -104,10 +106,10 @@ namespace ApiSdk.Models {
         /// <summary>base record info</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RecordInfo? Series { get; set; }
+        public ApiSdk.Models.RecordInfo? Series { get; set; }
 #nullable restore
 #else
-        public RecordInfo Series { get; set; }
+        public ApiSdk.Models.RecordInfo Series { get; set; }
 #endif
         /// <summary>The seriesId property</summary>
         public int? SeriesId { get; set; }
@@ -116,10 +118,10 @@ namespace ApiSdk.Models {
         /// <summary>The tagOptions property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<TagOption>? TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption>? TagOptions { get; set; }
 #nullable restore
 #else
-        public List<TagOption> TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption> TagOptions { get; set; }
 #endif
         /// <summary>The type property</summary>
         public long? Type { get; set; }
@@ -132,60 +134,67 @@ namespace ApiSdk.Models {
         public string Url { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new Character and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.Character"/> and sets the default values.
         /// </summary>
-        public Character() {
+        public Character()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.Character"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static Character CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.Character CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new Character();
+            return new ApiSdk.Models.Character();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"aliases", n => { Aliases = n.GetCollectionOfObjectValues<Alias>(Alias.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"episode", n => { Episode = n.GetObjectValue<RecordInfo>(RecordInfo.CreateFromDiscriminatorValue); } },
-                {"episodeId", n => { EpisodeId = n.GetIntValue(); } },
-                {"id", n => { Id = n.GetLongValue(); } },
-                {"image", n => { Image = n.GetStringValue(); } },
-                {"isFeatured", n => { IsFeatured = n.GetBoolValue(); } },
-                {"movie", n => { Movie = n.GetObjectValue<RecordInfo>(RecordInfo.CreateFromDiscriminatorValue); } },
-                {"movieId", n => { MovieId = n.GetIntValue(); } },
-                {"name", n => { Name = n.GetStringValue(); } },
-                {"nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"peopleId", n => { PeopleId = n.GetIntValue(); } },
-                {"peopleType", n => { PeopleType = n.GetStringValue(); } },
-                {"personImgURL", n => { PersonImgURL = n.GetStringValue(); } },
-                {"personName", n => { PersonName = n.GetStringValue(); } },
-                {"series", n => { Series = n.GetObjectValue<RecordInfo>(RecordInfo.CreateFromDiscriminatorValue); } },
-                {"seriesId", n => { SeriesId = n.GetIntValue(); } },
-                {"sort", n => { Sort = n.GetLongValue(); } },
-                {"tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<TagOption>(TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"type", n => { Type = n.GetLongValue(); } },
-                {"url", n => { Url = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "aliases", n => { Aliases = n.GetCollectionOfObjectValues<ApiSdk.Models.Alias>(ApiSdk.Models.Alias.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "episode", n => { Episode = n.GetObjectValue<ApiSdk.Models.RecordInfo>(ApiSdk.Models.RecordInfo.CreateFromDiscriminatorValue); } },
+                { "episodeId", n => { EpisodeId = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetLongValue(); } },
+                { "image", n => { Image = n.GetStringValue(); } },
+                { "isFeatured", n => { IsFeatured = n.GetBoolValue(); } },
+                { "movie", n => { Movie = n.GetObjectValue<ApiSdk.Models.RecordInfo>(ApiSdk.Models.RecordInfo.CreateFromDiscriminatorValue); } },
+                { "movieId", n => { MovieId = n.GetIntValue(); } },
+                { "name", n => { Name = n.GetStringValue(); } },
+                { "nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "peopleId", n => { PeopleId = n.GetIntValue(); } },
+                { "peopleType", n => { PeopleType = n.GetStringValue(); } },
+                { "personImgURL", n => { PersonImgURL = n.GetStringValue(); } },
+                { "personName", n => { PersonName = n.GetStringValue(); } },
+                { "series", n => { Series = n.GetObjectValue<ApiSdk.Models.RecordInfo>(ApiSdk.Models.RecordInfo.CreateFromDiscriminatorValue); } },
+                { "seriesId", n => { SeriesId = n.GetIntValue(); } },
+                { "sort", n => { Sort = n.GetLongValue(); } },
+                { "tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<ApiSdk.Models.TagOption>(ApiSdk.Models.TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "type", n => { Type = n.GetLongValue(); } },
+                { "url", n => { Url = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<Alias>("aliases", Aliases);
-            writer.WriteObjectValue<RecordInfo>("episode", Episode);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Alias>("aliases", Aliases);
+            writer.WriteObjectValue<ApiSdk.Models.RecordInfo>("episode", Episode);
             writer.WriteIntValue("episodeId", EpisodeId);
             writer.WriteLongValue("id", Id);
             writer.WriteStringValue("image", Image);
             writer.WriteBoolValue("isFeatured", IsFeatured);
-            writer.WriteObjectValue<RecordInfo>("movie", Movie);
+            writer.WriteObjectValue<ApiSdk.Models.RecordInfo>("movie", Movie);
             writer.WriteIntValue("movieId", MovieId);
             writer.WriteStringValue("name", Name);
             writer.WriteCollectionOfPrimitiveValues<string>("nameTranslations", NameTranslations);
@@ -194,10 +203,10 @@ namespace ApiSdk.Models {
             writer.WriteStringValue("peopleType", PeopleType);
             writer.WriteStringValue("personImgURL", PersonImgURL);
             writer.WriteStringValue("personName", PersonName);
-            writer.WriteObjectValue<RecordInfo>("series", Series);
+            writer.WriteObjectValue<ApiSdk.Models.RecordInfo>("series", Series);
             writer.WriteIntValue("seriesId", SeriesId);
             writer.WriteLongValue("sort", Sort);
-            writer.WriteCollectionOfObjectValues<TagOption>("tagOptions", TagOptions);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.TagOption>("tagOptions", TagOptions);
             writer.WriteLongValue("type", Type);
             writer.WriteStringValue("url", Url);
             writer.WriteAdditionalData(AdditionalData);

@@ -32,104 +32,129 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-namespace ApiSdk {
+namespace ApiSdk
+{
     /// <summary>
     /// The main entry point of the SDK, exposes the configuration and the fluent API.
     /// </summary>
-    public class ApiClient : BaseRequestBuilder {
+    public class ApiClient : BaseRequestBuilder
+    {
         /// <summary>The artwork property</summary>
-        public ArtworkRequestBuilder Artwork { get =>
-            new ArtworkRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Artwork.ArtworkRequestBuilder Artwork
+        {
+            get => new ApiSdk.Artwork.ArtworkRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The awards property</summary>
-        public AwardsRequestBuilder Awards { get =>
-            new AwardsRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Awards.AwardsRequestBuilder Awards
+        {
+            get => new ApiSdk.Awards.AwardsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The characters property</summary>
-        public CharactersRequestBuilder Characters { get =>
-            new CharactersRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Characters.CharactersRequestBuilder Characters
+        {
+            get => new ApiSdk.Characters.CharactersRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The companies property</summary>
-        public CompaniesRequestBuilder Companies { get =>
-            new CompaniesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Companies.CompaniesRequestBuilder Companies
+        {
+            get => new ApiSdk.Companies.CompaniesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The content property</summary>
-        public ContentRequestBuilder Content { get =>
-            new ContentRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Content.ContentRequestBuilder Content
+        {
+            get => new ApiSdk.Content.ContentRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The countries property</summary>
-        public CountriesRequestBuilder Countries { get =>
-            new CountriesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Countries.CountriesRequestBuilder Countries
+        {
+            get => new ApiSdk.Countries.CountriesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The entities property</summary>
-        public EntitiesRequestBuilder Entities { get =>
-            new EntitiesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Entities.EntitiesRequestBuilder Entities
+        {
+            get => new ApiSdk.Entities.EntitiesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The episodes property</summary>
-        public EpisodesRequestBuilder Episodes { get =>
-            new EpisodesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Episodes.EpisodesRequestBuilder Episodes
+        {
+            get => new ApiSdk.Episodes.EpisodesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The genders property</summary>
-        public GendersRequestBuilder Genders { get =>
-            new GendersRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Genders.GendersRequestBuilder Genders
+        {
+            get => new ApiSdk.Genders.GendersRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The genres property</summary>
-        public GenresRequestBuilder Genres { get =>
-            new GenresRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Genres.GenresRequestBuilder Genres
+        {
+            get => new ApiSdk.Genres.GenresRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The inspiration property</summary>
-        public InspirationRequestBuilder Inspiration { get =>
-            new InspirationRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Inspiration.InspirationRequestBuilder Inspiration
+        {
+            get => new ApiSdk.Inspiration.InspirationRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The languages property</summary>
-        public LanguagesRequestBuilder Languages { get =>
-            new LanguagesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Languages.LanguagesRequestBuilder Languages
+        {
+            get => new ApiSdk.Languages.LanguagesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The lists property</summary>
-        public ListsRequestBuilder Lists { get =>
-            new ListsRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Lists.ListsRequestBuilder Lists
+        {
+            get => new ApiSdk.Lists.ListsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The login property</summary>
-        public LoginRequestBuilder Login { get =>
-            new LoginRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Login.LoginRequestBuilder Login
+        {
+            get => new ApiSdk.Login.LoginRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The movies property</summary>
-        public MoviesRequestBuilder Movies { get =>
-            new MoviesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Movies.MoviesRequestBuilder Movies
+        {
+            get => new ApiSdk.Movies.MoviesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The people property</summary>
-        public PeopleRequestBuilder People { get =>
-            new PeopleRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.People.PeopleRequestBuilder People
+        {
+            get => new ApiSdk.People.PeopleRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The search property</summary>
-        public SearchRequestBuilder Search { get =>
-            new SearchRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Search.SearchRequestBuilder Search
+        {
+            get => new ApiSdk.Search.SearchRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The seasons property</summary>
-        public SeasonsRequestBuilder Seasons { get =>
-            new SeasonsRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Seasons.SeasonsRequestBuilder Seasons
+        {
+            get => new ApiSdk.Seasons.SeasonsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The series property</summary>
-        public SeriesRequestBuilder Series { get =>
-            new SeriesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Series.SeriesRequestBuilder Series
+        {
+            get => new ApiSdk.Series.SeriesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The sources property</summary>
-        public SourcesRequestBuilder Sources { get =>
-            new SourcesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Sources.SourcesRequestBuilder Sources
+        {
+            get => new ApiSdk.Sources.SourcesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The updates property</summary>
-        public UpdatesRequestBuilder Updates { get =>
-            new UpdatesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Updates.UpdatesRequestBuilder Updates
+        {
+            get => new ApiSdk.Updates.UpdatesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The user property</summary>
-        public UserRequestBuilder User { get =>
-            new UserRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.User.UserRequestBuilder User
+        {
+            get => new ApiSdk.User.UserRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new ApiClient and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.ApiClient"/> and sets the default values.
         /// </summary>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ApiClient(IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}", new Dictionary<string, object>()) {
+        public ApiClient(IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}", new Dictionary<string, object>())
+        {
             ApiClientBuilder.RegisterDefaultSerializer<JsonSerializationWriterFactory>();
             ApiClientBuilder.RegisterDefaultSerializer<TextSerializationWriterFactory>();
             ApiClientBuilder.RegisterDefaultSerializer<FormSerializationWriterFactory>();
@@ -137,7 +162,8 @@ namespace ApiSdk {
             ApiClientBuilder.RegisterDefaultDeserializer<JsonParseNodeFactory>();
             ApiClientBuilder.RegisterDefaultDeserializer<TextParseNodeFactory>();
             ApiClientBuilder.RegisterDefaultDeserializer<FormParseNodeFactory>();
-            if (string.IsNullOrEmpty(RequestAdapter.BaseUrl)) {
+            if (string.IsNullOrEmpty(RequestAdapter.BaseUrl))
+            {
                 RequestAdapter.BaseUrl = "https://api4.thetvdb.com/v4";
             }
             PathParameters.TryAdd("baseurl", RequestAdapter.BaseUrl);

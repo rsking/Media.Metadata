@@ -4,90 +4,99 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// Companies by type record
     /// </summary>
-    public class Companies : IAdditionalDataHolder, IParsable {
+    public class Companies : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
-        /// <summary>A company record</summary>
+        /// <summary>The distributor property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public Company? Distributor { get; set; }
+        public List<ApiSdk.Models.Company>? Distributor { get; set; }
 #nullable restore
 #else
-        public Company Distributor { get; set; }
+        public List<ApiSdk.Models.Company> Distributor { get; set; }
 #endif
-        /// <summary>A company record</summary>
+        /// <summary>The network property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public Company? Network { get; set; }
+        public List<ApiSdk.Models.Company>? Network { get; set; }
 #nullable restore
 #else
-        public Company Network { get; set; }
+        public List<ApiSdk.Models.Company> Network { get; set; }
 #endif
-        /// <summary>A company record</summary>
+        /// <summary>The production property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public Company? Production { get; set; }
+        public List<ApiSdk.Models.Company>? Production { get; set; }
 #nullable restore
 #else
-        public Company Production { get; set; }
+        public List<ApiSdk.Models.Company> Production { get; set; }
 #endif
-        /// <summary>A company record</summary>
+        /// <summary>The special_effects property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public Company? SpecialEffects { get; set; }
+        public List<ApiSdk.Models.Company>? SpecialEffects { get; set; }
 #nullable restore
 #else
-        public Company SpecialEffects { get; set; }
+        public List<ApiSdk.Models.Company> SpecialEffects { get; set; }
 #endif
-        /// <summary>A company record</summary>
+        /// <summary>The studio property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public Company? Studio { get; set; }
+        public List<ApiSdk.Models.Company>? Studio { get; set; }
 #nullable restore
 #else
-        public Company Studio { get; set; }
+        public List<ApiSdk.Models.Company> Studio { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new Companies and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.Companies"/> and sets the default values.
         /// </summary>
-        public Companies() {
+        public Companies()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.Companies"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static Companies CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.Companies CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new Companies();
+            return new ApiSdk.Models.Companies();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"distributor", n => { Distributor = n.GetObjectValue<Company>(Company.CreateFromDiscriminatorValue); } },
-                {"network", n => { Network = n.GetObjectValue<Company>(Company.CreateFromDiscriminatorValue); } },
-                {"production", n => { Production = n.GetObjectValue<Company>(Company.CreateFromDiscriminatorValue); } },
-                {"special_effects", n => { SpecialEffects = n.GetObjectValue<Company>(Company.CreateFromDiscriminatorValue); } },
-                {"studio", n => { Studio = n.GetObjectValue<Company>(Company.CreateFromDiscriminatorValue); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "distributor", n => { Distributor = n.GetCollectionOfObjectValues<ApiSdk.Models.Company>(ApiSdk.Models.Company.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "network", n => { Network = n.GetCollectionOfObjectValues<ApiSdk.Models.Company>(ApiSdk.Models.Company.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "production", n => { Production = n.GetCollectionOfObjectValues<ApiSdk.Models.Company>(ApiSdk.Models.Company.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "special_effects", n => { SpecialEffects = n.GetCollectionOfObjectValues<ApiSdk.Models.Company>(ApiSdk.Models.Company.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "studio", n => { Studio = n.GetCollectionOfObjectValues<ApiSdk.Models.Company>(ApiSdk.Models.Company.CreateFromDiscriminatorValue)?.ToList(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteObjectValue<Company>("distributor", Distributor);
-            writer.WriteObjectValue<Company>("network", Network);
-            writer.WriteObjectValue<Company>("production", Production);
-            writer.WriteObjectValue<Company>("special_effects", SpecialEffects);
-            writer.WriteObjectValue<Company>("studio", Studio);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Company>("distributor", Distributor);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Company>("network", Network);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Company>("production", Production);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Company>("special_effects", SpecialEffects);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Company>("studio", Studio);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

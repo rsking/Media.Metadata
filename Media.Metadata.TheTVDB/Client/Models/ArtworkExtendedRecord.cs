@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// extended artwork record
     /// </summary>
-    public class ArtworkExtendedRecord : IAdditionalDataHolder, IParsable {
+    public class ArtworkExtendedRecord : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The episodeId property</summary>
@@ -52,18 +54,18 @@ namespace ApiSdk.Models {
         /// <summary>artwork status record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public ArtworkStatus? Status { get; set; }
+        public ApiSdk.Models.ArtworkStatus? Status { get; set; }
 #nullable restore
 #else
-        public ArtworkStatus Status { get; set; }
+        public ApiSdk.Models.ArtworkStatus Status { get; set; }
 #endif
         /// <summary>The tagOptions property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<TagOption>? TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption>? TagOptions { get; set; }
 #nullable restore
 #else
-        public List<TagOption> TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption> TagOptions { get; set; }
 #endif
         /// <summary>The thumbnail property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -84,52 +86,59 @@ namespace ApiSdk.Models {
         /// <summary>The width property</summary>
         public long? Width { get; set; }
         /// <summary>
-        /// Instantiates a new ArtworkExtendedRecord and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.ArtworkExtendedRecord"/> and sets the default values.
         /// </summary>
-        public ArtworkExtendedRecord() {
+        public ArtworkExtendedRecord()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.ArtworkExtendedRecord"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static ArtworkExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.ArtworkExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new ArtworkExtendedRecord();
+            return new ApiSdk.Models.ArtworkExtendedRecord();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"episodeId", n => { EpisodeId = n.GetIntValue(); } },
-                {"height", n => { Height = n.GetLongValue(); } },
-                {"id", n => { Id = n.GetLongValue(); } },
-                {"image", n => { Image = n.GetStringValue(); } },
-                {"includesText", n => { IncludesText = n.GetBoolValue(); } },
-                {"language", n => { Language = n.GetStringValue(); } },
-                {"movieId", n => { MovieId = n.GetIntValue(); } },
-                {"networkId", n => { NetworkId = n.GetIntValue(); } },
-                {"peopleId", n => { PeopleId = n.GetIntValue(); } },
-                {"score", n => { Score = n.GetDoubleValue(); } },
-                {"seasonId", n => { SeasonId = n.GetIntValue(); } },
-                {"seriesId", n => { SeriesId = n.GetIntValue(); } },
-                {"seriesPeopleId", n => { SeriesPeopleId = n.GetIntValue(); } },
-                {"status", n => { Status = n.GetObjectValue<ArtworkStatus>(ArtworkStatus.CreateFromDiscriminatorValue); } },
-                {"tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<TagOption>(TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"thumbnail", n => { Thumbnail = n.GetStringValue(); } },
-                {"thumbnailHeight", n => { ThumbnailHeight = n.GetLongValue(); } },
-                {"thumbnailWidth", n => { ThumbnailWidth = n.GetLongValue(); } },
-                {"type", n => { Type = n.GetLongValue(); } },
-                {"updatedAt", n => { UpdatedAt = n.GetLongValue(); } },
-                {"width", n => { Width = n.GetLongValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "episodeId", n => { EpisodeId = n.GetIntValue(); } },
+                { "height", n => { Height = n.GetLongValue(); } },
+                { "id", n => { Id = n.GetLongValue(); } },
+                { "image", n => { Image = n.GetStringValue(); } },
+                { "includesText", n => { IncludesText = n.GetBoolValue(); } },
+                { "language", n => { Language = n.GetStringValue(); } },
+                { "movieId", n => { MovieId = n.GetIntValue(); } },
+                { "networkId", n => { NetworkId = n.GetIntValue(); } },
+                { "peopleId", n => { PeopleId = n.GetIntValue(); } },
+                { "score", n => { Score = n.GetDoubleValue(); } },
+                { "seasonId", n => { SeasonId = n.GetIntValue(); } },
+                { "seriesId", n => { SeriesId = n.GetIntValue(); } },
+                { "seriesPeopleId", n => { SeriesPeopleId = n.GetIntValue(); } },
+                { "status", n => { Status = n.GetObjectValue<ApiSdk.Models.ArtworkStatus>(ApiSdk.Models.ArtworkStatus.CreateFromDiscriminatorValue); } },
+                { "tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<ApiSdk.Models.TagOption>(ApiSdk.Models.TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "thumbnail", n => { Thumbnail = n.GetStringValue(); } },
+                { "thumbnailHeight", n => { ThumbnailHeight = n.GetLongValue(); } },
+                { "thumbnailWidth", n => { ThumbnailWidth = n.GetLongValue(); } },
+                { "type", n => { Type = n.GetLongValue(); } },
+                { "updatedAt", n => { UpdatedAt = n.GetLongValue(); } },
+                { "width", n => { Width = n.GetLongValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
             writer.WriteIntValue("episodeId", EpisodeId);
             writer.WriteLongValue("height", Height);
@@ -144,8 +153,8 @@ namespace ApiSdk.Models {
             writer.WriteIntValue("seasonId", SeasonId);
             writer.WriteIntValue("seriesId", SeriesId);
             writer.WriteIntValue("seriesPeopleId", SeriesPeopleId);
-            writer.WriteObjectValue<ArtworkStatus>("status", Status);
-            writer.WriteCollectionOfObjectValues<TagOption>("tagOptions", TagOptions);
+            writer.WriteObjectValue<ApiSdk.Models.ArtworkStatus>("status", Status);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.TagOption>("tagOptions", TagOptions);
             writer.WriteStringValue("thumbnail", Thumbnail);
             writer.WriteLongValue("thumbnailHeight", ThumbnailHeight);
             writer.WriteLongValue("thumbnailWidth", ThumbnailWidth);

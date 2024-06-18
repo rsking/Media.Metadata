@@ -5,17 +5,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Search.Remoteid.Item {
-    public class WithRemoteGetResponse : IAdditionalDataHolder, IParsable {
+namespace ApiSdk.Search.Remoteid.Item
+{
+    #pragma warning disable CS1591
+    public class WithRemoteGetResponse : IAdditionalDataHolder, IParsable
+    #pragma warning restore CS1591
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The data property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<SearchByRemoteIdResult>? Data { get; set; }
+        public List<ApiSdk.Models.SearchByRemoteIdResult>? Data { get; set; }
 #nullable restore
 #else
-        public List<SearchByRemoteIdResult> Data { get; set; }
+        public List<ApiSdk.Models.SearchByRemoteIdResult> Data { get; set; }
 #endif
         /// <summary>The status property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -26,35 +30,42 @@ namespace ApiSdk.Search.Remoteid.Item {
         public string Status { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new WithRemoteGetResponse and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Search.Remoteid.Item.WithRemoteGetResponse"/> and sets the default values.
         /// </summary>
-        public WithRemoteGetResponse() {
+        public WithRemoteGetResponse()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Search.Remoteid.Item.WithRemoteGetResponse"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static WithRemoteGetResponse CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Search.Remoteid.Item.WithRemoteGetResponse CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new WithRemoteGetResponse();
+            return new ApiSdk.Search.Remoteid.Item.WithRemoteGetResponse();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"data", n => { Data = n.GetCollectionOfObjectValues<SearchByRemoteIdResult>(SearchByRemoteIdResult.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"status", n => { Status = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "data", n => { Data = n.GetCollectionOfObjectValues<ApiSdk.Models.SearchByRemoteIdResult>(ApiSdk.Models.SearchByRemoteIdResult.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "status", n => { Status = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<SearchByRemoteIdResult>("data", Data);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.SearchByRemoteIdResult>("data", Data);
             writer.WriteStringValue("status", Status);
             writer.WriteAdditionalData(AdditionalData);
         }

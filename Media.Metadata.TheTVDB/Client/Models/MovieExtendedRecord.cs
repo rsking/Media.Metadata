@@ -4,28 +4,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// extended movie record
     /// </summary>
-    public class MovieExtendedRecord : IAdditionalDataHolder, IParsable {
+    public class MovieExtendedRecord : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The aliases property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Alias>? Aliases { get; set; }
+        public List<ApiSdk.Models.Alias>? Aliases { get; set; }
 #nullable restore
 #else
-        public List<Alias> Aliases { get; set; }
+        public List<ApiSdk.Models.Alias> Aliases { get; set; }
 #endif
         /// <summary>The artworks property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<ArtworkBaseRecord>? Artworks { get; set; }
+        public List<ApiSdk.Models.ArtworkBaseRecord>? Artworks { get; set; }
 #nullable restore
 #else
-        public List<ArtworkBaseRecord> Artworks { get; set; }
+        public List<ApiSdk.Models.ArtworkBaseRecord> Artworks { get; set; }
 #endif
         /// <summary>The audioLanguages property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -38,10 +40,10 @@ namespace ApiSdk.Models {
         /// <summary>The awards property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<AwardBaseRecord>? Awards { get; set; }
+        public List<ApiSdk.Models.AwardBaseRecord>? Awards { get; set; }
 #nullable restore
 #else
-        public List<AwardBaseRecord> Awards { get; set; }
+        public List<ApiSdk.Models.AwardBaseRecord> Awards { get; set; }
 #endif
         /// <summary>The boxOffice property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -70,10 +72,10 @@ namespace ApiSdk.Models {
         /// <summary>The characters property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Character>? Characters { get; set; }
+        public List<ApiSdk.Models.Character>? Characters { get; set; }
 #nullable restore
 #else
-        public List<Character> Characters { get; set; }
+        public List<ApiSdk.Models.Character> Characters { get; set; }
 #endif
         /// <summary>Companies by type record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -86,26 +88,26 @@ namespace ApiSdk.Models {
         /// <summary>The contentRatings property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<ContentRating>? ContentRatings { get; set; }
+        public List<ApiSdk.Models.ContentRating>? ContentRatings { get; set; }
 #nullable restore
 #else
-        public List<ContentRating> ContentRatings { get; set; }
+        public List<ApiSdk.Models.ContentRating> ContentRatings { get; set; }
 #endif
         /// <summary>release record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public Release? FirstRelease { get; set; }
+        public ApiSdk.Models.Release? FirstRelease { get; set; }
 #nullable restore
 #else
-        public Release FirstRelease { get; set; }
+        public ApiSdk.Models.Release FirstRelease { get; set; }
 #endif
         /// <summary>The genres property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<GenreBaseRecord>? Genres { get; set; }
+        public List<ApiSdk.Models.GenreBaseRecord>? Genres { get; set; }
 #nullable restore
 #else
-        public List<GenreBaseRecord> Genres { get; set; }
+        public List<ApiSdk.Models.GenreBaseRecord> Genres { get; set; }
 #endif
         /// <summary>The id property</summary>
         public long? Id { get; set; }
@@ -120,10 +122,10 @@ namespace ApiSdk.Models {
         /// <summary>The inspirations property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Inspiration>? Inspirations { get; set; }
+        public List<ApiSdk.Models.Inspiration>? Inspirations { get; set; }
 #nullable restore
 #else
-        public List<Inspiration> Inspirations { get; set; }
+        public List<ApiSdk.Models.Inspiration> Inspirations { get; set; }
 #endif
         /// <summary>The lastUpdated property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -136,10 +138,10 @@ namespace ApiSdk.Models {
         /// <summary>The lists property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<ListBaseRecord>? Lists { get; set; }
+        public List<ApiSdk.Models.ListBaseRecord>? Lists { get; set; }
 #nullable restore
 #else
-        public List<ListBaseRecord> Lists { get; set; }
+        public List<ApiSdk.Models.ListBaseRecord> Lists { get; set; }
 #endif
         /// <summary>The name property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -184,26 +186,26 @@ namespace ApiSdk.Models {
         /// <summary>The production_countries property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<ProductionCountry>? ProductionCountries { get; set; }
+        public List<ApiSdk.Models.ProductionCountry>? ProductionCountries { get; set; }
 #nullable restore
 #else
-        public List<ProductionCountry> ProductionCountries { get; set; }
+        public List<ApiSdk.Models.ProductionCountry> ProductionCountries { get; set; }
 #endif
         /// <summary>The releases property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Release>? Releases { get; set; }
+        public List<ApiSdk.Models.Release>? Releases { get; set; }
 #nullable restore
 #else
-        public List<Release> Releases { get; set; }
+        public List<ApiSdk.Models.Release> Releases { get; set; }
 #endif
         /// <summary>The remoteIds property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<RemoteID>? RemoteIds { get; set; }
+        public List<ApiSdk.Models.RemoteID>? RemoteIds { get; set; }
 #nullable restore
 #else
-        public List<RemoteID> RemoteIds { get; set; }
+        public List<ApiSdk.Models.RemoteID> RemoteIds { get; set; }
 #endif
         /// <summary>The runtime property</summary>
         public int? Runtime { get; set; }
@@ -236,10 +238,10 @@ namespace ApiSdk.Models {
         /// <summary>The studios property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<StudioBaseRecord>? Studios { get; set; }
+        public List<ApiSdk.Models.StudioBaseRecord>? Studios { get; set; }
 #nullable restore
 #else
-        public List<StudioBaseRecord> Studios { get; set; }
+        public List<ApiSdk.Models.StudioBaseRecord> Studios { get; set; }
 #endif
         /// <summary>The subtitleLanguages property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -252,26 +254,26 @@ namespace ApiSdk.Models {
         /// <summary>The tagOptions property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<TagOption>? TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption>? TagOptions { get; set; }
 #nullable restore
 #else
-        public List<TagOption> TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption> TagOptions { get; set; }
 #endif
         /// <summary>The trailers property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Trailer>? Trailers { get; set; }
+        public List<ApiSdk.Models.Trailer>? Trailers { get; set; }
 #nullable restore
 #else
-        public List<Trailer> Trailers { get; set; }
+        public List<ApiSdk.Models.Trailer> Trailers { get; set; }
 #endif
         /// <summary>translation extended record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public TranslationExtended? Translations { get; set; }
+        public ApiSdk.Models.TranslationExtended? Translations { get; set; }
 #nullable restore
 #else
-        public TranslationExtended Translations { get; set; }
+        public ApiSdk.Models.TranslationExtended Translations { get; set; }
 #endif
         /// <summary>The year property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -282,103 +284,110 @@ namespace ApiSdk.Models {
         public string Year { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new MovieExtendedRecord and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.MovieExtendedRecord"/> and sets the default values.
         /// </summary>
-        public MovieExtendedRecord() {
+        public MovieExtendedRecord()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.MovieExtendedRecord"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static MovieExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.MovieExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new MovieExtendedRecord();
+            return new ApiSdk.Models.MovieExtendedRecord();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"aliases", n => { Aliases = n.GetCollectionOfObjectValues<Alias>(Alias.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"artworks", n => { Artworks = n.GetCollectionOfObjectValues<ArtworkBaseRecord>(ArtworkBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"audioLanguages", n => { AudioLanguages = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"awards", n => { Awards = n.GetCollectionOfObjectValues<AwardBaseRecord>(AwardBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"boxOffice", n => { BoxOffice = n.GetStringValue(); } },
-                {"boxOfficeUS", n => { BoxOfficeUS = n.GetStringValue(); } },
-                {"budget", n => { Budget = n.GetStringValue(); } },
-                {"characters", n => { Characters = n.GetCollectionOfObjectValues<Character>(Character.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"companies", n => { Companies = n.GetObjectValue<ApiSdk.Models.Companies>(ApiSdk.Models.Companies.CreateFromDiscriminatorValue); } },
-                {"contentRatings", n => { ContentRatings = n.GetCollectionOfObjectValues<ContentRating>(ContentRating.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"first_release", n => { FirstRelease = n.GetObjectValue<Release>(Release.CreateFromDiscriminatorValue); } },
-                {"genres", n => { Genres = n.GetCollectionOfObjectValues<GenreBaseRecord>(GenreBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"id", n => { Id = n.GetLongValue(); } },
-                {"image", n => { Image = n.GetStringValue(); } },
-                {"inspirations", n => { Inspirations = n.GetCollectionOfObjectValues<Inspiration>(Inspiration.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"lastUpdated", n => { LastUpdated = n.GetStringValue(); } },
-                {"lists", n => { Lists = n.GetCollectionOfObjectValues<ListBaseRecord>(ListBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"name", n => { Name = n.GetStringValue(); } },
-                {"nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"originalCountry", n => { OriginalCountry = n.GetStringValue(); } },
-                {"originalLanguage", n => { OriginalLanguage = n.GetStringValue(); } },
-                {"overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"production_countries", n => { ProductionCountries = n.GetCollectionOfObjectValues<ProductionCountry>(ProductionCountry.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"releases", n => { Releases = n.GetCollectionOfObjectValues<Release>(Release.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"remoteIds", n => { RemoteIds = n.GetCollectionOfObjectValues<RemoteID>(RemoteID.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"runtime", n => { Runtime = n.GetIntValue(); } },
-                {"score", n => { Score = n.GetDoubleValue(); } },
-                {"slug", n => { Slug = n.GetStringValue(); } },
-                {"spoken_languages", n => { SpokenLanguages = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"status", n => { Status = n.GetObjectValue<ApiSdk.Models.Status>(ApiSdk.Models.Status.CreateFromDiscriminatorValue); } },
-                {"studios", n => { Studios = n.GetCollectionOfObjectValues<StudioBaseRecord>(StudioBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"subtitleLanguages", n => { SubtitleLanguages = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<TagOption>(TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"trailers", n => { Trailers = n.GetCollectionOfObjectValues<Trailer>(Trailer.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"translations", n => { Translations = n.GetObjectValue<TranslationExtended>(TranslationExtended.CreateFromDiscriminatorValue); } },
-                {"year", n => { Year = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "aliases", n => { Aliases = n.GetCollectionOfObjectValues<ApiSdk.Models.Alias>(ApiSdk.Models.Alias.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "artworks", n => { Artworks = n.GetCollectionOfObjectValues<ApiSdk.Models.ArtworkBaseRecord>(ApiSdk.Models.ArtworkBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "audioLanguages", n => { AudioLanguages = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "awards", n => { Awards = n.GetCollectionOfObjectValues<ApiSdk.Models.AwardBaseRecord>(ApiSdk.Models.AwardBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "boxOffice", n => { BoxOffice = n.GetStringValue(); } },
+                { "boxOfficeUS", n => { BoxOfficeUS = n.GetStringValue(); } },
+                { "budget", n => { Budget = n.GetStringValue(); } },
+                { "characters", n => { Characters = n.GetCollectionOfObjectValues<ApiSdk.Models.Character>(ApiSdk.Models.Character.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "companies", n => { Companies = n.GetObjectValue<ApiSdk.Models.Companies>(ApiSdk.Models.Companies.CreateFromDiscriminatorValue); } },
+                { "contentRatings", n => { ContentRatings = n.GetCollectionOfObjectValues<ApiSdk.Models.ContentRating>(ApiSdk.Models.ContentRating.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "first_release", n => { FirstRelease = n.GetObjectValue<ApiSdk.Models.Release>(ApiSdk.Models.Release.CreateFromDiscriminatorValue); } },
+                { "genres", n => { Genres = n.GetCollectionOfObjectValues<ApiSdk.Models.GenreBaseRecord>(ApiSdk.Models.GenreBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "id", n => { Id = n.GetLongValue(); } },
+                { "image", n => { Image = n.GetStringValue(); } },
+                { "inspirations", n => { Inspirations = n.GetCollectionOfObjectValues<ApiSdk.Models.Inspiration>(ApiSdk.Models.Inspiration.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "lastUpdated", n => { LastUpdated = n.GetStringValue(); } },
+                { "lists", n => { Lists = n.GetCollectionOfObjectValues<ApiSdk.Models.ListBaseRecord>(ApiSdk.Models.ListBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "name", n => { Name = n.GetStringValue(); } },
+                { "nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "originalCountry", n => { OriginalCountry = n.GetStringValue(); } },
+                { "originalLanguage", n => { OriginalLanguage = n.GetStringValue(); } },
+                { "overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "production_countries", n => { ProductionCountries = n.GetCollectionOfObjectValues<ApiSdk.Models.ProductionCountry>(ApiSdk.Models.ProductionCountry.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "releases", n => { Releases = n.GetCollectionOfObjectValues<ApiSdk.Models.Release>(ApiSdk.Models.Release.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "remoteIds", n => { RemoteIds = n.GetCollectionOfObjectValues<ApiSdk.Models.RemoteID>(ApiSdk.Models.RemoteID.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "runtime", n => { Runtime = n.GetIntValue(); } },
+                { "score", n => { Score = n.GetDoubleValue(); } },
+                { "slug", n => { Slug = n.GetStringValue(); } },
+                { "spoken_languages", n => { SpokenLanguages = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "status", n => { Status = n.GetObjectValue<ApiSdk.Models.Status>(ApiSdk.Models.Status.CreateFromDiscriminatorValue); } },
+                { "studios", n => { Studios = n.GetCollectionOfObjectValues<ApiSdk.Models.StudioBaseRecord>(ApiSdk.Models.StudioBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "subtitleLanguages", n => { SubtitleLanguages = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<ApiSdk.Models.TagOption>(ApiSdk.Models.TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "trailers", n => { Trailers = n.GetCollectionOfObjectValues<ApiSdk.Models.Trailer>(ApiSdk.Models.Trailer.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "translations", n => { Translations = n.GetObjectValue<ApiSdk.Models.TranslationExtended>(ApiSdk.Models.TranslationExtended.CreateFromDiscriminatorValue); } },
+                { "year", n => { Year = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<Alias>("aliases", Aliases);
-            writer.WriteCollectionOfObjectValues<ArtworkBaseRecord>("artworks", Artworks);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Alias>("aliases", Aliases);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.ArtworkBaseRecord>("artworks", Artworks);
             writer.WriteCollectionOfPrimitiveValues<string>("audioLanguages", AudioLanguages);
-            writer.WriteCollectionOfObjectValues<AwardBaseRecord>("awards", Awards);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.AwardBaseRecord>("awards", Awards);
             writer.WriteStringValue("boxOffice", BoxOffice);
             writer.WriteStringValue("boxOfficeUS", BoxOfficeUS);
             writer.WriteStringValue("budget", Budget);
-            writer.WriteCollectionOfObjectValues<Character>("characters", Characters);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Character>("characters", Characters);
             writer.WriteObjectValue<ApiSdk.Models.Companies>("companies", Companies);
-            writer.WriteCollectionOfObjectValues<ContentRating>("contentRatings", ContentRatings);
-            writer.WriteObjectValue<Release>("first_release", FirstRelease);
-            writer.WriteCollectionOfObjectValues<GenreBaseRecord>("genres", Genres);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.ContentRating>("contentRatings", ContentRatings);
+            writer.WriteObjectValue<ApiSdk.Models.Release>("first_release", FirstRelease);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.GenreBaseRecord>("genres", Genres);
             writer.WriteLongValue("id", Id);
             writer.WriteStringValue("image", Image);
-            writer.WriteCollectionOfObjectValues<Inspiration>("inspirations", Inspirations);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Inspiration>("inspirations", Inspirations);
             writer.WriteStringValue("lastUpdated", LastUpdated);
-            writer.WriteCollectionOfObjectValues<ListBaseRecord>("lists", Lists);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.ListBaseRecord>("lists", Lists);
             writer.WriteStringValue("name", Name);
             writer.WriteCollectionOfPrimitiveValues<string>("nameTranslations", NameTranslations);
             writer.WriteStringValue("originalCountry", OriginalCountry);
             writer.WriteStringValue("originalLanguage", OriginalLanguage);
             writer.WriteCollectionOfPrimitiveValues<string>("overviewTranslations", OverviewTranslations);
-            writer.WriteCollectionOfObjectValues<ProductionCountry>("production_countries", ProductionCountries);
-            writer.WriteCollectionOfObjectValues<Release>("releases", Releases);
-            writer.WriteCollectionOfObjectValues<RemoteID>("remoteIds", RemoteIds);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.ProductionCountry>("production_countries", ProductionCountries);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Release>("releases", Releases);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.RemoteID>("remoteIds", RemoteIds);
             writer.WriteIntValue("runtime", Runtime);
             writer.WriteDoubleValue("score", Score);
             writer.WriteStringValue("slug", Slug);
             writer.WriteCollectionOfPrimitiveValues<string>("spoken_languages", SpokenLanguages);
             writer.WriteObjectValue<ApiSdk.Models.Status>("status", Status);
-            writer.WriteCollectionOfObjectValues<StudioBaseRecord>("studios", Studios);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.StudioBaseRecord>("studios", Studios);
             writer.WriteCollectionOfPrimitiveValues<string>("subtitleLanguages", SubtitleLanguages);
-            writer.WriteCollectionOfObjectValues<TagOption>("tagOptions", TagOptions);
-            writer.WriteCollectionOfObjectValues<Trailer>("trailers", Trailers);
-            writer.WriteObjectValue<TranslationExtended>("translations", Translations);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.TagOption>("tagOptions", TagOptions);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Trailer>("trailers", Trailers);
+            writer.WriteObjectValue<ApiSdk.Models.TranslationExtended>("translations", Translations);
             writer.WriteStringValue("year", Year);
             writer.WriteAdditionalData(AdditionalData);
         }

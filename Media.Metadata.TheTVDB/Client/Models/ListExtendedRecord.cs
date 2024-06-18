@@ -4,28 +4,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// extended list record
     /// </summary>
-    public class ListExtendedRecord : IAdditionalDataHolder, IParsable {
+    public class ListExtendedRecord : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The aliases property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Alias>? Aliases { get; set; }
+        public List<ApiSdk.Models.Alias>? Aliases { get; set; }
 #nullable restore
 #else
-        public List<Alias> Aliases { get; set; }
+        public List<ApiSdk.Models.Alias> Aliases { get; set; }
 #endif
         /// <summary>The entities property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Entity>? Entities { get; set; }
+        public List<ApiSdk.Models.Entity>? Entities { get; set; }
 #nullable restore
 #else
-        public List<Entity> Entities { get; set; }
+        public List<ApiSdk.Models.Entity> Entities { get; set; }
 #endif
         /// <summary>The id property</summary>
         public long? Id { get; set; }
@@ -84,46 +86,53 @@ namespace ApiSdk.Models {
         public string Url { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new ListExtendedRecord and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.ListExtendedRecord"/> and sets the default values.
         /// </summary>
-        public ListExtendedRecord() {
+        public ListExtendedRecord()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.ListExtendedRecord"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static ListExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.ListExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new ListExtendedRecord();
+            return new ApiSdk.Models.ListExtendedRecord();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"aliases", n => { Aliases = n.GetCollectionOfObjectValues<Alias>(Alias.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"entities", n => { Entities = n.GetCollectionOfObjectValues<Entity>(Entity.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"id", n => { Id = n.GetLongValue(); } },
-                {"image", n => { Image = n.GetStringValue(); } },
-                {"imageIsFallback", n => { ImageIsFallback = n.GetBoolValue(); } },
-                {"isOfficial", n => { IsOfficial = n.GetBoolValue(); } },
-                {"name", n => { Name = n.GetStringValue(); } },
-                {"nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"overview", n => { Overview = n.GetStringValue(); } },
-                {"overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"score", n => { Score = n.GetLongValue(); } },
-                {"url", n => { Url = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "aliases", n => { Aliases = n.GetCollectionOfObjectValues<ApiSdk.Models.Alias>(ApiSdk.Models.Alias.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "entities", n => { Entities = n.GetCollectionOfObjectValues<ApiSdk.Models.Entity>(ApiSdk.Models.Entity.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "id", n => { Id = n.GetLongValue(); } },
+                { "image", n => { Image = n.GetStringValue(); } },
+                { "imageIsFallback", n => { ImageIsFallback = n.GetBoolValue(); } },
+                { "isOfficial", n => { IsOfficial = n.GetBoolValue(); } },
+                { "name", n => { Name = n.GetStringValue(); } },
+                { "nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "overview", n => { Overview = n.GetStringValue(); } },
+                { "overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "score", n => { Score = n.GetLongValue(); } },
+                { "url", n => { Url = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<Alias>("aliases", Aliases);
-            writer.WriteCollectionOfObjectValues<Entity>("entities", Entities);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Alias>("aliases", Aliases);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Entity>("entities", Entities);
             writer.WriteLongValue("id", Id);
             writer.WriteStringValue("image", Image);
             writer.WriteBoolValue("imageIsFallback", ImageIsFallback);

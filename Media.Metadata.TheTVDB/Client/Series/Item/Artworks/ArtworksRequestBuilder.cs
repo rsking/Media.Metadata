@@ -7,50 +7,60 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Series.Item.Artworks {
+namespace ApiSdk.Series.Item.Artworks
+{
     /// <summary>
     /// Builds and executes requests for operations under \series\{id}\artworks
     /// </summary>
-    public class ArtworksRequestBuilder : BaseRequestBuilder {
+    public class ArtworksRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>
-        /// Instantiates a new ArtworksRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ArtworksRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}/artworks{?lang*,type*}", pathParameters) {
+        public ArtworksRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}/artworks{?lang*,type*}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new ArtworksRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ArtworksRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}/artworks{?lang*,type*}", rawUrl) {
+        public ArtworksRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}/artworks{?lang*,type*}", rawUrl)
+        {
         }
         /// <summary>
         /// Returns series artworks base on language and type. &lt;br&gt; Note&amp;#58; Artwork type is an id that can be found using **/artwork/types** endpoint.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.Item.Artworks.ArtworksGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<ArtworksGetResponse?> GetAsync(Action<RequestConfiguration<ArtworksRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.Item.Artworks.ArtworksGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder.ArtworksRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<ArtworksGetResponse> GetAsync(Action<RequestConfiguration<ArtworksRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.Item.Artworks.ArtworksGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder.ArtworksRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<ArtworksGetResponse>(requestInfo, ArtworksGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Series.Item.Artworks.ArtworksGetResponse>(requestInfo, ApiSdk.Series.Item.Artworks.ArtworksGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns series artworks base on language and type. &lt;br&gt; Note&amp;#58; Artwork type is an id that can be found using **/artwork/types** endpoint.
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ArtworksRequestBuilderGetQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder.ArtworksRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ArtworksRequestBuilderGetQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder.ArtworksRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -60,14 +70,17 @@ namespace ApiSdk.Series.Item.Artworks {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public ArtworksRequestBuilder WithUrl(string rawUrl) {
-            return new ArtworksRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// Returns series artworks base on language and type. &lt;br&gt; Note&amp;#58; Artwork type is an id that can be found using **/artwork/types** endpoint.
         /// </summary>
-        public class ArtworksRequestBuilderGetQueryParameters {
+        public class ArtworksRequestBuilderGetQueryParameters 
+        {
             /// <summary>lang</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

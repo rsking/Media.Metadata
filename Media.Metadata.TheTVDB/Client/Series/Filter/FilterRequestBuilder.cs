@@ -7,50 +7,60 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Series.Filter {
+namespace ApiSdk.Series.Filter
+{
     /// <summary>
     /// Builds and executes requests for operations under \series\filter
     /// </summary>
-    public class FilterRequestBuilder : BaseRequestBuilder {
+    public class FilterRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>
-        /// Instantiates a new FilterRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.Filter.FilterRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public FilterRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/filter?country={country}&lang={lang}{&company*,contentRating*,genre*,sort*,sortType*,status*,year*}", pathParameters) {
+        public FilterRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/filter?country={country}&lang={lang}{&company*,contentRating*,genre*,sort*,sortType*,status*,year*}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new FilterRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.Filter.FilterRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public FilterRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/filter?country={country}&lang={lang}{&company*,contentRating*,genre*,sort*,sortType*,status*,year*}", rawUrl) {
+        public FilterRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/filter?country={country}&lang={lang}{&company*,contentRating*,genre*,sort*,sortType*,status*,year*}", rawUrl)
+        {
         }
         /// <summary>
         /// Search series based on filter parameters
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.Filter.FilterGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<FilterGetResponse?> GetAsync(Action<RequestConfiguration<FilterRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.Filter.FilterGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Series.Filter.FilterRequestBuilder.FilterRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<FilterGetResponse> GetAsync(Action<RequestConfiguration<FilterRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.Filter.FilterGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Series.Filter.FilterRequestBuilder.FilterRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<FilterGetResponse>(requestInfo, FilterGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Series.Filter.FilterGetResponse>(requestInfo, ApiSdk.Series.Filter.FilterGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Search series based on filter parameters
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<FilterRequestBuilderGetQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Series.Filter.FilterRequestBuilder.FilterRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<FilterRequestBuilderGetQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Series.Filter.FilterRequestBuilder.FilterRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -60,14 +70,17 @@ namespace ApiSdk.Series.Filter {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.Filter.FilterRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public FilterRequestBuilder WithUrl(string rawUrl) {
-            return new FilterRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Series.Filter.FilterRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Series.Filter.FilterRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// Search series based on filter parameters
         /// </summary>
-        public class FilterRequestBuilderGetQueryParameters {
+        public class FilterRequestBuilderGetQueryParameters 
+        {
             /// <summary>production company</summary>
             [QueryParameter("company")]
             public double? Company { get; set; }
@@ -99,10 +112,10 @@ namespace ApiSdk.Series.Filter {
 #endif
             /// <summary>sort by results</summary>
             [QueryParameter("sort")]
-            public GetSortQueryParameterType? Sort { get; set; }
+            public ApiSdk.Series.Filter.GetSortQueryParameterType? Sort { get; set; }
             /// <summary>sort type ascending or descending</summary>
             [QueryParameter("sortType")]
-            public GetSortTypeQueryParameterType? SortType { get; set; }
+            public ApiSdk.Series.Filter.GetSortTypeQueryParameterType? SortType { get; set; }
             /// <summary>status</summary>
             [QueryParameter("status")]
             public double? Status { get; set; }

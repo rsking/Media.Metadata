@@ -6,31 +6,40 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-namespace ApiSdk.Awards.Categories {
+namespace ApiSdk.Awards.Categories
+{
     /// <summary>
     /// Builds and executes requests for operations under \awards\categories
     /// </summary>
-    public class CategoriesRequestBuilder : BaseRequestBuilder {
+    public class CategoriesRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>Gets an item from the ApiSdk.awards.categories.item collection</summary>
         /// <param name="position">id</param>
-        public CategoriesItemRequestBuilder this[double position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("id", position);
-            return new CategoriesItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Awards.Categories.Item.CategoriesItemRequestBuilder"/></returns>
+        public ApiSdk.Awards.Categories.Item.CategoriesItemRequestBuilder this[double position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("id", position);
+                return new ApiSdk.Awards.Categories.Item.CategoriesItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new CategoriesRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Awards.Categories.CategoriesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CategoriesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/awards/categories", pathParameters) {
+        public CategoriesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/awards/categories", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new CategoriesRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Awards.Categories.CategoriesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CategoriesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/awards/categories", rawUrl) {
+        public CategoriesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/awards/categories", rawUrl)
+        {
         }
     }
 }

@@ -12,70 +12,85 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Series.Item {
+namespace ApiSdk.Series.Item
+{
     /// <summary>
     /// Builds and executes requests for operations under \series\{id}
     /// </summary>
-    public class SeriesItemRequestBuilder : BaseRequestBuilder {
+    public class SeriesItemRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The artworks property</summary>
-        public ArtworksRequestBuilder Artworks { get =>
-            new ArtworksRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder Artworks
+        {
+            get => new ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The episodes property</summary>
-        public EpisodesRequestBuilder Episodes { get =>
-            new EpisodesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Series.Item.Episodes.EpisodesRequestBuilder Episodes
+        {
+            get => new ApiSdk.Series.Item.Episodes.EpisodesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The extended property</summary>
-        public ExtendedRequestBuilder Extended { get =>
-            new ExtendedRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Series.Item.Extended.ExtendedRequestBuilder Extended
+        {
+            get => new ApiSdk.Series.Item.Extended.ExtendedRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The nextAired property</summary>
-        public NextAiredRequestBuilder NextAired { get =>
-            new NextAiredRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Series.Item.NextAired.NextAiredRequestBuilder NextAired
+        {
+            get => new ApiSdk.Series.Item.NextAired.NextAiredRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The translations property</summary>
-        public TranslationsRequestBuilder Translations { get =>
-            new TranslationsRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Series.Item.Translations.TranslationsRequestBuilder Translations
+        {
+            get => new ApiSdk.Series.Item.Translations.TranslationsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new SeriesItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.Item.SeriesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SeriesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}", pathParameters) {
+        public SeriesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new SeriesItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Series.Item.SeriesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SeriesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}", rawUrl) {
+        public SeriesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/series/{id}", rawUrl)
+        {
         }
         /// <summary>
         /// Returns series base record
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.Item.SeriesGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<SeriesGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.Item.SeriesGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<SeriesGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Series.Item.SeriesGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<SeriesGetResponse>(requestInfo, SeriesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Series.Item.SeriesGetResponse>(requestInfo, ApiSdk.Series.Item.SeriesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns series base record
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -85,9 +100,11 @@ namespace ApiSdk.Series.Item {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Series.Item.SeriesItemRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public SeriesItemRequestBuilder WithUrl(string rawUrl) {
-            return new SeriesItemRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Series.Item.SeriesItemRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Series.Item.SeriesItemRequestBuilder(rawUrl, RequestAdapter);
         }
     }
 }

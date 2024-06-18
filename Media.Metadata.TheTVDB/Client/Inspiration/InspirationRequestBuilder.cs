@@ -6,28 +6,33 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-namespace ApiSdk.Inspiration {
+namespace ApiSdk.Inspiration
+{
     /// <summary>
     /// Builds and executes requests for operations under \inspiration
     /// </summary>
-    public class InspirationRequestBuilder : BaseRequestBuilder {
+    public class InspirationRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The types property</summary>
-        public TypesRequestBuilder Types { get =>
-            new TypesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Inspiration.Types.TypesRequestBuilder Types
+        {
+            get => new ApiSdk.Inspiration.Types.TypesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new InspirationRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Inspiration.InspirationRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public InspirationRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/inspiration", pathParameters) {
+        public InspirationRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/inspiration", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new InspirationRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Inspiration.InspirationRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public InspirationRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/inspiration", rawUrl) {
+        public InspirationRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/inspiration", rawUrl)
+        {
         }
     }
 }

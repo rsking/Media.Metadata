@@ -8,39 +8,50 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-namespace ApiSdk.Artwork {
+namespace ApiSdk.Artwork
+{
     /// <summary>
     /// Builds and executes requests for operations under \artwork
     /// </summary>
-    public class ArtworkRequestBuilder : BaseRequestBuilder {
+    public class ArtworkRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The statuses property</summary>
-        public StatusesRequestBuilder Statuses { get =>
-            new StatusesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Artwork.Statuses.StatusesRequestBuilder Statuses
+        {
+            get => new ApiSdk.Artwork.Statuses.StatusesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The types property</summary>
-        public TypesRequestBuilder Types { get =>
-            new TypesRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Artwork.Types.TypesRequestBuilder Types
+        {
+            get => new ApiSdk.Artwork.Types.TypesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the ApiSdk.artwork.item collection</summary>
         /// <param name="position">id</param>
-        public ArtworkItemRequestBuilder this[double position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("id", position);
-            return new ArtworkItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Artwork.Item.ArtworkItemRequestBuilder"/></returns>
+        public ApiSdk.Artwork.Item.ArtworkItemRequestBuilder this[double position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("id", position);
+                return new ApiSdk.Artwork.Item.ArtworkItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new ArtworkRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Artwork.ArtworkRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ArtworkRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/artwork", pathParameters) {
+        public ArtworkRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/artwork", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new ArtworkRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Artwork.ArtworkRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ArtworkRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/artwork", rawUrl) {
+        public ArtworkRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/artwork", rawUrl)
+        {
         }
     }
 }

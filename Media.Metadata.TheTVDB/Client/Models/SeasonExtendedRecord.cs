@@ -4,20 +4,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// extended season record
     /// </summary>
-    public class SeasonExtendedRecord : IAdditionalDataHolder, IParsable {
+    public class SeasonExtendedRecord : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The artwork property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<ArtworkBaseRecord>? Artwork { get; set; }
+        public List<ApiSdk.Models.ArtworkBaseRecord>? Artwork { get; set; }
 #nullable restore
 #else
-        public List<ArtworkBaseRecord> Artwork { get; set; }
+        public List<ApiSdk.Models.ArtworkBaseRecord> Artwork { get; set; }
 #endif
         /// <summary>Companies by type record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -30,10 +32,10 @@ namespace ApiSdk.Models {
         /// <summary>The episodes property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<EpisodeBaseRecord>? Episodes { get; set; }
+        public List<ApiSdk.Models.EpisodeBaseRecord>? Episodes { get; set; }
 #nullable restore
 #else
-        public List<EpisodeBaseRecord> Episodes { get; set; }
+        public List<ApiSdk.Models.EpisodeBaseRecord> Episodes { get; set; }
 #endif
         /// <summary>The id property</summary>
         public int? Id { get; set; }
@@ -86,34 +88,34 @@ namespace ApiSdk.Models {
         /// <summary>The tagOptions property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<TagOption>? TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption>? TagOptions { get; set; }
 #nullable restore
 #else
-        public List<TagOption> TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption> TagOptions { get; set; }
 #endif
         /// <summary>The trailers property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Trailer>? Trailers { get; set; }
+        public List<ApiSdk.Models.Trailer>? Trailers { get; set; }
 #nullable restore
 #else
-        public List<Trailer> Trailers { get; set; }
+        public List<ApiSdk.Models.Trailer> Trailers { get; set; }
 #endif
         /// <summary>The translations property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Translation>? Translations { get; set; }
+        public List<ApiSdk.Models.Translation>? Translations { get; set; }
 #nullable restore
 #else
-        public List<Translation> Translations { get; set; }
+        public List<ApiSdk.Models.Translation> Translations { get; set; }
 #endif
         /// <summary>season type record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public SeasonType? Type { get; set; }
+        public ApiSdk.Models.SeasonType? Type { get; set; }
 #nullable restore
 #else
-        public SeasonType Type { get; set; }
+        public ApiSdk.Models.SeasonType Type { get; set; }
 #endif
         /// <summary>The year property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -124,52 +126,59 @@ namespace ApiSdk.Models {
         public string Year { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new SeasonExtendedRecord and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.SeasonExtendedRecord"/> and sets the default values.
         /// </summary>
-        public SeasonExtendedRecord() {
+        public SeasonExtendedRecord()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.SeasonExtendedRecord"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static SeasonExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.SeasonExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new SeasonExtendedRecord();
+            return new ApiSdk.Models.SeasonExtendedRecord();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"artwork", n => { Artwork = n.GetCollectionOfObjectValues<ArtworkBaseRecord>(ArtworkBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"companies", n => { Companies = n.GetObjectValue<ApiSdk.Models.Companies>(ApiSdk.Models.Companies.CreateFromDiscriminatorValue); } },
-                {"episodes", n => { Episodes = n.GetCollectionOfObjectValues<EpisodeBaseRecord>(EpisodeBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"id", n => { Id = n.GetIntValue(); } },
-                {"image", n => { Image = n.GetStringValue(); } },
-                {"imageType", n => { ImageType = n.GetIntValue(); } },
-                {"lastUpdated", n => { LastUpdated = n.GetStringValue(); } },
-                {"name", n => { Name = n.GetStringValue(); } },
-                {"nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"number", n => { Number = n.GetLongValue(); } },
-                {"overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"seriesId", n => { SeriesId = n.GetLongValue(); } },
-                {"tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<TagOption>(TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"trailers", n => { Trailers = n.GetCollectionOfObjectValues<Trailer>(Trailer.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"translations", n => { Translations = n.GetCollectionOfObjectValues<Translation>(Translation.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"type", n => { Type = n.GetObjectValue<SeasonType>(SeasonType.CreateFromDiscriminatorValue); } },
-                {"year", n => { Year = n.GetStringValue(); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "artwork", n => { Artwork = n.GetCollectionOfObjectValues<ApiSdk.Models.ArtworkBaseRecord>(ApiSdk.Models.ArtworkBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "companies", n => { Companies = n.GetObjectValue<ApiSdk.Models.Companies>(ApiSdk.Models.Companies.CreateFromDiscriminatorValue); } },
+                { "episodes", n => { Episodes = n.GetCollectionOfObjectValues<ApiSdk.Models.EpisodeBaseRecord>(ApiSdk.Models.EpisodeBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
+                { "image", n => { Image = n.GetStringValue(); } },
+                { "imageType", n => { ImageType = n.GetIntValue(); } },
+                { "lastUpdated", n => { LastUpdated = n.GetStringValue(); } },
+                { "name", n => { Name = n.GetStringValue(); } },
+                { "nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "number", n => { Number = n.GetLongValue(); } },
+                { "overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "seriesId", n => { SeriesId = n.GetLongValue(); } },
+                { "tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<ApiSdk.Models.TagOption>(ApiSdk.Models.TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "trailers", n => { Trailers = n.GetCollectionOfObjectValues<ApiSdk.Models.Trailer>(ApiSdk.Models.Trailer.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "translations", n => { Translations = n.GetCollectionOfObjectValues<ApiSdk.Models.Translation>(ApiSdk.Models.Translation.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "type", n => { Type = n.GetObjectValue<ApiSdk.Models.SeasonType>(ApiSdk.Models.SeasonType.CreateFromDiscriminatorValue); } },
+                { "year", n => { Year = n.GetStringValue(); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<ArtworkBaseRecord>("artwork", Artwork);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.ArtworkBaseRecord>("artwork", Artwork);
             writer.WriteObjectValue<ApiSdk.Models.Companies>("companies", Companies);
-            writer.WriteCollectionOfObjectValues<EpisodeBaseRecord>("episodes", Episodes);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.EpisodeBaseRecord>("episodes", Episodes);
             writer.WriteIntValue("id", Id);
             writer.WriteStringValue("image", Image);
             writer.WriteIntValue("imageType", ImageType);
@@ -179,10 +188,10 @@ namespace ApiSdk.Models {
             writer.WriteLongValue("number", Number);
             writer.WriteCollectionOfPrimitiveValues<string>("overviewTranslations", OverviewTranslations);
             writer.WriteLongValue("seriesId", SeriesId);
-            writer.WriteCollectionOfObjectValues<TagOption>("tagOptions", TagOptions);
-            writer.WriteCollectionOfObjectValues<Trailer>("trailers", Trailers);
-            writer.WriteCollectionOfObjectValues<Translation>("translations", Translations);
-            writer.WriteObjectValue<SeasonType>("type", Type);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.TagOption>("tagOptions", TagOptions);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Trailer>("trailers", Trailers);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Translation>("translations", Translations);
+            writer.WriteObjectValue<ApiSdk.Models.SeasonType>("type", Type);
             writer.WriteStringValue("year", Year);
             writer.WriteAdditionalData(AdditionalData);
         }

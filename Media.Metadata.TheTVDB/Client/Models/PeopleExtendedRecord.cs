@@ -4,36 +4,38 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-namespace ApiSdk.Models {
+namespace ApiSdk.Models
+{
     /// <summary>
     /// extended people record
     /// </summary>
-    public class PeopleExtendedRecord : IAdditionalDataHolder, IParsable {
+    public class PeopleExtendedRecord : IAdditionalDataHolder, IParsable
+    {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The aliases property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Alias>? Aliases { get; set; }
+        public List<ApiSdk.Models.Alias>? Aliases { get; set; }
 #nullable restore
 #else
-        public List<Alias> Aliases { get; set; }
+        public List<ApiSdk.Models.Alias> Aliases { get; set; }
 #endif
         /// <summary>The awards property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<AwardBaseRecord>? Awards { get; set; }
+        public List<ApiSdk.Models.AwardBaseRecord>? Awards { get; set; }
 #nullable restore
 #else
-        public List<AwardBaseRecord> Awards { get; set; }
+        public List<ApiSdk.Models.AwardBaseRecord> Awards { get; set; }
 #endif
         /// <summary>The biographies property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Biography>? Biographies { get; set; }
+        public List<ApiSdk.Models.Biography>? Biographies { get; set; }
 #nullable restore
 #else
-        public List<Biography> Biographies { get; set; }
+        public List<ApiSdk.Models.Biography> Biographies { get; set; }
 #endif
         /// <summary>The birth property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -54,10 +56,10 @@ namespace ApiSdk.Models {
         /// <summary>The characters property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Character>? Characters { get; set; }
+        public List<ApiSdk.Models.Character>? Characters { get; set; }
 #nullable restore
 #else
-        public List<Character> Characters { get; set; }
+        public List<ApiSdk.Models.Character> Characters { get; set; }
 #endif
         /// <summary>The death property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -114,18 +116,18 @@ namespace ApiSdk.Models {
         /// <summary>The races property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<Race>? Races { get; set; }
+        public List<ApiSdk.Models.Race>? Races { get; set; }
 #nullable restore
 #else
-        public List<Race> Races { get; set; }
+        public List<ApiSdk.Models.Race> Races { get; set; }
 #endif
         /// <summary>The remoteIds property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<RemoteID>? RemoteIds { get; set; }
+        public List<ApiSdk.Models.RemoteID>? RemoteIds { get; set; }
 #nullable restore
 #else
-        public List<RemoteID> RemoteIds { get; set; }
+        public List<ApiSdk.Models.RemoteID> RemoteIds { get; set; }
 #endif
         /// <summary>The score property</summary>
         public long? Score { get; set; }
@@ -140,72 +142,79 @@ namespace ApiSdk.Models {
         /// <summary>The tagOptions property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<TagOption>? TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption>? TagOptions { get; set; }
 #nullable restore
 #else
-        public List<TagOption> TagOptions { get; set; }
+        public List<ApiSdk.Models.TagOption> TagOptions { get; set; }
 #endif
         /// <summary>translation extended record</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public TranslationExtended? Translations { get; set; }
+        public ApiSdk.Models.TranslationExtended? Translations { get; set; }
 #nullable restore
 #else
-        public TranslationExtended Translations { get; set; }
+        public ApiSdk.Models.TranslationExtended Translations { get; set; }
 #endif
         /// <summary>
-        /// Instantiates a new PeopleExtendedRecord and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Models.PeopleExtendedRecord"/> and sets the default values.
         /// </summary>
-        public PeopleExtendedRecord() {
+        public PeopleExtendedRecord()
+        {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Models.PeopleExtendedRecord"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static PeopleExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode) {
+        public static ApiSdk.Models.PeopleExtendedRecord CreateFromDiscriminatorValue(IParseNode parseNode)
+        {
             _ = parseNode ?? throw new ArgumentNullException(nameof(parseNode));
-            return new PeopleExtendedRecord();
+            return new ApiSdk.Models.PeopleExtendedRecord();
         }
         /// <summary>
         /// The deserialization information for the current model
         /// </summary>
-        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers() {
-            return new Dictionary<string, Action<IParseNode>> {
-                {"aliases", n => { Aliases = n.GetCollectionOfObjectValues<Alias>(Alias.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"awards", n => { Awards = n.GetCollectionOfObjectValues<AwardBaseRecord>(AwardBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"biographies", n => { Biographies = n.GetCollectionOfObjectValues<Biography>(Biography.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"birth", n => { Birth = n.GetStringValue(); } },
-                {"birthPlace", n => { BirthPlace = n.GetStringValue(); } },
-                {"characters", n => { Characters = n.GetCollectionOfObjectValues<Character>(Character.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"death", n => { Death = n.GetStringValue(); } },
-                {"gender", n => { Gender = n.GetIntValue(); } },
-                {"id", n => { Id = n.GetLongValue(); } },
-                {"image", n => { Image = n.GetStringValue(); } },
-                {"lastUpdated", n => { LastUpdated = n.GetStringValue(); } },
-                {"name", n => { Name = n.GetStringValue(); } },
-                {"nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
-                {"races", n => { Races = n.GetCollectionOfObjectValues<Race>(Race.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"remoteIds", n => { RemoteIds = n.GetCollectionOfObjectValues<RemoteID>(RemoteID.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"score", n => { Score = n.GetLongValue(); } },
-                {"slug", n => { Slug = n.GetStringValue(); } },
-                {"tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<TagOption>(TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
-                {"translations", n => { Translations = n.GetObjectValue<TranslationExtended>(TranslationExtended.CreateFromDiscriminatorValue); } },
+        /// <returns>A IDictionary&lt;string, Action&lt;IParseNode&gt;&gt;</returns>
+        public virtual IDictionary<string, Action<IParseNode>> GetFieldDeserializers()
+        {
+            return new Dictionary<string, Action<IParseNode>>
+            {
+                { "aliases", n => { Aliases = n.GetCollectionOfObjectValues<ApiSdk.Models.Alias>(ApiSdk.Models.Alias.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "awards", n => { Awards = n.GetCollectionOfObjectValues<ApiSdk.Models.AwardBaseRecord>(ApiSdk.Models.AwardBaseRecord.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "biographies", n => { Biographies = n.GetCollectionOfObjectValues<ApiSdk.Models.Biography>(ApiSdk.Models.Biography.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "birth", n => { Birth = n.GetStringValue(); } },
+                { "birthPlace", n => { BirthPlace = n.GetStringValue(); } },
+                { "characters", n => { Characters = n.GetCollectionOfObjectValues<ApiSdk.Models.Character>(ApiSdk.Models.Character.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "death", n => { Death = n.GetStringValue(); } },
+                { "gender", n => { Gender = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetLongValue(); } },
+                { "image", n => { Image = n.GetStringValue(); } },
+                { "lastUpdated", n => { LastUpdated = n.GetStringValue(); } },
+                { "name", n => { Name = n.GetStringValue(); } },
+                { "nameTranslations", n => { NameTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "overviewTranslations", n => { OverviewTranslations = n.GetCollectionOfPrimitiveValues<string>()?.ToList(); } },
+                { "races", n => { Races = n.GetCollectionOfObjectValues<ApiSdk.Models.Race>(ApiSdk.Models.Race.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "remoteIds", n => { RemoteIds = n.GetCollectionOfObjectValues<ApiSdk.Models.RemoteID>(ApiSdk.Models.RemoteID.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "score", n => { Score = n.GetLongValue(); } },
+                { "slug", n => { Slug = n.GetStringValue(); } },
+                { "tagOptions", n => { TagOptions = n.GetCollectionOfObjectValues<ApiSdk.Models.TagOption>(ApiSdk.Models.TagOption.CreateFromDiscriminatorValue)?.ToList(); } },
+                { "translations", n => { Translations = n.GetObjectValue<ApiSdk.Models.TranslationExtended>(ApiSdk.Models.TranslationExtended.CreateFromDiscriminatorValue); } },
             };
         }
         /// <summary>
         /// Serializes information the current object
         /// </summary>
         /// <param name="writer">Serialization writer to use to serialize this model</param>
-        public virtual void Serialize(ISerializationWriter writer) {
+        public virtual void Serialize(ISerializationWriter writer)
+        {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<Alias>("aliases", Aliases);
-            writer.WriteCollectionOfObjectValues<AwardBaseRecord>("awards", Awards);
-            writer.WriteCollectionOfObjectValues<Biography>("biographies", Biographies);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Alias>("aliases", Aliases);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.AwardBaseRecord>("awards", Awards);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Biography>("biographies", Biographies);
             writer.WriteStringValue("birth", Birth);
             writer.WriteStringValue("birthPlace", BirthPlace);
-            writer.WriteCollectionOfObjectValues<Character>("characters", Characters);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Character>("characters", Characters);
             writer.WriteStringValue("death", Death);
             writer.WriteIntValue("gender", Gender);
             writer.WriteLongValue("id", Id);
@@ -214,12 +223,12 @@ namespace ApiSdk.Models {
             writer.WriteStringValue("name", Name);
             writer.WriteCollectionOfPrimitiveValues<string>("nameTranslations", NameTranslations);
             writer.WriteCollectionOfPrimitiveValues<string>("overviewTranslations", OverviewTranslations);
-            writer.WriteCollectionOfObjectValues<Race>("races", Races);
-            writer.WriteCollectionOfObjectValues<RemoteID>("remoteIds", RemoteIds);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.Race>("races", Races);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.RemoteID>("remoteIds", RemoteIds);
             writer.WriteLongValue("score", Score);
             writer.WriteStringValue("slug", Slug);
-            writer.WriteCollectionOfObjectValues<TagOption>("tagOptions", TagOptions);
-            writer.WriteObjectValue<TranslationExtended>("translations", Translations);
+            writer.WriteCollectionOfObjectValues<ApiSdk.Models.TagOption>("tagOptions", TagOptions);
+            writer.WriteObjectValue<ApiSdk.Models.TranslationExtended>("translations", Translations);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

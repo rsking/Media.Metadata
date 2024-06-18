@@ -8,54 +8,65 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace ApiSdk.Awards.Categories.Item {
+namespace ApiSdk.Awards.Categories.Item
+{
     /// <summary>
     /// Builds and executes requests for operations under \awards\categories\{id}
     /// </summary>
-    public class CategoriesItemRequestBuilder : BaseRequestBuilder {
+    public class CategoriesItemRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>The extended property</summary>
-        public ExtendedRequestBuilder Extended { get =>
-            new ExtendedRequestBuilder(PathParameters, RequestAdapter);
+        public ApiSdk.Awards.Categories.Item.Extended.ExtendedRequestBuilder Extended
+        {
+            get => new ApiSdk.Awards.Categories.Item.Extended.ExtendedRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new CategoriesItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Awards.Categories.Item.CategoriesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CategoriesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/awards/categories/{id}", pathParameters) {
+        public CategoriesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/awards/categories/{id}", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new CategoriesItemRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Awards.Categories.Item.CategoriesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CategoriesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/awards/categories/{id}", rawUrl) {
+        public CategoriesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/awards/categories/{id}", rawUrl)
+        {
         }
         /// <summary>
         /// Returns a single award category base record
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Awards.Categories.Item.CategoriesGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<CategoriesGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Awards.Categories.Item.CategoriesGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #nullable restore
 #else
-        public async Task<CategoriesGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default) {
+        public async Task<ApiSdk.Awards.Categories.Item.CategoriesGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<CategoriesGetResponse>(requestInfo, CategoriesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<ApiSdk.Awards.Categories.Item.CategoriesGetResponse>(requestInfo, ApiSdk.Awards.Categories.Item.CategoriesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns a single award category base record
         /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default) {
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
@@ -65,9 +76,11 @@ namespace ApiSdk.Awards.Categories.Item {
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
+        /// <returns>A <see cref="ApiSdk.Awards.Categories.Item.CategoriesItemRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public CategoriesItemRequestBuilder WithUrl(string rawUrl) {
-            return new CategoriesItemRequestBuilder(rawUrl, RequestAdapter);
+        public ApiSdk.Awards.Categories.Item.CategoriesItemRequestBuilder WithUrl(string rawUrl)
+        {
+            return new ApiSdk.Awards.Categories.Item.CategoriesItemRequestBuilder(rawUrl, RequestAdapter);
         }
     }
 }

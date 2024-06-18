@@ -6,31 +6,40 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-namespace ApiSdk.Movies.Slug {
+namespace ApiSdk.Movies.Slug
+{
     /// <summary>
     /// Builds and executes requests for operations under \movies\slug
     /// </summary>
-    public class SlugRequestBuilder : BaseRequestBuilder {
+    public class SlugRequestBuilder : BaseRequestBuilder
+    {
         /// <summary>Gets an item from the ApiSdk.movies.slug.item collection</summary>
         /// <param name="position">slug</param>
-        public WithSlugItemRequestBuilder this[string position] { get {
-            var urlTplParams = new Dictionary<string, object>(PathParameters);
-            urlTplParams.Add("slug", position);
-            return new WithSlugItemRequestBuilder(urlTplParams, RequestAdapter);
-        } }
+        /// <returns>A <see cref="ApiSdk.Movies.Slug.Item.WithSlugItemRequestBuilder"/></returns>
+        public ApiSdk.Movies.Slug.Item.WithSlugItemRequestBuilder this[string position]
+        {
+            get
+            {
+                var urlTplParams = new Dictionary<string, object>(PathParameters);
+                urlTplParams.Add("slug", position);
+                return new ApiSdk.Movies.Slug.Item.WithSlugItemRequestBuilder(urlTplParams, RequestAdapter);
+            }
+        }
         /// <summary>
-        /// Instantiates a new SlugRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Movies.Slug.SlugRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SlugRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies/slug", pathParameters) {
+        public SlugRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies/slug", pathParameters)
+        {
         }
         /// <summary>
-        /// Instantiates a new SlugRequestBuilder and sets the default values.
+        /// Instantiates a new <see cref="ApiSdk.Movies.Slug.SlugRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SlugRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies/slug", rawUrl) {
+        public SlugRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/movies/slug", rawUrl)
+        {
         }
     }
 }
