@@ -47,12 +47,14 @@ public class PlexRenamer : IRenamer
                     name += $" {{edition-{edition}}}";
                 }
 
+                var path = Path.Combine("Movies", name).ReplaceAll(GetInvalidPathChars());
+
                 if (movie is { Work: { } work } && work.Trim() is { Length: not 0 } trimmedWork)
                 {
                     name = AddPart(name, trimmedWork);
                 }
 
-                return Path.Combine(Path.Combine("Movies", name).ReplaceAll(GetInvalidPathChars()), (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars()));
+                return Path.Combine(path, (name + Path.GetExtension(current)).ReplaceAll(GetInvalidFileNameChars()));
             }
         }
 
