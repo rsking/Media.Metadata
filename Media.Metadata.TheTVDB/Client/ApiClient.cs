@@ -29,7 +29,6 @@ using Microsoft.Kiota.Serialization.Multipart;
 using Microsoft.Kiota.Serialization.Text;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System;
 namespace ApiSdk
@@ -37,120 +36,121 @@ namespace ApiSdk
     /// <summary>
     /// The main entry point of the SDK, exposes the configuration and the fluent API.
     /// </summary>
-    public class ApiClient : BaseRequestBuilder
+    [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.16.0")]
+    public partial class ApiClient : BaseRequestBuilder
     {
         /// <summary>The artwork property</summary>
-        public ApiSdk.Artwork.ArtworkRequestBuilder Artwork
+        public global::ApiSdk.Artwork.ArtworkRequestBuilder Artwork
         {
-            get => new ApiSdk.Artwork.ArtworkRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Artwork.ArtworkRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The awards property</summary>
-        public ApiSdk.Awards.AwardsRequestBuilder Awards
+        public global::ApiSdk.Awards.AwardsRequestBuilder Awards
         {
-            get => new ApiSdk.Awards.AwardsRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Awards.AwardsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The characters property</summary>
-        public ApiSdk.Characters.CharactersRequestBuilder Characters
+        public global::ApiSdk.Characters.CharactersRequestBuilder Characters
         {
-            get => new ApiSdk.Characters.CharactersRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Characters.CharactersRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The companies property</summary>
-        public ApiSdk.Companies.CompaniesRequestBuilder Companies
+        public global::ApiSdk.Companies.CompaniesRequestBuilder Companies
         {
-            get => new ApiSdk.Companies.CompaniesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Companies.CompaniesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The content property</summary>
-        public ApiSdk.Content.ContentRequestBuilder Content
+        public global::ApiSdk.Content.ContentRequestBuilder Content
         {
-            get => new ApiSdk.Content.ContentRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Content.ContentRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The countries property</summary>
-        public ApiSdk.Countries.CountriesRequestBuilder Countries
+        public global::ApiSdk.Countries.CountriesRequestBuilder Countries
         {
-            get => new ApiSdk.Countries.CountriesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Countries.CountriesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The entities property</summary>
-        public ApiSdk.Entities.EntitiesRequestBuilder Entities
+        public global::ApiSdk.Entities.EntitiesRequestBuilder Entities
         {
-            get => new ApiSdk.Entities.EntitiesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Entities.EntitiesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The episodes property</summary>
-        public ApiSdk.Episodes.EpisodesRequestBuilder Episodes
+        public global::ApiSdk.Episodes.EpisodesRequestBuilder Episodes
         {
-            get => new ApiSdk.Episodes.EpisodesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Episodes.EpisodesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The genders property</summary>
-        public ApiSdk.Genders.GendersRequestBuilder Genders
+        public global::ApiSdk.Genders.GendersRequestBuilder Genders
         {
-            get => new ApiSdk.Genders.GendersRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Genders.GendersRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The genres property</summary>
-        public ApiSdk.Genres.GenresRequestBuilder Genres
+        public global::ApiSdk.Genres.GenresRequestBuilder Genres
         {
-            get => new ApiSdk.Genres.GenresRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Genres.GenresRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The inspiration property</summary>
-        public ApiSdk.Inspiration.InspirationRequestBuilder Inspiration
+        public global::ApiSdk.Inspiration.InspirationRequestBuilder Inspiration
         {
-            get => new ApiSdk.Inspiration.InspirationRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Inspiration.InspirationRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The languages property</summary>
-        public ApiSdk.Languages.LanguagesRequestBuilder Languages
+        public global::ApiSdk.Languages.LanguagesRequestBuilder Languages
         {
-            get => new ApiSdk.Languages.LanguagesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Languages.LanguagesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The lists property</summary>
-        public ApiSdk.Lists.ListsRequestBuilder Lists
+        public global::ApiSdk.Lists.ListsRequestBuilder Lists
         {
-            get => new ApiSdk.Lists.ListsRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Lists.ListsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The login property</summary>
-        public ApiSdk.Login.LoginRequestBuilder Login
+        public global::ApiSdk.Login.LoginRequestBuilder Login
         {
-            get => new ApiSdk.Login.LoginRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Login.LoginRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The movies property</summary>
-        public ApiSdk.Movies.MoviesRequestBuilder Movies
+        public global::ApiSdk.Movies.MoviesRequestBuilder Movies
         {
-            get => new ApiSdk.Movies.MoviesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Movies.MoviesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The people property</summary>
-        public ApiSdk.People.PeopleRequestBuilder People
+        public global::ApiSdk.People.PeopleRequestBuilder People
         {
-            get => new ApiSdk.People.PeopleRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.People.PeopleRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The search property</summary>
-        public ApiSdk.Search.SearchRequestBuilder Search
+        public global::ApiSdk.Search.SearchRequestBuilder Search
         {
-            get => new ApiSdk.Search.SearchRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Search.SearchRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The seasons property</summary>
-        public ApiSdk.Seasons.SeasonsRequestBuilder Seasons
+        public global::ApiSdk.Seasons.SeasonsRequestBuilder Seasons
         {
-            get => new ApiSdk.Seasons.SeasonsRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Seasons.SeasonsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The series property</summary>
-        public ApiSdk.Series.SeriesRequestBuilder Series
+        public global::ApiSdk.Series.SeriesRequestBuilder Series
         {
-            get => new ApiSdk.Series.SeriesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Series.SeriesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The sources property</summary>
-        public ApiSdk.Sources.SourcesRequestBuilder Sources
+        public global::ApiSdk.Sources.SourcesRequestBuilder Sources
         {
-            get => new ApiSdk.Sources.SourcesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Sources.SourcesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The updates property</summary>
-        public ApiSdk.Updates.UpdatesRequestBuilder Updates
+        public global::ApiSdk.Updates.UpdatesRequestBuilder Updates
         {
-            get => new ApiSdk.Updates.UpdatesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Updates.UpdatesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The user property</summary>
-        public ApiSdk.User.UserRequestBuilder User
+        public global::ApiSdk.User.UserRequestBuilder User
         {
-            get => new ApiSdk.User.UserRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.User.UserRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new <see cref="ApiSdk.ApiClient"/> and sets the default values.
+        /// Instantiates a new <see cref="global::ApiSdk.ApiClient"/> and sets the default values.
         /// </summary>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
         public ApiClient(IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}", new Dictionary<string, object>())

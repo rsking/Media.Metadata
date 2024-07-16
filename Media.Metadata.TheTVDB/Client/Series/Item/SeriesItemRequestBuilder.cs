@@ -4,11 +4,11 @@ using ApiSdk.Series.Item.Episodes;
 using ApiSdk.Series.Item.Extended;
 using ApiSdk.Series.Item.NextAired;
 using ApiSdk.Series.Item.Translations;
+using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
@@ -17,35 +17,36 @@ namespace ApiSdk.Series.Item
     /// <summary>
     /// Builds and executes requests for operations under \series\{id}
     /// </summary>
-    public class SeriesItemRequestBuilder : BaseRequestBuilder
+    [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.16.0")]
+    public partial class SeriesItemRequestBuilder : BaseRequestBuilder
     {
         /// <summary>The artworks property</summary>
-        public ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder Artworks
+        public global::ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder Artworks
         {
-            get => new ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Series.Item.Artworks.ArtworksRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The episodes property</summary>
-        public ApiSdk.Series.Item.Episodes.EpisodesRequestBuilder Episodes
+        public global::ApiSdk.Series.Item.Episodes.EpisodesRequestBuilder Episodes
         {
-            get => new ApiSdk.Series.Item.Episodes.EpisodesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Series.Item.Episodes.EpisodesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The extended property</summary>
-        public ApiSdk.Series.Item.Extended.ExtendedRequestBuilder Extended
+        public global::ApiSdk.Series.Item.Extended.ExtendedRequestBuilder Extended
         {
-            get => new ApiSdk.Series.Item.Extended.ExtendedRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Series.Item.Extended.ExtendedRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The nextAired property</summary>
-        public ApiSdk.Series.Item.NextAired.NextAiredRequestBuilder NextAired
+        public global::ApiSdk.Series.Item.NextAired.NextAiredRequestBuilder NextAired
         {
-            get => new ApiSdk.Series.Item.NextAired.NextAiredRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Series.Item.NextAired.NextAiredRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The translations property</summary>
-        public ApiSdk.Series.Item.Translations.TranslationsRequestBuilder Translations
+        public global::ApiSdk.Series.Item.Translations.TranslationsRequestBuilder Translations
         {
-            get => new ApiSdk.Series.Item.Translations.TranslationsRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Series.Item.Translations.TranslationsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new <see cref="ApiSdk.Series.Item.SeriesItemRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::ApiSdk.Series.Item.SeriesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
@@ -53,7 +54,7 @@ namespace ApiSdk.Series.Item
         {
         }
         /// <summary>
-        /// Instantiates a new <see cref="ApiSdk.Series.Item.SeriesItemRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::ApiSdk.Series.Item.SeriesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
@@ -63,20 +64,20 @@ namespace ApiSdk.Series.Item
         /// <summary>
         /// Returns series base record
         /// </summary>
-        /// <returns>A <see cref="ApiSdk.Series.Item.SeriesGetResponse"/></returns>
+        /// <returns>A <see cref="global::ApiSdk.Series.Item.SeriesGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<ApiSdk.Series.Item.SeriesGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::ApiSdk.Series.Item.SeriesGetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<ApiSdk.Series.Item.SeriesGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::ApiSdk.Series.Item.SeriesGetResponse> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<ApiSdk.Series.Item.SeriesGetResponse>(requestInfo, ApiSdk.Series.Item.SeriesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::ApiSdk.Series.Item.SeriesGetResponse>(requestInfo, global::ApiSdk.Series.Item.SeriesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns series base record
@@ -100,11 +101,11 @@ namespace ApiSdk.Series.Item
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
-        /// <returns>A <see cref="ApiSdk.Series.Item.SeriesItemRequestBuilder"/></returns>
+        /// <returns>A <see cref="global::ApiSdk.Series.Item.SeriesItemRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public ApiSdk.Series.Item.SeriesItemRequestBuilder WithUrl(string rawUrl)
+        public global::ApiSdk.Series.Item.SeriesItemRequestBuilder WithUrl(string rawUrl)
         {
-            return new ApiSdk.Series.Item.SeriesItemRequestBuilder(rawUrl, RequestAdapter);
+            return new global::ApiSdk.Series.Item.SeriesItemRequestBuilder(rawUrl, RequestAdapter);
         }
     }
 }

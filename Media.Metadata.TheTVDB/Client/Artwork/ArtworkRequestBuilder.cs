@@ -2,10 +2,10 @@
 using ApiSdk.Artwork.Item;
 using ApiSdk.Artwork.Statuses;
 using ApiSdk.Artwork.Types;
+using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System;
 namespace ApiSdk.Artwork
@@ -13,32 +13,33 @@ namespace ApiSdk.Artwork
     /// <summary>
     /// Builds and executes requests for operations under \artwork
     /// </summary>
-    public class ArtworkRequestBuilder : BaseRequestBuilder
+    [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.16.0")]
+    public partial class ArtworkRequestBuilder : BaseRequestBuilder
     {
         /// <summary>The statuses property</summary>
-        public ApiSdk.Artwork.Statuses.StatusesRequestBuilder Statuses
+        public global::ApiSdk.Artwork.Statuses.StatusesRequestBuilder Statuses
         {
-            get => new ApiSdk.Artwork.Statuses.StatusesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Artwork.Statuses.StatusesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The types property</summary>
-        public ApiSdk.Artwork.Types.TypesRequestBuilder Types
+        public global::ApiSdk.Artwork.Types.TypesRequestBuilder Types
         {
-            get => new ApiSdk.Artwork.Types.TypesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Artwork.Types.TypesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the ApiSdk.artwork.item collection</summary>
         /// <param name="position">id</param>
-        /// <returns>A <see cref="ApiSdk.Artwork.Item.ArtworkItemRequestBuilder"/></returns>
-        public ApiSdk.Artwork.Item.ArtworkItemRequestBuilder this[double position]
+        /// <returns>A <see cref="global::ApiSdk.Artwork.Item.ArtworkItemRequestBuilder"/></returns>
+        public global::ApiSdk.Artwork.Item.ArtworkItemRequestBuilder this[double position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
                 urlTplParams.Add("id", position);
-                return new ApiSdk.Artwork.Item.ArtworkItemRequestBuilder(urlTplParams, RequestAdapter);
+                return new global::ApiSdk.Artwork.Item.ArtworkItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>
-        /// Instantiates a new <see cref="ApiSdk.Artwork.ArtworkRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::ApiSdk.Artwork.ArtworkRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
@@ -46,7 +47,7 @@ namespace ApiSdk.Artwork
         {
         }
         /// <summary>
-        /// Instantiates a new <see cref="ApiSdk.Artwork.ArtworkRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::ApiSdk.Artwork.ArtworkRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>

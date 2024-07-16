@@ -3,11 +3,11 @@ using ApiSdk.Movies.Filter;
 using ApiSdk.Movies.Item;
 using ApiSdk.Movies.Slug;
 using ApiSdk.Movies.Statuses;
+using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
@@ -16,37 +16,38 @@ namespace ApiSdk.Movies
     /// <summary>
     /// Builds and executes requests for operations under \movies
     /// </summary>
-    public class MoviesRequestBuilder : BaseRequestBuilder
+    [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.16.0")]
+    public partial class MoviesRequestBuilder : BaseRequestBuilder
     {
         /// <summary>The filter property</summary>
-        public ApiSdk.Movies.Filter.FilterRequestBuilder Filter
+        public global::ApiSdk.Movies.Filter.FilterRequestBuilder Filter
         {
-            get => new ApiSdk.Movies.Filter.FilterRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Movies.Filter.FilterRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The slug property</summary>
-        public ApiSdk.Movies.Slug.SlugRequestBuilder Slug
+        public global::ApiSdk.Movies.Slug.SlugRequestBuilder Slug
         {
-            get => new ApiSdk.Movies.Slug.SlugRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Movies.Slug.SlugRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The statuses property</summary>
-        public ApiSdk.Movies.Statuses.StatusesRequestBuilder Statuses
+        public global::ApiSdk.Movies.Statuses.StatusesRequestBuilder Statuses
         {
-            get => new ApiSdk.Movies.Statuses.StatusesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::ApiSdk.Movies.Statuses.StatusesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the ApiSdk.movies.item collection</summary>
         /// <param name="position">id</param>
-        /// <returns>A <see cref="ApiSdk.Movies.Item.MoviesItemRequestBuilder"/></returns>
-        public ApiSdk.Movies.Item.MoviesItemRequestBuilder this[double position]
+        /// <returns>A <see cref="global::ApiSdk.Movies.Item.MoviesItemRequestBuilder"/></returns>
+        public global::ApiSdk.Movies.Item.MoviesItemRequestBuilder this[double position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
                 urlTplParams.Add("id", position);
-                return new ApiSdk.Movies.Item.MoviesItemRequestBuilder(urlTplParams, RequestAdapter);
+                return new global::ApiSdk.Movies.Item.MoviesItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>
-        /// Instantiates a new <see cref="ApiSdk.Movies.MoviesRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::ApiSdk.Movies.MoviesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
@@ -54,7 +55,7 @@ namespace ApiSdk.Movies
         {
         }
         /// <summary>
-        /// Instantiates a new <see cref="ApiSdk.Movies.MoviesRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::ApiSdk.Movies.MoviesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
@@ -64,20 +65,20 @@ namespace ApiSdk.Movies
         /// <summary>
         /// returns list of movie base records
         /// </summary>
-        /// <returns>A <see cref="ApiSdk.Movies.MoviesGetResponse"/></returns>
+        /// <returns>A <see cref="global::ApiSdk.Movies.MoviesGetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<ApiSdk.Movies.MoviesGetResponse?> GetAsync(Action<RequestConfiguration<ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::ApiSdk.Movies.MoviesGetResponse?> GetAsync(Action<RequestConfiguration<global::ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<ApiSdk.Movies.MoviesGetResponse> GetAsync(Action<RequestConfiguration<ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::ApiSdk.Movies.MoviesGetResponse> GetAsync(Action<RequestConfiguration<global::ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<ApiSdk.Movies.MoviesGetResponse>(requestInfo, ApiSdk.Movies.MoviesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::ApiSdk.Movies.MoviesGetResponse>(requestInfo, global::ApiSdk.Movies.MoviesGetResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// returns list of movie base records
@@ -86,11 +87,11 @@ namespace ApiSdk.Movies
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<global::ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<global::ApiSdk.Movies.MoviesRequestBuilder.MoviesRequestBuilderGetQueryParameters>> requestConfiguration = default)
         {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
@@ -101,16 +102,17 @@ namespace ApiSdk.Movies
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
-        /// <returns>A <see cref="ApiSdk.Movies.MoviesRequestBuilder"/></returns>
+        /// <returns>A <see cref="global::ApiSdk.Movies.MoviesRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public ApiSdk.Movies.MoviesRequestBuilder WithUrl(string rawUrl)
+        public global::ApiSdk.Movies.MoviesRequestBuilder WithUrl(string rawUrl)
         {
-            return new ApiSdk.Movies.MoviesRequestBuilder(rawUrl, RequestAdapter);
+            return new global::ApiSdk.Movies.MoviesRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// returns list of movie base records
         /// </summary>
-        public class MoviesRequestBuilderGetQueryParameters 
+        [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.16.0")]
+        public partial class MoviesRequestBuilderGetQueryParameters 
         {
             /// <summary>page number</summary>
             [QueryParameter("page")]

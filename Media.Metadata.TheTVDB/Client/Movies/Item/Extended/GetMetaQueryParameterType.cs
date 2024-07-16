@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace ApiSdk.Movies.Item.Extended
 {
+    [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.16.0")]
     #pragma warning disable CS1591
     public enum GetMetaQueryParameterType
     #pragma warning restore CS1591

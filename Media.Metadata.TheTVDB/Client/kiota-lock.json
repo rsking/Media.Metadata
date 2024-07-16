@@ -2,7 +2,7 @@
   "descriptionHash": "5117AEBDFCAB487C0690546AFB285AF2E2A295BA3372A0B92B14C655F4C4ADCC1D923E4CDDA5EE9E0AB9E3CDD5CCBB034032649DB206CCC819A98570A3BA23DF",
   "descriptionLocation": "https://thetvdb.github.io/v4-api/swagger.yml",
   "lockFileVersion": "1.0.0",
-  "kiotaVersion": "1.15.0",
+  "kiotaVersion": "1.16.0",
   "clientClassName": "ApiClient",
   "clientNamespaceName": "ApiSdk",
   "language": "CSharp",
