@@ -23,7 +23,7 @@ public static class AppDomainExtensions
         var potentialPaths = GetPotentialPaths()
             .Select(path => path.Replace('/', Path.DirectorySeparatorChar));
 
-        var probingDirectories = ((string?)appDomain.GetData("PROBING_DIRECTORIES"))?.Split(Path.PathSeparator) ?? new[] { appDomain.BaseDirectory };
+        var probingDirectories = ((string?)appDomain.GetData("PROBING_DIRECTORIES"))?.Split(Path.PathSeparator) ?? [appDomain.BaseDirectory];
         var directories = probingDirectories
             .Select(RootedPath)
             .SelectMany(directory => potentialPaths.Select(path => Path.Combine(directory, path)))

@@ -37,20 +37,22 @@ internal partial class MainViewModel(IReader reader, IUpdater updater) : Communi
     [CommunityToolkit.Mvvm.ComponentModel.NotifyCanExecuteChangedFor(nameof(SearchCommand))]
     private bool isSaving;
 
+#pragma warning disable IDE0028 // Simplify collection initialization
     /// <summary>
     /// Gets the videos.
     /// </summary>
     public IList<Video> Videos { get; } = new System.Collections.ObjectModel.ObservableCollection<Video>();
 
     /// <summary>
-    /// Gets the selected editable video.
-    /// </summary>
-    public VideoViewModel? SelectedEditableVideo { get; private set; }
-
-    /// <summary>
     /// Gets the selected videos.
     /// </summary>
     public IList<Video> SelectedVideos { get; } = new System.Collections.ObjectModel.ObservableCollection<Video>();
+#pragma warning restore IDE0028 // Simplify collection initialization
+
+    /// <summary>
+    /// Gets the selected editable video.
+    /// </summary>
+    public VideoViewModel? SelectedEditableVideo { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether this instance can save.
@@ -101,8 +103,8 @@ internal partial class MainViewModel(IReader reader, IUpdater updater) : Communi
         var selectedVideos = (this.SelectedVideos, this.SelectedVideo) switch
         {
             ({ Count: > 0 }, _) => GetSelectedVideos(this.SelectedVideos),
-            (_, Video v) => new[] { v },
-            _ => Enumerable.Empty<Video>(),
+            (_, Video v) => [v],
+            _ => [],
         };
 
         foreach (var video in selectedVideos)

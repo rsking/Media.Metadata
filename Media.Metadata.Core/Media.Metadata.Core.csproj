@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Formatters.PList" VersionOverride="1.0.0" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" VersionOverride="1.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" VersionOverride="2.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" VersionOverride="2.0.0" NoWarn="NU1902;NU1903" />
   </ItemGroup>
 
   <ItemGroup>

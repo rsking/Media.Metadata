@@ -25,7 +25,9 @@ internal class ListBoxSelectionBehavior<T> : Microsoft.Xaml.Interactivity.Behavi
 
     private bool viewHandled;
 
+#pragma warning disable CS0414
     private bool modelHandled;
+#pragma warning restore CS0414
 
     /// <summary>
     /// Gets or sets the selected items.
