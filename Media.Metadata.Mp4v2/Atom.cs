@@ -45,14 +45,16 @@ internal abstract class Atom
             {
                 var itemPointer = atomItemList.elements[i];
                 var item = itemPointer.ToStructure<NativeMethods.MP4ItmfItem>();
-                var dataList = item.dataList;
-                for (var j = 0; j < dataList.size; j++)
+                if (item.dataList is { elements: { Length: > 0 } elements })
                 {
-                    var dataListItemPointer = dataList.elements[j];
-                    var data = dataListItemPointer.ToStructure<NativeMethods.MP4ItmfData>();
-                    if (data.typeCode == this.DataType && data.value.ToByteArray(data.valueSize) is { } dataBuffer)
+                    for (var j = 0; j < elements.Length; j++)
                     {
-                        this.Populate(dataBuffer);
+                        var dataListItemPointer = elements[j];
+                        var data = dataListItemPointer.ToStructure<NativeMethods.MP4ItmfData>();
+                        if (data.typeCode == this.DataType && data.value.ToByteArray(data.valueSize) is { } dataBuffer)
+                        {
+                            this.Populate(dataBuffer);
+                        }
                     }
                 }
             }

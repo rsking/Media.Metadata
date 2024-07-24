@@ -555,7 +555,7 @@ internal class MetadataTags : IDisposable
         SetEnumValue(tagsPtr, this.MediaStoreAccountType, tags.iTunesAccountType, MediaStoreAccountKind.NotSet, NativeMethods.MP4TagsSetITunesAccountType);
         if (this.MediaStoreCountry != tags.iTunesCountry.ReadEnumValue(MediaStoreCountry.None))
         {
-            var countryValue = this.MediaStoreCountry == MediaStoreCountry.None ? null : (int?)this.MediaStoreCountry;
+            var countryValue = this.MediaStoreCountry is MediaStoreCountry.None ? null : (int?)this.MediaStoreCountry;
             tagsPtr.WriteInt32(countryValue, NativeMethods.MP4TagsSetITunesCountry);
         }
 
@@ -578,7 +578,7 @@ internal class MetadataTags : IDisposable
             {
                 this.WriteArtwork(tagsPtr);
             }
-            else if (this.ArtworkCount != 0)
+            else if (this.ArtworkCount is not 0)
             {
                 _ = NativeMethods.MP4TagsRemoveArtwork(tagsPtr, 0);
             }
@@ -795,7 +795,7 @@ internal class MetadataTags : IDisposable
         if (listPtr != IntPtr.Zero)
         {
             var list = listPtr.ToStructure<NativeMethods.MP4ItmfItemList>();
-            if (list.size == 1)
+            if (list.size is 1)
             {
                 var itemPointer = list.elements[0];
                 var item = itemPointer.ToStructure<NativeMethods.MP4ItmfItem>();
@@ -869,7 +869,7 @@ internal class MetadataTags : IDisposable
 
         var newArtworkPtr = Marshal.AllocHGlobal(Marshal.SizeOf(newArtwork));
         Marshal.StructureToPtr(newArtwork, newArtworkPtr, fDeleteOld: false);
-        _ = this.ArtworkCount == 0
+        _ = this.ArtworkCount is 0
             ? NativeMethods.MP4TagsAddArtwork(tagsPtr, newArtworkPtr)
             : NativeMethods.MP4TagsSetArtwork(tagsPtr, 0, newArtworkPtr);
 

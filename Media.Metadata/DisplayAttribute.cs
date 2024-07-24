@@ -348,11 +348,11 @@ public sealed class DisplayAttribute : Attribute
 
         public string? GetLocalizableValue()
         {
-            if (this.cachedResult == null)
+            if (this.cachedResult is null)
             {
                 // If the property value is null, then just cache that value
                 // If the resource type is null, then property value is literal, so cache it
-                if (this.propertyValue == null || this.resourceType == null)
+                if (this.propertyValue is null || this.resourceType is null)
                 {
                     this.cachedResult = () => this.propertyValue;
                 }
@@ -372,7 +372,7 @@ public sealed class DisplayAttribute : Attribute
                     else
                     {
                         var getter = property.GetMethod;
-                        if (getter?.IsStatic != true)
+                        if (getter?.IsStatic is not true)
                         {
                             badlyConfigured = true;
                         }

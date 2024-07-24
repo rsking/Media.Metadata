@@ -35,10 +35,10 @@ public class TagLibReader : IReader
             : throw new ArgumentException(default, nameof(path));
     }
 
-    private static Video ReadVideo(FileInfo fileInfo, AppleTag appleTag) => appleTag switch
+    private static Video ReadVideo(FileInfo fileInfo, AppleTag appleTag) => appleTag.GetMediaType() switch
     {
-        var t when t.GetMediaType() == MediaType.Movie => ReadMovie(fileInfo, appleTag, CreatePList(appleTag)),
-        var t when t.GetMediaType() == MediaType.TVShow => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)),
+        MediaType.Movie => ReadMovie(fileInfo, appleTag, CreatePList(appleTag)),
+        MediaType.TVShow => ReadEpisode(fileInfo, appleTag, CreatePList(appleTag)),
         _ => new LocalVideo(fileInfo, Path.GetFileNameWithoutExtension(fileInfo.Name)) { Work = appleTag.GetWork() },
     };
 

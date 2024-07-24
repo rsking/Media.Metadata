@@ -96,7 +96,7 @@ internal sealed class ChapterExtractor(Stream stream)
                 {
                     var v = new byte[1];
                     _ = this.stream.Read(v, 0, 1);
-                    var isv8 = v[0] == 1;
+                    var isv8 = v[0] is 1;
                     _ = this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
                     return moovData with { TimeUnitPerSecond = this.ReadUInt32() };
                 }
@@ -129,7 +129,7 @@ internal sealed class ChapterExtractor(Stream stream)
                     {
                         var v = new byte[1];
                         _ = this.stream.Read(v, 0, 1);
-                        var isv8 = v[0] == 1;
+                        var isv8 = v[0] is 1;
                         _ = this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
                         return this.ReadUInt32();
                     }
@@ -160,7 +160,7 @@ internal sealed class ChapterExtractor(Stream stream)
                         {
                             var v = new byte[1];
                             _ = this.stream.Read(v, 0, 1);
-                            var isv8 = v[0] == 1;
+                            var isv8 = v[0] is 1;
 
                             _ = this.stream.Seek(3L + (isv8 ? 16L : 8L), SeekOrigin.Current);
                             var timeUnitPerSecond = this.ReadUInt32();
@@ -315,7 +315,7 @@ internal sealed class ChapterExtractor(Stream stream)
         void ReadChapters(MoovInfo moovBox)
         {
             var soundBox = moovBox.Tracks.Where(b => string.Equals(b.Type, "soun", StringComparison.Ordinal)).ToArray();
-            if (soundBox.Length == 0)
+            if (soundBox.Length is 0)
             {
                 return;
             }
@@ -324,7 +324,7 @@ internal sealed class ChapterExtractor(Stream stream)
             {
                 var chapterIds = new HashSet<uint>(soundBox[0].Chaps);
                 var textBox = moovBox.Tracks.Where(b => b.Id.HasValue && string.Equals(b.Type, "text", StringComparison.Ordinal) && chapterIds.Contains(b.Id.Value)).ToArray();
-                if (textBox.Length == 0)
+                if (textBox.Length is 0)
                 {
                     return;
                 }
@@ -438,7 +438,7 @@ internal sealed class ChapterExtractor(Stream stream)
                 return null;
             }
 
-            if (offset == 1)
+            if (offset is 1)
             {
                 offset = (long)this.ReadUInt64();
             }
@@ -451,7 +451,7 @@ internal sealed class ChapterExtractor(Stream stream)
             {
                 BoxOffset = currentPosition,
                 Offset = offset,
-                Last = offset == 0,
+                Last = offset is 0,
                 Type = type,
             };
         }

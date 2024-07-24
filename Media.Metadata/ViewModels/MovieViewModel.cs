@@ -19,10 +19,7 @@ internal partial class MovieViewModel : VideoViewModel
     /// </summary>
     /// <param name="movie">The movie.</param>
     public MovieViewModel(Models.LocalMovieWithImageSource movie)
-        : base(movie, movie.FileInfo, movie.Image, movie.ImageFormat, movie.ImageSource)
-    {
-        this.Edition = movie.Edition;
-    }
+        : base(movie, movie.FileInfo, movie.Image, movie.ImageFormat, movie.ImageSource) => this.Edition = movie.Edition;
 
     /// <inheritdoc/>
     public override Task<Video> ToVideoAsync(CancellationToken cancellationToken = default) => Task.FromResult<Video>(

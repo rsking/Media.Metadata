@@ -154,23 +154,18 @@ public class Mp4Writer : IUpdater
 
                 IEnumerable<Track> GetTracks(IEnumerable<Track> tracks, MediaTrackType key)
                 {
-                    if (key == MediaTrackType.All)
+                    return key switch
                     {
-                        return tracks;
-                    }
+                        MediaTrackType.All => tracks,
+                        MediaTrackType.Audio => tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4AudioTrackType, StringComparison.Ordinal)),
+                        MediaTrackType.Video => tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4VideoTrackType, StringComparison.Ordinal)),
+                        _ => GetTrackById((int)key),
+                    };
 
-                    if (key == MediaTrackType.Audio)
+                    IEnumerable<Track> GetTrackById(int id)
                     {
-                        return tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4AudioTrackType, StringComparison.Ordinal));
+                        return tracks.Where(track => track.Id == id);
                     }
-
-                    if (key == MediaTrackType.Video)
-                    {
-                        return tracks.Where(track => string.Equals(track.Type, NativeMethods.MP4VideoTrackType, StringComparison.Ordinal));
-                    }
-
-                    var id = (int)key;
-                    return tracks.Where(track => track.Id == id);
                 }
             }
         }

@@ -4,7 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+#pragma warning disable IDE0130
 namespace Microsoft.Extensions.DependencyInjection;
+#pragma warning restore IDE0130
 
 using System.Runtime.InteropServices;
 
@@ -53,10 +55,10 @@ public static class AppDomainExtensions
             var architecture = RuntimeInformation.OSArchitecture switch
             {
                 Architecture.Arm => Arm,
-                Architecture.Arm64 when IntPtr.Size == 4 => Arm,
+                Architecture.Arm64 when IntPtr.Size is 4 => Arm,
                 Architecture.Arm64 => Arm64,
                 Architecture.X86 => X86,
-                Architecture.X64 when IntPtr.Size == 4 => X86,
+                Architecture.X64 when IntPtr.Size is 4 => X86,
                 Architecture.X64 => X64,
                 _ => throw new InvalidOperationException(),
             };

@@ -92,7 +92,7 @@ static CliCommand CreateSearchMovie()
                     Console.WriteLine(movie.ToString());
 
                     if (string.Equals(movie.Name, name, StringComparison.Ordinal)
-                        && (year == 0 || (movie.Release.HasValue && movie.Release.Value.Year == year)))
+                        && (year is 0 || (movie.Release.HasValue && movie.Release.Value.Year == year)))
                     {
                         break;
                     }
@@ -205,7 +205,7 @@ static CliCommand CreateUpdateMovie(CliOption<string[]> langOption)
             {
                 await foreach (var movie in search.SearchAsync(name, year, cancellationToken: cancellationToken).ConfigureAwait(false))
                 {
-                    if (string.Equals(movie.Name, name, StringComparison.OrdinalIgnoreCase) && (year == 0 || (movie.Release.HasValue && movie.Release.Value.Year == year)))
+                    if (string.Equals(movie.Name, name, StringComparison.OrdinalIgnoreCase) && (year is 0 || (movie.Release.HasValue && movie.Release.Value.Year == year)))
                     {
                         await parseResult.Configuration.Output.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"Found Movie {movie.Name} ({movie.Release?.Year})")).ConfigureAwait(false);
                         await parseResult.Configuration.Output.WriteLineAsync($"Saving {path.Name}").ConfigureAwait(false);
@@ -283,7 +283,7 @@ static CliCommand CreateUpdateEpisode(CliOption<string[]> langOption)
                         .OrderBy(group => group.Key)
                         .ToList();
 
-                    if (seasons.Count == 0)
+                    if (seasons.Count is 0)
                     {
                         return;
                     }
@@ -482,7 +482,7 @@ static CliCommand CreateRename()
                 return;
             }
 
-            if (file.Length == 0)
+            if (file.Length is 0)
             {
                 continue;
             }
@@ -534,7 +534,7 @@ static CliCommand CreateRename()
                         await parseResult.Configuration.Output.WriteLineAsync($"Replacing {path.FullName} with {file.FullName} with a move").ConfigureAwait(true);
                         if (!dryRun)
                         {
-                            file.CopyTo(path.FullName, overwrite: true);
+                            _ = file.CopyTo(path.FullName, overwrite: true);
                             if (file.Exists)
                             {
                                 file.Delete();
@@ -555,14 +555,14 @@ static CliCommand CreateRename()
 
                     if (!dryRun)
                     {
-                        file.CopyTo(path.FullName, overwrite: true);
+                        _ = file.CopyTo(path.FullName, overwrite: true);
                     }
                 }
             }
 
             static Video ReadFile(IReader reader, string path, int retries = 3)
             {
-                for (int i = 0; i < retries - 1; i++)
+                for (var i = 0; i < retries - 1; i++)
                 {
                     try
                     {
@@ -630,7 +630,7 @@ static FileInfo[] ParseFileInfo(ArgumentResult argumentResult)
             // separate the root directory from the glob
             var glob = Path.GetFileName(root);
             var directory = Path.GetDirectoryName(root);
-            while (directory?.Contains('*', StringComparison.OrdinalIgnoreCase) == true)
+            while (directory?.Contains('*', StringComparison.OrdinalIgnoreCase) is true)
             {
                 glob = $"{Path.GetFileName(directory)}{Path.AltDirectorySeparatorChar}{glob}";
                 directory = Path.GetDirectoryName(directory);

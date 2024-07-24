@@ -69,7 +69,7 @@ public static class PListExtensions
     public static void Add(this Formatters.PList.PList propertyList, string key, IEnumerable<string> values)
     {
         var @array = values.ToPListArray("name");
-        if (array.Length == 0)
+        if (array.Length is 0)
         {
             return;
         }

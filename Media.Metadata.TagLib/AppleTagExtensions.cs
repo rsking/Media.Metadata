@@ -241,11 +241,11 @@ public static class AppleTagExtensions
     /// <returns>The long description.</returns>
     public static string? GetLongDescription(this AppleTag appleTag) => appleTag.GetJoinedText(LongDescription);
 
-    private static byte? GetByteOrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count == 1) is AppleDataBox item
+    private static byte? GetByteOrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count is 1) is AppleDataBox item
         ? item.Data.Data[0]
         : default(byte?);
 
-    private static int? GetInt32OrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count == 4) is AppleDataBox item
+    private static int? GetInt32OrDefault(this AppleTag appleTag, ReadOnlyByteVector type) => appleTag.DataBoxes(type).FirstOrDefault(item => item.Data.Count is 4) is AppleDataBox item
         ? (int)System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(item.Data.Data)
         : default(int?);
 

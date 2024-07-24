@@ -17,8 +17,8 @@
     <PackageVersion Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
     <PackageVersion Include="NeoSmart.AsyncLock" Version="3.2.1" />
     <PackageVersion Include="RestSharp" Version="110.2.0" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.8" />
-    <PackageVersion Include="System.CommandLine.Hosting" Version="0.4.0-alpha.24209.3" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.9" />
+    <PackageVersion Include="System.CommandLine.Hosting" Version="0.4.0-alpha.24324.3" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <PackageVersion Include="TagLibSharp" Version="2.3.0" />
@@ -28,13 +28,13 @@
   </ItemGroup>
 
   <ItemGroup Label="Kiota">
-    <PackageVersion Include="Microsoft.Kiota.Abstractions" Version="1.9.9" />
-    <PackageVersion Include="Microsoft.Kiota.Authentication.Azure" Version="1.9.9" />
-    <PackageVersion Include="Microsoft.Kiota.Http.HttpClientLibrary" Version="1.9.9" />
-    <PackageVersion Include="Microsoft.Kiota.Serialization.Form" Version="1.9.9" />
-    <PackageVersion Include="Microsoft.Kiota.Serialization.Json" Version="1.9.9" />
-    <PackageVersion Include="Microsoft.Kiota.Serialization.Multipart" Version="1.9.9" />
-    <PackageVersion Include="Microsoft.Kiota.Serialization.Text" Version="1.9.9" />
+    <PackageVersion Include="Microsoft.Kiota.Abstractions" Version="1.9.11" />
+    <PackageVersion Include="Microsoft.Kiota.Authentication.Azure" Version="1.9.11" />
+    <PackageVersion Include="Microsoft.Kiota.Http.HttpClientLibrary" Version="1.9.11" />
+    <PackageVersion Include="Microsoft.Kiota.Serialization.Form" Version="1.9.11" />
+    <PackageVersion Include="Microsoft.Kiota.Serialization.Json" Version="1.9.11" />
+    <PackageVersion Include="Microsoft.Kiota.Serialization.Multipart" Version="1.9.11" />
+    <PackageVersion Include="Microsoft.Kiota.Serialization.Text" Version="1.9.11" />
   </ItemGroup>
 
   <ItemGroup Label="Source Generators">
@@ -42,9 +42,9 @@
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">
-    <GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.160" />
+    <GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.161" />
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.12.4" />
-    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.29.0.95321" />
+    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="9.30.0.95878" />
     <GlobalPackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
   </ItemGroup>
 

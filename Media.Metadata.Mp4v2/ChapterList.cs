@@ -228,7 +228,7 @@ internal sealed class ChapterList : IList<Chapter>
         var chapterListPointer = IntPtr.Zero;
         var chapterCount = 0;
         var chapterType = NativeMethods.MP4GetChapters(fileHandle, ref chapterListPointer, ref chapterCount, NativeMethods.MP4ChapterType.Qt);
-        if (chapterType != NativeMethods.MP4ChapterType.None && chapterCount != 0)
+        if (chapterType is not NativeMethods.MP4ChapterType.None && chapterCount is not 0)
         {
             var currentChapterPointer = chapterListPointer;
             for (var i = 0; i < chapterCount; i++)
@@ -236,8 +236,7 @@ internal sealed class ChapterList : IList<Chapter>
                 var currentChapter = currentChapterPointer.ToStructure<NativeMethods.MP4Chapter>();
                 var duration = TimeSpan.FromMilliseconds(currentChapter.duration);
                 var title = System.Text.Encoding.UTF8.GetString(currentChapter.title);
-                if ((currentChapter.title[0] == 0xFE && currentChapter.title[1] == 0xFF) ||
-                    (currentChapter.title[0] == 0xFF && currentChapter.title[1] == 0xFE))
+                if (currentChapter.title is [0xFE, 0xFF, ..] or [0xFF, 0xFE, ..])
                 {
                     title = System.Text.Encoding.Unicode.GetString(currentChapter.title);
                 }

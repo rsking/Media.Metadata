@@ -252,7 +252,7 @@ public sealed class TheTVDbShowSearch(Microsoft.Extensions.Options.IOptions<TheT
                 config.QueryParameters.Type = "series";
                 if (year > 0)
                 {
-                    config.QueryParameters.Year = (double)year;
+                    config.QueryParameters.Year = year;
                 }
             },
             cancellationToken).ConfigureAwait(false);
