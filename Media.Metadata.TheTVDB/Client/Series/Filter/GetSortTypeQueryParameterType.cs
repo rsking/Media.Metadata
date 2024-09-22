@@ -3,9 +3,9 @@ using System.Runtime.Serialization;
 using System;
 namespace ApiSdk.Series.Filter
 {
-    [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.16.0")]
+    [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.19.0")]
     #pragma warning disable CS1591
-    public enum GetSortTypeQueryParameterType
+    internal enum GetSortTypeQueryParameterType
     #pragma warning restore CS1591
     {
         [EnumMember(Value = "asc")]
