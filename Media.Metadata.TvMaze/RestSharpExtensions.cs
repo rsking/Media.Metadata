@@ -20,9 +20,9 @@ internal static class RestSharpExtensions
     /// <param name="client">The <see cref="RestClient"/>.</param>
     /// <param name="request">The request.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>The result of <see cref="RestClientExtensions.ExecuteGetAsync"/> for <paramref name="client"/>.</returns>
+    /// <returns>The result of <see cref="RestClientExtensions.ExecuteGetAsync(IRestClient, RestRequest, CancellationToken)"/> for <paramref name="client"/>.</returns>
     /// <exception cref="InvalidOperationException">The request was not successful.</exception>
-    public static async Task<T> GetResponseOrThrow<T>(this RestClient client, RestRequest request, CancellationToken cancellationToken) => await client.ExecuteGetAsync<T>(request, cancellationToken).ConfigureAwait(false) switch
+    public static async Task<T> GetResponseOrThrow<T>(this IRestClient client, RestRequest request, CancellationToken cancellationToken) => await client.ExecuteGetAsync<T>(request, cancellationToken).ConfigureAwait(false) switch
     {
         { IsSuccessful: true, Data: { } data } => data,
         { ErrorException: { } ex } => throw ex,

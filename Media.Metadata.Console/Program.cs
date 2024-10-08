@@ -66,7 +66,7 @@ await configuration
             _ = services
                 .Configure<InvocationLifetimeOptions>(options => options.SuppressStatusMessages = true);
         }))
-    .InvokeAsync(args)
+    .InvokeAsync(args.Select(Environment.ExpandEnvironmentVariables).ToArray())
     .ConfigureAwait(true);
 
 static CliCommand CreateSearchMovie()

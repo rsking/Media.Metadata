@@ -87,9 +87,8 @@ public readonly record struct Rating(string Standard, string ContentRating, int 
         _ => [],
     };
 
-    private static Dictionary<Country, ILookup<RatingType, Rating>> LoadRatings(IEqualityComparer<string>? comparer = default)
+    private static Dictionary<Country, ILookup<RatingType, Rating>> LoadRatings()
     {
-        comparer ??= StringComparer.Ordinal;
         return GetRatings()
             .ToLookup(tuple => tuple.Country)
             .ToDictionary(
