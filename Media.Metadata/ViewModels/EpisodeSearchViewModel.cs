@@ -13,7 +13,7 @@ namespace Media.Metadata.ViewModels;
 /// Initialises a new instance of the <see cref="EpisodeSearchViewModel"/> class.
 /// </remarks>
 /// <param name="showSearch">The series search.</param>
-internal partial class EpisodeSearchViewModel(IShowSearch showSearch) : VideoSearchViewModel
+internal sealed partial class EpisodeSearchViewModel(IShowSearch showSearch) : VideoSearchViewModel
 {
     private readonly System.Collections.ObjectModel.ObservableCollection<Series> series = [];
 

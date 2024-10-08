@@ -16,7 +16,7 @@ using Microsoft.UI.Xaml.Controls;
 /// </remarks>
 /// <param name="reader">The reader.</param>
 /// <param name="updater">The updater.</param>
-internal partial class MainViewModel(IReader reader, IUpdater updater) : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+internal sealed partial class MainViewModel(IReader reader, IUpdater updater) : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
     private readonly IReader reader = reader;
 

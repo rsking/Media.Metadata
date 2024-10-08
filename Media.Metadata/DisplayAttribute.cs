@@ -44,7 +44,7 @@ public sealed class DisplayAttribute : Attribute
     /// </remarks>
     /// <value>
     ///     The short name is generally used as the grid column label for a UI element bound to the member
-    ///     bearing this attribute.  A <c>null</c> or empty string is legal, and consumers must allow for that.
+    ///     bearing this attribute.  A <see langword="null"/> or empty string is legal, and consumers must allow for that.
     /// </value>
     public string? ShortName
     {
@@ -69,7 +69,7 @@ public sealed class DisplayAttribute : Attribute
     /// </remarks>
     /// <value>
     ///     The name is generally used as the field label for a UI element bound to the member
-    ///     bearing this attribute.  A <c>null</c> or empty string is legal, and consumers must allow for that.
+    ///     bearing this attribute.  A <see langword="null"/> or empty string is legal, and consumers must allow for that.
     /// </value>
     public string? Name
     {
@@ -94,7 +94,7 @@ public sealed class DisplayAttribute : Attribute
     /// </remarks>
     /// <value>
     ///     Description is generally used as a tool tip or description a UI element bound to the member
-    ///     bearing this attribute.  A <c>null</c> or empty string is legal, and consumers must allow for that.
+    ///     bearing this attribute.  A <see langword="null"/> or empty string is legal, and consumers must allow for that.
     /// </value>
     public string? Description
     {
@@ -119,7 +119,7 @@ public sealed class DisplayAttribute : Attribute
     /// </remarks>
     /// <value>
     ///     A prompt is generally used as a prompt or watermark for a UI element bound to the member
-    ///     bearing this attribute.  A <c>null</c> or empty string is legal, and consumers must allow for that.
+    ///     bearing this attribute.  A <see langword="null"/> or empty string is legal, and consumers must allow for that.
     /// </value>
     public string? Prompt
     {
@@ -143,7 +143,7 @@ public sealed class DisplayAttribute : Attribute
     ///     </para>
     /// </remarks>
     /// <value>
-    ///     A group name is used for grouping fields into the UI.  A <c>null</c> or empty string is legal,
+    ///     A group name is used for grouping fields into the UI.  A <see langword="null"/> or empty string is legal,
     ///     and consumers must allow for that.
     /// </value>
     public string? GroupName
@@ -229,7 +229,7 @@ public sealed class DisplayAttribute : Attribute
     /// <returns>
     /// When <see cref="ResourceType" /> has not been specified, the value of <see cref="ShortName" /> will be returned.
     /// <para>When <see cref="ResourceType" /> has been specified and <see cref="ShortName" /> represents a resource key within that resource type, then the localized value will be returned.</para>
-    /// <para>If <see cref="ShortName" /> is <c>null</c>, the value from <see cref="GetName" /> will be returned.</para>
+    /// <para>If <see cref="ShortName" /> is <see langword="null"/>, the value from <see cref="GetName" /> will be returned.</para>
     /// </returns>
     /// <exception cref="InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="ShortName" /> property, but a public static property with a name matching the <see cref="ShortName" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
     public string? GetShortName() => this.shortName.GetLocalizableValue() ?? this.GetName();
@@ -241,7 +241,7 @@ public sealed class DisplayAttribute : Attribute
     /// <returns>
     /// When <see cref="ResourceType" /> has not been specified, the value of <see cref="Name" /> will be returned.
     /// <para>When <see cref="ResourceType" /> has been specified and <see cref="Name" /> represents a resource key within that resource type, then the localized value will be returned.</para>
-    /// <para>Can return <c>null</c> and will not fall back onto other values, as it's more likely for the consumer to want to fall back onto the property name.</para>
+    /// <para>Can return <see langword="null"/> and will not fall back onto other values, as it's more likely for the consumer to want to fall back onto the property name.</para>
     /// </returns>
     /// <exception cref="InvalidOperationException">After setting both the <see cref="ResourceType" /> property and the <see cref="Name" /> property, but a public static property with a name matching the <see cref="Name" /> value couldn't be found on the <see cref="ResourceType" />.</exception>
     public string? GetName() => this.name.GetLocalizableValue();
@@ -280,29 +280,29 @@ public sealed class DisplayAttribute : Attribute
     public string? GetGroupName() => this.groupName.GetLocalizableValue();
 
     /// <summary>
-    /// Gets the value of <see cref="AutoGenerateField" /> if it has been set, or <c>null</c>.
+    /// Gets the value of <see cref="AutoGenerateField" /> if it has been set, or <see langword="null"/>.
     /// </summary>
     /// <returns>
     /// When <see cref="AutoGenerateField" /> has been set returns the value of that property.
-    /// <para>When <see cref="AutoGenerateField" /> has not been set returns <c>null</c>.</para>
+    /// <para>When <see cref="AutoGenerateField" /> has not been set returns <see langword="null"/>.</para>
     /// </returns>
     public bool? GetAutoGenerateField() => this.autoGenerateField;
 
     /// <summary>
-    /// Gets the value of <see cref="AutoGenerateFilter" /> if it has been set, or <c>null</c>.
+    /// Gets the value of <see cref="AutoGenerateFilter" /> if it has been set, or <see langword="null"/>.
     /// </summary>
     /// <returns>
     /// When <see cref="AutoGenerateFilter" /> has been set returns the value of that property.
-    /// <para>When <see cref="AutoGenerateFilter" /> has not been set returns <c>null</c>.</para>
+    /// <para>When <see cref="AutoGenerateFilter" /> has not been set returns <see langword="null"/>.</para>
     /// </returns>
     public bool? GetAutoGenerateFilter() => this.autoGenerateFilter;
 
     /// <summary>
-    /// Gets the value of <see cref="Order" /> if it has been set, or <c>null</c>.
+    /// Gets the value of <see cref="Order" /> if it has been set, or <see langword="null"/>.
     /// </summary>
     /// <returns>
     /// When <see cref="Order" /> has been set returns the value of that property.
-    /// <para>When <see cref="Order" /> has not been set returns <c>null</c>.</para>
+    /// <para>When <see cref="Order" /> has not been set returns <see langword="null"/>.</para>
     /// </returns>
     /// <remarks>
     /// When an order is not specified, presentation layers should consider using the value of 10000.

@@ -13,7 +13,7 @@ namespace Media.Metadata.ViewModels;
 /// Initialises a new instance of the <see cref="MediaTrackViewModel"/> class.
 /// </remarks>
 /// <param name="mediaTrack">The media track.</param>
-internal partial class MediaTrackViewModel(MediaTrack mediaTrack) : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+internal sealed partial class MediaTrackViewModel(MediaTrack mediaTrack) : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
     private static IEnumerable<string>? languages;
 
@@ -34,6 +34,7 @@ internal partial class MediaTrackViewModel(MediaTrack mediaTrack) : CommunityToo
     /// Gets the languages.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "For data binding")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2325:Methods and properties that don't access instance data should be static", Justification = "For data binding")]
     public IEnumerable<string> Languages => GetLanguages();
 
     /// <summary>

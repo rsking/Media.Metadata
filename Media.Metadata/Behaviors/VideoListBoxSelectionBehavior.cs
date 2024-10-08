@@ -9,6 +9,4 @@ namespace Media.Metadata.Behaviors;
 /// <summary>
 /// <see cref="ListBoxSelectionBehavior{T}"/> for <see cref="Video"/> instances.
 /// </summary>
-internal class VideoListBoxSelectionBehavior : ListBoxSelectionBehavior<Video>
-{
-}
+internal sealed class VideoListBoxSelectionBehavior : ListBoxSelectionBehavior<Video>;

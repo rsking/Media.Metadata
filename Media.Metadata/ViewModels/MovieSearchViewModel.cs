@@ -9,15 +9,10 @@ namespace Media.Metadata.ViewModels;
 /// <summary>
 /// The <see cref="Movie"/> <see cref="VideoSearchViewModel"/>.
 /// </summary>
-internal partial class MovieSearchViewModel : VideoSearchViewModel
+/// <param name="movieSearch">The movie search.</param>
+internal sealed partial class MovieSearchViewModel(IMovieSearch movieSearch) : VideoSearchViewModel
 {
-    private readonly IMovieSearch movieSearch;
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="MovieSearchViewModel"/> class.
-    /// </summary>
-    /// <param name="movieSearch">The movie search.</param>
-    public MovieSearchViewModel(IMovieSearch movieSearch) => this.movieSearch = movieSearch;
+    private readonly IMovieSearch movieSearch = movieSearch;
 
     /// <summary>
     /// Gets or sets the year.

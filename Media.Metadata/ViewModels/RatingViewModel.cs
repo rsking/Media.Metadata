@@ -9,7 +9,7 @@ namespace Media.Metadata.ViewModels;
 /// <summary>
 /// An editable rating.
 /// </summary>
-internal partial class RatingViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+internal sealed partial class RatingViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
     private readonly System.Collections.ObjectModel.ObservableCollection<Rating> ratings = [];
 

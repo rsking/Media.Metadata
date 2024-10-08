@@ -9,7 +9,7 @@ namespace Media.Metadata.ViewModels;
 /// <summary>
 /// An editable <see cref="Movie"/>.
 /// </summary>
-internal partial class MovieViewModel : VideoViewModel
+internal sealed partial class MovieViewModel : VideoViewModel
 {
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     private string? edition;
